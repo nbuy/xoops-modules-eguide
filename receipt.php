@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.2 2003/10/17 06:53:41 nobu Exp $
+// $Id: receipt.php,v 1.3 2003/10/18 05:10:57 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -200,8 +200,9 @@ default:
     echo "</tr>\n";
     $nc = 0;
     $citem = array();
+    $tags = preg_match("/^XOOPS 1\\./",XOOPS_VERSION)?array("bg1","bg3"):array("even","odd");
     while ($order = $xoopsDB->fetchArray($result)) {
-	$bg = ($nc++ % 2)?"bg3":"bg4";
+	$bg = $tags[($nc++ % 2)];
 	echo "<tr class='$bg'>";
 	if (!$print) {
 	    echo "<td nowrap>";

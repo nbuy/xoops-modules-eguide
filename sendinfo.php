@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.1 2003/02/05 06:47:34 nobu Exp $
+// $Id: sendinfo.php,v 1.2 2003/10/18 05:10:57 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -11,6 +11,13 @@ include("perm.php");
 $tbl = $xoopsDB->prefix("eguide");
 $opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
+
+foreach ($HTTP_POST_VARS as $i => $v) {
+    $$i = stripslashes($v);
+}
+foreach (array("op","eid") as $v) {
+    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
+}
 
 include(XOOPS_ROOT_PATH."/header.php");
 OpenTable();
