@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>eguide module helps</title>
+<style>
+th { padding: 4px; background: #e0e0e0; }
+td { padding: 4px; background: #e8e8e8; }
+blockquote { color: #004000; }
+</style>
+</head>
+<body>
+  <a name="form"><h2>Additional fileld Formats</h2></a>
+  <strong>In Reservation</strong>
+  Additonal items set to FORM when use order to reservation.
+  This additional items to setup following formats:
+  <blockquote>
+      item-name["*"][,type[,argument...]]<p />
+      type ::= {text|checkbox|radio|textarea|select}<br />
+      argument ::= [value ["+"] "="] label
+  </blockquote>
+  <ul>
+    <li>"*" meen need input something.</li>
+    <li>"#" is message in the FORM (displayed comments).</li>
+    <li>"," is derimiter. (Use HTML special char when use in arguments)</li>
+    <li>value equivarent label when it suppressed.</li>
+    <li>"+" Selected items (checkbox, radio, select) default value.</li>
+  </ul>
+
+  <h3>examples:</h3>
+
+  <form>
+    <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
+      <tr bgcolor="#d0d0d0"><th>setup</th><th>Displayed form</th></tr>
+      <tr><td>Name*</td><td>Name* <input name='samp1' /></td></tr>
+      <tr><td>Name*,size=5</td><td>Name* <input name='samp2' size=5 /></td></tr>
+      <tr><td>Name*,size=5,#comment text</td><td>Name* <input name='samp3' size=5 /> comment text</td></tr>
+      <tr><td>Selection,radio,Item1+,Item2,Item3</td><td>Selection <input type='radio' name='samp4' value='1' checked /> Item1 &nbsp; <input type='radio' name='samp4' value='2' /> Item2 &nbsp; <input type='radio' name='samp4' value='3' /> Item3 &nbsp; </td></tr>
+      <tr><td>Selection,checkbox,Item1+,Item2,Item3</td><td>Selection <input type='checkbox' name='samp5_1' checked /> Item1 &nbsp; <input type='checkbox' name='samp5_2' /> Item2 &nbsp; <input type='checkbox' name='samp5_3' /> Item3 &nbsp; </td></tr>
+      <tr><td>Selection,select,Item1,Item2,Item3</td><td>Selection <select name='samp6'><option>Item1</option><option>Item2</option><option>Item3</option></select></td></tr>
+      <tr><td>#message text</td><td>message text</td></tr>
+    </table>
+  </form>
+  
+</body>
+</html>
