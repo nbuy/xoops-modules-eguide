@@ -24,7 +24,7 @@
 // ------------------------------------------------------------------------- //
 include("../../mainfile.php");
 include("const.php");
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 if (function_exists("getCache")) {
     eval(getCache($xoopsModule->dirname()."/config.php"));
 } else {
