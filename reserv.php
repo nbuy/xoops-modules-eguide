@@ -1,6 +1,6 @@
 <?
 // reservation proceedings.
-// $Id: reserv.php,v 1.1 2003/02/05 06:47:34 nobu Exp $
+// $Id: reserv.php,v 1.2 2003/05/26 09:25:54 nobu Exp $
 include("header.php");
 
 $opt = $xoopsDB->prefix("eguide_opt");
@@ -175,8 +175,8 @@ VALUES  ($eid,$uid,$now, '$ml', '".addslashes($value)."',$accept,'$conf')");
 	$xoopsMailer->setFromName("Event Reservation");
 	if ($xoopsMailer->send()) {
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
-	    echo "<p>"._MD_RESERV_CONF."</p>";
-	    echo "<blockquote>".nl2br($value)."</blockquote>";
+	    echo "<p class='evbody'>"._MD_RESERV_CONF."</p>";
+	    echo "<blockquote class='evbody'>".nl2br($value)."</blockquote>";
 	    if ($accept) {
 		$xoopsDB->query("UPDATE $opt SET reserved=reserved+1 WHERE eid=$eid");
 	    }

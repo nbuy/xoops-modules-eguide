@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.2 2003/03/09 09:00:12 nobu Exp $
+// $Id: admin.php,v 1.3 2003/05/26 09:25:54 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -59,8 +59,8 @@ if ($op=='save') {
     } else {
 	$prev = STAT_POST;
 	$xoopsDB->query("INSERT INTO $tbl ".
-			"(uid, title, cdate, mdate, edate, expire, summary, body, status)".
-			" VALUES($uid, '$title', $now, $now, $edate, $expire, '$summary', '$body', $status)");
+			"(uid, title, cdate, mdate, edate, expire, summary, body, style, status)".
+			" VALUES($uid, '$title', $now, $now, $edate, $expire, '$summary', '$body', $style, $status)");
 	$res = $xoopsDB->query("SELECT eid FROM $tbl WHERE uid=$uid AND mdate=$now");
 	$data = $xoopsDB->fetchArray($res);
 	$eid = $data['eid'];
