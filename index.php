@@ -2,6 +2,7 @@
 include("header.php");
 
 if (isset($HTTP_GET_VARS['prev'])) $prev = intval($HTTP_GET_VARS['prev']);
+if (isset($HTTP_GET_VARS['page'])) $page = intval($HTTP_GET_VARS['page']);
 if (isset($HTTP_GET_VARS['start'])) $start = intval($HTTP_GET_VARS['start']);
 
 if ( $xoopsConfig['startpage'] == $xoopsModule->dirname() ) {
@@ -58,12 +59,12 @@ if (empty($prev)) {
     $start += $max;
     $result = $xoopsDB->query("SELECT eid FROM $tbl WHERE expire>$now AND status=".STAT_NORMAL." LIMIT $start,$max");
     $q = $xoopsDB->getRowsNum($result);
-    if (empty($page) || $page=1) {
+    if (empty($page) || $page==1) {
 	$prev="?prev=1";
 	$page="?page=2";
     } else {
-	$prev="?page=".$page-1;
-	$page="?page=".$page+1;
+	$prev="?page=".($page-1);
+	$page="?page=".($page+1);
     }
 } else {
     $result = $xoopsDB->query("SELECT eid FROM $tbl WHERE expire<$now AND status=".STAT_NORMAL." LIMIT ".$eventConfig['max_event'].", ".$eventConfig['max_event']);

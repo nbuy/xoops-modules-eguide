@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.6 2004/07/06 05:43:00 nobu Exp $
+// $Id: ev_top.php,v 1.7 2004/12/02 16:12:50 nobu Exp $
 
 function b_event_top_show($options) {
     include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
@@ -40,7 +40,7 @@ function b_event_top_show($options) {
 	    if ($n) $content .= "<p><a href='$modurl/admin/index.php?op=events'>"._BLOCK_EV_WAIT."</a>: $n</p>";
 	}
     }
-    $content .= "<div class='evline' align='right'><a href='$modurl/'>"._BLOCK_EV_MORE."</a></div>\n";
+    $content .= "<div class='evmore' style='text-align: right'><a href='$modurl/'>"._BLOCK_EV_MORE."</a></div>\n";
     return array("content"=>$content, "title"=>_MI_EGUIDE_HEADLINE);
 }
 

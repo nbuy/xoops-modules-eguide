@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.12 2004/07/17 04:31:49 nobu Exp $
+// $Id: index.php,v 1.13 2004/12/02 16:12:50 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -100,7 +100,7 @@ case "events":
     xoops_cp_header();
     OpenTable();
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
-    $result = $xoopsDB->query("SELECT eid,edate,title,uid,status FROM $tbl ORDER BY edate");
+    $result = $xoopsDB->query("SELECT eid,edate,title,uid,status FROM $tbl ORDER BY edate DESC");
     $n = 0;
     echo "<form action='$self' method='post'>\n";
     echo "<table cellspacing='1' cellpadding='3' border='0' class='bg2'>\n";

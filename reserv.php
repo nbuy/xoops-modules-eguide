@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.5 2004/07/06 04:55:08 nobu Exp $
+// $Id: reserv.php,v 1.6 2004/12/02 16:12:50 nobu Exp $
 include("header.php");
 
 $opt = $xoopsDB->prefix("eguide_opt");
@@ -81,7 +81,7 @@ include(XOOPS_ROOT_PATH."/header.php");
 switch($op) {
 case 'order':
     OpenTable();
-    echo "<p><b>"._MI_EGUIDE_NAME." - "._MD_RESERVATION."</b></p>\n";
+    echo "<p><b>"._MD_RESERVATION."</b></p>\n";
     $result = $xoopsDB->query("SELECT * FROM $opt WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     $err = 0;
@@ -217,6 +217,7 @@ VALUES  ($eid,$uid,$now, '$ml', '".addslashes($value)."',$accept,'$conf')");
 	    echo "<div class='error'>"._MD_SEND_ERR."</div>\n";
 	    // delete failer record.
 	    $xoopsDB->query("DELETE FROM $rsv WHERE rvid=$rvid");
+	    $xoopsDB->query("UPDATE $opt SET reserved=reserved-1 WHERE eid=$eid");
 	}
     }
     CloseTable();
