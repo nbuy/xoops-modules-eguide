@@ -31,7 +31,7 @@ $modversion['blocks'][1]['name'] = _MI_EGUIDE_HEADLINE;
 $modversion['blocks'][1]['description'] = "Comming soon Events";
 $modversion['blocks'][1]['show_func'] = "b_event_top_show";
 $modversion['blocks'][1]['edit_func'] = "b_event_top_edit";
-$modversion['blocks'][1]['options'] = "0";
+$modversion['blocks'][1]['options'] = "0|10";
 
 // Menu
 $modversion['hasMain'] = 1;

@@ -26,7 +26,8 @@ function b_event_top_show($options) {
     global $xoopsDB, $xoopsUser;
     $content = "";
     $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time()." AND status=0 ORDER BY edate";
-    $result = $xoopsDB->query($sql, 5, 0);
+    if(!isset($options[1])) $options[1]=10;
+    $result = $xoopsDB->query($sql, $options[1], 0);
     if ($xoopsDB->getRowsNum($result)==0) {
 	$content .= "<div class='evline'>"._BLOCK_EV_NONE."</div>\n";
     }
@@ -68,6 +69,8 @@ function b_event_top_edit($options) {
     }
     return _BLOCK_EV_STYLE."&nbsp;".
 	"<input type='radio' name='options[]' value='1'$sel0 />"._YES." &nbsp; \n".
-	"<input type='radio' name='options[]' value='0'$sel1 />"._NO."\n";
+	"<input type='radio' name='options[]' value='0'$sel1 />"._NO."<br/>\n".
+	_BLOCK_EV_ITEMS."&nbsp;<input name='lines' value='".$options[1].
+	"' />\n";
 }
 ?>
