@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.5 2003/10/17 06:53:41 nobu Exp $
+// $Id: index.php,v 1.6 2003/10/17 07:10:02 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -121,8 +121,8 @@ case "events":
 	$edit = "<a href='../admin.php?eid=$eid'>"._EDIT."</a>".
 	    " <a href='index.php?op=edit&amp;eid=$eid'>"._AM_EDIT."</a>".
 	    " <a href='../admin.php?op=delete&amp;eid=$eid'>"._DELETE."</a>";
-	echo "<tr class='$bg2' class='$bg'><td>$date</td><td>$title</td>";
-	echo "<td>$u</td><td>$sn</td><td>$edit</td></tr>\n";
+	echo "<tr class='$bg'><td class='$bg2'>$date</td><td class='$bg2'>$title</td>";
+	echo "<td class='$bg2'>$u</td><td class='$bg2'>$sn</td><td class='$bg2'>$edit</td></tr>\n";
     }
     echo "</table>\n";
     $log = $xoopsDB->prefix("eguide_log");
@@ -146,12 +146,16 @@ case "notifies":
     echo "<tr class='bg4'><th></th><th>"._AM_ORDER_DATE."</th>".
 	"<th>"._AM_EMAIL."</th></tr>\n";
     while ($data = $xoopsDB->fetchArray($result)) {
-	$bg = ($n++%2)?"bg1":"bg3";
+	if ($n++%2) {
+	    $bg = "bg1"; $bg2 = "odd";
+	} else {
+	    $bg = "bg3"; $bg2 = "even";
+	}
 	$rvid = $data['rvid'];
 	$date = date(_AM_POST_FMT, $data['rdate']);
 	$email = $data['email'];
-	echo "<tr class='$bg'><td><input type='checkbox' name='rm$n' value='$rvid' /></td>".
-	    "<td>$date</td><td>$email</td></tr>\n";
+	echo "<tr class='$bg'><td class='$bg2'><input type='checkbox' name='rm$n' value='$rvid' /></td>".
+	    "<td class='$bg2'>$date</td><td class='$bg2'>$email</td></tr>\n";
     }
     echo "</table><input type='submit' value='".
 	_DELETE."' />\n</form>\n";
