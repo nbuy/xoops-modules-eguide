@@ -67,10 +67,11 @@ function b_event_top_edit($options) {
 	$sel0="";
 	$sel1=" checked";
     }
+    if (!isset($options[1])) $options[1]=10;
     return _BLOCK_EV_STYLE."&nbsp;".
 	"<input type='radio' name='options[]' value='1'$sel0 />"._YES." &nbsp; \n".
 	"<input type='radio' name='options[]' value='0'$sel1 />"._NO."<br/>\n".
-	_BLOCK_EV_ITEMS."&nbsp;<input name='lines' value='".$options[1].
+	_BLOCK_EV_ITEMS."&nbsp;<input name='options[1]' value='".$options[1].
 	"' />\n";
 }
 ?>
