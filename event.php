@@ -45,9 +45,9 @@ themeevent($data, $print);
 
 $opt = $xoopsDB->prefix("eguide_opt");
 $result = $xoopsDB->query("SELECT * FROM $opt WHERE eid=$eid");
-if ($data['expire'] < time()) {
+if ($data['expire'] < time() || !$result) {
     # expired event
-} elseif ($data = $xoopsDB->fetchArray($result)) {
+} elseif ($data = $xoopsDB->fetchArray($result) && $data['reservation']) {
     $reserved = false;
     if ($xoopsUser) {
 	$rsv = $xoopsDB->prefix("eguide_reserv");
