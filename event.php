@@ -3,9 +3,8 @@ include("header.php");
 $inc = XOOPS_ROOT_PATH."/modules/image/class.php";
 if (file_exists($inc)) include_once($inc);
 
-if (empty($eid)) {
-	redirect_header("index.php",2,_MD_NOEVENT);
-	exit();
+foreach (array("eid", "op") as $v) {
+    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
 }
 $myts =& MyTextSanitizer::getInstance();
 

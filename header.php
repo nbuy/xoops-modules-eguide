@@ -24,11 +24,14 @@
 // ------------------------------------------------------------------------- //
 include("../../mainfile.php");
 include("const.php");
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 if (function_exists("getCache")) {
     eval(getCache($xoopsModule->dirname()."/config.php"));
 } else {
     // compat XOOPS 1.3.x
     include(XOOPS_ROOT_PATH."/modules/".$xoopsModule->dirname()."/cache/config.php");
+    // compat XOOPS 2.0.x
+    $inc = XOOPS_ROOT_PATH."/include/old_theme_functions.php";
+    if (file_exists($inc)) include_once($inc);
 }
 ?>

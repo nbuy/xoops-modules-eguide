@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.3 2003/05/26 09:25:54 nobu Exp $
+// $Id: admin.php,v 1.4 2003/10/17 06:53:41 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -15,6 +15,10 @@ include("perm.php");
 // remove slashes
 foreach ($HTTP_POST_VARS as $i => $v) {
     $$i = stripslashes($v);
+}
+
+foreach (array("op","eid") as $v) {
+    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
 }
 
 if (isset($HTTP_POST_VARS['save'])) $op = "save";
@@ -41,6 +45,7 @@ if ($op=='save') {
     $summary=addslashes($summary);
     $body=addslashes($body);
     $now = time();
+    $reservation = (isset($reservation)&&$reservation==1)?1:0;
     $strict = (isset($strict)&&$strict==1)?1:0;
     $autoaccept = (isset($autoaccept)&&$autoaccept==1)?1:0;
     $notify = (isset($notify)&&$notify==1)?1:0;
@@ -92,7 +97,7 @@ if ($op=='save') {
     } else {
 	$xoopsDB->query("INSERT INTO $opt".
 			"(eid, reservation, strict, autoaccept, notify, persons, optfield)".
-			" VALUES($eid, 1, $strict, $autoaccept, $notify, $persons, '$optfield')");
+			" VALUES($eid, $reservation, $strict, $autoaccept, $notify, $persons, '$optfield')");
     }
     redirect_header("event.php?eid=$eid",2,_AM_DBUPDATED);
     exit;

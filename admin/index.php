@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.4 2003/06/10 15:15:16 nobu Exp $
+// $Id: index.php,v 1.5 2003/10/17 06:53:41 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -8,6 +8,9 @@ $inc = XOOPS_ROOT_PATH."/modules/image/class.php";
 if (file_exists($inc)) include_once($inc);
 
 $self = XOOPS_URL.$HTTP_SERVER_VARS["SCRIPT_NAME"];
+foreach (array("op") as $v) {
+    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
+}
 
 // show general configuration form
 function eventConfig() {
@@ -98,7 +101,11 @@ case "events":
     echo "<th>"._AM_POSTER."</th><th>"._AM_DISP_STATUS."</th>";
     echo "<th>"._AM_OPERATION."</th></tr>\n";
     while ($data = $xoopsDB->fetchArray($result)) {
-	$bg = ($n++%2)?"bg1":"bg3";
+	if ($n++%2) {
+	    $bg = "bg1"; $bg2 = "odd";
+	} else {
+	    $bg = "bg3"; $bg2 = "even";
+	}
 	$eid = $data['eid'];
 	$date = date(_AM_DATE_FMT, $data['edate']);
 	$title = "<a href='../event.php?eid=$eid'>".$data['title']."</a>";
@@ -114,7 +121,7 @@ case "events":
 	$edit = "<a href='../admin.php?eid=$eid'>"._EDIT."</a>".
 	    " <a href='index.php?op=edit&amp;eid=$eid'>"._AM_EDIT."</a>".
 	    " <a href='../admin.php?op=delete&amp;eid=$eid'>"._DELETE."</a>";
-	echo "<tr class='$bg'><td>$date</td><td>$title</td>";
+	echo "<tr class='$bg2' class='$bg'><td>$date</td><td>$title</td>";
 	echo "<td>$u</td><td>$sn</td><td>$edit</td></tr>\n";
     }
     echo "</table>\n";
