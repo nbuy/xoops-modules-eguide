@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.3 2003/06/10 15:01:50 nobu Exp $
+// $Id: index.php,v 1.4 2003/06/10 15:15:16 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -18,8 +18,8 @@ function eventConfig() {
     OpenTable();
     echo "<h4>" ._MI_EGUIDE_CONFIG. "</h4><br>\n";
     echo "<form action='index.php' method='post'>\n";
-    echo "<table width='100%' border='0'>\n<tr><td class='nw'>".
-	_AM_POST_GROUP."</td><td width='100%'>
+    echo "<table border='0'>\n<tr><td class='nw'>".
+	_AM_POST_GROUP."</td><td>
         <select name='group'>\n";
     $r=$xoopsDB->query("SELECT groupid,name FROM ".$xoopsDB->prefix("groups"));
     while (list($i,$v)=$xoopsDB->fetchRow($r)) {
