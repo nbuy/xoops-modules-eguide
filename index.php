@@ -33,10 +33,12 @@ $tbl = $xoopsDB->prefix("eguide");
 $max = $eventConfig['max_event'];
 if (isset($prev)) {
     $start = ($prev-1)*$max;
+    $ord = 'DESC';
 } else {
     $start = (isset($page)?$page-1:0)*$max;
+    $ord = 'ASC';
 }
-$result = $xoopsDB->query("SELECT eid, cdate, edate, title, summary, uid, status, style, counter  FROM $tbl WHERE $expire AND status=".STAT_NORMAL." ORDER BY edate LIMIT $start,$max");
+$result = $xoopsDB->query("SELECT eid, cdate, edate, title, summary, uid, status, style, counter  FROM $tbl WHERE $expire AND status=".STAT_NORMAL." ORDER BY edate $ord LIMIT $start,$max");
 if ($xoopsDB->getRowsNum($result)==0) {
 	OpenTable();
 	echo _MD_EVENT_NONE;
