@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.10 2004/07/07 04:34:29 nobu Exp $
+// $Id: index.php,v 1.11 2004/07/15 05:13:37 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -15,7 +15,7 @@ foreach (array("op", "eid", "status", "uid") as $v) {
 
 // show general configuration form
 function eventConfig() {
-    global $xoopsConfig, $xoopsModule, $eventConfig, $xoopsDB;
+    global $xoopsConfig, $xoopsModule, $eventConfig, $xoopsDB, $self;
     xoops_cp_header();
     //$xoopsModule->printAdminMenu();
     //echo "<br />";
@@ -64,7 +64,7 @@ function eventConfig() {
 
 // save general configuration
 function eventConfigS() {
-    global $xoopsModule;
+    global $xoopsModule,$self;
 
     function myvalue($name) {
 	global $HTTP_POST_VARS;
