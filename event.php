@@ -108,7 +108,7 @@ if (!empty($data['reserved'])) {
 	    }
 	    $x = "";
 	    foreach ($show as $v) {
-		$x .= "<td>".$a[$v]."$uinfo</td>";
+		$x .= "<td>".$myts->sanitizeForDisplay($a[$v])."$uinfo</td>";
 		$uinfo = "";
 	    }
 	    echo "<tr class='$bg'><td align='right'>$nc</td>".$x."</tr>\n";
