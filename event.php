@@ -14,6 +14,7 @@ $stc=($xoopsUser && $xoopsUser->isAdmin($xoopsModule->mid())?"":"AND status=".ST
 $result = $xoopsDB->query("SELECT * FROM $tbl WHERE eid=$eid $stc");
 $data = $xoopsDB->fetchArray($result);
 
+$xoopsConfig['title'] = $myts->sanitizeForDisplay($data['title']);
 if (empty($data['eid'])) {
 	redirect_header("index.php",2,_MD_NOEVENT);
 	exit();
@@ -39,7 +40,7 @@ if ( file_exists("$inc/themeevent.php") ) {
 }
 
 OpenTable();
-$print = "<a href='event.php?op=print&amp;eid=$eid'><img src='".XOOPS_URL."/images/print.gif' alt='"._PRINT."' border='0'></a>";
+$print = "<a href='event.php?op=print&amp;eid=$eid'><img src='".XOOPS_URL."/modules/news/images/print.gif' alt='"._PRINT."' border='0'></a>";
 themeevent($data, $print);
 
 $opt = $xoopsDB->prefix("eguide_opt");

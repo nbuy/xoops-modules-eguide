@@ -1,6 +1,6 @@
-<?
+<?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.2 2003/05/26 09:25:54 nobu Exp $
+// $Id: reserv.php,v 1.3 2003/06/10 15:01:47 nobu Exp $
 include("header.php");
 
 $opt = $xoopsDB->prefix("eguide_opt");

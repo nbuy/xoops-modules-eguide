@@ -1,4 +1,4 @@
-<?
+<?php
 define("_AM_RVSTAT_ORDER",0);
 define("_AM_RVSTAT_RESERVED",1);
 define("_AM_RVSTAT_REFUSED",2);

@@ -4,7 +4,7 @@ if ( $xoopsConfig['startpage'] == $xoopsModule->dirname() ) {
 
 	$xoopsOption['show_rblock'] =1;
 	include(XOOPS_ROOT_PATH."/header.php");
-	if ( empty($_GET['start']) ) {
+	if ( empty($start) && empty($prev) ) {
 		make_cblock();
 	}
 } else {
