@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.5 2004/07/06 05:43:00 nobu Exp $
+// $Id: receipt.php,v 1.6 2004/07/07 06:34:55 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -230,6 +230,7 @@ default:
 	    if ($v && isset($mc[$lab])) {
 		$mv = ($mc[$lab]=='checkbox')?explode(",",$v):array($v);
 		foreach ($mv as $i) {
+		    if (empty($i)) continue;
 		    $x="$lab/$i";
 		    if (isset($citem[$x])) $citem[$x]++;
 		    else $citem[$x]=1;
