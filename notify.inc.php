@@ -14,7 +14,7 @@ function event_notify($op, $data) {
 	    $xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=".$data['eid']);
 	    $xoopsMailer->assign("EVENT_TITLE", $title);
 	    $xoopsMailer->assign("EVENT_DATE", $edate);
-	    $note = ($status == STAT_POST)?_AM_APPROVE_REQ:"";
+	    $note = ($data['status'] == STAT_POST)?_AM_APPROVE_REQ:"";
 	    $xoopsMailer->assign("EVENT_NOTE", "");
 	    $xoopsMailer->setBody(_AM_NOTIFY_NEW);
 	    $xoopsMailer->setToEmails($to);
@@ -29,7 +29,7 @@ function event_notify($op, $data) {
     
 }
 function user_notify($eid) {
-    global $xoopsUser, $xoopsDB, $xoopsConfig;
+    global $xoopsUser, $xoopsDB, $xoopsConfig, $eventConfig;
 
     $tbl = $xoopsDB->prefix("eguide");
     $rsv = $xoopsDB->prefix("eguide_reserv");
@@ -43,7 +43,7 @@ function user_notify($eid) {
 
     if (!$eventConfig['user_notify'] ||
 	$data['expire']<time() ||
-	$status!=STAT_NORMAL) return (false);
+	$data['status']!=STAT_NORMAL) return (false);
 
     $result = $xoopsDB->query("SELECT rvid, email, confirm FROM $rsv WHERE eid=0");
     while ($data = $xoopsDB->fetchArray($result)) {

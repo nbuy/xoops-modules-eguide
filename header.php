@@ -24,6 +24,8 @@
 // ------------------------------------------------------------------------- //
 include("../../mainfile.php");
 include("const.php");
+global $eventConfig;
+
 //error_reporting(E_ALL);
 if (function_exists("getCache")) {
     eval(getCache($xoopsModule->dirname()."/config.php"));
