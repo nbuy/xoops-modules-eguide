@@ -6,4 +6,5 @@ define("_BLOCK_EV_WAIT", "New Event Articles");
 define("_BLOCK_EV_STYLE","Display verbose");
 define("_BLOCK_EV_ITEMS","Display events in block");
 define("_BLOCK_EV_NONE", "There is NO events");
+define("_BLOCK_EV_MORE", "more...");
 ?>

@@ -1,10 +1,11 @@
 <?php
-// $Id: ev_top.php,v 1.5 2004/07/06 04:55:08 nobu Exp $
+// $Id: ev_top.php,v 1.6 2004/07/06 05:43:00 nobu Exp $
 
 function b_event_top_show($options) {
     include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
     global $xoopsDB, $xoopsUser;
     $moddir = 'eguide';
+    $modurl = XOOPS_URL."/modules/$moddir";
 
     $content = "";
     $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time()." AND status=0 ORDER BY edate";
@@ -29,16 +30,17 @@ function b_event_top_show($options) {
 	    $add = "";
 	}
 	$eid = $myrow['eid'];
-	$content .= "<div class='evline'>$date<a href='".XOOPS_URL."/modules/$moddir/event.php?eid=$eid'>$title</a> $add</div>\n";
+	$content .= "<div class='evline'>$date<a href='$modurl/event.php?eid=$eid'>$title</a> $add</div>\n";
     }
     $mod = XoopsModule::getByDirname($moddir);
     if ($xoopsUser && $xoopsUser->isAdmin($mod->mid())) {
 	$result = $xoopsDB->query("SELECT count(eid) FROM ".$xoopsDB->prefix("eguide")." WHERE status=1");
 	if ($xoopsDB->getRowsNum($result)) {
 	    $n = array_shift($xoopsDB->fetchArray($result));
-	    if ($n) $content .= "<p><a href='".XOOPS_URL."/modules/$moddir/admin/index.php?op=events'>"._BLOCK_EV_WAIT."</a>: $n</p>";
+	    if ($n) $content .= "<p><a href='$modurl/admin/index.php?op=events'>"._BLOCK_EV_WAIT."</a>: $n</p>";
 	}
     }
+    $content .= "<div class='evline' align='right'><a href='$modurl/'>"._BLOCK_EV_MORE."</a></div>\n";
     return array("content"=>$content, "title"=>_MI_EGUIDE_HEADLINE);
 }
 

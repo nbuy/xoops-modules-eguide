@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.4 2004/07/06 04:55:08 nobu Exp $
+// $Id: receipt.php,v 1.5 2004/07/06 05:43:00 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -113,7 +113,7 @@ if ($print) {
     OpenTable();
 }
 
-echo "<p class='evhead'>$title</p>\n";
+echo "<p class='evhead'><a href='event.php?eid=$eid'>$title</a></p>\n";
 switch ($op) {
 case 'active':
     foreach (array_keys($HTTP_POST_VARS) as $i) {
