@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.4 2003/10/17 06:53:41 nobu Exp $
+// $Id: reserv.php,v 1.5 2004/07/06 04:55:08 nobu Exp $
 include("header.php");
 
 $opt = $xoopsDB->prefix("eguide_opt");
@@ -87,12 +87,16 @@ case 'order':
     $err = 0;
     $field = 0;
     $value = "";
+    if (empty($data['reservation'])) {
+	$err++;
+	echo "<div class='error'>"._MD_RESERV_STOP."</div>\n";
+    }
     foreach (explode("\n", $data['optfield']) as $n) {
 	$field++;
 	if (preg_match('/^\s*#/', $n)) continue;
 	if (preg_match('/^\s*$/', $n)) continue;
 	$a = explode(",", preg_replace('/[\n\r]/',"", $n));
-	$name = array_shift($a);
+	$name = preg_replace('/^!\s*/', '', array_shift($a));
 	$type = "text";
 	if (isset($a[0])) {
 	    switch (strtolower(array_shift($a))) {
@@ -107,9 +111,10 @@ case 'order':
 	if ($type == 'checkbox') {
 	    $v = "";
 	    for ($i=1; $i<=count($a); $i++) {
-		if ($v != "") $v .= ",";
 		$n = "opt${field}_$i";
-		if (isset($HTTP_POST_VARS[$n])) $v .= $HTTP_POST_VARS[$n];
+		if (isset($HTTP_POST_VARS[$n])) {
+		    $v .= (($v=="")?"":",").$HTTP_POST_VARS[$n];
+		}
 	    }
 	} else {
 	    $v = $HTTP_POST_VARS["opt$field"];
@@ -142,6 +147,19 @@ case 'order':
 	echo "<div class='error'>$email - "._MD_DUP_ERR."</div>";
 	$err++;
     }
+    if (!$err) {
+	$accept = $data['autoaccept'];
+	if ($accept) {
+	    $cond = "eid=$eid".($data['strict']?" AND reserved<persons":"");
+	    $res = $xoopsDB->query("UPDATE $opt SET reserved=reserved+1 WHERE $cond");
+	    //if (!$res || $xoopsDB->getAffectedRows()==0) { // in XOOPS2
+	    if (!$res || mysql_affected_rows($xoopsDB->conn)==0) {
+		echo "<div class='error'>"._MD_RESERV_FULL."</div>";
+		$err++;
+	    }
+	}
+    }
+
     if ($err) {
 	echo "<p><input type='button' value='"._MD_BACK."' onclick='javascript:history.go(-1);' /></p>";
     } else {
@@ -152,7 +170,6 @@ case 'order':
 	    if (strtolower($xoopsUser->email())==$ml) $uid = $xoopsUser->uid();
 	}
 	$now=time();
-	$accept = $data['autoaccept'];
 	$xoopsDB->query("INSERT INTO $rsv
 	(eid, uid, rdate, email, info, status, confirm)
 VALUES  ($eid,$uid,$now, '$ml', '".addslashes($value)."',$accept,'$conf')");
@@ -184,9 +201,6 @@ VALUES  ($eid,$uid,$now, '$ml', '".addslashes($value)."',$accept,'$conf')");
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
 	    echo "<p class='evbody'>"._MD_RESERV_CONF."</p>";
 	    echo "<blockquote class='evbody'>".nl2br($value)."</blockquote>";
-	    if ($accept) {
-		$xoopsDB->query("UPDATE $opt SET reserved=reserved+1 WHERE eid=$eid");
-	    }
 	    // register user notify request
 	    //
 	    if ($eventConfig['user_notify'] && isset($notify)) {

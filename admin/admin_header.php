@@ -1,7 +1,6 @@
 <?php
 include("../../../mainfile.php");
 include("../const.php");
-//error_reporting(E_ALL);
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 include(XOOPS_ROOT_PATH."/include/cp_functions.php");
 if ( $xoopsUser ) {

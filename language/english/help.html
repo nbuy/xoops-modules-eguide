@@ -43,8 +43,8 @@ td,th { padding: 4px; background: #e8e8e8;}
       <div class="note">
       XOOPS at [Admin Menu - System - Modules Admin]
       to install "event guide" module.<br />
-      general setup for event guide if you want.
-      [Admin Menu - Event Guide - genneral setup]
+      module setup for event guide if you want.
+      [Admin Menu - Event Guide - module setup]
       </div>
     <li>Register New event</li>
       <div class="note">
@@ -124,11 +124,12 @@ td,th { padding: 4px; background: #e8e8e8;}
   Additonal items set to FORM when use order to reservation.
   This additional items to setup following formats:
   <blockquote>
-      line ::= item-name["*"][,type[,argument...]]<p />
+      line ::= ["!"]item-name["*"][,type[,argument...]]<p />
       type ::= {text|checkbox|radio|textarea|select}<br />
       argument ::= [value ["+"] "="] label
   </blockquote>
   <ul>
+    <li>"!" meen the item display public.</li>
     <li>"*" meen need input something.</li>
     <li>"#" is message in the FORM (displayed comments).</li>
     <li>"," is derimiter. (Use HTML special char when use in arguments)</li>

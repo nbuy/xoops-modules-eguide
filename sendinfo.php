@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.2 2003/10/18 05:10:57 nobu Exp $
+// $Id: sendinfo.php,v 1.3 2004/07/06 04:55:08 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -34,6 +34,7 @@ if (isset($op) && $op=="doit") {
     $xoopsMailer->setFromName("Event Information");
     $xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");
     $req = (isset($request))?" OR eid=0":""; 
+    if (empty($status)) $status=1;
     $result = $xoopsDB->query("SELECT email FROM $rsv WHERE (eid=$eid AND status=$status)$req GROUP BY email");
     while ($data = $xoopsDB->fetchArray($result)) {
 	$xoopsMailer->setToEmails($data['email']);
@@ -50,24 +51,26 @@ if (isset($op) && $op=="doit") {
     $result = $xoopsDB->query("SELECT edate, title, uid FROM $tbl WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     $title = "Re: ".date(_MD_DATE_FMT, $data['edate'])." ".htmlspecialchars($data['title']);
-    if (empty($status)) $status=1;
     $result = $xoopsDB->query("SELECT status, count(rvid) FROM $rsv WHERE eid=$eid GROUP BY status");
     
     echo "<h4>"._AM_INFO_TITLE."</h4>\n";
     echo "<form action='sendinfo.php' method='post'>\n";
     echo "<b>"._AM_INFO_CONDITION."</b> ";
-    echo "<select name='status'>\n";
-    while ($data = $xoopsDB->fetchArray($result)) {
-	$s = $data['status'];
-	$n = $data['count(rvid)'];
-	$ck = ($s == _AM_RVSTAT_RESERVED)?" selected":"";
-	echo "<option value='$s'$ck>".$rv_stats[$s]." - ".
-	    sprintf(_AM_INFO_COUNT, $n)."</option>\n";
+    if ($xoopsDB->getRowsNum($result)) {
+	echo "<select name='status'>\n";
+	while ($data = $xoopsDB->fetchArray($result)) {
+	    $s = $data['status'];
+	    $n = $data['count(rvid)'];
+	    $ck = ($s == _AM_RVSTAT_RESERVED)?" selected":"";
+	    echo "<option value='$s'$ck>".$rv_stats[$s]." - ".
+		sprintf(_AM_INFO_COUNT, $n)."</option>\n";
+	}
+	echo "</select>";
     }
     $result = $xoopsDB->query("SELECT count(rvid) FROM $rsv WHERE eid=0");
     list($ord)=$xoopsDB->fetchRow($result);
     $notify = ($ord)?("&nbsp;&nbsp; <input type='checkbox' name='request' /> "._AM_INFO_REQUEST." (".sprintf(_AM_INFO_COUNT, $ord).")"):"";
-    echo "</select>$notify<br />\n";
+    echo "$notify<br />\n";
     echo "<input type='hidden' name='op' value='doit' />\n".
 	"<input type='hidden' name='eid' value='$eid' />\n".
 	"<p><b>"._AM_TITLE."</b> ".

@@ -32,6 +32,9 @@ if (function_exists("getCache")) {
     include(XOOPS_ROOT_PATH."/modules/".$xoopsModule->dirname()."/cache/config.php");
     // compat XOOPS 2.0.x
     $inc = XOOPS_ROOT_PATH."/include/old_theme_functions.php";
-    if (file_exists($inc)) include_once($inc);
+    if (file_exists($inc)) {
+	include_once($inc);
+	include_once(XOOPS_ROOT_PATH."/include/old_functions.php");
+    }
 }
 ?>

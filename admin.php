@@ -1,11 +1,11 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.4 2003/10/17 06:53:41 nobu Exp $
+// $Id: admin.php,v 1.5 2004/07/06 04:55:08 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
 include_once("language/".$xoopsConfig['language']."/admin.php");
-//error_reporting(E_ALL);
+include_once("notify.inc.php");
 
 // need switch normal xoops
 $myts =& MyTextSanitizer::getInstance();
@@ -13,8 +13,14 @@ $myts =& MyTextSanitizer::getInstance();
 include("perm.php");
 
 // remove slashes
-foreach ($HTTP_POST_VARS as $i => $v) {
-    $$i = stripslashes($v);
+if (XOOPS_USE_MULTIBYTES && function_exists("mb_convert_encoding")) {
+    foreach ($HTTP_POST_VARS as $i => $v) {
+	$$i = mb_convert_encoding(stripslashes($v), _CHARSET, "EUC-JP,UTF-8,Shift_JIS,JIS");
+    }
+} else {
+    foreach ($HTTP_POST_VARS as $i => $v) {
+	$$i = stripslashes($v);
+    }
 }
 
 foreach (array("op","eid") as $v) {
@@ -66,27 +72,16 @@ if ($op=='save') {
 	$xoopsDB->query("INSERT INTO $tbl ".
 			"(uid, title, cdate, mdate, edate, expire, summary, body, style, status)".
 			" VALUES($uid, '$title', $now, $now, $edate, $expire, '$summary', '$body', $style, $status)");
-	$res = $xoopsDB->query("SELECT eid FROM $tbl WHERE uid=$uid AND mdate=$now");
+	$res = $xoopsDB->query("SELECT eid,title,edate,status FROM $tbl WHERE uid=$uid AND mdate=$now");
 	$data = $xoopsDB->fetchArray($res);
+	event_notify("new", $data);
 	$eid = $data['eid'];
-	if ($eventConfig['notify']) {
-	    $xoopsMailer =& getMailer();
-	    $xoopsMailer->useMail();
-	    $xoopsMailer->setSubject(_AM_NEWSUB." - ".date(_AM_DATE_FMT, $edate)." $title");
-	    $xoopsMailer->setBody(XOOPS_URL."/modules/eguide/event.php?eid=$eid");
-	    $xoopsMailer->setToEmails($xoopsConfig['adminmail']);
-	    $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-	    $xoopsMailer->setFromName("Event Notify");
-	    $xoopsMailer->send();
-	}
     }
     if (empty($eid)) {
-	echo "Internal Error: table '$tbl' in admin.php";
+	echo "<div class='error'>Internal Error: table '$tbl' in admin.php</div>\n";
 	exit();
     }
-    if ($eventConfig['user_notify'] && $expire>$now) {
-	if ($prev!=$status && $status==STAT_NORMAL) user_notify($eid);
-    }
+    if ($prev!=$status) user_notify($eid);
     $result = $xoopsDB->query("SELECT eid FROM $opt WHERE eid=$eid");
     if ($xoopsDB->getRowsNum($result)) {
 	$xoopsDB->query("UPDATE $opt ".
@@ -181,30 +176,5 @@ function getDateField($p) {
     if (empty($HTTP_POST_VARS["${p}year"])) return 0;
     return mktime($HTTP_POST_VARS["${p}hour"],$HTTP_POST_VARS["${p}min"], 0,
 		  $HTTP_POST_VARS["${p}month"], $HTTP_POST_VARS["${p}day"], $HTTP_POST_VARS["${p}year"]);
-}
-
-function user_notify($eid) {
-    global $xoopsUser, $xoopsDB, $xoopsConfig;
-    global $tbl, $rsv;
-    $result = $xoopsDB->query("SELECT title, edate FROM $tbl WHERE eid=$eid");
-    $data = $xoopsDB->fetchArray($result);
-    $title = date(_AM_DATE_FMT, $data['edate'])." ".$data['title'];
-    $result = $xoopsDB->query("SELECT rvid, email, confirm FROM $rsv WHERE eid=0");
-    while ($data = $xoopsDB->fetchArray($result)) {
-	$xoopsMailer =& getMailer();
-	$xoopsMailer->useMail();
-	$xoopsMailer->setSubject(_AM_NEWSUB." - $title");
-	$xoopsMailer->setBody(_AM_NEW_NOTIFY);
-	$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-	$xoopsMailer->setFromName("Event Notify");
-	$xoopsMailer->assign("SITENAME", $xoopsConfig['sitename']);
-	$xoopsMailer->assign("TITLE", $title);
-	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");
-	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=".$data['rvid']."&key=".$data['confirm']);
-	$xoopsMailer->setToEmails($data['email']);
-	if (!$xoopsMailer->send()) {
-	    echo "<div class='error'>".$xoopsMailer->getErrors()."</div>\n";
-	}
-    }
 }
 ?>

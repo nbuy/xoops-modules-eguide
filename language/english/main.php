@@ -9,6 +9,10 @@ define("_MD_EMAIL","EMail Address");
 define("_MD_SUBJECT","Confirm");
 define("_MD_NOTIFY_EVENT",  "Notify to registers");
 define("_MD_NOTIFY_REQUEST","Notify by mail when new event posted");
+define("_MD_ORDER_NOTE1","'*' is require item. ");
+define("_MD_ORDER_NOTE2","'[ ]' item to be display on list of participant.");
+define("_MD_ORDER_SEND","Reservation");
+
 define("_MD_EVENT_NONE","There is no event guide");
 define("_MD_BACK","Back");
 define("_MD_RESERVED","This event is reserved");
@@ -25,6 +29,7 @@ define("_MD_DUP_REGISTER","mail notify was registered alredy");
 define("_MD_REGISTERED","Mail notification registered");
 
 define("_MD_RESERV_ACCEPT","sending confirm email");
+define("_MD_RESERV_STOP","Reservation is stopped.");
 define("_MD_RESERV_CONF","ordering information");
 define("_MD_RESERV_ADMIN","Reservations");
 
@@ -46,6 +51,7 @@ define("_MD_POSTERC","Poster");
 define("_MD_DATEC","Event Date:");
 define("_MD_DATE","Registed");
 define("_MD_REFER","%d hits");
+define("_MD_RESERV_LIST","List of participant");
 
 //%%%%%%	File Name print.php 	%%%%%
 

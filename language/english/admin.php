@@ -22,6 +22,7 @@ define("_AM_DISP_STATUS","Status");
 define("_AM_ACTIVATE","Approved");
 define("_AM_REFUSE","Refused");
 define("_AM_ADD","Add");
+define("_AM_UPDATE","Update");
 
 define("_AM_APPROVE","Approve Display");
 define("_AM_MONTHC","month %d");
@@ -64,6 +65,12 @@ define("_AM_RESERV_EDIT","Edit Reservation");
 define("_AM_RESERV_DEL","Delete this");
 define("_AM_RESERV_LIST","Return to list");
 
+define("_AM_NOTIFY_NEW","Register New Event.\n
+ Date: {EVENT_DATE}
+Title: {EVENT_TITLE}\n{EVENT_URL}\n
+{EVENT_NOTE}");
+define("_AM_APPROVE_REQ","Please confirmation the event and Approval it.");
+
 define("_AM_RESERV_MSG","{TITLE}\n{EVENT_URL}\n
 for this event to order\n
     In {ORDER_MAIL}\n
@@ -95,7 +102,9 @@ define("_AM_INFO_TITLE","Information Mail to Send");
 define("_AM_INFO_MAIL","Sending Mail");
 define("_AM_INFO_CONDITION","Send to");
 define("_AM_INFO_REQUEST","Notify Registers");
+define("_AM_INFO_SEARCH","Search");
 define("_AM_INFO_COUNT","count %d");
+define("_AM_INFO_NODATA","No DATA");
 define("_AM_INFO_SELF","send to self (%s)");
 define("_AM_INFO_DEFAULT","-messages-\n\n\nReserved Event\n    {EVENT_URL}\n");
 define("_AM_INFO_MAILOK","Mail sended");

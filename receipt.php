@@ -1,12 +1,13 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.3 2003/10/18 05:10:57 nobu Exp $
+// $Id: receipt.php,v 1.4 2004/07/06 04:55:08 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
 include_once("language/".$xoopsConfig['language']."/admin.php");
 
 include("perm.php");
+include("functions.php");
 
 $tbl = $xoopsDB->prefix("eguide");
 $opt = $xoopsDB->prefix("eguide_opt");
@@ -54,7 +55,8 @@ if (isset($eid)) {
 	// comment line
 	if (preg_match('/^\s*#/', $ln)||preg_match('/^\s*$/', $ln)) continue;
 	$fld = explode(",", $ln);
-	$lab = preg_replace('/[\*#]$/', "", array_shift($fld));
+	$lab = preg_replace('/^!\s*/', '',
+			    preg_replace('/[\*#]$/', "", array_shift($fld)));
 	$type = isset($fld[0])?strtolower($fld[0]):false;
 	if ($type=="checkbox" || $type=="radio" || $type=="select") {
 	    $mc[$lab]=$type;	// it's countable
@@ -68,25 +70,23 @@ $nrec = $xoopsDB->getRowsNum($result);
 
 if ($nrec) {
     if ($op=='csv') {
-	if (empty($charset)) $charset = "Shift_JIS";
-	$conv = $charset!=_CHARSET && function_exists("iconv");
+	$charset = "Shift_JIS";
+	if (isset($HTTP_GET_VAR['charset'])) {
+	    $charset = $HTTP_GET_VAR['charset'];
+	    if ($charset != _CHARSET) $charset = "Shift_JIS";
+	}
 	// field name
 	$out = '"'._AM_ORDER_DATE.'","'._MD_EMAIL.'"';
 	if (count($item)) {
 	    $out .= ',"'.join('","', preg_replace('/\"/', '&quot;',$item)).'"';
 	}
 	$out .= "\n";
-	// BUGS in PHP4 (until 4.2.3):
-	//    iconv to fail in long string in Shift_JIS convertion.
-	//    then makes short part of string to convert.
-	//    -- nobu in 18/Nov/2002
-	if ($conv) $out = iconv(_CHARSET, $charset, $out);
 	// body
 	while ($a = $xoopsDB->fetchArray($result)) {
 	    $out .= '"'.date(_MD_TIME_FMT,$a['rdate']).'","'.$a['email'].'"';
 	    foreach (explodeinfo($a['info'], $item) as $lab => $v) {
 		if ($v) $v = '"'.preg_replace('/\n/', '\n', (preg_replace('/\"/', '&quot;', $v))).'"';
-		$out .= ",".($conv?iconv(_CHARSET,$charset,$v):$v);
+		$out .= ",$v";
 	    }
 	    $out .= "\n";
 	}
@@ -94,6 +94,13 @@ if ($nrec) {
 	$file = "eguide_".date("Ymd").".csv";
 	header("Content-Type: text/plain; Charset=$charset");
 	header('Content-Disposition:attachment;filename="'.$file.'"');
+	if (XOOPS_USE_MULTIBYTES && $charset != _CHARSET) {
+	    if (function_exists("mb_convert_encoding")) {
+		$out = mb_convert_encoding($out, $charset, _CHARSET);
+	    } elseif (function_exists("iconv")) {
+		$out = iconv(_CHARSET, $charset, $out);
+	    }
+	}
 	echo $out;
 	exit;
     }
@@ -253,7 +260,7 @@ default:
 	echo "<p align='right'>[ ";
 	echo "<a href='receipt.php?op=csv&amp;eid=$eid'>"._AM_CSV_OUT."</a>";
 	echo " | <a href='sendinfo.php?eid=$eid'>"._AM_INFO_MAIL."</a>";
-	echo " ] <a href='receipt.php?op=print&amp;eid=$eid'><img src='".XOOPS_URL."/images/print.gif' alt='"._PRINT."' border='0'></a>";
+	echo " ] <a href='receipt.php?op=print&amp;eid=$eid'><img src='".XOOPS_URL."/modules/news/images/print.gif' alt='"._PRINT."' border='0'></a>";
 	echo "</p>";
     }
     if (count($citem)) {
@@ -277,36 +284,6 @@ if ($print) {
     include(XOOPS_ROOT_PATH."/footer.php");
 }
 exit;
-
-// exploding addional informations.
-function explodeinfo($info, $item) {
-    $ln = explode("\n", preg_replace('/\r/','',$info));
-    $n = 0;
-    $result = array();
-    while ($a = array_shift($ln)) {
-	$lab = $item[$n];
-	if (preg_match("/^".str_replace("/", '\/', quotemeta($lab)).": (.*)$/", $a, $m)) {
-	    $v = isset($m[1])?$m[1]:"";
-	    if ($m[1] == "\\") {
-		$v = "";
-		$x = "/^".(isset($item[$n+1])?quotemeta($item[$n+1]):"\n").": /";
-		while (($a=array_shift($ln))&&!preg_match($x, $a)) {
-		    $v .= "$a\n";
-		}
-		array_unshift($ln, $a);
-	    }
-	    $result[$lab] = "$v";
-	} else {
-	    global $xoopsConfig;
-	    if ($xoopsConfig['debug']) {
-		echo "<span class='error'>".$item[$n].",$a</span>";
-	    }
-	    break;
-	}
-	$n++;
-    }
-    return $result;
-}
 
 function update_reserv($eid) {
     global $xoopsDB, $rsv, $opt;

@@ -1,29 +1,11 @@
 <?php
-// ------------------------------------------------------------------------- //
-//                XOOPS - PHP Content Management System                      //
-//                       <http://www.xoops.org/>                             //
-// ------------------------------------------------------------------------- //
-// Based on:								     //
-// myPHPNUKE Web Portal System - http://myphpnuke.com/	  		     //
-// PHP-NUKE Web Portal System - http://phpnuke.org/	  		     //
-// Thatware - http://thatware.org/					     //
-// ------------------------------------------------------------------------- //
-//  This program is free software; you can redistribute it and/or modify     //
-//  it under the terms of the GNU General Public License as published by     //
-//  the Free Software Foundation; either version 2 of the License, or        //
-//  (at your option) any later version.                                      //
-//                                                                           //
-//  This program is distributed in the hope that it will be useful,          //
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of           //
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            //
-//  GNU General Public License for more details.                             //
-//                                                                           //
-//  You should have received a copy of the GNU General Public License        //
-//  along with this program; if not, write to the Free Software              //
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
-// ------------------------------------------------------------------------- //
+// $Id: ev_top.php,v 1.5 2004/07/06 04:55:08 nobu Exp $
+
 function b_event_top_show($options) {
+    include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
     global $xoopsDB, $xoopsUser;
+    $moddir = 'eguide';
+
     $content = "";
     $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time()." AND status=0 ORDER BY edate";
     if(!isset($options[1])) $options[1]=10;
@@ -47,18 +29,19 @@ function b_event_top_show($options) {
 	    $add = "";
 	}
 	$eid = $myrow['eid'];
-	$content .= "<div class='evline'>$date<a href='".XOOPS_URL."/modules/eguide/event.php?eid=$eid'>$title</a> $add</div>\n";
+	$content .= "<div class='evline'>$date<a href='".XOOPS_URL."/modules/$moddir/event.php?eid=$eid'>$title</a> $add</div>\n";
     }
-    $mod = XoopsModule::getByDirname("eguide");
+    $mod = XoopsModule::getByDirname($moddir);
     if ($xoopsUser && $xoopsUser->isAdmin($mod->mid())) {
 	$result = $xoopsDB->query("SELECT count(eid) FROM ".$xoopsDB->prefix("eguide")." WHERE status=1");
 	if ($xoopsDB->getRowsNum($result)) {
 	    $n = array_shift($xoopsDB->fetchArray($result));
-	    if ($n) $content .= "<p><a href='".XOOPS_URL."/modules/eguide/admin/index.php?op=events'>"._BLOCK_EV_WAIT."</a>: $n</p>";
+	    if ($n) $content .= "<p><a href='".XOOPS_URL."/modules/$moddir/admin/index.php?op=events'>"._BLOCK_EV_WAIT."</a>: $n</p>";
 	}
     }
     return array("content"=>$content, "title"=>_MI_EGUIDE_HEADLINE);
 }
+
 function b_event_top_edit($options) {
     if ($options[0]) {
 	$sel0=" checked";

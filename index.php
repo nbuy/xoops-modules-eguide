@@ -1,5 +1,9 @@
 <?php
 include("header.php");
+
+if (isset($HTTP_GET_VARS['prev'])) $prev = intval($HTTP_GET_VARS['prev']);
+if (isset($HTTP_GET_VARS['start'])) $start = intval($HTTP_GET_VARS['start']);
+
 if ( $xoopsConfig['startpage'] == $xoopsModule->dirname() ) {
 
 	$xoopsOption['show_rblock'] =1;
