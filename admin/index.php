@@ -1,12 +1,11 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.9 2004/07/06 04:55:08 nobu Exp $
+// $Id: index.php,v 1.10 2004/07/07 04:34:29 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
 $inc = XOOPS_ROOT_PATH."/modules/image/class.php";
 if (file_exists($inc)) include_once($inc);
-error_reporting(E_ALL);
 
 $self = XOOPS_URL.$HTTP_SERVER_VARS["SCRIPT_NAME"];
 foreach (array("op", "eid", "status", "uid") as $v) {
