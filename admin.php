@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.1 2003/02/05 06:47:33 nobu Exp $
+// $Id: admin.php,v 1.2 2003/03/09 09:00:12 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -46,7 +46,7 @@ if ($op=='save') {
     $notify = (isset($notify)&&$notify==1)?1:0;
     $persons = isset($persons)?intval($persons):0;
     $optfield = addslashes($optfield);
-    $style = isset($style)?intval($style):0;
+    $style = isset($style)?intval($style):1;
     if (isset($eid)) {
 	$cond = $adm?"":" AND uid=$uid";
 	$result = $xoopsDB->query("SELECT status FROM $tbl WHERE eid=$eid");
