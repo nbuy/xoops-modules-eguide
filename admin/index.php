@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.7 2003/10/18 05:10:57 nobu Exp $
+// $Id: index.php,v 1.8 2003/11/18 03:19:44 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -24,7 +24,9 @@ function eventConfig() {
     echo "<table border='0'>\n<tr><td class='nw'>".
 	_AM_POST_GROUP."</td><td>
         <select name='group'>\n";
-    $r=$xoopsDB->query("SELECT groupid,name FROM ".$xoopsDB->prefix("groups"));
+    $type=preg_match("/^XOOPS 1/",XOOPS_VERSION)?"type":"group_type";
+    $r=$xoopsDB->query("SELECT groupid,name FROM ".$xoopsDB->prefix("groups").
+		       " WHERE $type<>'Anonymous'");
     while (list($i,$v)=$xoopsDB->fetchRow($r)) {
 	$ck = ($i==$eventConfig['group'])?" selected":"";
 	echo "<option value='$i'$ck>$v</option>\n";
