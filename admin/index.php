@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.1 2003/02/05 06:47:37 nobu Exp $
+// $Id: index.php,v 1.2 2003/02/07 06:24:55 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -226,9 +226,13 @@ case "eventConfigS":
 default:
     xoops_cp_header();
     OpenTable();
-    echo " - <b><a href='$self?op=eventConfig'>"._MI_EGUIDE_CONFIG."</a></b><br /><br />\n";
-    echo " - <b><a href='$self?op=events'>"._MI_EGUIDE_EVENTS."</a></b><br /><br />\n";
-    echo " - <b><a href='$self?op=notifies'>"._MI_EGUIDE_NOTIFIES."</a></b>\n";
+    include_once("menu.php");
+    $base = XOOPS_URL."/modules/".$xoopsModule->dirname();
+    foreach ($adminmenu as $v) {
+	$title = $v['title'];
+	$link = $v['link'];
+	echo "<p> - <b><a href='$base/$link'>$title</a></b></p>\n";
+    }
     CloseTable();
     break;
 }

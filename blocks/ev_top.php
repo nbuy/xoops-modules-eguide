@@ -27,6 +27,9 @@ function b_event_top_show($options) {
     $content = "";
     $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time()." AND status=0 ORDER BY edate";
     $result = $xoopsDB->query($sql, 5, 0);
+    if ($xoopsDB->getRowsNum($result)==0) {
+	$content .= "<div class='evline'>"._BLOCK_EV_NONE."</div>\n";
+    }
     while ( $myrow = $xoopsDB->fetchArray($result) ) {
 	$title = htmlspecialchars($myrow["title"]);
 	if ( !XOOPS_USE_MULTIBYTES ) {

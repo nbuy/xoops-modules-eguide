@@ -33,13 +33,17 @@ if (isset($prev)) {
     $start = (isset($page)?$page-1:0)*$max;
 }
 $result = $xoopsDB->query("SELECT eid, cdate, edate, title, summary, uid, status, style, counter  FROM $tbl WHERE $expire AND status=".STAT_NORMAL." ORDER BY edate LIMIT $start,$max");
-$count = 0;
-while ($data = $xoopsDB->fetchArray($result)) {
-    $mlink = "<a href='event.php?eid=".$data['eid']."'>"._MD_READMORE."</a>";
-    OpenTable();
-    themeevent($data, $mlink);
-    CloseTable();
-    $count++;
+if ($xoopsDB->getRowsNum($result)==0) {
+	OpenTable();
+	echo _MD_EVENT_NONE;
+	CloseTable();
+} else {
+    while ($data = $xoopsDB->fetchArray($result)) {
+	$mlink = "<a href='event.php?eid=".$data['eid']."'>"._MD_READMORE."</a>";
+	OpenTable();
+	themeevent($data, $mlink);
+	CloseTable();
+    }
 }
 
 if (empty($prev)) {

@@ -9,12 +9,13 @@ define("_AM_EDITARTICLE","Edit Event Article");
 define("_AM_DATE_FMT","Y-m-d");
 define("_AM_TIME_FMT","m-d H:i");
 define("_AM_POST_FMT","Y-m-d H:i");
+define("_AM_POSTED","Posted");
 define("_AM_YES","Yes");
 define("_AM_NO","No");
 define("_AM_INTROTEXT","Introduction Text");
 define("_AM_EXTEXT","Description");
 define("_AM_OPERATION","Operation");
-define("_AM_EDITUSER","Edit");
+define("_AM_EDITUSER","More");
 define("_AM_STATUS","Status");
 define("_AM_EDIT","Status");
 define("_AM_DISP_STATUS","Status");
@@ -32,12 +33,20 @@ define("_AM_SAVE","save");
 define("_AM_SAVECHANGE","Save Changes");
 define("_AM_CANCEL","Cancel");
 define("_AM_NEWSUB","New Event");
-define("_AM_NOTIFYSUBMIT","Notify mail when New Event registerd");
+define("_AM_NEW_NOTIFY","{SITENAME}
+There is new event registered.\n
+{TITLE}
+  {EVENT_URL}\n
+This event to be send before your registered address.
+If you want no more notification, please remove register in follow URL:\n
+  {CANCEL_URL}
+");
+define("_AM_NOTIFYSUBMIT","Notify mail to admin when New Event registerd");
 define("_AM_NEEDPOSTAUTH","Need to approve New Event");
 define("_AM_MAX_LISTITEM","Display additional item in list");
 define("_AM_MAX_SHOW","Display events in top page");
-define("_AM_BLOCKS_STYLE","More info in block");
 define("_AM_USER_NOTIFY","Notfiy new event to requested user");
+define("_AM_EMAIL","Email");
 
 // for Event Guide
 define("_AM_RESERVATION","Reservation");
@@ -85,6 +94,7 @@ define("_AM_CSV_OUT","CSV Output");
 define("_AM_INFO_TITLE","Information Mail to Send");
 define("_AM_INFO_MAIL","Sending Mail");
 define("_AM_INFO_CONDITION","Send to");
+define("_AM_INFO_REQUEST","Notify Registers");
 define("_AM_INFO_COUNT","count %d");
 define("_AM_INFO_SELF","send to self (%s)");
 define("_AM_INFO_DEFAULT","-messages-\n\n\nReserved Event\n    {EVENT_URL}\n");

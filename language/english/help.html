@@ -1,20 +1,130 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html language="en">
 <head>
-<title>eguide module helps</title>
+<title>Event Guide module helps</title>
 <style>
-th { padding: 4px; background: #e0e0e0; }
-td { padding: 4px; background: #e8e8e8; }
-blockquote { color: #004000; }
+td,th { padding: 4px; background: #e8e8e8;}
+.hd th  { padding: 4px; background: #d0d0d0; }
+.bnf { color: #008000; }
+.note { font-size: 80%; color: #800000; padding: 0.5em;}
 </style>
 </head>
 <body>
+  <h1>Event Guide module</h1>
+  <ul>
+  <li><a href="#summary">Summary</a></li>
+  <li><a href="#roleplay">Using Steps</a></li>
+  <li><a href="#functions">Functions</a></li>
+  <li><a href="#config">Event Configuration</a></li>
+  <li><a href="#form">Additional fileld Formats</a></li>
+  <li><a href="#changes">Changes</a></li>
+  </ul>
+
+  <hr>
+
+  <a name="summary"><h2>Summary</h2></a>
+
+  Event guide module will be display event guidance
+  and reservations the envet.
+  The modules have functions as followed:
+<ul>
+  <li>Event reservations</li>
+  <li>Configurable reservation forms - register handle by email address</li>
+  <li>Display event automatical in time - change display and allow reserve</li>
+  <li>Adminstration reservations and get data CSV format</li>
+  <li>Mail to send reserved person</li>
+  <li>New event notify to registers</li>
+</ul>
+
+  <a name="roleplay"><h2>Using Steps</h2></a>
+
+  <ol>
+    <li>Install this module</li>
+      <div class="note">
+      XOOPS at [Admin Menu - System - Modules Admin]
+      to install "event guide" module.<br />
+      general setup for event guide if you want.
+      [Admin Menu - Event Guide - genneral setup]
+      </div>
+    <li>Register New event</li>
+      <div class="note">
+      Write event guide document and register it.
+      The reservation form can change after.
+      </div>
+    <li>Event reservations</li>
+      <div class="note">
+      Reservation list and Adminstration can login permition user at "Adminstrations" link.
+      </div>
+  </ol>
+
+
+  <a name="functions"><h2>Functions</h2></a>
+
+  <h3>Event Registration and Display</h3>
+
+    <ol>
+      <li>Show Summary Listed</li>
+      <li>Blocks (Date and Title list)</li>
+      <li>Show all (with reservation form)</li>
+      <div class='note'>
+      When Admin permition or event poster will display administeration links.
+      </div>
+    </ol>
+
+  <h3>Event Edit</h3>
+
+    <ol>
+      <li>New Event Register - allow admin or setup group</li>
+      <li>Reservations</li>
+        <ul>
+	  <li>Approve reserve request</li>
+	  <li>Summary displayed</li>
+	    <ul>
+	       <li>counting items in radio, check, select field</li>
+	       <li>Display reservations list (for Display, for Print)</li>
+      <div class="note">
+      Reservation need approve (not auto approve disabled), Here to do approve.
+      <br />
+      Reservation All information to display and Edit, Delete operation
+      to be choose item more link.
+      NOTE: careful to be form field match when edit informations.
+      </div>
+	       <li>get data in CSV format</li>
+	    </ul>
+	  <li>Sending Mail to reservaiton persons</li>
+	</ul>
+    </ol>
+
+  <h3>Admin functions</h3>
+
+    <ol>
+      <li><a href="#config">Event Configuration</a></li>
+      <li>Event operations</li>
+      <li>Notify new evnet registers</li>
+    </ol>
+
+  <a name="config"><h2>Event Configuration</h2></a>
+
+  Event Guide module setup items as follow:
+  
+  <blockquote>
+    <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
+      <tr class="hd"><th>Item</th><th>value</th><th>description</th></tr>
+      <tr><th align="left">Permit event register group</th><td>Group (<u>Regsiter Users</u>)</td><td>allow group to register new event</td></tr>
+      <tr><th align="left">Notify mail to admin when New Event registerd</th><td><u>Yes</u>/No</td><td></td></tr>
+      <tr><th align="left">Need to approve New Event</th><td>Yes/<u>No</u></td><td></td></tr>
+      <tr><th align="left">Notfiy new event to requested user</th><td><u>Yes</u>/No</td><td></td></tr>
+      <tr><th align="left">Display additional item in list</th><td>field counts (<u>3</u>)</td><td></td></tr>
+      <tr><th align="left">Display events in top page</th><td>Event counts (<u>10</u>)</td><td></td></tr>
+    </table>
+  </blockquote>
+
   <a name="form"><h2>Additional fileld Formats</h2></a>
   <strong>In Reservation</strong>
   Additonal items set to FORM when use order to reservation.
   This additional items to setup following formats:
   <blockquote>
-      item-name["*"][,type[,argument...]]<p />
+      line ::= item-name["*"][,type[,argument...]]<p />
       type ::= {text|checkbox|radio|textarea|select}<br />
       argument ::= [value ["+"] "="] label
   </blockquote>
@@ -40,6 +150,15 @@ blockquote { color: #004000; }
       <tr><td>#message text</td><td>message text</td></tr>
     </table>
   </form>
-  
+
+  <a name="changes"><h2>Changes</h2></a>
+
+<dl>
+  <dd>2003/02/07 1.0 Released.</dd>
+</dl>
+
+<hr>
+<address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
+MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a>
 </body>
 </html>

@@ -5,4 +5,6 @@ $adminmenu[1]['title'] = _MI_EGUIDE_EVENTS;
 $adminmenu[1]['link'] = "admin/index.php?op=events";
 $adminmenu[2]['title'] = _MI_EGUIDE_NOTIFIES;
 $adminmenu[2]['link'] = "admin/index.php?op=notifies";
+$adminmenu[3]['title'] = _MI_EGUIDE_SUBMIT;
+$adminmenu[3]['link'] = "admin.php";
 ?>
