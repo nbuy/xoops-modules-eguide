@@ -47,23 +47,25 @@ $opt = $xoopsDB->prefix("eguide_opt");
 $result = $xoopsDB->query("SELECT * FROM $opt WHERE eid=$eid");
 if ($data['expire'] < time() || !$result) {
     # expired event
-} elseif ($data = $xoopsDB->fetchArray($result) && $data['reservation']) {
-    $reserved = false;
-    if ($xoopsUser) {
-	$rsv = $xoopsDB->prefix("eguide_reserv");
-	$result = $xoopsDB->query("SELECT * FROM $rsv WHERE eid=$eid AND uid=".$xoopsUser->uid());
-	$reserved = ($xoopsDB->getRowsNum($result)>0);
-    }
-    if ($reserved) {
-	echo "<div class='evnote'>"._MD_RESERVED."</div>\n";
-    } elseif ($data['strict'] && $data['persons']<=$data['reserved']) {
-	echo "<div class='evnote'>"._MD_RESERV_FULL."</div>\n";
-    } else {
-	eventform($data);
-    }
-    if ($data['persons']) {
-	echo "<p>".sprintf(_MD_RESERV_NUM, $data['persons'])." (".
-	    sprintf(_MD_RESERV_REG, $data['reserved']).")</p>\n";
+} elseif ($data = $xoopsDB->fetchArray($result)) {
+    if ($data['reservation']) {
+	$reserved = false;
+	if ($xoopsUser) {
+	    $rsv = $xoopsDB->prefix("eguide_reserv");
+	    $result = $xoopsDB->query("SELECT * FROM $rsv WHERE eid=$eid AND uid=".$xoopsUser->uid());
+	    $reserved = ($xoopsDB->getRowsNum($result)>0);
+	}
+	if ($reserved) {
+	    echo "<div class='evnote'>"._MD_RESERVED."</div>\n";
+	} elseif ($data['strict'] && $data['persons']<=$data['reserved']) {
+	    echo "<div class='evnote'>"._MD_RESERV_FULL."</div>\n";
+	} else {
+	    eventform($data);
+	}
+	if ($data['persons']) {
+	    echo "<p>".sprintf(_MD_RESERV_NUM, $data['persons'])." (".
+		sprintf(_MD_RESERV_REG, $data['reserved']).")</p>\n";
+	}
     }
 }
 
