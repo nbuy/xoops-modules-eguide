@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.2 2003/02/07 06:24:55 nobu Exp $
+// $Id: index.php,v 1.3 2003/06/10 15:01:50 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -11,7 +11,7 @@ $self = XOOPS_URL.$HTTP_SERVER_VARS["SCRIPT_NAME"];
 
 // show general configuration form
 function eventConfig() {
-    global $xoopsConfig, $xoopsModule, $eventConfig;
+    global $xoopsConfig, $xoopsModule, $eventConfig, $xoopsDB;
     xoops_cp_header();
     //$xoopsModule->printAdminMenu();
     //echo "<br />";
@@ -21,7 +21,8 @@ function eventConfig() {
     echo "<table width='100%' border='0'>\n<tr><td class='nw'>".
 	_AM_POST_GROUP."</td><td width='100%'>
         <select name='group'>\n";
-    foreach (XoopsGroup::getAllGroupsList() as $i => $v) {
+    $r=$xoopsDB->query("SELECT groupid,name FROM ".$xoopsDB->prefix("groups"));
+    while (list($i,$v)=$xoopsDB->fetchRow($r)) {
 	$ck = ($i==$eventConfig['group'])?" selected":"";
 	echo "<option value='$i'$ck>$v</option>\n";
     }

@@ -14,20 +14,32 @@ if ( $xoopsUser ) {
 	redirect_header(XOOPS_URL."/",3,_NOPERM);
 	exit();
 }
-if ( file_exists("../language/".$xoopsConfig['language']."/admin.php") ) {
-	include("../language/".$xoopsConfig['language']."/admin.php");
+$modbase = XOOPS_ROOT_PATH."/modules/".$xoopsModule->dirname();
+$loc="$modbase/language/".$xoopsConfig['language'];
+if ( file_exists("$loc/admin.php") ) {
+	include("$loc/admin.php");
 } else {
-	include("../language/english/admin.php");
+	include("$modbase/language/english/admin.php");
+}
+if ( file_exists("$loc/modinfo.php") ) {
+	include_once("$loc/modinfo.php");
+} else {
+	include_once("$modbase/language/english/modinfo.php");
 }
 if (function_exists("getCache")) {
     eval(getCache($xoopsModule->dirname()."/config.php"));
 } else {
-    include(XOOPS_ROOT_PATH."/modules/".$xoopsModule->dirname()."/cache/config.php");
+    include("$modbase/cache/config.php");
     function putCache($tag, $content) {
 	$file = XOOPS_ROOT_PATH."/modules/".preg_replace('/\//', "/cache/", $tag);
 	$fp = fopen($file, "w");
-	fwrite($fp, "<?php\n$content\n?>");
-	fclose($fp);
+	if ($fp) {
+	    fwrite($fp, "<?php\n$content\n?>");
+	    fclose($fp);
+	} else {
+	    redirect_header("index.php",5,sprintf(_MUSTWABLE, $file));
+	    exit();
+	}
     }
 }
 ?>
