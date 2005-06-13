@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.5 2004/07/06 04:55:08 nobu Exp $
+// $Id: admin.php,v 1.6 2005/06/13 05:17:34 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -12,15 +12,8 @@ $myts =& MyTextSanitizer::getInstance();
 
 include("perm.php");
 
-// remove slashes
-if (XOOPS_USE_MULTIBYTES && function_exists("mb_convert_encoding")) {
-    foreach ($HTTP_POST_VARS as $i => $v) {
-	$$i = mb_convert_encoding(stripslashes($v), _CHARSET, "EUC-JP,UTF-8,Shift_JIS,JIS");
-    }
-} else {
-    foreach ($HTTP_POST_VARS as $i => $v) {
-	$$i = stripslashes($v);
-    }
+foreach ($HTTP_POST_VARS as $i => $v) {
+    $$i = post_filter($v);
 }
 
 foreach (array("op","eid") as $v) {

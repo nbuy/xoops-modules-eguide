@@ -39,4 +39,28 @@ if (function_exists("getCache")) {
 	include_once(XOOPS_ROOT_PATH."/include/old_functions.php");
     }
 }
+
+// remove slashes
+if (XOOPS_USE_MULTIBYTES && function_exists("mb_convert_encoding") &&
+    $xoopsConfig['language'] == 'japanese') {
+    if (get_magic_quotes_gpc()) {
+	function post_filter($s) {
+	    return mb_convert_encoding(stripslashes($s), _CHARSET, "EUC-JP,UTF-8,Shift_JIS,JIS");
+	}
+    } else {
+	function post_filter($s) {
+	    return mb_convert_encoding($s, _CHARSET, "EUC-JP,UTF-8,Shift_JIS,JIS");
+	}
+    }
+} else {
+    if (get_magic_quotes_gpc()) {
+	function post_filter($s) {
+	    return stripslashes($s);
+	}
+    } else {
+	function post_filter($s) {
+	    return $s;
+	}
+    }
+}
 ?>

@@ -1,8 +1,9 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.6 2004/12/02 16:12:50 nobu Exp $
+// $Id: reserv.php,v 1.7 2005/06/13 05:17:34 nobu Exp $
 include("header.php");
 
+$tbl = $xoopsDB->prefix("eguide");
 $opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
 
@@ -10,7 +11,7 @@ foreach (array("op","key","rvid") as $v) {
     if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
 }
 foreach ($HTTP_POST_VARS as $i => $v) {
-    $$i = stripslashes($v);
+    $$i = post_filter($v);
 }
 
 if (isset($op)) {
@@ -22,8 +23,7 @@ if (isset($op)) {
 	$eid = $reserv['eid'];
 	if ($result) {
 	    if ($eid) {
-		$eid = "eid=$eid";
-		$result = $xoopsDB->query("SELECT uid, notify, title, edate FROM $opt WHERE $eid");
+		$result = $xoopsDB->query("SELECT uid, notify, title, edate FROM $tbl t,$opt o WHERE t.eid=$eid AND o.eid=t.eid");
 		if ($reserv['status']) {
 		    $xoopsDB->query("UPDATE $opt SET reserved=reserved-1 WHERE $eid");
 		}
@@ -37,7 +37,7 @@ if (isset($op)) {
 		    $xoopsMailer->setSubject(_MD_RESERV_CANCELED);
 		    $xoopsMailer->setBody(sprintf(_MD_RESERV_NOTIFY,
 						  _MD_RESERV_CANCELED, $reserv['email'], $title,
-						  XOOPS_URL."/modules/eguide/event.php?$eid"));
+						  XOOPS_URL."/modules/eguide/event.php?eid=$eid"));
 		    $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
 		    $xoopsMailer->setFromName("Event Notify");
 		    $xoopsMailer->setToUsers($poster);
@@ -176,8 +176,7 @@ VALUES  ($eid,$uid,$now, '$ml', '".addslashes($value)."',$accept,'$conf')");
 	$result = $xoopsDB->query("SELECT rvid FROM $rsv WHERE eid=$eid AND email='$ml' AND rdate=$now");
 	$id = $xoopsDB->fetchArray($result);
 	$rvid = $id['rvid'];
-	$result = $xoopsDB->query("SELECT title, edate, uid FROM ".
-			  $xoopsDB->prefix("eguide")." WHERE eid=$eid");
+	$result = $xoopsDB->query("SELECT title, edate, uid FROM $tbl WHERE eid=$eid");
 	$guide = $xoopsDB->fetchArray($result);
 	$title = date(_MD_DATE_FMT, $guide['edate'])." ".$guide['title'];
 
@@ -234,7 +233,7 @@ case 'cancel':
 	    include("themeevent.php");
 	}
 	$eid = $data['eid'];
-	$result = $xoopsDB->query("SELECT eid, cdate, edate, title, summary, uid, status, style, counter  FROM ".$xoopsDB->prefix("eguide")." WHERE eid=$eid");
+	$result = $xoopsDB->query("SELECT eid, cdate, edate, title, summary, uid, status, style, counter  FROM $tbl WHERE eid=$eid");
 	if ($eid == 0 || $view = $xoopsDB->fetchArray($result)) {
 	    OpenTable();
 	    if ($eid) {

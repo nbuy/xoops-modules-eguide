@@ -2,6 +2,7 @@
 .evhead { font-size: 12pt; font-style: bold; padding-bottom: 0.5em; }
 .bg1 th { border: solid 1px; white-space: nowrap; font-size: 10pt;}
 .bg3 td, .bg4 td { border-bottom: dashed 1px; font-size: 10pt;}
+.bg1 td { font-size: 10pt;}
 .evtbl {
    border-spacing: 1px;
 }

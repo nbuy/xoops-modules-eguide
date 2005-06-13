@@ -51,7 +51,7 @@ define("_AM_EMAIL","Email");
 
 // for Event Guide
 define("_AM_RESERVATION","Reservation");
-define("_AM_RESERV_DESC","Doing reservation proceeding");
+define("_AM_RESERV_DESC","Do reservation proceeding");
 define("_AM_RESERV_STOP","Stop reservation when full of persons");
 define("_AM_RESERV_AUTO","Accept Automatic (No need approve)");
 define("_AM_RESERV_NOTIFY","Reservation notify by mail");

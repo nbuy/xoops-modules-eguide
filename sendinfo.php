@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.3 2004/07/06 04:55:08 nobu Exp $
+// $Id: sendinfo.php,v 1.4 2005/06/13 05:17:34 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -13,7 +13,7 @@ $opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
 
 foreach ($HTTP_POST_VARS as $i => $v) {
-    $$i = stripslashes($v);
+    $$i = post_filter($v);
 }
 foreach (array("op","eid") as $v) {
     if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
@@ -22,7 +22,6 @@ foreach (array("op","eid") as $v) {
 include(XOOPS_ROOT_PATH."/header.php");
 OpenTable();
 if (isset($op) && $op=="doit") {
-    $body = stripslashes($body);
     $result = $xoopsDB->query("SELECT edate, title FROM $tbl WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     $title = "Re: ".date(_MD_DATE_FMT, $data['edate'])." ".htmlspecialchars($data['title']);

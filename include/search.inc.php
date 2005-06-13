@@ -1,8 +1,8 @@
 <?php
 
-function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc){
+function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc==true){
 	global $xoopsDB;
-	$opt = $desc?", summary description":"";
+	$opt = $desc?", summary":"";
 	$sql = "SELECT eid,uid,title,edate$opt FROM ".$xoopsDB->prefix("eguide")." WHERE status=0";
 	//$sql .= " AND expire>".time();
 	if ( $userid != 0 ) {
@@ -28,7 +28,7 @@ function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc){
 		$ret[$i]['title'] = $myrow['title'];
 		$ret[$i]['time'] = $myrow['edate'];
 		$ret[$i]['uid'] = $myrow['uid'];
-		if ($desc) $ret[$i]['description'] = $myrow['description'];
+		if ($desc) $ret[$i]['description'] = $myrow['summary'];
 		$i++;
 	}
 	return $ret;

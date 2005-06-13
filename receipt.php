@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.6 2004/07/07 06:34:55 nobu Exp $
+// $Id: receipt.php,v 1.7 2005/06/13 05:17:34 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -13,7 +13,7 @@ $tbl = $xoopsDB->prefix("eguide");
 $opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
 foreach ($HTTP_POST_VARS as $i => $v) {
-    $$i = stripslashes($v);
+    $$i = post_filter($v);
 }
 foreach (array("op","rvid","eid") as $v) {
     if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
@@ -70,7 +70,7 @@ $nrec = $xoopsDB->getRowsNum($result);
 
 if ($nrec) {
     if ($op=='csv') {
-	$charset = "Shift_JIS";
+	$charset = $xoopsConfig['language']=='japanese'?"Shift_JIS":_CHARSET;
 	if (isset($HTTP_GET_VAR['charset'])) {
 	    $charset = $HTTP_GET_VAR['charset'];
 	    if ($charset != _CHARSET) $charset = "Shift_JIS";
