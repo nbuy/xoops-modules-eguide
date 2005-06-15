@@ -1,6 +1,6 @@
 <?php
 
-function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc==true){
+function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc=true){
 	global $xoopsDB;
 	$opt = $desc?", summary":"";
 	$sql = "SELECT eid,uid,title,edate$opt FROM ".$xoopsDB->prefix("eguide")." WHERE status=0";
