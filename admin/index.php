@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.14 2005/09/19 07:05:58 nobu Exp $
+// $Id: index.php,v 1.15 2005/09/19 07:45:01 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -296,15 +296,10 @@ default:
     OpenTable();
     include_once("menu.php");
     $base = XOOPS_URL."/modules/".$xoopsModule->dirname();
-    $pref = XOOPS_URL."/modules/system/admin.php?fct=preferences&op=showmod&mod=".$xoopsModule->getVar('mid');
-    $adminmenu[] = array('title'=>_MD_AM_GENERAL, 'link'=>$pref);
     foreach ($adminmenu as $v) {
 	$title = $v['title'];
 	$link = $v['link'];
-	if (!preg_match('/^(\/|https?:)/', $link)) {
-	    $link = $base.$link;
-	}
-	echo "<p> - <b><a href='$link'>$title</a></b></p>\n";
+	echo "<p> - <b><a href='$base/$link'>$title</a></b></p>\n";
     }
     CloseTable();
     break;
