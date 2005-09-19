@@ -1,16 +1,16 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.13 2004/12/02 16:12:50 nobu Exp $
+// $Id: index.php,v 1.14 2005/09/19 07:05:58 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
 $inc = XOOPS_ROOT_PATH."/modules/image/class.php";
 if (file_exists($inc)) include_once($inc);
 
-$self = $HTTP_SERVER_VARS["SCRIPT_NAME"];
+$self = $_SERVER["SCRIPT_NAME"];
 foreach (array("op", "eid", "status", "uid") as $v) {
-    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
-    elseif (isset($HTTP_POST_VARS[$v])) $$v = $HTTP_POST_VARS[$v];
+    if (isset($_GET[$v])) $$v = $_GET[$v];
+    elseif (isset($_POST[$v])) $$v = $_POST[$v];
 }
 
 // show general configuration form
@@ -67,8 +67,8 @@ function eventConfigS() {
     global $xoopsModule,$self;
 
     function myvalue($name) {
-	global $HTTP_POST_VARS;
-	$v = $HTTP_POST_VARS[$name];
+	global $_POST;
+	$v = $_POST[$name];
 	if (!preg_match('/^\d+$/', $v)) {
 	    $v = "\"$v\"";
 	}
@@ -156,8 +156,8 @@ case "notifies":
     OpenTable();
     echo "<h4>"._AM_INFO_REQUEST."</h4>";
     $cond = "eid=0";
-    if (isset($HTTP_GET_VARS['q'])) {
-	$q = $HTTP_GET_VARS['q'];
+    if (isset($_GET['q'])) {
+	$q = $_GET['q'];
 	$cond .= " AND email like '%$q%'";
     }
     $result = $xoopsDB->query("SELECT * FROM $rsv WHERE $cond ORDER BY rdate");
@@ -200,7 +200,7 @@ case "notifies":
     break;
 
 case "delnotify":
-    foreach ($HTTP_POST_VARS as $i => $v) {
+    foreach ($_POST as $i => $v) {
 	if (preg_match('/^rm\d+$/', $i, $d)) {
 	    if (empty($cond)) $cond = "rvid=$v";
 	    else $cond .= " OR rvid=$v";
@@ -270,8 +270,8 @@ case "eventConfigS":
     break;
 
 case "resvCtrl":
-    $rv = isset($HTTP_POST_VARS['rv'])?$HTTP_POST_VARS['rv']:array();
-    $ck = isset($HTTP_POST_VARS['ck'])?$HTTP_POST_VARS['ck']:array();
+    $rv = isset($_POST['rv'])?$_POST['rv']:array();
+    $ck = isset($_POST['ck'])?$_POST['ck']:array();
     $off = $on = "";
     foreach (array_keys($rv) as $k) {
 	if (isset($ck[$k])) {
@@ -296,10 +296,15 @@ default:
     OpenTable();
     include_once("menu.php");
     $base = XOOPS_URL."/modules/".$xoopsModule->dirname();
+    $pref = XOOPS_URL."/modules/system/admin.php?fct=preferences&op=showmod&mod=".$xoopsModule->getVar('mid');
+    $adminmenu[] = array('title'=>_MD_AM_GENERAL, 'link'=>$pref);
     foreach ($adminmenu as $v) {
 	$title = $v['title'];
 	$link = $v['link'];
-	echo "<p> - <b><a href='$base/$link'>$title</a></b></p>\n";
+	if (!preg_match('/^(\/|https?:)/', $link)) {
+	    $link = $base.$link;
+	}
+	echo "<p> - <b><a href='$link'>$title</a></b></p>\n";
     }
     CloseTable();
     break;

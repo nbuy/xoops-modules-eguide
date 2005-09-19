@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.6 2005/06/13 05:17:34 nobu Exp $
+// $Id: admin.php,v 1.7 2005/09/19 07:05:57 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -12,16 +12,16 @@ $myts =& MyTextSanitizer::getInstance();
 
 include("perm.php");
 
-foreach ($HTTP_POST_VARS as $i => $v) {
+foreach ($_POST as $i => $v) {
     $$i = post_filter($v);
 }
 
 foreach (array("op","eid") as $v) {
-    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
+    if (isset($_GET[$v])) $$v = $_GET[$v];
 }
 
-if (isset($HTTP_POST_VARS['save'])) $op = "save";
-elseif (isset($HTTP_POST_VARS['preview'])) $op = "preview";
+if (isset($_POST['save'])) $op = "save";
+elseif (isset($_POST['preview'])) $op = "preview";
 elseif (empty($op)) $op = 'new';
 
 $edate = getDateField("edate");
@@ -165,9 +165,9 @@ exit;
 
 // make to unix time from separate fields.
 function getDateField($p) {
-    global $HTTP_POST_VARS;
-    if (empty($HTTP_POST_VARS["${p}year"])) return 0;
-    return mktime($HTTP_POST_VARS["${p}hour"],$HTTP_POST_VARS["${p}min"], 0,
-		  $HTTP_POST_VARS["${p}month"], $HTTP_POST_VARS["${p}day"], $HTTP_POST_VARS["${p}year"]);
+    global $_POST;
+    if (empty($_POST["${p}year"])) return 0;
+    return mktime($_POST["${p}hour"],$_POST["${p}min"], 0,
+		  $_POST["${p}month"], $_POST["${p}day"], $_POST["${p}year"]);
 }
 ?>

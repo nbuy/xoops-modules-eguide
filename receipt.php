@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.7 2005/06/13 05:17:34 nobu Exp $
+// $Id: receipt.php,v 1.8 2005/09/19 07:05:58 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -12,11 +12,11 @@ include("functions.php");
 $tbl = $xoopsDB->prefix("eguide");
 $opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
-foreach ($HTTP_POST_VARS as $i => $v) {
+foreach ($_POST as $i => $v) {
     $$i = post_filter($v);
 }
 foreach (array("op","rvid","eid") as $v) {
-    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
+    if (isset($_GET[$v])) $$v = $_GET[$v];
 }
 if (isset($rvid)) {
     if (empty($op)) $op = "one";
@@ -71,8 +71,8 @@ $nrec = $xoopsDB->getRowsNum($result);
 if ($nrec) {
     if ($op=='csv') {
 	$charset = $xoopsConfig['language']=='japanese'?"Shift_JIS":_CHARSET;
-	if (isset($HTTP_GET_VAR['charset'])) {
-	    $charset = $HTTP_GET_VAR['charset'];
+	if (isset($_GET['charset'])) {
+	    $charset = $_GET['charset'];
 	    if ($charset != _CHARSET) $charset = "Shift_JIS";
 	}
 	// field name
@@ -116,9 +116,9 @@ if ($print) {
 echo "<p class='evhead'><a href='event.php?eid=$eid'>$title</a></p>\n";
 switch ($op) {
 case 'active':
-    foreach (array_keys($HTTP_POST_VARS) as $i) {
+    foreach (array_keys($_POST) as $i) {
 	if (preg_match('/^act\d+$/', $i)) {
-	    $rvid = $HTTP_POST_VARS[$i];
+	    $rvid = $_POST[$i];
 	    $result=$xoopsDB->query("SELECT * FROM $rsv WHERE rvid=$rvid");
 	    $data = $xoopsDB->fetchArray($result);
 	    if ($data) {

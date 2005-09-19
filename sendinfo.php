@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.4 2005/06/13 05:17:34 nobu Exp $
+// $Id: sendinfo.php,v 1.5 2005/09/19 07:05:58 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -12,11 +12,11 @@ $tbl = $xoopsDB->prefix("eguide");
 $opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
 
-foreach ($HTTP_POST_VARS as $i => $v) {
+foreach ($_POST as $i => $v) {
     $$i = post_filter($v);
 }
 foreach (array("op","eid") as $v) {
-    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
+    if (isset($_GET[$v])) $$v = $_GET[$v];
 }
 
 include(XOOPS_ROOT_PATH."/header.php");

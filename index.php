@@ -1,9 +1,9 @@
 <?php
 include("header.php");
 
-if (isset($HTTP_GET_VARS['prev'])) $prev = intval($HTTP_GET_VARS['prev']);
-if (isset($HTTP_GET_VARS['page'])) $page = intval($HTTP_GET_VARS['page']);
-if (isset($HTTP_GET_VARS['start'])) $start = intval($HTTP_GET_VARS['start']);
+if (isset($_GET['prev'])) $prev = intval($_GET['prev']);
+if (isset($_GET['page'])) $page = intval($_GET['page']);
+if (isset($_GET['start'])) $start = intval($_GET['start']);
 
 if ( $xoopsConfig['startpage'] == $xoopsModule->dirname() ) {
 

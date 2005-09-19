@@ -23,7 +23,7 @@ function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc=true
 	$ret = array();
 	$i = 0;
  	while($myrow = $xoopsDB->fetchArray($result)){
-		$ret[$i]['image'] = "images/forum.gif";
+	    //$ret[$i]['image'] = "images/forum.gif";
 		$ret[$i]['link'] = "event.php?eid=".$myrow['eid']."";
 		$ret[$i]['title'] = $myrow['title'];
 		$ret[$i]['time'] = $myrow['edate'];

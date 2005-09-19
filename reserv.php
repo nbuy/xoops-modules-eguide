@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.7 2005/06/13 05:17:34 nobu Exp $
+// $Id: reserv.php,v 1.8 2005/09/19 07:05:58 nobu Exp $
 include("header.php");
 
 $tbl = $xoopsDB->prefix("eguide");
@@ -8,9 +8,9 @@ $opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
 
 foreach (array("op","key","rvid") as $v) {
-    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
+    if (isset($_GET[$v])) $$v = $_GET[$v];
 }
-foreach ($HTTP_POST_VARS as $i => $v) {
+foreach ($_POST as $i => $v) {
     $$i = post_filter($v);
 }
 
@@ -70,7 +70,7 @@ if (isset($op)) {
 	exit;
     case 'register':
 	if (empty($eventConfig['user_notify'])) {
-	    redirect_header($HTTP_SERVER_VARS['HTTP_REFERER'],2,_NOPERM);
+	    redirect_header($_SERVER['HTTP_REFERER'],2,_NOPERM);
 	    exit;
 	}
     }
@@ -112,12 +112,12 @@ case 'order':
 	    $v = "";
 	    for ($i=1; $i<=count($a); $i++) {
 		$n = "opt${field}_$i";
-		if (isset($HTTP_POST_VARS[$n])) {
-		    $v .= (($v=="")?"":",").$HTTP_POST_VARS[$n];
+		if (isset($_POST[$n])) {
+		    $v .= (($v=="")?"":",").$_POST[$n];
 		}
 	    }
 	} else {
-	    $v = $HTTP_POST_VARS["opt$field"];
+	    $v = $_POST["opt$field"];
 	    if ($type=='textarea') $v = "\\\n$v";
 	}
 	if (preg_match('/\*$/', $name)) {

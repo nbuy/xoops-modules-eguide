@@ -4,7 +4,7 @@ $inc = XOOPS_ROOT_PATH."/modules/image/class.php";
 if (file_exists($inc)) include_once($inc);
 
 foreach (array("eid", "op") as $v) {
-    if (isset($HTTP_GET_VARS[$v])) $$v = $HTTP_GET_VARS[$v];
+    if (isset($_GET[$v])) $$v = $_GET[$v];
 }
 $myts =& MyTextSanitizer::getInstance();
 

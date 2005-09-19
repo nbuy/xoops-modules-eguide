@@ -1,6 +1,6 @@
 <?php
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "1.6.4";
+$modversion['version'] = "1.6.5";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi<br />( http://mysite.ddo.jp/ )";
