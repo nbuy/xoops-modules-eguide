@@ -10,9 +10,10 @@ $myts =& MyTextSanitizer::getInstance();
 
 $tbl = $xoopsDB->prefix("eguide");
 $rsv = $xoopsDB->prefix("eguide_reserv");
+$opt = $xoopsDB->prefix("eguide_opt");
 
 $stc=($xoopsUser && $xoopsUser->isAdmin($xoopsModule->mid())?"":"AND status=".STAT_NORMAL);
-$result = $xoopsDB->query("SELECT * FROM $tbl WHERE eid=$eid $stc");
+$result = $xoopsDB->query("SELECT e.*, reservation FROM $tbl e,$opt o WHERE e.eid=$eid AND e.eid=o.eid $stc");
 $data = $xoopsDB->fetchArray($result);
 
 $xoopsConfig['title'] = $myts->sanitizeForDisplay($data['title']);
@@ -44,12 +45,11 @@ OpenTable();
 $print = "<a href='event.php?op=print&amp;eid=$eid'><img src='".XOOPS_URL."/modules/news/images/print.gif' alt='"._PRINT."' border='0'></a>";
 themeevent($data, $print);
 
-$opt = $xoopsDB->prefix("eguide_opt");
 $result = $xoopsDB->query("SELECT * FROM $opt WHERE eid=$eid");
 if ($data['expire'] < time() || !$result) {
     # expired event
-} elseif ($data = $xoopsDB->fetchArray($result)) {
-    if ($data['reservation']) {
+} elseif ($odata = $xoopsDB->fetchArray($result)) {
+    if ($odata['reservation']) {
 	$reserved = false;
 	if ($xoopsUser) {
 	    $result = $xoopsDB->query("SELECT * FROM $rsv WHERE eid=$eid AND uid=".$xoopsUser->uid());
@@ -57,24 +57,24 @@ if ($data['expire'] < time() || !$result) {
 	}
 	if ($reserved) {
 	    echo "<div class='evnote'>"._MD_RESERVED."</div>\n";
-	} elseif ($data['strict'] && $data['persons']<=$data['reserved']) {
+	} elseif ($odata['strict'] && $odata['persons']<=$odata['reserved']) {
 	    echo "<div class='evnote'>"._MD_RESERV_FULL."</div>\n";
 	} else {
-	    eventform($data);
+	    eventform($odata);
 	}
-	if ($data['persons']) {
-	    echo "<p>".sprintf(_MD_RESERV_NUM, $data['persons'])." (".
-		sprintf(_MD_RESERV_REG, $data['reserved']).")</p>\n";
+	if ($odata['persons']) {
+	    echo "<p>".sprintf(_MD_RESERV_NUM, $odata['persons'])." (".
+		sprintf(_MD_RESERV_REG, $odata['reserved']).")</p>\n";
 	}
     }
 }
 
 CloseTable();
 
-if (!empty($data['reserved'])) {
+if ($data['reservation'] && !empty($odata['reserved'])) {
     $show = array();
     $item = array();
-    foreach (explode("\n", $data['optfield']) as $n) {
+    foreach (explode("\n", $odata['optfield']) as $n) {
 	$a = explode(",", preg_replace('/[\n\r]/',"", $n));
 	$lab = preg_replace('/[\*#]$/', "",array_shift($a));
 	if (preg_match('/^!/', $lab)) {
