@@ -24,16 +24,16 @@ td,th { padding: 4px; background: #e8e8e8;}
 
   <a name="summary"><h2>Summary</h2></a>
 
-  Event guide module will be display event guidance
-  and reservations the envet.
-  The modules have functions as followed:
+  Event guide module will display event guidance
+  and reservations for the event.
+  The modules has functions as follows:
 <ul>
   <li>Event reservations</li>
-  <li>Configurable reservation forms - register handle by email address</li>
-  <li>Display event automatical in time - change display and allow reserve</li>
-  <li>Adminstration reservations and get data CSV format</li>
-  <li>Mail to send reserved person</li>
-  <li>New event notify to registers</li>
+  <li>Configurable reservation forms - register id by email address</li>
+  <li>Display event automatically in time - change display and allow reservations</li>
+  <li>Adminster reservations and get data in CSV format</li>
+  <li>Mail to send to persons who have made reservations</li>
+  <li>New event notification to registered users</li>
 </ul>
 
   <a name="roleplay"><h2>Using Steps</h2></a>
@@ -49,11 +49,11 @@ td,th { padding: 4px; background: #e8e8e8;}
     <li>Register New event</li>
       <div class="note">
       Write event guide document and register it.
-      The reservation form can change after.
+      The reservation form can be changed afterwards.
       </div>
     <li>Event reservations</li>
       <div class="note">
-      Reservation list and Adminstration can login permition user at "Adminstrations" link.
+      Reservation list and Adminstrators can login with  user permissions via the "Adminstration" link.
       </div>
   </ol>
 
@@ -67,31 +67,31 @@ td,th { padding: 4px; background: #e8e8e8;}
       <li>Blocks (Date and Title list)</li>
       <li>Show all (with reservation form)</li>
       <div class='note'>
-      When Admin permition or event poster will display administeration links.
+      When user with Admin permission or event poster - will display administration links.
       </div>
     </ol>
 
   <h3>Event Edit</h3>
 
     <ol>
-      <li>New Event Register - allow admin or setup group</li>
+      <li>New Event Registration - allow admin or setup group</li>
       <li>Reservations</li>
         <ul>
-	  <li>Approve reserve request</li>
-	  <li>Summary displayed</li>
+	  <li>Approve reservation request</li>
+	  <li>Summary display</li>
 	    <ul>
 	       <li>counting items in radio, check, select field</li>
-	       <li>Display reservations list (for Display, for Print)</li>
+	       <li>Display reservation list (for Display, for Print)</li>
       <div class="note">
-      Reservation need approve (not auto approve disabled), Here to do approve.
+      Reservations need approval (auto approve disabled), Here to approve.
       <br />
-      Reservation All information to display and Edit, Delete operation
-      to be choose item more link.
-      NOTE: careful to be form field match when edit informations.
+      All Reservation information to display and Edit, Delete operation
+      to be chosen from item "more" link.
+      NOTE: Be careful to be match form field when you edit information.
       </div>
 	       <li>get data in CSV format</li>
 	    </ul>
-	  <li>Sending Mail to reservaiton persons</li>
+	  <li>Sending Mail to reservation persons</li>
 	</ul>
     </ol>
 
@@ -100,7 +100,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     <ol>
       <li><a href="#config">Event Configuration</a></li>
       <li>Event operations</li>
-      <li>Notify new evnet registers</li>
+      <li>Notify new event registered users</li>
     </ol>
 
   <a name="config"><h2>Event Configuration</h2></a>
@@ -110,34 +110,34 @@ td,th { padding: 4px; background: #e8e8e8;}
   <blockquote>
     <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
       <tr class="hd"><th>Item</th><th>value</th><th>description</th></tr>
-      <tr><th align="left">Permit event register group</th><td>Group (<u>Regsiter Users</u>)</td><td>allow group to register new event</td></tr>
-      <tr><th align="left">Notify mail to admin when New Event registerd</th><td><u>Yes</u>/No</td><td></td></tr>
+      <tr><th align="left">Permit event registration group</th><td>Group (<u>Regsiter Users</u>)</td><td>allow group to register new event</td></tr>
+      <tr><th align="left">Notification mail to admin when New Event registerd</th><td><u>Yes</u>/No</td><td></td></tr>
       <tr><th align="left">Need to approve New Event</th><td>Yes/<u>No</u></td><td></td></tr>
-      <tr><th align="left">Notfiy new event to requested user</th><td><u>Yes</u>/No</td><td></td></tr>
-      <tr><th align="left">Display additional item in list</th><td>field counts (<u>3</u>)</td><td></td></tr>
+      <tr><th align="left">Notification of new event to requested user</th><td><u>Yes</u>/No</td><td></td></tr>
+      <tr><th align="left">Display additional items in list</th><td>field counts (<u>3</u>)</td><td></td></tr>
       <tr><th align="left">Display events in top page</th><td>Event counts (<u>10</u>)</td><td></td></tr>
     </table>
   </blockquote>
 
   <a name="form"><h2>Additional fileld Formats</h2></a>
   <strong>In Reservation</strong>
-  Additonal items set to FORM when use order to reservation.
-  This additional items to setup following formats:
+  Additonal items set to FORM when used order to make reservation.
+  These additional items are setup with the following formats:
   <blockquote>
       line ::= ["!"]item-name["*"][,type[,argument...]]<p />
       type ::= {text|checkbox|radio|textarea|select}<br />
       argument ::= [value ["+"] "="] label
   </blockquote>
   <ul>
-    <li>"!" meen the item display public.</li>
+    <li>"!" means the item is displayed to the public.</li>
        <div class="note">
-       Additional form top of line marked "!" reservation list are display.
-       There is no "!" marked items, the list not display.
+       Additionally, form top of line marked "!"  - reservation list is displayed.
+       If there is no "!" marked items, the list is not displayed.
        </div>
-    <li>"*" meen need input something.</li>
-    <li>"#" is message in the FORM (displayed comments).</li>
-    <li>"," is derimiter. (Use HTML special char when use in arguments)</li>
-    <li>value equivarent label when it suppressed.</li>
+    <li>"*" means you need input something.</li>
+    <li>"#" is a message in the FORM (displayed comments).</li>
+    <li>"," is a delimiter. (Use HTML special char when used in arguments)</li>
+    <li>value equivalent label when it suppressed.</li>
     <li>"+" Selected items (checkbox, radio, select) default value.</li>
   </ul>
 
@@ -159,6 +159,8 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"><h2>Changes</h2></a>
 
 <dl>
+  <dd>2005/09/28 1.6.7</dd>
+  <dd>2005/09/28 Update language/english resources (from jyotirmaya, thanks)</dd>
   <dd>2005/09/19 1.6.6</dd>
   <dd>2005/09/19 No Reservations anchor display when reservation disabled</dd>
   <dd>2005/09/12 change to use $HTTP_{GET|POST|SERVER}_VARS to $_{GET|POST|SERVER}</dd>
@@ -209,6 +211,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.12 2005/09/19 14:27:00 nobu Exp $
+$Id: help.html,v 1.13 2005/09/27 19:12:49 nobu Exp $
 </body>
 </html>
