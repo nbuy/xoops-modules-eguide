@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.5 2005/09/19 07:05:58 nobu Exp $
+// $Id: sendinfo.php,v 1.6 2005/10/21 05:47:06 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -24,7 +24,7 @@ OpenTable();
 if (isset($op) && $op=="doit") {
     $result = $xoopsDB->query("SELECT edate, title FROM $tbl WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
-    $title = "Re: ".date(_MD_DATE_FMT, $data['edate'])." ".htmlspecialchars($data['title']);
+    $title = "Re: ".formatTimestamp($data['edate'], _MD_DATE_FMT)." ".htmlspecialchars($data['title']);
     $xoopsMailer =& getMailer();
     $xoopsMailer->useMail();
     $xoopsMailer->setSubject($title);
@@ -49,7 +49,7 @@ if (isset($op) && $op=="doit") {
 } else {
     $result = $xoopsDB->query("SELECT edate, title, uid FROM $tbl WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
-    $title = "Re: ".date(_MD_DATE_FMT, $data['edate'])." ".htmlspecialchars($data['title']);
+    $title = "Re: ".formatTimestamp($data['edate'], _MD_DATE_FMT)." ".htmlspecialchars($data['title']);
     $result = $xoopsDB->query("SELECT status, count(rvid) FROM $rsv WHERE eid=$eid GROUP BY status");
     
     echo "<h4>"._AM_INFO_TITLE."</h4>\n";

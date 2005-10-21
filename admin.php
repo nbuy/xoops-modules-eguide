@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.7 2005/09/19 07:05:57 nobu Exp $
+// $Id: admin.php,v 1.8 2005/10/21 05:47:05 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -167,7 +167,7 @@ exit;
 function getDateField($p) {
     global $_POST;
     if (empty($_POST["${p}year"])) return 0;
-    return mktime($_POST["${p}hour"],$_POST["${p}min"], 0,
-		  $_POST["${p}month"], $_POST["${p}day"], $_POST["${p}year"]);
+    return userTimeToServerTime(mktime($_POST["${p}hour"],$_POST["${p}min"], 0,
+		  $_POST["${p}month"], $_POST["${p}day"], $_POST["${p}year"]));
 }
 ?>

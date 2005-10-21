@@ -9,7 +9,7 @@ function event_notify($op, $data) {
 	    $xoopsMailer =& getMailer();
 	    $xoopsMailer->useMail();
 	    $title = $data['title'];
-	    $edate = date(_AM_DATE_FMT, $data['edate']);
+	    $edate = formatTimestamp($data['edate'], _AM_DATE_FMT);
 	    $xoopsMailer->setSubject(_AM_NEWSUB." - $edate $title");
 	    $xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=".$data['eid']);
 	    $xoopsMailer->assign("EVENT_TITLE", $title);
@@ -39,7 +39,7 @@ function user_notify($eid) {
 	echo "<div class='error'>Not found Event(eid='$eid')</div>\n";
     }
     $data = $xoopsDB->fetchArray($result);
-    $title = date(_AM_DATE_FMT, $data['edate'])." ".$data['title'];
+    $title = formatTimestamp($data['edate'], _AM_DATE_FMT)." ".$data['title'];
 
     if (!$eventConfig['user_notify'] ||
 	$data['expire']<time() ||

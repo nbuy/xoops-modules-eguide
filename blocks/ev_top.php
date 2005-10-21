@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.7 2004/12/02 16:12:50 nobu Exp $
+// $Id: ev_top.php,v 1.8 2005/10/21 05:47:06 nobu Exp $
 
 function b_event_top_show($options) {
     include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
@@ -22,10 +22,10 @@ function b_event_top_show($options) {
 	    }
 	}
 
-	$date = "<strong>".date(_BLOCK_DATE_FMT, $myrow['edate'])."</strong>&nbsp;";
+	$date = "<strong>".formatTimestamp($myrow['edate'], _BLOCK_DATE_FMT)."</strong>&nbsp;";
 	if ($options[0]) {
 	    $poster = new XoopsUser($myrow['uid']);
-	    $add = "["._BLOCK_EV_POST." ".date(_BLOCK_DATE_FMT, $myrow['cdate'])." ".$poster->uname()."]";
+	    $add = "["._BLOCK_EV_POST." ".formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT)." ".$poster->uname()."]";
 	} else {
 	    $add = "";
 	}

@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.15 2005/09/19 07:45:01 nobu Exp $
+// $Id: index.php,v 1.16 2005/10/21 05:47:06 nobu Exp $
 include("admin_header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
@@ -112,7 +112,7 @@ case "events":
     while ($data = $xoopsDB->fetchArray($result)) {
 	$bg = $tags[$n++%2];
 	$eid = $data['eid'];
-	$date = date(_AM_DATE_FMT, $data['edate']);
+	$date = formatTimestamp($data['edate'], _AM_DATE_FMT);
 	$title = "<a href='../event.php?eid=$eid'>".$data['title']."</a>";
 	$poster = new XoopsUser($data['uid']);
 	$u = "<a href='".XOOPS_URL."/userinfo.php?uid=".$poster->uid()."'>".$poster->uname()."</a>";
@@ -179,7 +179,7 @@ case "notifies":
 	while ($data = $xoopsDB->fetchArray($result)) {
 	    $bg = $tags[$n++%2];
 	    $rvid = $data['rvid'];
-	    $date = date(_AM_POST_FMT, $data['rdate']);
+	    $date = formatTimestamp($data['rdate'], _AM_POST_FMT);
 	    $email = $data['email'];
 	    if (isset($data['uid'])) {
 		$uid = $data['uid'];
@@ -215,11 +215,11 @@ case "edit":
     OpenTable();
     $result = $xoopsDB->query("SELECT eid,edate,cdate,title,uid,status FROM $tbl WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
-    $date = date(_AM_DATE_FMT, $data['edate']); 
+    $date = formatTimestamp($data['edate'], _AM_DATE_FMT); 
     $title = "<a href='../event.php?eid=$eid'>".$data['title']."</a>";
     $uid = $data['uid'];
     $poster = new XoopsUser($uid);
-    $post = date(_AM_POST_FMT, $data['cdate']);
+    $post = formatTimestamp($data['cdate'], _AM_POST_FMT);
 
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
     echo "<form action='$self' method='post'>\n";

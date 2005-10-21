@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.8 2005/09/19 07:05:58 nobu Exp $
+// $Id: receipt.php,v 1.9 2005/10/21 05:47:05 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
@@ -40,7 +40,7 @@ $opts = $xoopsDB->fetchArray($result);
 
 $result = $xoopsDB->query("SELECT edate, title, uid FROM $tbl WHERE eid=$eid");
 $head = $xoopsDB->fetchArray($result);
-$title = date(_MD_DATE_FMT, $head['edate'])." ".htmlspecialchars($head['title']);
+$title = formatTimestamp($head['edate'], _MD_DATE_FMT)." ".htmlspecialchars($head['title']);
 $poster = new XoopsUser($head['uid']);
 
 if (empty($op)) $op = 'view';
@@ -83,7 +83,7 @@ if ($nrec) {
 	$out .= "\n";
 	// body
 	while ($a = $xoopsDB->fetchArray($result)) {
-	    $out .= '"'.date(_MD_TIME_FMT,$a['rdate']).'","'.$a['email'].'"';
+	    $out .= '"'.formatTimestamp($a['rdate'], _MD_TIME_FMT).'","'.$a['email'].'"';
 	    foreach (explodeinfo($a['info'], $item) as $lab => $v) {
 		if ($v) $v = '"'.preg_replace('/\n/', '\n', (preg_replace('/\"/', '&quot;', $v))).'"';
 		$out .= ",$v";
@@ -91,7 +91,7 @@ if ($nrec) {
 	    $out .= "\n";
 	}
 
-	$file = "eguide_".date("Ymd").".csv";
+	$file = "eguide_".formatTimestamp(time(),"Ymd").".csv";
 	header("Content-Type: text/plain; Charset=$charset");
 	header('Content-Disposition:attachment;filename="'.$file.'"');
 	if (XOOPS_USE_MULTIBYTES && $charset != _CHARSET) {
@@ -155,7 +155,7 @@ case 'edit':
     echo "<input type='hidden' name='rvid' value='$rvid' />\n";
     $atr = "align='left' class='bg1'";
     echo "<tr><th $atr>"._AM_RVID."</th><td class='bg3'>$rvid</td></tr>\n";
-    echo "<tr><th $atr>"._AM_ORDER_DATE."</th><td class='bg3'>".date(_MD_TIME_FMT, $data['rdate'])."</td></tr>\n";
+    echo "<tr><th $atr>"._AM_ORDER_DATE."</th><td class='bg3'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";
     echo "<tr><th $atr>"._MD_EMAIL."</th><td class='bg3'><input size='40' name='email' value='".$data['email']."' /></td></tr>\n";
     echo "<tr><th $atr>"._AM_STATUS."</th><td class='bg3'>\n";
     $s = $data['status'];
@@ -180,7 +180,7 @@ case 'one':
     echo "<table class='evtbl'>\n";
     $atr = "align='left' class='bg1'";
     echo "<tr><th $atr>"._AM_RVID."</th><td class='bg3' nowrap>$rvid [$edit]</td></tr>\n";
-    echo "<tr><th $atr>"._AM_ORDER_DATE."</th><td class='bg3'>".date(_MD_TIME_FMT, $data['rdate'])."</td></tr>\n";
+    echo "<tr><th $atr>"._AM_ORDER_DATE."</th><td class='bg3'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";
     echo "<tr><th $atr>"._MD_EMAIL."</th><td class='bg3'>".$data['email']."</td></tr>\n";
     echo "<tr><th $atr>"._AM_STATUS."</th><td class='bg3'>".$rv_stats[$data['status']]."</td></tr>\n";
     foreach (explodeinfo($data['info'], $item) as $lab => $v) {
@@ -194,7 +194,7 @@ case 'one':
 default:
     $status = 0;
     echo "<table width='100%'><tr><td>"._AM_ORDER_COUNT." ".$nrec."</td>";
-    echo "<td align='right'>"._AM_PRINT_DATE." ".date(_MD_POSTED_FMT)."</td></tr></table>";
+    echo "<td align='right'>"._AM_PRINT_DATE." ".formatTimestamp(time(), _MD_POSTED_FMT)."</td></tr></table>";
     echo "<form action='receipt.php' method='post'>\n";
     echo "<table class='evtbl' width='100%'>\n";
     echo "<tr class='bg1'>";
@@ -223,7 +223,7 @@ default:
 	    echo "</td>";
 	}
 	printf("<td nowrap>%s</td><td><a href='mailto:%s'>%s</td>",
-	       date(_AM_TIME_FMT, $order['rdate']),
+	       formatTimestamp($order['rdate'], _AM_TIME_FMT),
 	       $order['email'], $order['email']);
 	$n = $eventConfig['max_item'];
 	foreach (explodeinfo($order['info'], $item) as $lab => $v) {

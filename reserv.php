@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.8 2005/09/19 07:05:58 nobu Exp $
+// $Id: reserv.php,v 1.9 2005/10/21 05:47:05 nobu Exp $
 include("header.php");
 
 $tbl = $xoopsDB->prefix("eguide");
@@ -30,7 +30,7 @@ if (isset($op)) {
 		$data = $xoopsDB->fetchArray($result);
 		if ($data['notify']) {
 		    $poster = new XoopsUser($data['uid']);
-		    $title = date(_MD_DATE_FMT, $data['edate'])." ".$data['title'];
+		    $title = formatTimestamp($data['edate'], _MD_DATE_FMT)." ".$data['title'];
 
 		    $xoopsMailer =& getMailer();
 		    $xoopsMailer->useMail();
@@ -178,7 +178,7 @@ VALUES  ($eid,$uid,$now, '$ml', '".addslashes($value)."',$accept,'$conf')");
 	$rvid = $id['rvid'];
 	$result = $xoopsDB->query("SELECT title, edate, uid FROM $tbl WHERE eid=$eid");
 	$guide = $xoopsDB->fetchArray($result);
-	$title = date(_MD_DATE_FMT, $guide['edate'])." ".$guide['title'];
+	$title = formatTimestamp($guide['edate'], _MD_DATE_FMT)." ".$guide['title'];
 
 	$poster = new XoopsUser($guide['uid']);
 	$xoopsMailer =& getMailer();
