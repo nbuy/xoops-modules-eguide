@@ -36,7 +36,8 @@ if (function_exists("getCache")) {
     $inc = XOOPS_ROOT_PATH."/include/old_theme_functions.php";
     if (file_exists($inc)) {
 	include_once($inc);
-	include_once(XOOPS_ROOT_PATH."/include/old_functions.php");
+	$inc = XOOPS_ROOT_PATH."/include/old_functions.php";
+	if (file_exists($inc)) include_once($inc);
     }
 }
 
