@@ -1,23 +1,23 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.9 2005/10/21 05:47:05 nobu Exp $
+// $Id: receipt.php,v 1.10 2005/10/30 12:00:30 nobu Exp $
 
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
 include_once("language/".$xoopsConfig['language']."/admin.php");
 
-include("perm.php");
-include("functions.php");
-
-$tbl = $xoopsDB->prefix("eguide");
-$opt = $xoopsDB->prefix("eguide_opt");
-$rsv = $xoopsDB->prefix("eguide_reserv");
 foreach ($_POST as $i => $v) {
     $$i = post_filter($v);
 }
 foreach (array("op","rvid","eid") as $v) {
     if (isset($_GET[$v])) $$v = $_GET[$v];
 }
+include("perm.php");
+include("functions.php");
+
+$tbl = $xoopsDB->prefix("eguide");
+$opt = $xoopsDB->prefix("eguide_opt");
+$rsv = $xoopsDB->prefix("eguide_reserv");
 if (isset($rvid)) {
     if (empty($op)) $op = "one";
     $result = $xoopsDB->query("SELECT * FROM $rsv WHERE rvid=$rvid");
