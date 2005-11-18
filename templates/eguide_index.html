@@ -1,0 +1,35 @@
+<{foreach from=$events item=event}>
+<div class="event">
+  <div class="evhead">
+    <{$event.date}>: <{$event.title}>
+  </div>
+<{if $event.catname}>
+  <a href="index.php?cat=<{$event.catid}>">
+  <{if $event.catimg}>
+    <img src="<{$event.catimg}>" alt="<{$event.catname}>" class="catbox" />
+  <{else}>
+    <span class="catbox"><{$event.catname}></span>
+  <{/if}>
+  </a>
+<{/if}>
+  <div class="evinfo"><{$lang_poster}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$lang_postdate}> <{$event.postdate}> (<{$event.hits}>)</div>
+  <br />
+  <div class="evbody"><{$event.disp_summary}></div>
+  <br clear="all"/>
+  <div class="evlink"><{if $event.isadmin}>[
+<{if $event.reservation}>
+    <a href="receipt.php?eid=<{$event.eid}>"><{$lang_reserv_admin}></a> | 
+<{/if}>
+    <a href="admin.php?op=edit&amp;eid=<{$event.eid}>"><{$lang_edit}></a> |
+    <a href="admin.php?op=delete&amp;eid=<{$event.eid}>"><{$lang_delete}></a> ]
+<{/if}>
+ <a href="event.php?eid=<{$event.eid}>"><{$lang_detail}></a>
+  </div>
+</div>
+<{/foreach}>
+<table width="100%">
+<tr>
+  <td><{if $page_prev}><a href="index.php<{$page_prev}>"><{$lang_prev}></a><{/if}></td>
+  <td align="right"><{if $page_next}><a href="index.php<{$page_next}>"><{$lang_next}></a><{/if}></td>
+</tr>
+</table>

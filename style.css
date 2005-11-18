@@ -1,0 +1,18 @@
+/* for eguide module */
+.error { color: #ff0000; font-weight: bold; text-align: left; }
+.evhead { color: #800000; font-size: 120%; font-weight: bold; text-align: left;}
+.evinfo { font-size: 75%; text-align: left;}
+.evbody { text-align: left; }
+.evlink { font-size: 90%; text-align: right;}
+.evline { font-size: 90%; text-align: left;}
+.evnote { font-size: 110%; text-align: center; font-weight: bold; color: #c00000; }
+.evtitle {
+   color: #000080; font-size: 110%;
+   font-weight: bold; text-align: left;
+   padding-bottom: 0.5em;
+}
+.evtbl th { text-align: left; vertical-align: top; }
+.event, .evform, .evlist { border: solid thin #639ACE; padding: 0.5em; margin-bottom: 1em;}
+.catbox { float: right; }
+h2 { color: #800000; }
+h3 { color: #002040; margin-bottom: 0px;}

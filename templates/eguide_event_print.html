@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<{$xoops_langcode}>" lang="<{$xoops_langcode}>">
+<head>
+<meta name="generator" content="XOOPS" />
+<title><{$xoops_sitename}> - <{$xoops_pagetitle}></title>
+<link rel="stylesheet" type="text/css" media="all" href="print.css" />
+<link href="<{$xoops_url}>/favicon.ico" rel="SHORTCUT ICON" />
+</head>
+<body>
+<div class="event">
+  <div class="evhead"><{$event.date}>: <{$event.title}></div>
+<{if $event.catname}>
+  <a href="index.php?cat=<{$event.catid}>">
+  <{if $event.catimg}>
+    <img src="<{$event.catimg}>" alt="<{$event.catname}>" class="catbox" />
+  <{else}>
+    <span class="catbox">[<{$event.catname}>]</span>
+  <{/if}>
+  </a>
+<{/if}>
+  <div class="evinfo"><{$lang_poster}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$lang_postdate}> <{$event.postdate}> (<{$event.hits}>)</div>
+  <br />
+  <div class="evbody"><{$event.summary}></div>
+  <br />
+  <div class="evbody"><{$event.body}></div>
+  <br />
+<{if $persons}>
+<p><{$lang_reserv_num}> (<{$lang_reserv_reg}>)</p>
+<{/if}>
+</div>
+
+<{if $list}>
+<div class="evlist">
+<div class="evtitle"><{$lang_reserv_list}></div>
+<table class="outer" align="center" width="100%">
+<tr class="head"><th></th><{foreach from=$labels item=lab}><th><{$lab}></th><{/foreach}></tr>
+<{foreach from=$list item=order key=nc}>
+<tr class="<{cycle values="even, odd"}>">
+  <td class="num"><{$nc}></td>
+<{foreach from=$order item=value}>
+  <td><{$value}></td><{/foreach}>
+<{/foreach}>
+<tr >
+</table>
+</div>
+<{/if}>
+</body>
+</html>

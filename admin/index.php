@@ -1,11 +1,7 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.16 2005/10/21 05:47:06 nobu Exp $
-include("admin_header.php");
-include_once(XOOPS_ROOT_PATH."/class/xoopstopic.php");
-include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
-$inc = XOOPS_ROOT_PATH."/modules/image/class.php";
-if (file_exists($inc)) include_once($inc);
+// $Id: index.php,v 1.17 2005/11/18 17:08:03 nobu Exp $
+include 'admin_header.php';
 
 $self = $_SERVER["SCRIPT_NAME"];
 foreach (array("op", "eid", "status", "uid") as $v) {
@@ -13,97 +9,19 @@ foreach (array("op", "eid", "status", "uid") as $v) {
     elseif (isset($_POST[$v])) $$v = $_POST[$v];
 }
 
-// show general configuration form
-function eventConfig() {
-    global $xoopsConfig, $xoopsModule, $eventConfig, $xoopsDB, $self;
-    xoops_cp_header();
-    //$xoopsModule->printAdminMenu();
-    //echo "<br />";
-    OpenTable();
-    echo "<h4>" ._MI_EGUIDE_CONFIG. "</h4><br>\n";
-    echo "<form action='$self' method='post'>\n";
-    echo "<table border='0'>\n<tr><td class='nw'>".
-	_AM_POST_GROUP."</td><td>
-        <select name='group'>\n";
-    $type=preg_match("/^XOOPS 1/",XOOPS_VERSION)?"type":"group_type";
-    $r=$xoopsDB->query("SELECT groupid,name FROM ".$xoopsDB->prefix("groups").
-		       " WHERE $type<>'Anonymous'");
-    while (list($i,$v)=$xoopsDB->fetchRow($r)) {
-	$ck = ($i==$eventConfig['group'])?" selected":"";
-	echo "<option value='$i'$ck>$v</option>\n";
-    }
-    echo "</select>\n";
-    echo "</td></tr>";
-
-    $yn = array(1=>_AM_YES, 0=>_AM_NO);
-	
-    function myradio($name, $item, $value, $def) {
-	echo "<tr><td class='nw'>$item</td><td>";
-	foreach ($value as $i => $v) {
-	    $ck = ($i == $def)?" checked":"";
-	    echo "<input type='radio' name='$name' value='$i' $ck />&nbsp;$v&nbsp;";
-	}
-	echo "</td></tr>";
-    }
-
-    myradio("notify", _AM_NOTIFYSUBMIT, $yn, $eventConfig['notify']);
-    myradio("auth", _AM_NEEDPOSTAUTH, $yn, $eventConfig['auth']);
-    myradio("user_notify", _AM_USER_NOTIFY, $yn, $eventConfig['user_notify']);
-    echo "<tr><td class='nw'>"._AM_MAX_LISTITEM."</td>";
-    echo "<td><input size=3 name='max_item' value='".$eventConfig['max_item']."' align='right' /></td></tr>\n";
-    echo "<tr><td class='nw'>"._AM_MAX_SHOW."</td>";
-    echo "<td><input size=3 name='max_event' value='".$eventConfig['max_event']."' align='right' /></td></tr>\n";
-    echo "</table>";
-    echo "<input type='hidden' name='op' value='eventConfigS' />";
-    echo "<input type='submit' value='"._AM_SAVECHANGE."' />";
-    echo "&nbsp;<input type='button' value='"._AM_CANCEL."' onclick='javascript:history.go(-1)' />";
-    echo "</form>";
-    CloseTable();
-
-}
-
-// save general configuration
-function eventConfigS() {
-    global $xoopsModule,$self;
-
-    function myvalue($name) {
-	global $_POST;
-	$v = $_POST[$name];
-	if (!preg_match('/^\d+$/', $v)) {
-	    $v = "\"$v\"";
-	}
-	return "\$eventConfig['$name']=$v;\n";
-    }
-
-    $content  = myvalue('group');
-    $content .= myvalue('notify');
-    $content .= myvalue('auth');
-    $content .= myvalue('max_item');
-    $content .= myvalue('max_event');
-    $content .= myvalue('user_notify');
-
-    putCache($xoopsModule->dirname()."/config.php", $content);
-
-    redirect_header("$self",1,_AM_DBUPDATED);
-    exit();
-}
-
-$tbl = $xoopsDB->prefix("eguide");
-$opt = $xoopsDB->prefix("eguide_opt");
 $rsv = $xoopsDB->prefix("eguide_reserv");
-function css_tags() {
-    return preg_match("/^XOOPS 1/",XOOPS_VERSION)?array("bg1","bg3"):array("even","odd");
-}
+
+function css_tags() { return array("even","odd"); }
+
 if (!isset($op)) $op="";
 switch($op) {
 case "events":
     xoops_cp_header();
-    OpenTable();
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
-    $result = $xoopsDB->query("SELECT eid,edate,title,uid,status FROM $tbl ORDER BY edate DESC");
+    $result = $xoopsDB->query("SELECT eid,edate,title,uid,status FROM ".EGTBL." ORDER BY edate DESC");
     $n = 0;
     echo "<form action='$self' method='post'>\n";
-    echo "<table cellspacing='1' cellpadding='3' border='0' class='bg2'>\n";
+    echo "<table cellspacing='1' border='0' class='outer'>\n";
     echo "<tr class='bg4'><th>"._AM_RESERVATION."</th><th>".
 	_AM_EVENT_DAY."</th><th>"._AM_TITLE."</th>";
     echo "<th>"._AM_POSTER."</th><th>"._AM_DISP_STATUS."</th>";
@@ -112,7 +30,7 @@ case "events":
     while ($data = $xoopsDB->fetchArray($result)) {
 	$bg = $tags[$n++%2];
 	$eid = $data['eid'];
-	$date = formatTimestamp($data['edate'], _AM_DATE_FMT);
+	$date = eventdate($data['edate']);
 	$title = "<a href='../event.php?eid=$eid'>".$data['title']."</a>";
 	$poster = new XoopsUser($data['uid']);
 	$u = "<a href='".XOOPS_URL."/userinfo.php?uid=".$poster->uid()."'>".$poster->uname()."</a>";
@@ -123,7 +41,7 @@ case "events":
 	} elseif ($s == STAT_POST) {
 	    $sn = "<strong>$sn</strong>";
 	}
-	$ors = $xoopsDB->query("SELECT reservation FROM $opt WHERE eid=$eid");
+	$ors = $xoopsDB->query("SELECT reservation FROM ".OPTBL." WHERE eid=$eid");
 	if ($xoopsDB->getRowsNum($ors)) {
 	    list($resv) = $xoopsDB->fetchRow($ors);
 	    $mk = "<input type='hidden' name='rv[$eid]' value='on' />";
@@ -143,7 +61,7 @@ case "events":
     echo "<input type='submit' value='"._AM_UPDATE."' />\n";
     echo "</form>\n";
     $log = $xoopsDB->prefix("eguide_log");
-    $result = $xoopsDB->query("SELECT count(rvid) FROM $rsv WHERE eid=0");
+    $result = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." WHERE eid=0");
     if ($result) {
 	list($n) = $xoopsDB->fetchRow($result);
 	echo "<p><a href='$self?op=notifies'>"._AM_INFO_REQUEST."</a> ".sprintf(_AM_INFO_COUNT, $n)."</p>\n";
@@ -153,14 +71,13 @@ case "events":
 
 case "notifies":
     xoops_cp_header();
-    OpenTable();
     echo "<h4>"._AM_INFO_REQUEST."</h4>";
     $cond = "eid=0";
     if (isset($_GET['q'])) {
 	$q = $_GET['q'];
 	$cond .= " AND email like '%$q%'";
     }
-    $result = $xoopsDB->query("SELECT * FROM $rsv WHERE $cond ORDER BY rdate");
+    $result = $xoopsDB->query("SELECT * FROM ".RVTBL." WHERE $cond ORDER BY rdate");
     $n = 0;
     $nc = $xoopsDB->getRowsNum($result);
     echo "<form action='$self' method='get'>\n".
@@ -172,7 +89,7 @@ case "notifies":
     if ($nc) {
 	echo "<form action='$self' method='post'>\n".
 	    "<input type='hidden' name='op' value='delnotify' />\n".
-	    "<table cellspacing='1' cellpadding='3' border='0' class='bg2'>\n".
+	    "<table cellspacing='1' border='0' class='outer'>\n".
 	    "<tr class='bg4'><th></th><th>"._AM_ORDER_DATE."</th>".
 	    "<th>"._AM_EMAIL."</th></tr>\n";
 	$tags = css_tags();
@@ -206,16 +123,15 @@ case "delnotify":
 	    else $cond .= " OR rvid=$v";
 	}
     }
-    $result = $xoopsDB->queryF($sql = "DELETE FROM $rsv WHERE eid=0 AND ($cond)");
+    $result = $xoopsDB->queryF($sql = "DELETE FROM ".RVTBL." WHERE eid=0 AND ($cond)");
     redirect_header("$self?op=notifies",1,_AM_DBUPDATED);
     exit;
 
 case "edit":
     xoops_cp_header();
-    OpenTable();
-    $result = $xoopsDB->query("SELECT eid,edate,cdate,title,uid,status FROM $tbl WHERE eid=$eid");
+    $result = $xoopsDB->query("SELECT eid,edate,cdate,title,uid,status FROM ".EGTBL." WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
-    $date = formatTimestamp($data['edate'], _AM_DATE_FMT); 
+    $date = eventdate($data['edate']); 
     $title = "<a href='../event.php?eid=$eid'>".$data['title']."</a>";
     $uid = $data['uid'];
     $poster = new XoopsUser($uid);
@@ -223,22 +139,22 @@ case "edit":
 
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
     echo "<form action='$self' method='post'>\n";
-    echo "<table border='0'>\n";
-    echo "<tr><td class='nw'>"._AM_EVENT_DAY."</td><td>$date</td></tr>\n";
-    echo "<tr><td class='nw'>"._AM_TITLE."</td><td>$title</td></tr>\n";
-    echo "<tr><td class='nw'>"._AM_POSTER."</td><td>";
+    echo "<table border='0' cellspacing='1' class='outer'>\n";
+    echo "<tr><td class='head'>"._AM_EVENT_DAY."</td><td class='even'>$date</td></tr>\n";
+    echo "<tr><td class='head'>"._AM_TITLE."</td><td class='odd'>$title</td></tr>\n";
+    echo "<tr><td class='head'>"._AM_POSTER."</td><td class='even'>";
     $result = $xoopsDB->query("SELECT u.uid,groupid,uname".
 	" FROM ".$xoopsDB->prefix("groups_users_link")." l, ".
 	$xoopsDB->prefix("users")." u WHERE l.uid=u.uid AND ".
-	"(groupid=1 OR groupid=".$eventConfig['group'].") GROUP BY u.uid ORDER BY uname");
+	"(groupid=1 OR groupid=".$xoopsModuleConfig['group'].") GROUP BY u.uid ORDER BY uname");
     echo "<select name='uid'>\n";
     while($p=$xoopsDB->fetchArray($result)) {
 	$ck = ($uid==$p['uid'])?" selected":"";
 	printf("<option value='%d'$ck>%s</>\n", $p['uid'], $p['uname']);
     }
     echo "</select></td></tr>\n";
-    echo "<tr><td class='nw'>"._AM_POSTED."</td><td>$post</td></tr>\n";
-    echo "<tr><td class='nw'>"._AM_DISP_STATUS."</td><td>\n";
+    echo "<tr><td class='head'>"._AM_POSTED."</td><td class='odd'>$post</td></tr>\n";
+    echo "<tr><td class='head'>"._AM_DISP_STATUS."</td><td class='even'>\n";
     echo "<select name='status'>\n";
     $status=$data['status'];
     foreach ($ev_stats as $i =>$v) {
@@ -248,26 +164,45 @@ case "edit":
     echo "</select>\n";
     echo "</td></tr>\n";
     echo "</table>\n";
-    echo "<input type='hidden' name='op' value='save' />";
+    echo "<p><input type='hidden' name='op' value='save' />";
     echo "<input type='hidden' name='eid' value='$eid' />";
-    echo "<input type='submit' value='"._AM_SAVECHANGE."' />";
-    echo "&nbsp;<input type='button' value='"._AM_CANCEL."' onclick='javascript:history.go(-1)' />";
+    echo "<input type='submit' value='"._AM_UPDATE."' />";
+    echo "&nbsp;<input type='button' value='"._AM_CANCEL."' onclick='javascript:history.go(-1)' /></p>";
     echo "</form>";
     CloseTable();
     break;
 
 case "save":
-    $result = $xoopsDB->query("UPDATE $tbl SET uid=$uid, status=$status WHERE eid=$eid");
+    $result = $xoopsDB->query("UPDATE ".EGTBL." SET uid=$uid, status=$status WHERE eid=$eid");
     redirect_header("$self?op=events",1,_AM_DBUPDATED);
-    exit();
+    exit;
 
-case "eventConfig":
-    eventConfig();
+case "category":
+    xoops_cp_header();
+    echo "<h4>"._AM_CATEGORY."</h4>\n";
+    showCategories();
+    echo "<h4>"._AM_CATEGORY_NEW."</h4>\n";
+    editCategory(0);
     break;
 
-case "eventConfigS":
-    eventConfigS();
+case "catedit":
+    xoops_cp_header();
+    echo "<h4>"._AM_CATEGORY."</h4>\n";
+    editCategory(intval($_GET['cat']));
     break;
+
+case "catsave":
+    $catid=intval($_POST['catid']);
+    $catname=$xoopsDB->quoteString(param('catname',''));
+    $catdesc=$xoopsDB->quoteString(param('catdesc',''));
+    $catimg=$xoopsDB->quoteString(param('catimg',''));
+    if ($catid) {
+	$xoopsDB->query("UPDATE ".CATBL." SET catname=$catname, catimg=$catimg, catdesc=$catdesc WHERE catid=$catid");
+    } else {
+	$xoopsDB->query("INSERT INTO ".CATBL."(catname, catimg, catdesc) VALUES($catname,$catimg,$catdesc)");
+    }
+    redirect_header("$self?op=category",1,_AM_DBUPDATED);
+    exit;
 
 case "resvCtrl":
     $rv = isset($_POST['rv'])?$_POST['rv']:array();
@@ -283,27 +218,90 @@ case "resvCtrl":
 	}
     }
     if ($on != "") {
-	$result = $xoopsDB->query("UPDATE $opt SET reservation=1 WHERE $on");
+	$result = $xoopsDB->query("UPDATE ".OPTBL." SET reservation=1 WHERE $on");
     }
     if ($off != "") {
-	$result = $xoopsDB->query("UPDATE $opt SET reservation=0 WHERE $off");
+	$result = $xoopsDB->query("UPDATE ".OPTBL." SET reservation=0 WHERE $off");
     }
     redirect_header("$self?op=events",1,_AM_DBUPDATED);
-    exit();
+    exit;
 
 default:
     xoops_cp_header();
-    OpenTable();
     include_once("menu.php");
-    $base = XOOPS_URL."/modules/".$xoopsModule->dirname();
-    foreach ($adminmenu as $v) {
-	$title = $v['title'];
-	$link = $v['link'];
-	echo "<p> - <b><a href='$base/$link'>$title</a></b></p>\n";
+    $base = XOOPS_URL.'/modules/'.$xoopsModule->dirname();
+    $adminmenu[] = array('title'=>_PREFERENCES,
+			 'link'=>XOOPS_URL.'/modules/system/admin.php?fct=preferences&amp;op=showmod&amp;mod=' . $xoopsModule->getVar('mid'));
+    foreach ($adminmenu as $menu) {
+	$title = $menu['title'];
+	$link = $menu['link'];
+	if (!preg_match('/^https?:\/\/|^\//', $link)) $link = $base.'/'.$link;
+	echo "<p> - <b><a href='$link'>$title</a></b></p>\n";
     }
     CloseTable();
     break;
 }
 
 xoops_cp_footer();
+
+function showCategories() {
+    global $xoopsDB;
+    $myts =& MyTextSanitizer::getInstance();
+    $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix('eguide_category').' ORDER BY catid');
+
+    echo "<form action='index.php?op=catdel' method='post'>\n";
+    echo "<table border='0' cellspacing='1' class='outer'>\n";
+    echo '<tr><th></th><th>'._AM_CAT_NAME.'</th><th>'._AM_CAT_IMG.'</th><th>'._AM_CAT_DESC.'</th><th>'._AM_OPERATION.'</th></tr>';
+    $n = 0;
+    while ($data = $xoopsDB->fetchArray($res)) {
+	$img = $data['catimg'];
+	$name =  $myts->htmlSpecialChars($data['catname']);
+	$id = $data['catid'];
+	$desc =  $myts->htmlSpecialChars($data['catdesc']);
+	if (preg_match('/^\//', $img)) $img = XOOPS_URL.$img;
+	elseif (!preg_match('/^https?:/', $img)) {
+	    $img = XOOPS_URL."/modules/eguide";
+	} else {
+	    $img = "";
+	}
+	if (!empty($img)) $img = "<img src='$img' alt='$name'/>";
+	$edit="<a href='index.php?op=catedit&amp;cat=$id'>"._EDIT."</a>";
+	$del="<input type='checkbox' name='dels[$id] value='$id'/>";
+	echo '<tr class="'.(($n++%2)?'even':'odd')."\"><td>$del</td>".
+	    "<td>$name</td><td>$img</td><td>$desc</td><td>$edit</td></tr>";
+    }
+    echo "</table>\n";
+    echo "<p><input type='submit' value='"._DELETE."'/></p>";
+    echo "</form>\n";
+
+    echo "<hr/>\n";
+}
+
+function editCategory($cat) {
+    global $xoopsDB;
+
+    $myts =& MyTextSanitizer::getInstance();
+    $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix('eguide_category')." WHERE catid=$cat");
+    $data = $xoopsDB->fetchArray($res);
+    if (empty($data)) {
+	$img = '';
+	$name =  '';
+	$id = 0;
+	$desc =  '';
+    } else {
+	$img = $data['catimg'];
+	$name =  $myts->htmlSpecialChars($data['catname']);
+	$id = $data['catid'];
+	$desc =  $myts->htmlSpecialChars($data['catdesc']);
+    }
+    echo "<form action='index.php?op=catsave' method='post'>\n";
+    echo "<table border='0' class='outer' cellspacing='1'>\n";
+    echo "<tr><td class='head'>"._AM_CAT_NAME."</td><td class='even'><input name='catname' value='$name' size='30'/></td></tr>\n";
+    echo "<tr><td class='head'>"._AM_CAT_IMG."</td><td class='odd'><input name='catimg' value='$img' size='50'/></td></tr>\n";
+    echo "<tr><td class='head'>"._AM_CAT_DESC."</td><td class='even'><textarea name='catdesc'>$desc</textarea></td></tr>\n";
+    echo "</table>\n";
+    echo "<input type='hidden' name='catid' value='$id'/>\n";
+    echo "<p><input type='submit' value='"._GO."'/>\n";
+    echo "</form>\n";
+}
 ?>

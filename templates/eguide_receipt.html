@@ -1,0 +1,82 @@
+<div class="evlist">
+<h3><{$lang_reserv_list}></h3>
+
+<div>[<a href="editdate.php?eid=<{$eid}>"><{$lang_edit_extent}></a>]</div>
+<{if $extents}>
+<table class="outer">
+<tr class="head"><th><{$lang_extent_date}></th><th><{$lang_order_count}></th><th><{$lang_operation}></th></tr>
+<{foreach from=$extents item=ext}>
+<tr class="<{cycle values="even, odd"}>">
+  <td><{$ext.date}></td><td><{$ext.reserved}></td>
+  <td><{if $ext.reserved}><a href="receipt.php?eid=<{$eid}>&amp;sub=<{$ext.exid}>"><{$lang_detail}></a><{/if}></td>
+</tr>
+<{/foreach}>
+</table>
+<{/if}>
+<{if $list}>
+<table width="100%">
+<tr><td><{$lang_order_count}> <{$order_count}></td><td align="right"><{$lang_print_date}> <{$print_date}></td></tr>
+</table>
+<form action="receipt.php" method="post">
+<table width="100%" cellspacing="1" cellpadding="4" class="outer">
+<tr class="head">
+  <th><{$lang_operation}></th>
+  <th><{$lang_order_date}></th>
+  <th><{$lang_email}></th>
+<{foreach from=$labels item=lab}>
+  <th><{$lab}></th>
+<{/foreach}>
+</tr>
+<{foreach from=$list item=order}>
+<tr class="<{cycle values="even, odd"}>">
+  <td>
+    <a href="receipt.php?rvid=<{$order.rvid}>"><{$lang_detail}></a>
+<{if $order.confirm}>
+    <input type="checkbox" name="act<{$order.rvid}>" value="<{$order.rvid}>" checked />
+<{/if}>
+  </td>
+  <td nowrap><{$order.date}></td>
+  <td>
+    <a href="mailto:<{$order.email}>"><{$order.email}></a>
+<{if $order.uname}>
+(<a href="<{$xoops_url}>/userinfo.php?uid=<{$order.uid}>"><{$order.uname}></a>)
+<{/if}>
+  </td>
+<{foreach from=$order.add item=value}>
+  <td><{$value}></td>
+<{/foreach}>
+<{/foreach}>
+<tr >
+</table>
+<{if $confirm}>
+<input type='hidden' name='op' value='active' />
+<input type='hidden' name='eid' value='<{$eid}>' />
+<br/>
+<table><tr><td><select name='yesno'>
+<{foreach from=$operations key=value item=label}>
+  <option value="<{$value}>"><{$label}></option>
+<{/foreach}>
+</select></td><td>
+<input type="submit" value="<{$lang_submit}>." />
+</td></tr>
+</table>
+<p><b><{$lang_reserv_msg_h}></b></p>
+<textarea name="msg" cols="60" rows="10"><{$lang_reserv_msg}></textarea>
+<{/if}>
+</form>
+<p align='right'>
+[<a href="receipt.php?op=csv&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$lang_cvs_out}></a>
+ | <a href="sendinfo.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$lang_info_mail}></a>] 
+<a href="receipt.php?op=print&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$lang_print}>" border="0" /></a>
+</p>
+<{/if}>
+<{if $citem}>
+<div class="evhead"><{$lang_summary}></div>
+<table class="evtbl">
+<tr class="head"><th><{$lang_sum_item}></th><th><{$lang_sum}></th></tr>
+<{foreach from=$citem key=label item=count}>
+<tr class="<{cycle values="even, odd"}>"><td><{$label}></td><td align='right'><{$count}></td></tr>
+<{/foreach}>
+</table>
+<{/if}>
+</div>

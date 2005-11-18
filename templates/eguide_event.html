@@ -1,0 +1,90 @@
+<div class="event">
+  <div class="evhead"><{$event.date}>: <{$event.title}></div>
+<{if $event.catname}>
+  <a href="index.php?cat=<{$event.catid}>">
+  <{if $event.catimg}>
+    <img src="<{$event.catimg}>" alt="<{$event.catname}>" class="catbox" />
+  <{else}>
+    <span class="catbox"><{$event.catname}></span>
+  <{/if}>
+  </a>
+<{/if}>
+  <div class="evinfo"><{$lang_poster}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$lang_postdate}> <{$event.postdate}> (<{$event.hits}>)</div>
+  <br />
+  <div class="evbody"><{$event.disp_summary}></div>
+  <br />
+  <div class="evbody"><{$event.disp_body}></div>
+  <br />
+<{if $event.persons}>
+<p><{$event.reserv_num}> (<{$event.reserv_reg}>)</p>
+<{/if}>
+<{if $event.eid}>
+  <div class="evlink"><{if $event.isadmin}>[
+<{if $event.reservation}>
+    <a href="receipt.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_reserv_admin}></a> |
+<{/if}>
+    <a href="admin.php?eid=<{$event.eid}>"><{$lang_edit}></a> |
+    <a href="admin.php?op=delete&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_delete}></a> ] <{/if}>
+    <a href="event.php?op=print&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$lang_print}>" border="0" /></a>
+  </div>
+<{/if}>
+</div>
+<{if $event.extents}>
+<div class="evform">
+<form action="event.php">
+<b><{$event.lang_extents}></b>
+<input type="hidden" name="eid" value="<{$event.eid}>"/>
+<select name="sub">
+<{foreach from=$event.extents item=ext}>
+<option value="<{$ext.exid}>"><{$ext.date}></option>
+<{/foreach}>
+</select>
+<input type="submit"/>
+</form>
+</div>
+<{elseif $form}>
+<div class="evform">
+<div class="evtitle"><{$form.title}></div>
+<form action="reserv.php" method="post">
+<table class="outer" align="center" cellspacing="1" border="0">
+<{if $form.lang_email}>
+<tr class="<{cycle values="even, odd"}>"><th><{$form.lang_email}></th><td><input size="40" name="email" value="<{$form.email}>"/>
+<{if $form.user_notify}>
+<br/><input type="checkbox" name="notify" /><{$form.lang_notify}>
+<{/if}>
+</td></tr>
+<{/if}>
+<{foreach from=$form.items item=fm}>
+<tr class="<{cycle values="even, odd"}>"><th><{$fm.label}></th><td><{$fm.value}></td></tr>
+<{/foreach}>
+</table>
+<input type="hidden" name="op" value="order" />
+<input type="hidden" name="eid" value="<{$form.eid}>" />
+<{if $event.exid}>
+<input type="hidden" name="sub" value="<{$event.exid}>" />
+<{/if}>
+<p style="text-align: center;"><input type="submit" value="<{$form.lang_order}>" /></p>
+</form>
+<{if $form.lang_note || $form.note}><p align='right'><{$form.lang_note}> <{$form.note}></p><{/if}>
+</div>
+<{elseif $message}>
+<div class="evform">
+  <div class="evnote"><{$message}></div>
+</div>
+<{/if}>
+
+<{if $list}>
+<div class="evlist">
+<div class="evtitle"><{$lang_reserv_list}></div>
+<table width="100%" cellspacing="1" cellpadding="4" class="outer">
+<tr class="head"><th></th><{foreach from=$labels item=lab}><th><{$lab}></th><{/foreach}></tr>
+<{foreach from=$list item=order key=nc}>
+<tr class="<{cycle values="even, odd"}>">
+  <td align="right"><{$nc}></td>
+<{foreach from=$order item=value}>
+  <td><{$value}></td><{/foreach}>
+<{/foreach}>
+<tr >
+</table>
+</div>
+<{/if}>

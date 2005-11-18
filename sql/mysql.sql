@@ -1,9 +1,5 @@
-# phpMyAdmin MySQL-Dump
-# version 2.2.2
-# http://phpwizard.net/phpMyAdmin/
-# http://phpmyadmin.sourceforge.net/ (download page)
-#
-# --------------------------------------------------------
+# Event Guide Module for XOOPS
+# $Id: mysql.sql,v 1.2 2005/11/18 17:08:03 nobu Exp $
 
 #
 # Table structure for table `eguide`
@@ -26,7 +22,34 @@ CREATE TABLE eguide (
   topicid int(8) unsigned NOT NULL default '1',
   PRIMARY KEY  (eid)
 ) TYPE=MyISAM;
+
+#
+# Table structure for table `eguide_category`
+#
+
+CREATE TABLE eguide_category (
+  catid    integer NOT NULL auto_increment,
+  catname  varchar(40) NOT NULL,
+  catimg   varchar(255),
+  catdesc  text,
+  PRIMARY KEY  (catid)
+) TYPE=MyISAM;
+
 # --------------------------------------------------------
+
+INSERT INTO eguide_category VALUES(1, ''); -- Default Category (Noname)
+
+#
+# Table structure for table `eguide_extent`
+#
+
+CREATE TABLE eguide_extent (
+  exid    integer NOT NULL auto_increment,
+  eidref  integer NOT NULL,
+  exdate  integer NOT NULL,
+  reserved int(8) unsigned NOT NULL default '0',
+  PRIMARY KEY  (exid)
+) TYPE=MyISAM;
 
 #
 # Table structure for table `eguide_opt`
@@ -50,8 +73,9 @@ CREATE TABLE eguide_opt (
 
 CREATE TABLE eguide_reserv (
   rvid int(8) unsigned NOT NULL auto_increment,
-  eid int(8) NOT NULL,
-  uid int(8),
+  eid  int(8) NOT NULL,
+  exid int(8) NOT NULL,
+  uid  int(8),
   rdate integer,
   email varchar(60),
   info text,

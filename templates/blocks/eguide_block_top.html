@@ -1,0 +1,7 @@
+<{foreach item=event from=$block.events}>
+<div><{$event.date}> <a href="<{$xoops_url}>/modules/eguide/event.php?eid=<{$event.eid}>"><{$event.title}></a><{if $block.detail}> (<{$lang_poster}> <{$event.uname}> <{$event.post}>)<{/if}></div>
+<{/foreach}>
+<{if $block.waiting}>
+<p><a href="<{$xoops_url}>/modules/eguide/admin/index.php?op=events"><{$block.lang_waiting}></a>: <{$block.waiting}></p>
+<{/if}>
+<div class="evmore"><a href="<{$xoops_url}>/modules/eguide/"><{$block.lang_more}></a></div>

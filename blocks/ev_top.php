@@ -1,9 +1,11 @@
 <?php
-// $Id: ev_top.php,v 1.8 2005/10/21 05:47:06 nobu Exp $
+// $Id: ev_top.php,v 1.9 2005/11/18 17:08:03 nobu Exp $
+
+include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
 function b_event_top_show($options) {
-    include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
     global $xoopsDB, $xoopsUser;
+    $myts =& MyTextSanitizer::getInstance();
     $moddir = 'eguide';
     $modurl = XOOPS_URL."/modules/$moddir";
 
@@ -11,37 +13,37 @@ function b_event_top_show($options) {
     $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time()." AND status=0 ORDER BY edate";
     if(!isset($options[1])) $options[1]=10;
     $result = $xoopsDB->query($sql, $options[1], 0);
-    if ($xoopsDB->getRowsNum($result)==0) {
-	$content .= "<div class='evline'>"._BLOCK_EV_NONE."</div>\n";
-    }
+
+    $block = array('lang_poster'=>_BLOCK_EV_POST,
+		   'lang_nodata'=>_BLOCK_EV_NONE,
+		   'lang_waiting'=>_BLOCK_EV_WAIT,
+		   'lang_more'=>_BLOCK_EV_MORE,
+		   'detail'=>$options[0],
+		   'events'=>array());
     while ( $myrow = $xoopsDB->fetchArray($result) ) {
-	$title = htmlspecialchars($myrow["title"]);
+	$event = array();
+	$title = $myts->makeTboxData4Show($myrow["title"]);
 	if ( !XOOPS_USE_MULTIBYTES ) {
-	    if (strlen($title) >= 19) {
-		$title = substr($title,0,18)."...";
+	    if (strlen($title) >= $options[2]) {
+		$title = $myts->makeTboxData4Show(substr($myrow['title'],0,($options[2] -1)))."...";
 	    }
 	}
-
-	$date = "<strong>".formatTimestamp($myrow['edate'], _BLOCK_DATE_FMT)."</strong>&nbsp;";
-	if ($options[0]) {
-	    $poster = new XoopsUser($myrow['uid']);
-	    $add = "["._BLOCK_EV_POST." ".formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT)." ".$poster->uname()."]";
-	} else {
-	    $add = "";
-	}
-	$eid = $myrow['eid'];
-	$content .= "<div class='evline'>$date<a href='$modurl/event.php?eid=$eid'>$title</a> $add</div>\n";
+	$event['title'] = $title;
+	$event['eid'] = $myrow['eid'];
+	$event['date'] = formatTimestamp($myrow['edate'], _BLOCK_DATE_FMT);
+	$event['uname'] = XoopsUser::getUnameFromId($myrow['uid']);
+	$event['post'] = formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT);
+	$event['uid'] = $myrow['uid'];
+	$block['events'][] = $event;
     }
     $mod = XoopsModule::getByDirname($moddir);
     if ($xoopsUser && $xoopsUser->isAdmin($mod->mid())) {
 	$result = $xoopsDB->query("SELECT count(eid) FROM ".$xoopsDB->prefix("eguide")." WHERE status=1");
 	if ($xoopsDB->getRowsNum($result)) {
-	    $n = array_shift($xoopsDB->fetchArray($result));
-	    if ($n) $content .= "<p><a href='$modurl/admin/index.php?op=events'>"._BLOCK_EV_WAIT."</a>: $n</p>";
+	    list($block['waiting']) = $xoopsDB->fetchRow($result);
 	}
     }
-    $content .= "<div class='evmore' style='text-align: right'><a href='$modurl/'>"._BLOCK_EV_MORE."</a></div>\n";
-    return array("content"=>$content, "title"=>_MI_EGUIDE_HEADLINE);
+    return $block;
 }
 
 function b_event_top_edit($options) {

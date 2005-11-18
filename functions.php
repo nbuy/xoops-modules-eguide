@@ -28,4 +28,249 @@ function explodeinfo($info, $item) {
     }
     return $result;
 }
+
+function xss_filter($text) {
+    return preg_replace('/<script[^>]*>.*<\/script[^>]*>/si', '', $text);
+}
+
+function edit_eventdata(&$data) {
+    $myts =& MyTextSanitizer::getInstance();
+    $data['date'] = eventdate($data['ldate']);
+    $data['postdate'] = eventdate($data['cdate']);
+    $data['uname'] = XoopsUser::getUnameFromId($data['uid']);
+    $data['hits'] = sprintf(_MD_REFER, $data['counter']);
+    $br = 0;
+    $html = 1;
+    switch ($data['style']) {
+    case 2: $html = 0;
+    case 1: $br = 1;
+    }
+    $data['disp_summary'] = xss_filter(xss_filter($myts->displayTarea($data['summary'],$html,0,1,1,$br)));
+    $data['disp_body'] = xss_filter($myts->displayTarea($data['body'],$html,0,1,1,$br));
+    $data['title'] = $myts->htmlSpecialChars($data['title']);
+    if ($data['persons']) {
+	$data['reserv_num']=sprintf(_MD_RESERV_NUM, $data['persons']);
+	$data['reserv_reg']=sprintf(_MD_RESERV_REG, $data['reserved']);
+    }
+}
+
+function assign_const() {
+    $css='<link rel="stylesheet" type="text/css" media="all" href="event.css" />';
+    return array('lang_detail'=>_MD_READMORE,
+		 'lang_poster'=>_MD_POSTERC,
+		 'lang_postdate'=>_MD_DATE,
+		 'lang_edit'=>_EDIT,
+		 'lang_delete'=>_DELETE,
+		 'lang_prev'=>_MD_SHOW_PREV,
+		 'lang_next'=>_MD_SHOW_NEXT,
+		 'lang_reserv_admin'=>_MD_RESERV_ADMIN,
+		 'lang_print'=>_PRINT,
+		 'xoops_module_header'=>$css);
+}
+
+function eventform($data) {
+    global $xoopsUser, $xoopsModuleConfig;
+    $myts =& MyTextSanitizer::getInstance();
+
+    if (empty($data['reservation'])) return null;
+
+    $form = array();
+    // reservation form
+    $form['title'] = _MD_RESERVATION;
+    $form['email'] = $myts->makeTboxData4Edit(is_object($xoopsUser)?$xoopsUser->email():"");
+    if (!$xoopsModuleConfig['member_only']) {
+	$form['lang_email'] = _MD_EMAIL;
+    }
+    $form['user_notify'] = $xoopsModuleConfig['user_notify'];
+    $form['lang_notify'] = _MD_NOTIFY_REQUEST;
+    $items = array();
+    $field = 0;
+    $note1 = $note2 = "";
+    foreach (explode("\n", $data['optfield']) as $n) {
+	$field++;
+	$n = preg_replace("/\s*[\n\r]/", "", $n);
+	if ($n=="") continue;
+	$attr = "";
+	if (preg_match('/^\s*#/', $n)) {
+	    $opts = preg_replace('/^\s*#\s*/', "", $n);
+	    $type = "#";
+	    $name = "&nbsp;";
+	} else {
+	    $opt = explode(",", $n);
+	    $name = array_shift($opt);
+	    if (preg_match('/^!/', $name)) {
+		$name = preg_replace('/^!\s*/', '', $name);
+		$attr = 'evop';
+		$note2 = _MD_ORDER_NOTE2;
+	    } elseif (preg_match('/\*$/', $name)) {
+		$attr = 'evms';
+		$note1 = _MD_ORDER_NOTE1;
+	    }
+	    $v = "";
+	    if ($xoopsUser && preg_match(_MD_NAME, $name)) {
+		$v = htmlspecialchars($xoopsUser->name());
+	    }
+	    $type = "text";
+	    $aname = isset($opt[0])?strtolower($opt[0]):"";
+	    switch ($aname) {
+		case "text":
+		case "checkbox":
+		case "radio":
+		case "textarea":
+		case "select":
+		    $type = $aname;
+		    array_shift($opt);
+	    }
+	    $size = 60;
+	    $cols = 40;
+	    $rows = 5;
+	    $opts = "";
+	    $comment = "";
+	    $fname = "opt$field";
+	    $sub = 0;
+	    foreach ($opt as $op) {
+		if (preg_match("/^#/",$op)) {
+		    $comment .= preg_replace("/^#/","",$op);
+		    continue;
+		}
+		$args = explode("=", $op, 2);
+		// XXX: strtolower PHP4 mbstring bug escape.
+		$aname=isset($args[1])?strtolower($args[0]):$args[0];
+		switch ($aname) {
+		case "size":
+		    $size = $args[1];
+		    break;
+		case "rows":
+		    $rows = $args[1];
+		    break;
+		case "cols":
+		    $cols = $args[1];
+		    break;
+		default:
+		    $an = preg_replace('/\+$/', "", $aname);
+		    $ck = ($an != $aname)?" checked":"";
+		    if ($type=='radio') {
+			$sub++;
+			if (isset($args[1])) {
+			    $opts .= "<input type='$type' name='$fname' value='$an'$ck />".$args[1]." &nbsp; ";
+			} else {
+			    $opts .= "<input type='$type' name='$fname' value='$an'$ck />$an &nbsp; ";
+			}
+		    } elseif ($type=='checkbox') {
+			$sub++;
+			if (isset($args[1])) {
+			    $opts .= "<input type='$type' name='${fname}_$sub' value='$an'$ck />".$args[1]." &nbsp; ";
+			} else {
+			    $opts .= "<input type='$type' name='${fname}_$sub' value='$an'$ck />$an &nbsp; ";
+			}
+		    } elseif ($type=='select') {
+			if ($ck != "") $ck = " selected";
+			if (isset($args[1])) {
+			    $opts .= "<option value='$an'$ck>".$args[1]."</option>\n";
+			} else {
+			    $opts .= "<option$ck>$an</option>\n";
+			}
+		    }
+		}
+	    }
+	    if ($type == "text") {
+		$opts .= "<input size='$size' name='$fname' value='$v' />";
+	    } elseif ($type == "textarea") {
+		$opts .= "<textarea name='$fname' rows='$rows' cols='$cols' wrap='virtual'>$v</textarea>";
+	    } elseif ($type == "select") {
+		$opts = "<select name='$fname'>\n$opts</select>";
+	    }
+	}
+	if (!empty($attr)) {
+	    if ($attr=='evop') $name = "[$name]";
+	    $attr=" class='$attr'";
+	}
+	$items[] = array('attr'=>$attr, 'label'=>$name, 'value'=>$opts, 'comment'=>$comment);
+    }
+    $form['items'] = $items;
+    $form['lang_note'] = $note1;
+    $form['note'] = $note2;
+    $form['eid'] = empty($data['eid'])?0:$data['eid'];
+    $form['lang_order'] = _MD_ORDER_SEND;
+    return $form;
+}
+
+// remove slashes
+if (XOOPS_USE_MULTIBYTES && function_exists("mb_convert_encoding") &&
+    $xoopsConfig['language'] == 'japanese') {
+    if (get_magic_quotes_gpc()) {
+	function post_filter($s) {
+	    return mb_convert_encoding(stripslashes($s), _CHARSET, "EUC-JP,UTF-8,Shift_JIS,JIS");
+	}
+    } else {
+	function post_filter($s) {
+	    return mb_convert_encoding($s, _CHARSET, "EUC-JP,UTF-8,Shift_JIS,JIS");
+	}
+    }
+} else {
+    if (get_magic_quotes_gpc()) {
+	function post_filter($s) {
+	    return stripslashes($s);
+	}
+    } else {
+	function post_filter($s) {
+	    return $s;
+	}
+    }
+}
+
+// take HTTP paramater with normalize filter
+function param($name, $def=0) {
+    if (isset($_POST[$name])) $val = $_POST[$name];
+    elseif (isset($_GET[$name])) $val = $_GET[$name];
+    else return $def;
+    return is_numeric($def)?intval($val):post_filter($val);
+}
+
+// set ldate to next event date if exists extent entry.
+function set_next_event() {
+    global $xoopsDB;
+    $now = time();
+    // Search already passed event that exist next extent.
+    $res = $xoopsDB->query("SELECT eid, min(exdate) FROM ".EGTBL.", ".EXTBL." WHERE edate<$now AND ldate<$now AND expire>$now AND eid=eidref AND exdate>$now GROUP BY eid");
+    while (list($eid, $exdate) = $xoopsDB->fetchRow($res)) {
+	$xoopsDB->queryF("UPDATE ".EGTBL." SET ldate=$exdate WHERE eid=$eid");
+	echo "<div>UPDATE: eid=$eid to $exdate</div>";
+    }
+}
+
+function get_extents($eid, $exid) {
+    global $xoopsDB;
+    if ($exid) {
+	$result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL.' WHERE exid='.$exid);
+	return array($xoopsDB->fetchArray($result));
+    } else {
+	$result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL." WHERE eidref=$eid AND exdate>".time().' ORDER BY exdate');
+	$extents = array();
+	while ($extent = $xoopsDB->fetchArray($result)) {
+	    $extent['date'] = eventdate($extent['exdate']);
+	    $extents[] = $extent;
+	}
+	return $extents;
+    }
+}
+
+function eventdate($time) {
+    global $ev_week;
+    $str = formatTimestamp($time, _MD_DATE_FMT);
+    if (isset($ev_week)) {
+	$str = str_replace(array_keys($ev_week), $ev_week, $str);
+    }
+    return $str;
+}
+
+function get_category() {
+    global $xoopsDB;
+    $result = $xoopsDB->query("SELECT catid, catname FROM ".CATBL." ORDER BY catid");
+    $list = array();
+    while (list($id, $name)=$xoopsDB->fetchRow($result)) {
+	$list[$id] = $name;
+    }
+    return $list;
+}
 ?>

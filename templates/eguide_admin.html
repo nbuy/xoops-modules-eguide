@@ -1,0 +1,55 @@
+<{if $event}>
+<{include file="db:eguide_event.html"}>
+<{/if}>
+<div class="event">
+<h2><{$lang_event_edit}></h2>
+<form action="admin.php?eid=<{$eid}>" method="post" class="evbody">
+<h3><{$lang_title}></h3>
+<input type="text" name="title" id="title" value="<{$title}>" size="70" maxlength="80" />
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td>
+<h3><{$lang_event_date}></h3>
+<{$input_edate}>
+<h3><{$lang_event_expire}></h3>
+<{$input_expire}>
+</td><td><h3><{$lang_event_category}></h3>
+<{$input_category}></td></tr>
+</table>
+<p>
+  <b><{$lang_event_extent}></b> <{$input_extent}>
+<{if $extent_sets}>
+<div class="extents">
+<{foreach from=$extent_sets item=ext}>
+  <nobr><{if $ext.disable}>&middot; <{else}><input type="checkbox" value="<{$ext.exdate}>" name="extent_sets[<{$ext.no}>]"<{if $ext.checked}> checked<{/if}>/><{/if}><{$ext.date}></nobr>
+<{/foreach}>
+</div>
+<{/if}>
+</p>
+<h3><{$lang_introtext}></h3>
+<{$summary_textarea}>
+<h3><{$lang_extext}></h3>
+<textarea name="body" wrap="virtual" cols="60" rows="10"><{$body}></textarea>
+
+<h3><{$lang_event_style}></h3>
+<{$input_style}>
+
+<h3><{$lang_reserv_setting}></h3>
+<div><input type="checkbox" name="reservation" value="1"<{if $reservation}> checked<{/if}>/> <{$lang_reserv_desc}></div>
+<div>
+  <input type="checkbox" name="strict" value="1"<{if $strict}> checked<{/if}>/> <{$lang_reserv_stopfull}>
+  <input type="checkbox" name="autoaccept" value="1"<{if $autoaccept}> checked<{/if}>/> <{$lang_reserv_auto}>
+</div>
+<div><input type="checkbox" name="notify" value="1"<{if $notify}> checked<{/if}>/> <{$lang_reserv_notifyposter}></div>
+<div><b><{$lang_reserv_persons}></b> <input type="text" name="persons" value="<{$persons}>" size="3" /> <{$lang_reserv_unit}></div>
+<h3><{$lang_reserv_item}></h3>
+<textarea name="optfield" wrap="virtual" cols="60" rows="5"><{$optfield}></textarea>
+<div class="evinfo"><{$lang_reserv_item_desc}></div>
+<{if $input_status}>
+<p><{$input_status}></p>
+<{/if}>
+<p>
+<input type="submit" name="preview" value="<{$lang_preview}>" />
+<input type="submit" name="save" value="<{$lang_save}>" />
+</p>
+</form>
+</div>

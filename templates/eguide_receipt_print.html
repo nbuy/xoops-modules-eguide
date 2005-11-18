@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<{$xoops_langcode}>" lang="<{$xoops_langcode}>">
+<head>
+<meta name="generator" content="XOOPS" />
+<title><{$xoops_sitename}> - <{$xoops_pagetitle}></title>
+<link rel="stylesheet" type="text/css" media="all" href="print.css" />
+<link href="<{$xoops_url}>/favicon.ico" rel="SHORTCUT ICON" />
+</head>
+<body>
+<div class="evlist">
+<h3><{$lang_reserv_list}></h3>
+
+<table width="100%">
+<tr><td><{$lang_order_count}> <{$order_count}></td><td align="right"><{$lang_print_date}> <{$print_date}></td></tr>
+</table>
+<table width="100%" cellspacing="1" cellpadding="4" class="evtbl">
+<tr class="head">
+  <th><{$lang_order_date}></th>
+  <th><{$lang_email}></th>
+<{foreach from=$labels item=lab}>
+  <th><{$lab}></th>
+<{/foreach}>
+</tr>
+<{foreach from=$list item=order}>
+<tr class="<{cycle values="even, odd"}>">
+  <td nowrap><{$order.date}></td>
+  <td><{$order.email}></td>
+<{foreach from=$order.add item=value}>
+  <td><{$value}></td>
+<{/foreach}>
+<{/foreach}>
+<tr >
+</table>
+<{if $citem}>
+<br/>
+<div class="evhead"><{$lang_summary}></div>
+<table class="evtbl">
+<tr class="head"><th><{$lang_sum_item}></th><th><{$lang_sum}></th></tr>
+<{foreach from=$citem key=label item=count}>
+<tr class="<{cycle values="even, odd"}>"><td><{$label}></td><td align='right'><{$count}></td></tr>
+<{/foreach}>
+</table>
+<{/if}>
+</div>
+</body>
+</html>
