@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.10 2005/11/18 17:08:02 nobu Exp $
+// $Id: event.php,v 1.11 2005/11/19 18:32:34 nobu Exp $
 
 include 'header.php';
 
@@ -56,7 +56,9 @@ $xoopsOption['template_main'] = 'eguide_event.html';
 $xoopsTpl->assign(assign_const());
 edit_eventdata($data);
 $xoopsTpl->assign('event', $data);
-
+$xoopsTpl->assign('caldate', param('caldate', '')); // piCal support
+$xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".
+		  $data['date']." ".$data['title']);
 if ($data['ldate'] < $now) {
     $xoopsTpl->assign('message', _MD_RESERV_CLOSE);
 } elseif ($data['reservation']) {

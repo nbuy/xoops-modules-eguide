@@ -18,12 +18,13 @@
   <br clear="all"/>
   <div class="evlink"><{if $event.isadmin}>[
 <{if $event.reservation}>
-    <a href="receipt.php?eid=<{$event.eid}>"><{$lang_reserv_admin}></a> | 
+    <a href="receipt.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_reserv_admin}></a> | 
 <{/if}>
     <a href="admin.php?op=edit&amp;eid=<{$event.eid}>"><{$lang_edit}></a> |
-    <a href="admin.php?op=delete&amp;eid=<{$event.eid}>"><{$lang_delete}></a> ]
+    <a href="editdate.php?eid=<{$event.eid}>"><{$lang_edit_extent}></a> |
+    <a href="admin.php?op=delete&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_delete}></a> ]
 <{/if}>
- <a href="event.php?eid=<{$event.eid}>"><{$lang_detail}></a>
+ <a href="event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_detail}></a>
   </div>
 </div>
 <{/foreach}>

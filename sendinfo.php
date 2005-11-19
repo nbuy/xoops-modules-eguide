@@ -1,9 +1,9 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.7 2005/11/18 17:08:03 nobu Exp $
+// $Id: sendinfo.php,v 1.8 2005/11/19 18:32:35 nobu Exp $
 
 include 'header.php';
-include 'perm.php';
+require 'perm.php';
 
 $op = param('op', 'form');
 $eid = param('eid');

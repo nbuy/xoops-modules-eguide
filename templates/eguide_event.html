@@ -24,7 +24,11 @@
     <a href="receipt.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_reserv_admin}></a> |
 <{/if}>
     <a href="admin.php?eid=<{$event.eid}>"><{$lang_edit}></a> |
+    <a href="editdate.php?eid=<{$event.eid}>"><{$lang_edit_extent}></a> |
     <a href="admin.php?op=delete&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_delete}></a> ] <{/if}>
+<{if $caldate}>
+    <a href="<{$xoops_url}>/modules/piCal/index.php?caldate=<{$caldate}>"><{$lang_calender}></a>
+<{/if}>
     <a href="event.php?op=print&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$lang_print}>" border="0" /></a>
   </div>
 <{/if}>
@@ -39,7 +43,7 @@
 <option value="<{$ext.exid}>"><{$ext.date}></option>
 <{/foreach}>
 </select>
-<input type="submit"/>
+<input type="submit" value="<{$lang_submit}>"/>
 </form>
 </div>
 <{elseif $form}>
@@ -55,7 +59,7 @@
 </td></tr>
 <{/if}>
 <{foreach from=$form.items item=fm}>
-<tr class="<{cycle values="even, odd"}>"><th><{$fm.label}></th><td><{$fm.value}></td></tr>
+<tr class="<{$fm.attr}>"><th><{$fm.label}></th><td><{$fm.value}></td></tr>
 <{/foreach}>
 </table>
 <input type="hidden" name="op" value="order" />

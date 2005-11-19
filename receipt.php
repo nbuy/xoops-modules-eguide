@@ -1,9 +1,9 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.11 2005/11/18 17:08:03 nobu Exp $
+// $Id: receipt.php,v 1.12 2005/11/19 18:32:35 nobu Exp $
 
 include 'header.php';
-include 'perm.php';
+require 'perm.php';
 
 $op = param('op', 'view');
 $rvid=param('rvid');
@@ -17,11 +17,11 @@ if ($rvid) {
     $eid = $data['eid'];
     if ($op=='save') {
 	$xoopsDB->query("UPDATE ".RVTBL." SET email='$email', status='$status', info='$info' WHERE rvid=$rvid");
-	update_reserv($eid);
+	update_reserv($eid, $exid);
 	$op='one';
     } elseif ($op=='delete') {
 	$xoopsDB->query("DELETE FROM ".RVTBL." WHERE rvid=$rvid AND eid=$eid");
-	update_reserv($eid);
+	update_reserv($eid, $exid);
 	redirect_header("receipt.php?eid=$eid",2,_MD_DBUPDATED);
 	exit;
     }
@@ -113,33 +113,41 @@ $xoopsTpl->assign(array('lang_reserv_list'=>$title,
 			'eid'=>$eid, 'exid'=>$exid));
 switch ($op) {
 case 'active':
-    foreach (array_keys($_POST) as $i) {
-	if (preg_match('/^act\d+$/', $i)) {
-	    $rvid = $_POST[$i];
-	    $result=$xoopsDB->query("SELECT * FROM ".RVTBL." WHERE rvid=$rvid");
-	    $data = $xoopsDB->fetchArray($result);
-	    if ($data) {
-		$xoopsMailer =& getMailer();
-		$xoopsMailer->useMail();
-		$xoopsMailer->setSubject("Re: $title");
-		$xoopsMailer->setBody($msg);
-		$xoopsMailer->setFromEmail($poster->email());
-		$xoopsMailer->setFromName("Event Reservation");
+    foreach ($_POST['act'] as $i) {
+	$rvid = intval($i);
+	$yesno = param('yesno');
+	$result = $xoopsDB->query("SELECT * FROM ".RVTBL." WHERE rvid=$rvid");
+	$data = $xoopsDB->fetchArray($result);
+	if ($data) {
+	    $msg = param('msg', '');
+	    $xoopsMailer =& getMailer();
+	    $xoopsMailer->useMail();
+	    $xoopsMailer->setSubject("Re: ".$title);
+	    $xoopsMailer->setBody($msg);
+	    $xoopsMailer->setFromEmail($poster->email());
+	    if ($data['uid']) {
+		$user = new XoopsUser($data['uid']);
+		$xoopsMailer->setToUsers($user);
+		$xoopsMailer->assign("ORDER_MAIL", $user->getVar('email'));
+	    } else {
 		$xoopsMailer->setToEmails($data['email']);
 		$xoopsMailer->assign("ORDER_MAIL", $data['email']);
-		$xoopsMailer->assign("INFO", $data['info']);
-		$xoopsMailer->assign("RESULT", $yesno==1?
-				     _AM_RESERV_ACTIVE:_AM_RESERV_REFUSE);
-		if ($xoopsMailer->send()) {
-		    $xoopsDB->query("UPDATE ".RVTBL." SET status='$yesno' WHERE rvid=$rvid");
-		    echo $xoopsMailer->getSuccess();
-		} else {
-		    echo $xoopsMailer->getErrors();
-		}
+	    }
+	    $xoopsMailer->setFromName("Event Reservation");
+	    $xoopsMailer->assign("INFO", $data['info']);
+	    $xoopsMailer->assign("RESULT", $yesno==1?
+				 _MD_RESERV_ACTIVE:_MD_RESERV_REFUSE);
+	    if ($xoopsMailer->send()) {
+		$xoopsDB->query("UPDATE ".RVTBL." SET status='$yesno' WHERE rvid=$rvid");
+		echo "<div>"._MD_INFO_MAILOK."</div>\n";
+		echo $xoopsMailer->getSuccess();
+	    } else {
+		echo "<div>"._MD_INFO_MAILNG."</div>\n";
+		echo $xoopsMailer->getErrors();
 	    }
 	}
     }
-    update_reserv($eid);
+    update_reserv($eid, $exid);
     break;
 
 case 'edit':
@@ -202,7 +210,6 @@ default:
     $max = $xoopsModuleConfig['max_item'];
     $xoopsTpl->assign(array('order_count'=>$nrec,
 			    'lang_order_count'=>_MD_ORDER_COUNT,
-			    'lang_edit_extent'=>_MD_EDIT_EXTENT,
 			    'lang_print_date'=>_MD_PRINT_DATE,
 			    'print_date'=>formatTimestamp(time(), _MD_POSTED_FMT),
 			    'lang_operation'=>_MD_OPERATION,

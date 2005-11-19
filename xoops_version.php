@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.22 2005/11/19 08:57:14 nobu Exp $
+// $Id: xoops_version.php,v 1.23 2005/11/19 18:32:35 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
 $modversion['version'] = "1.901";
@@ -60,11 +60,22 @@ $modversion['blocks'][2]=array('file' => "ev_top.php",
 			       'options' => '0|10|19|1',
 			       'template' => 'eguide_block_top.html');
 // Menu
+$module_handler =& xoops_gethandler('module');
+$module =& $module_handler->getByDirname('eguide');
+$config_handler =& xoops_gethandler('config');
+$configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+
+global $xoopsUser;
 $modversion['hasMain'] = 1;
-$modversion['sub'][1]['name'] = _MI_EGUIDE_SUBMIT;
-$modversion['sub'][1]['url'] = "admin.php";
-$modversion['sub'][2]['name'] = _MI_EGUIDE_REG;
-$modversion['sub'][2]['url'] = "reserv.php?op=register";
+if (is_object($xoopsUser) &&
+    in_array($configs['group'], $xoopsUser->getGroups())) {
+    $modversion['sub'][1]['name'] = _MI_EGUIDE_SUBMIT;
+    $modversion['sub'][1]['url'] = "admin.php";
+}
+if ($configs['user_notify']) {
+    $modversion['sub'][2]['name'] = _MI_EGUIDE_REG;
+    $modversion['sub'][2]['url'] = "reserv.php?op=register";
+}
 
 // Search
 $modversion['hasSearch'] = 1;

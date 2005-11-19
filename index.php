@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.9 2005/11/19 08:57:14 nobu Exp $
+// $Id: index.php,v 1.10 2005/11/19 18:32:34 nobu Exp $
 
 include 'header.php';
 
@@ -25,8 +25,8 @@ if (empty($prev)) {
 
 $opt = isset($_GET['cat'])?' AND topicid='.intval($_GET['cat']):'';
 
-$fields = "e.eid, cdate, ldate, title, summary, reservation, uid, status, style, counter, catid, catname, catimg ";
-$result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid WHERE '.$cond.$opt.' ORDER BY ldate '.$ord, $max, $start);
+$fields = "e.eid, cdate, ldate, title, summary, reservation, uid, status, style, counter, catid, catname, catimg, exid";
+$result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.' ON e.eid=eidref AND ldate=exdate WHERE '.$cond.$opt.' ORDER BY ldate '.$ord, $max, $start);
 if ($xoopsDB->errno() && $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
     redirect_header('admin/upgrade_1.x.x.php', 5, _MD_NEED_UPGRADE);
     exit;

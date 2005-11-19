@@ -1,13 +1,12 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.10 2005/11/19 08:57:14 nobu Exp $
+// $Id: admin.php,v 1.11 2005/11/19 18:32:34 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
 include_once 'notify.inc.php';
 
-// need switch normal xoops
-include 'perm.php';
+require 'perm.php';
 
 $eid = param('eid');
 $op = param('op', $eid?'edit':'new');
@@ -68,7 +67,7 @@ if ($op=='new') {
 	foreach ($iargs as $name) {
 	    $data[$name] = param($name);
 	}
-	$data['ldate'] = $data['edate'];
+	$data['ldate'] = 0;
 	foreach ($targs as $name) {
 	    $data[$name] = param($name, "");
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.10 2005/11/19 08:57:14 nobu Exp $
+// $Id: ev_top.php,v 1.11 2005/11/19 18:32:35 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -15,8 +15,7 @@ function b_event_top_show($options) {
     if(!isset($options[1])) $options[1]=10;
     $result = $xoopsDB->query($sql, $options[1], 0);
 
-    $block = array('lang_poster'=>_BLOCK_EV_POST,
-		   'lang_nodata'=>_BLOCK_EV_NONE,
+    $block = array('lang_nodata'=>_BLOCK_EV_NONE,
 		   'lang_waiting'=>_BLOCK_EV_WAIT,
 		   'lang_more'=>_BLOCK_EV_MORE,
 		   'detail'=>$options[0],
@@ -24,7 +23,11 @@ function b_event_top_show($options) {
     while ( $myrow = $xoopsDB->fetchArray($result) ) {
 	$event = array();
 	$title = $myts->makeTboxData4Show($myrow["title"]);
-	if ( !XOOPS_USE_MULTIBYTES ) {
+	if ( XOOPS_USE_MULTIBYTES ) {
+	    if (function_exists('mb_strcut')&& strlen($title) >= $options[2]) {
+		$title = $myts->makeTboxData4Show(mb_strcut($myrow['title'],0,($options[2] -1), _CHARSET))."...";
+	    }
+	} else {
 	    if (strlen($title) >= $options[2]) {
 		$title = $myts->makeTboxData4Show(substr($myrow['title'],0,($options[2] -1)))."...";
 	    }

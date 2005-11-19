@@ -1,7 +1,6 @@
 <div class="evlist">
 <h3><{$lang_reserv_list}></h3>
 
-<div>[<a href="editdate.php?eid=<{$eid}>"><{$lang_edit_extent}></a>]</div>
 <{if $extents}>
 <table class="outer">
 <tr class="head"><th><{$lang_extent_date}></th><th><{$lang_order_count}></th><th><{$lang_operation}></th></tr>
@@ -32,7 +31,7 @@
   <td>
     <a href="receipt.php?rvid=<{$order.rvid}>"><{$lang_detail}></a>
 <{if $order.confirm}>
-    <input type="checkbox" name="act<{$order.rvid}>" value="<{$order.rvid}>" checked />
+    <input type="checkbox" name="act[]" value="<{$order.rvid}>" checked />
 <{/if}>
   </td>
   <td nowrap><{$order.date}></td>
@@ -51,6 +50,7 @@
 <{if $confirm}>
 <input type='hidden' name='op' value='active' />
 <input type='hidden' name='eid' value='<{$eid}>' />
+<input type='hidden' name='sub' value='<{$exid}>' />
 <br/>
 <table><tr><td><select name='yesno'>
 <{foreach from=$operations key=value item=label}>

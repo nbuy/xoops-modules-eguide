@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.10 2005/11/18 17:08:03 nobu Exp $
+// $Id: reserv.php,v 1.11 2005/11/19 18:32:35 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -162,7 +162,8 @@ case 'order':
 	}
     } else {
 	if (!is_object($xoopsUser)) redirect_header($_SERVER['HTTP_REFERER'],2);
-	$ml = strtolower($xoopsUser->getVar('email'));
+	$email = $xoopsUser->getVar('email');
+	$ml = strtolower($email);
     }
     if (!$err) {
 	$accept = $data['autoaccept'];
@@ -209,6 +210,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$xoopsMailer->setTemplateDir(XOOPS_ROOT_PATH."/modules/eguide/language/".$xoopsConfig['language']."/");
 	$xoopsMailer->setTemplate($accept?"accept.tpl":"order.tpl");
 	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");
+	$xoopsMailer->assign("RVID", $rvid);
 	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
 	$xoopsMailer->assign("INFO", _MD_EMAIL.": ".$email."\n".$value);
 	$xoopsMailer->assign("TITLE", $title);

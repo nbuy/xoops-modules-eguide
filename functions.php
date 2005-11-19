@@ -48,7 +48,7 @@ function edit_eventdata(&$data) {
     $data['disp_summary'] = xss_filter(xss_filter($myts->displayTarea($data['summary'],$html,0,1,1,$br)));
     $data['disp_body'] = xss_filter($myts->displayTarea($data['body'],$html,0,1,1,$br));
     $data['title'] = $myts->htmlSpecialChars($data['title']);
-    if ($data['persons']) {
+    if (!empty($data['persons'])) {
 	$data['reserv_num']=sprintf(_MD_RESERV_NUM, $data['persons']);
 	$data['reserv_reg']=sprintf(_MD_RESERV_REG, $data['reserved']);
     }
@@ -58,13 +58,16 @@ function assign_const() {
     $css='<link rel="stylesheet" type="text/css" media="all" href="event.css" />';
     return array('lang_detail'=>_MD_READMORE,
 		 'lang_poster'=>_MD_POSTERC,
-		 'lang_postdate'=>_MD_DATE,
+		 'lang_postdate'=>_MD_POSTDATE,
 		 'lang_edit'=>_EDIT,
+		 'lang_edit_extent'=>_MD_EDIT_EXTENT,
 		 'lang_delete'=>_DELETE,
 		 'lang_prev'=>_MD_SHOW_PREV,
 		 'lang_next'=>_MD_SHOW_NEXT,
 		 'lang_reserv_admin'=>_MD_RESERV_ADMIN,
 		 'lang_print'=>_PRINT,
+		 'lang_submit'=>_SUBMIT,
+		 'lang_calender'=>_MD_CALENDER,
 		 'xoops_module_header'=>$css);
 }
 
@@ -98,13 +101,14 @@ function eventform($data) {
 	} else {
 	    $opt = explode(",", $n);
 	    $name = array_shift($opt);
-	    if (preg_match('/^!/', $name)) {
-		$name = preg_replace('/^!\s*/', '', $name);
-		$attr = 'evop';
-		$note2 = _MD_ORDER_NOTE2;
-	    } elseif (preg_match('/\*$/', $name)) {
+	    if (preg_match('/\*$/', $name)) {
 		$attr = 'evms';
 		$note1 = _MD_ORDER_NOTE1;
+	    }
+	    if (preg_match('/^!/', $name)) {
+		$name = preg_replace('/^!/', '', $name);
+		$attr = 'evop';
+		$note2 = _MD_ORDER_NOTE2;
 	    }
 	    $v = "";
 	    if ($xoopsUser && preg_match(_MD_NAME, $name)) {
@@ -181,10 +185,8 @@ function eventform($data) {
 		$opts = "<select name='$fname'>\n$opts</select>";
 	    }
 	}
-	if (!empty($attr)) {
-	    if ($attr=='evop') $name = "[$name]";
-	    $attr=" class='$attr'";
-	}
+	if ($attr=='evop') $name = "[$name]";
+	if ($attr=='') $attr = (count($items)%2)?'even':'odd';
 	$items[] = array('attr'=>$attr, 'label'=>$name, 'value'=>$opts, 'comment'=>$comment);
     }
     $form['items'] = $items;
@@ -232,20 +234,20 @@ function set_next_event() {
     global $xoopsDB;
     $now = time();
     // Search already passed event that exist next extent.
-    $res = $xoopsDB->query("SELECT eid, min(exdate) FROM ".EGTBL.", ".EXTBL." WHERE edate<$now AND ldate<$now AND expire>$now AND eid=eidref AND exdate>$now GROUP BY eid");
-    while (list($eid, $exdate) = $xoopsDB->fetchRow($res)) {
+    $res = $xoopsDB->query("SELECT eid, min(exdate),edate FROM ".EGTBL." LEFT JOIN ".EXTBL." ON eid=eidref AND exdate>$now WHERE (edate<$now OR ldate=0) AND ldate<$now AND expire>$now GROUP BY eid");
+    while (list($eid, $exdate, $edate) = $xoopsDB->fetchRow($res)) {
+	if (empty($exdate)) $exdate = $edate;
 	$xoopsDB->queryF("UPDATE ".EGTBL." SET ldate=$exdate WHERE eid=$eid");
-	echo "<div>UPDATE: eid=$eid to $exdate</div>";
     }
 }
 
-function get_extents($eid, $exid) {
+function get_extents($eid, $exid, $all=false) {
     global $xoopsDB;
     if ($exid) {
 	$result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL.' WHERE exid='.$exid);
 	return array($xoopsDB->fetchArray($result));
     } else {
-	$result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL." WHERE eidref=$eid AND exdate>".time().' ORDER BY exdate');
+	$result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL." WHERE eidref=$eid".($all?"":" AND exdate>".time()).' ORDER BY exdate');
 	$extents = array();
 	while ($extent = $xoopsDB->fetchArray($result)) {
 	    $extent['date'] = eventdate($extent['exdate']);

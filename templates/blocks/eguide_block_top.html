@@ -1,6 +1,9 @@
 <{if $block.detail}> 
 <{foreach item=event from=$block.events}>
-<div><{$event.date}> <a href="<{$xoops_url}>/modules/eguide/event.php?eid=<{$event.eid}>"><{$event.title}></a>(<{$lang_poster}> <{$event.uname}> <{$event.post}>)</div>
+<div><{$event.date}>
+   <a href="<{$xoops_url}>/modules/eguide/event.php?eid=<{$event.eid}>"><{$event.title}></a> 
+   (<a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a> <{$event.post}>)
+</div>
 <{/foreach}>
 <{else}>
 <{foreach item=event from=$block.events}>
