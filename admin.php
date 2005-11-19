@@ -1,10 +1,10 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.9 2005/11/18 17:08:02 nobu Exp $
+// $Id: admin.php,v 1.10 2005/11/19 08:57:14 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include_once("notify.inc.php");
+include_once 'notify.inc.php';
 
 // need switch normal xoops
 include 'perm.php';
@@ -23,7 +23,7 @@ $uid = $xoopsUser->getVar('uid');
 
 // set form data
 $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
-	       'persons', 'style', 'topicid');
+	       'persons', 'style');
 $targs = array('title', 'summary', 'body', 'optfield');
 
 $myts =& MyTextSanitizer::getInstance();
@@ -64,6 +64,7 @@ if ($op=='new') {
 	}
 	$data['ldate'] = $data['edate'] = $edate;
 	$data['expire'] = $expire;
+	$data['topicid'] = param('topicid', 1);
 	foreach ($iargs as $name) {
 	    $data[$name] = param($name);
 	}
@@ -227,7 +228,12 @@ if ($eid && $op=='delete') {
 	$input_expire = datefield('expire', $data['expire']);
     }
 
-    $input_category = select_list('topicid', get_category(), $data['topicid']);
+    $cats = get_category();
+    if (count($cats) > 1) {
+	$input_category = select_list('topicid', $cats, $data['topicid']);
+    } else {
+	$input_category = '';
+    }
 
     if ($op == 'preview') {
 	$views = array('edate', 'cdate', 'ldate', 'title', 'summary', 'body',

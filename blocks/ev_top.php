@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.9 2005/11/18 17:08:03 nobu Exp $
+// $Id: ev_top.php,v 1.10 2005/11/19 08:57:14 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -10,7 +10,8 @@ function b_event_top_show($options) {
     $modurl = XOOPS_URL."/modules/$moddir";
 
     $content = "";
-    $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time()." AND status=0 ORDER BY edate";
+    $order = $options[3]?'cdate DESC':'ldate';
+    $sql = "SELECT eid, title, ldate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time().' AND status=0 ORDER BY '.$order;
     if(!isset($options[1])) $options[1]=10;
     $result = $xoopsDB->query($sql, $options[1], 0);
 
@@ -30,9 +31,11 @@ function b_event_top_show($options) {
 	}
 	$event['title'] = $title;
 	$event['eid'] = $myrow['eid'];
-	$event['date'] = formatTimestamp($myrow['edate'], _BLOCK_DATE_FMT);
+	$event['date'] = formatTimestamp($myrow['ldate'], _BLOCK_DATE_FMT);
+	$event['_date'] = formatTimestamp($myrow['ldate'], 's');
 	$event['uname'] = XoopsUser::getUnameFromId($myrow['uid']);
 	$event['post'] = formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT);
+	$event['_post'] = formatTimestamp($myrow['cdate'], 'm');
 	$event['uid'] = $myrow['uid'];
 	$block['events'][] = $event;
     }
@@ -54,11 +57,13 @@ function b_event_top_edit($options) {
 	$sel0="";
 	$sel1=" checked";
     }
-    if (!isset($options[1])) $options[1]=10;
     return _BLOCK_EV_STYLE."&nbsp;".
 	"<input type='radio' name='options[]' value='1'$sel0 />"._YES." &nbsp; \n".
 	"<input type='radio' name='options[]' value='0'$sel1 />"._NO."<br/>\n".
-	_BLOCK_EV_ITEMS."&nbsp;<input name='options[1]' value='".$options[1].
-	"' />\n";
+	_BLOCK_EV_ITEMS."&nbsp;<input name='options[]' value='".$options[1].
+	"' /><br/>\n".
+	_BLOCK_EV_TRIM."&nbsp;<input name='options[]' value='".$options[2]."' />\n".
+	"<input type='hidden' name='options[]' value='".$options[3]."' />\n";
+    
 }
 ?>

@@ -1,10 +1,10 @@
 <?php
 // checking permittion for event adiminstration.
-// $Id: perm.php,v 1.3 2005/11/18 17:08:02 nobu Exp $
+// $Id: perm.php,v 1.4 2005/11/19 08:57:14 nobu Exp $
 function eguide_perm($eid) {
     global $xoopsDB, $xoopsUser, $xoopsModule, $xoopsModuleConfig, $_POST;
     if (!$xoopsUser) return false;		   	// need login
-    elseif ($xoopsUser->isAdmin($xoopsModule->mid())) ;	// ok admin
+    elseif ($xoopsUser->isAdmin($xoopsModule->getVar('mid'))) ;	// ok admin
     elseif (empty($_POST['op'])||$_POST['op']=="new"){
 	$groups = $xoopsUser->groups();
 	if (!in_array($xoopsModuleConfig['group'],$groups)) return false;

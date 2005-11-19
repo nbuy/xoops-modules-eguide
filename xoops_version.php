@@ -1,12 +1,12 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.21 2005/11/18 17:08:03 nobu Exp $
+// $Id: xoops_version.php,v 1.22 2005/11/19 08:57:14 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "1.9001";
+$modversion['version'] = "1.901";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
-$modversion['author'] = "Nobuhiro Yasutomi<br />( http://mysite.ddo.jp/ )";
+$modversion['author'] = "Nobuhiro Yasutomi";
 $modversion['help'] = "help.html";
 $modversion['license'] = "GPL see LICENSE";
 $modversion['official'] = 0;
@@ -49,7 +49,15 @@ $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'description' => _MI_EGUIDE_HEADLINE_DESC,
 			       'show_func' => 'b_event_top_show',
 			       'edit_func' => 'b_event_top_edit',
-			       'options' => '0|10|19',
+			       'options' => '0|10|19|0',
+			       'template' => 'eguide_block_top.html');
+
+$modversion['blocks'][2]=array('file' => "ev_top.php",
+			       'name' => _MI_EGUIDE_HEADLINE2,
+			       'description' => _MI_EGUIDE_HEADLINE2_DESC,
+			       'show_func' => 'b_event_top_show',
+			       'edit_func' => 'b_event_top_edit',
+			       'options' => '0|10|19|1',
 			       'template' => 'eguide_block_top.html');
 // Menu
 $modversion['hasMain'] = 1;
@@ -82,7 +90,7 @@ $modversion['config'][3]=array('name' => 'auth',
 			       'description' => '_MI_EGUIDE_NEEDPOSTAUTH_DESC',
 			       'formtype' => 'yesno',
 			       'valuetype' => 'int',
-			       'default' => 1);
+			       'default' => 0);
 $modversion['config'][4]=array('name' => 'max_item',
 			       'title' => '_MI_EGUIDE_MAX_LISTITEM',
 			       'description' => '_MI_EGUIDE_MAX_LISTITEM_DESC',

@@ -12,7 +12,7 @@
    padding-bottom: 0.5em;
 }
 .evtbl th { text-align: left; vertical-align: top; }
-.event, .evform, .evlist { border: solid thin #639ACE; padding: 0.5em; margin-bottom: 1em;}
+.event, .evform, .evlist { border: solid thin grey; padding: 0.5em; margin-bottom: 1em;}
 .catbox { float: right; }
 h2 { color: #800000; }
 h3 { color: #002040; margin-bottom: 0px;}

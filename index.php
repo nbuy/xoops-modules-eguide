@@ -1,11 +1,11 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.8 2005/11/18 17:08:02 nobu Exp $
+// $Id: index.php,v 1.9 2005/11/19 08:57:14 nobu Exp $
 
 include 'header.php';
 
-$prev = isset($_GET['prev'])?intval($_GET['prev']):0;
-$page = isset($_GET['page'])?intval($_GET['page']):0;
+$prev = param('prev');
+$page = param('page');
 
 set_next_event();
 
@@ -27,6 +27,10 @@ $opt = isset($_GET['cat'])?' AND topicid='.intval($_GET['cat']):'';
 
 $fields = "e.eid, cdate, ldate, title, summary, reservation, uid, status, style, counter, catid, catname, catimg ";
 $result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid WHERE '.$cond.$opt.' ORDER BY ldate '.$ord, $max, $start);
+if ($xoopsDB->errno() && $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
+    redirect_header('admin/upgrade_1.x.x.php', 5, _MD_NEED_UPGRADE);
+    exit;
+}
 
 $events = array();
 $isadmin = false;
@@ -42,7 +46,6 @@ while ($event = $xoopsDB->fetchArray($result)) {
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
-
 $xoopsOption['template_main'] = 'eguide_index.html';
 
 $xoopsTpl->assign('events', $events);
@@ -73,6 +76,7 @@ if (empty($prev)) {
 	$page="?prev=".($prev+1);
     }
 }
+
 if ($opt) $opt = "&amp;cat=".intval($_GET['cat']);
 
 if ($p) $xoopsTpl->assign('page_prev', $prev.$opt);
