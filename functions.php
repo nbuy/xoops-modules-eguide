@@ -1,4 +1,7 @@
 <?php
+// Event Guide common functions
+// $Id: functions.php,v 1.4 2005/11/24 08:15:48 nobu Exp $
+
 // exploding addional informations.
 function explodeinfo($info, $item) {
     $ln = explode("\n", preg_replace('/\r/','',$info));
@@ -35,6 +38,7 @@ function xss_filter($text) {
 
 function edit_eventdata(&$data) {
     $myts =& MyTextSanitizer::getInstance();
+    $data['ldate'] = empty($data['exdate'])?$data['edate']:$data['exdate'];
     $data['date'] = eventdate($data['ldate']);
     $data['postdate'] = eventdate($data['cdate']);
     $data['uname'] = XoopsUser::getUnameFromId($data['uid']);
@@ -55,9 +59,7 @@ function edit_eventdata(&$data) {
 }
 
 function assign_const() {
-    $css='<link rel="stylesheet" type="text/css" media="all" href="event.css" />';
-    return array('lang_detail'=>_MD_READMORE,
-		 'lang_poster'=>_MD_POSTERC,
+    return array('lang_poster'=>_MD_POSTERC,
 		 'lang_postdate'=>_MD_POSTDATE,
 		 'lang_edit'=>_EDIT,
 		 'lang_edit_extent'=>_MD_EDIT_EXTENT,
@@ -68,7 +70,7 @@ function assign_const() {
 		 'lang_print'=>_PRINT,
 		 'lang_submit'=>_SUBMIT,
 		 'lang_calender'=>_MD_CALENDER,
-		 'xoops_module_header'=>$css);
+		 'xoops_module_header'=>HEADER_CSS);
 }
 
 function eventform($data) {
@@ -241,20 +243,15 @@ function set_next_event() {
     }
 }
 
-function get_extents($eid, $exid, $all=false) {
+function get_extents($eid, $all=false) {
     global $xoopsDB;
-    if ($exid) {
-	$result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL.' WHERE exid='.$exid);
-	return array($xoopsDB->fetchArray($result));
-    } else {
-	$result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL." WHERE eidref=$eid".($all?"":" AND exdate>".time()).' ORDER BY exdate');
-	$extents = array();
-	while ($extent = $xoopsDB->fetchArray($result)) {
-	    $extent['date'] = eventdate($extent['exdate']);
-	    $extents[] = $extent;
-	}
-	return $extents;
+    $result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL." WHERE eidref=$eid".($all?"":" AND exdate>".time()).' ORDER BY exdate');
+    $extents = array();
+    while ($extent = $xoopsDB->fetchArray($result)) {
+	$extent['date'] = eventdate($extent['exdate']);
+	$extents[] = $extent;
     }
+    return $extents;
 }
 
 function eventdate($time) {

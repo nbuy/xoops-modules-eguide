@@ -1,41 +1,55 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.11 2005/11/19 18:32:35 nobu Exp $
+// $Id: reserv.php,v 1.12 2005/11/24 08:15:49 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
 $rvid = param('rvid');
 $key = param('key');
+$now=time();
 
 if (isset($op)) {
     switch ($op) {
     case 'delete':
-	$result = $xoopsDB->query('SELECT email,eid,status FROM '.RVTBL." WHERE rvid=$rvid");
-	$reserv = $xoopsDB->fetchArray($result);
-	$result = $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid AND confirm=$key");
-	$eid = $reserv['eid'];
-	if ($result) {
-	    if ($eid) {
-		$result = $xoopsDB->query('SELECT uid, notify, title, edate FROM '.EGTBL.' e LEFT JOIN '.OPTBL." o ON e.eid=o.eid WHERE e.eid=$eid");
-		$data = $xoopsDB->fetchArray($result);
-		if ($reserv['status']) {
-		    $xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved-1 WHERE eid=$eid");
-		}
-		if ($data['notify']) {
-		    $poster = new XoopsUser($data['uid']);
-		    $title = eventdate($data['edate'])." ".$data['title'];
+	$result = $xoopsDB->query('SELECT email,r.eid,r.exid,r.status,e.uid,IF(exdate,exdate,edate) edate, notify FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.OPTBL.' o ON r.eid=o.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid AND edate<$now");
+	if ($result && $xoopsDB->getRowsNum($result)) {
+	    $reserv = $xoopsDB->fetchArray($result);
+	    $eid = $reserv['eid'];
+	    $exid = $reserv['exid'];
 
-		    $xoopsMailer =& getMailer();
-		    $xoopsMailer->useMail();
-		    $xoopsMailer->setSubject(_MD_RESERV_CANCELED);
-		    $xoopsMailer->setBody(sprintf(_MD_RESERV_NOTIFY,
-						  _MD_RESERV_CANCELED, $reserv['email'], $title,
-						  XOOPS_URL."/modules/eguide/event.php?eid=$eid"));
-		    $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-		    $xoopsMailer->setFromName("Event Notify");
-		    $xoopsMailer->setToUsers($poster);
-		    $xoopsMailer->send();
+	    $result = $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid AND confirm=$key");
+	} else {
+	    redirect_header('index.php', 3, _MD_RESERV_NOTFOUND);
+	    exit;
+	}
+	if ($result) {
+	    if ($exid && $reserv['status']) {
+		$xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved-1 WHERE exid=$exid");
+	    } else {
+		$xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved-1 WHERE eid=$eid");
+	    }
+	    if ($xoopsModuleConfig['use_plugins']) {
+		include_once 'plugins.php';
+		foreach ($hooked_function['cancel'] as $func) {
+		    if (!$func($eid, $exid, $reserv['uid'])) {
+			echo "Cancel failed";
+		    }
 		}
+	    }
+	    if ($reserv['notify']) {
+		$poster = new XoopsUser($reserv['uid']);
+		$title = eventdate($reserv['edate'])." ".$reserv['title'];
+
+		$xoopsMailer =& getMailer();
+		$xoopsMailer->useMail();
+		$xoopsMailer->setSubject(_MD_RESERV_CANCELED);
+		$xoopsMailer->setBody(sprintf(_MD_RESERV_NOTIFY,
+					      _MD_RESERV_CANCELED, $reserv['email'], $title,
+					      XOOPS_URL."/modules/eguide/event.php?eid=$eid"));
+		$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
+		$xoopsMailer->setFromName("Event Notify");
+		$xoopsMailer->setToUsers($poster);
+		$xoopsMailer->send();
 	    }
 	    redirect_header("index.php",5,_MD_RESERV_CANCELED);
 	} else {
@@ -49,7 +63,6 @@ if (isset($op)) {
 	    $reg = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE email=$ml AND eid=0");
 	    if ($xoopsDB->getRowsNum($reg)==0) {
 		$conf = rand(10000,99999);
-		$now = time();
 		$uid = $xoopsUser?$xoopsUser->getVar('uid'):"NULL";
 		$xoopsDB->query('INSERT INTO '.RVTBL.
 "(eid,uid,rdate,email,status,confirm) VALUES (0,$uid,$now,$ml,1,'$conf')");
@@ -71,13 +84,13 @@ if (isset($op)) {
 }
 
 include(XOOPS_ROOT_PATH."/header.php");
-
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 $eid = param('eid');
 switch($op) {
 case 'order':
-    OpenTable();
-    echo "<p><b>"._MD_RESERVATION."</b></p>\n";
-    $result = $xoopsDB->query('SELECT * FROM '.OPTBL." WHERE eid=$eid");
+    echo "<div class='evform'>\n";
+    echo "<h3>"._MD_RESERVATION."</h3>\n";
+    $result = $xoopsDB->query('SELECT uid,o.* FROM '.EGTBL.' e,'.OPTBL." o WHERE e.eid=o.eid AND e.eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     $exid = param('sub');
     $err = 0;
@@ -165,19 +178,28 @@ case 'order':
 	$email = $xoopsUser->getVar('email');
 	$ml = strtolower($email);
     }
+
     if (!$err) {
 	$accept = $data['autoaccept'];
-	if ($accept) {
-	    if ($exid) {
-		$cond = "exid=$exid".($data['strict']?" AND reserved<".$data['persons']:"");
-		$res = $xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved+1 WHERE $cond");
-	    } else {
-		$cond = "eid=$eid".($data['strict']?" AND reserved<persons":"");
-		$res = $xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved+1 WHERE $cond");
-	    }
-	    if (!$res || $xoopsDB->getAffectedRows()==0) { // in XOOPS2
-		echo "<div class='error'>"._MD_RESERV_FULL."</div>";
-		$err++;
+	$strict = $data['strict'];
+	$persons = $data['persons'];
+	if ($accept && !count_reserved($eid, $exid, $strict, $persons)) {
+	    echo "<div class='error'>"._MD_RESERV_FULL."</div>";
+	    $err++;
+	}
+
+	// plugin reserved
+	if (!$err && $xoopsModuleConfig['use_plugins']) {
+	    include_once 'plugins.php';
+	    foreach ($hooked_function['reserve'] as $func) {
+		if (!$func($eid, $exid, $data['uid'])) {
+		    echo "<div class='error'>"._MD_RESERV_PLUGIN_FAIL."</div>";
+		    if ($accept) { // rollback
+			count_reserved($eid, $exid, $strict, $persons, -1);
+		    }
+		    $err++;
+		    break;
+		}
 	    }
 	}
     }
@@ -193,7 +215,6 @@ case 'order':
 		$uid = $xoopsUser->getVar('uid');
 	    }
 	}
-	$now=time();
 	$ml = $xoopsDB->quoteString($ml);
 	$xoopsDB->query('INSERT INTO '.RVTBL."
 	(eid, exid, uid, rdate, email, info, status, confirm)
@@ -209,7 +230,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$xoopsMailer->useMail();
 	$xoopsMailer->setTemplateDir(XOOPS_ROOT_PATH."/modules/eguide/language/".$xoopsConfig['language']."/");
 	$xoopsMailer->setTemplate($accept?"accept.tpl":"order.tpl");
-	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");
+	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":''));
 	$xoopsMailer->assign("RVID", $rvid);
 	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
 	$xoopsMailer->assign("INFO", _MD_EMAIL.": ".$email."\n".$value);
@@ -223,8 +244,10 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$xoopsMailer->setFromName("Event Reservation");
 	if ($xoopsMailer->send()) {
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
-	    echo "<p class='evbody'>"._MD_RESERV_CONF."</p>";
-	    echo "<blockquote class='evbody'>".nl2br($value)."</blockquote>";
+	    if ($value) {
+		echo "<h3>"._MD_RESERV_CONF."</h3>";
+		echo "<blockquote class='evbody'>".nl2br($value)."</blockquote>";
+	    }
 	    //
 	    // register user notify request
 	    //
@@ -245,40 +268,41 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    $xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved-1 WHERE eid=$eid");
 	}
     }
-    CloseTable();
+    echo "</div>\n";
     break;
 
 case 'cancel':
-    $result=$xoopsDB->query('SELECT * FROM '.RVTBL." WHERE rvid=$rvid AND confirm=$key");
-    if ($xoopsDB->getRowsNum($result)) {
+    $result = $xoopsDB->query('SELECT e.eid, cdate, title, summary, e.uid, e.status, style, counter, IF(exdate,exdate,edate) edate FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid");
+    echo "<div class='evform'>\n";
+    if ($result && $xoopsDB->getRowsNum($result)) {
 	$data = $xoopsDB->fetchArray($result);
-	$eid = $data['eid'];
-	$result = $xoopsDB->query('SELECT eid, cdate, edate, title, summary, uid, status, style, counter  FROM '.EGTBL." WHERE eid=$eid");
-	if ($eid == 0 || $view = $xoopsDB->fetchArray($result)) {
-	    OpenTable();
-	    echo "<h1>".$view['title']."</h1>\n";
-	    echo "<p>".$view['summary']."</p>\n";
+	if ($edate>$now) {
+	    echo "<div class='error'>"._MD_RESERV_NOCANCEL."</div>\n";
+	} else {
+	    $eid = $data['eid'];
+	    edit_eventdata($data);
+	    echo "<h2>".$data['title']."</h2>\n";
+	    echo "<div class='evbody'>".$data['disp_summary']."</div>\n";
 	    echo "<p /><div>"._MD_EMAIL." ".$data['email']."</div>";
-	    echo "<div>"._MD_RESERV_CANCEL;
+	    echo "<h3>"._MD_RESERV_CANCEL."<h3>\n";
 	    echo "<form action='reserv.php' method='post'>\n";
 	    echo "<input type='hidden' name='op' value='delete' />\n";
 	    echo "<input type='hidden' name='eid' value='".$data['eid']."' />\n";
 	    echo "<input type='hidden' name='key' value='$key' />\n";
 	    echo "<input type='hidden' name='rvid' value='$rvid' />\n";
-	    echo "<input type='submit' value='"._SUBMIT."' />\n</form></div>\n";
-	    CloseTable();
+	    echo "<input type='submit' value='"._SUBMIT."' />\n";
+	    echo "</form>\n";
 	}
     } else {
-	OpenTable();
 	echo "<div class='error'>"._MD_RESERV_NOTFOUND."</div>";
-	CloseTable();
     }
+    echo "</div>\n";
     break;
 
 case 'register':
     OpenTable();
     $email = ($xoopsUser)?$xoopsUser->getVar('email'):"";
-    echo "<div class='evtitle'>"._MD_NOTIFY_EVENT."</div><br />";
+    echo "<h2>"._MD_NOTIFY_EVENT."</h2>\n";
     echo "<form action='reserv.php' method='post'>
 <table class='evtbl' align='center'>\n";
     echo "<tr><th>"._MD_EMAIL."*</th><td><input size='40' name='email' value='$email'/> <input type='submit' value='"._REGISTER."'></td></tr>\n";
@@ -297,6 +321,18 @@ function getTitle($eid) {
     $result = $xoopsDB->query("SELECT title, edate, uid FROM ".
 			      $xoopsDB->prefix("eguide")." WHERE eid=$eid");
     return $xoopsDB->fetchArray($result);
+}
+
+function count_reserved($eid, $exid, $strict, $persons, $value=1) {
+    global $xoopsDB;
+    if ($exid) {
+	$cond = "exid=$exid".($data['strict']?" AND reserved<".$data['persons']:"");
+	$res = $xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved+$value WHERE $cond");
+    } else {
+	$cond = "eid=$eid".($data['strict']?" AND reserved<persons":"");
+	$res = $xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved+$value WHERE $cond");
+    }
+    return $res && $xoopsDB->getAffectedRows();
 }
 
 ?>

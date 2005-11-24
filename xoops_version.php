@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.23 2005/11/19 18:32:35 nobu Exp $
+// $Id: xoops_version.php,v 1.24 2005/11/24 08:15:49 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "1.901";
+$modversion['version'] = "1.91";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -43,6 +43,8 @@ $modversion['templates'][5]=array('file' => 'eguide_receipt_print.html',
 				  'description' => _MI_EGUIDE_RECEIPT_PRINT_TPL);
 $modversion['templates'][6]=array('file' => 'eguide_event_print.html',
 				  'description' => _MI_EGUIDE_EVENT_PRINT_TPL);
+$modversion['templates'][7]=array('file' => 'eguide_item.html',
+				  'description' => _MI_EGUIDE_EVENT_ITEM_TPL);
 // Blocks
 $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'name' => _MI_EGUIDE_HEADLINE,
@@ -114,15 +116,27 @@ $modversion['config'][5]=array('name' => 'max_event',
 			       'formtype' => 'text',
 			       'valuetype' => 'int',
 			       'default' => 10);
-$modversion['config'][6]=array('name' => 'user_notify',
+$modversion['config'][6]=array('name' => 'show_extents',
+			       'title' => '_MI_EGUIDE_SHOW_EXTENTS',
+			       'description' => '_MI_EGUIDE_SHOW_EXTENTS_DESC',
+			       'formtype' => 'yesno',
+			       'valuetype' => 'int',
+			       'default' => 1);
+$modversion['config'][7]=array('name' => 'user_notify',
 			       'title' => '_MI_EGUIDE_USER_NOTIFY',
 			       'description' => '_MI_EGUIDE_USER_NOTIFY_DESC',
 			       'formtype' => 'yesno',
 			       'valuetype' => 'int',
 			       'default' => 1);
-$modversion['config'][7]=array('name' => 'member_only',
+$modversion['config'][8]=array('name' => 'member_only',
 			       'title' => '_MI_EGUIDE_MEMBER',
 			       'description' => '_MI_EGUIDE_MEMBER_DESC',
+			       'formtype' => 'yesno',
+			       'valuetype' => 'int',
+			       'default' => 0);
+$modversion['config'][9]=array('name' => 'use_plugins',
+			       'title' => '_MI_EGUIDE_PLUGINS',
+			       'description' => '_MI_EGUIDE_PLUGINS_DESC',
 			       'formtype' => 'yesno',
 			       'valuetype' => 'int',
 			       'default' => 0);

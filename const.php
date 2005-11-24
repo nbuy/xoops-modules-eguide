@@ -14,4 +14,7 @@ define('CATBL', $xoopsDB->prefix("eguide_category"));
 define('OPTBL', $xoopsDB->prefix("eguide_opt"));
 define('EXTBL', $xoopsDB->prefix("eguide_extent"));
 define('RVTBL', $xoopsDB->prefix("eguide_reserv"));
+
+define('HEADER_CSS', '<link rel="stylesheet" type="text/css" media="all" href="event.css" />');
+
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.11 2005/11/19 18:32:35 nobu Exp $
+// $Id: ev_top.php,v 1.12 2005/11/24 08:16:04 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -10,8 +10,12 @@ function b_event_top_show($options) {
     $modurl = XOOPS_URL."/modules/$moddir";
 
     $content = "";
-    $order = $options[3]?'cdate DESC':'ldate';
-    $sql = "SELECT eid, title, ldate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>".time().' AND status=0 ORDER BY '.$order;
+    $now = time();
+    if ($options[3]) {
+        $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>$now AND status=0 ORDER BY cdate DESC";
+    } else {
+	$sql = "SELECT eid, title, edate, cdate, uid, exid, exdate  FROM ".$xoopsDB->prefix("eguide").' LEFT JOIN '.$xoopsDB->prefix("eguide_extent")." ON eid=eidref AND ldate=exdate WHERE expire>$now AND status=0 ORDER BY ldate";
+    }
     if(!isset($options[1])) $options[1]=10;
     $result = $xoopsDB->query($sql, $options[1], 0);
 
@@ -29,13 +33,15 @@ function b_event_top_show($options) {
 	    }
 	} else {
 	    if (strlen($title) >= $options[2]) {
-		$title = $myts->makeTboxData4Show(substr($myrow['title'],0,($options[2] -1)))."...";
+		$title = $myts->makeTarea(substr($myrow['title'],0,($options[2] -1)))."...";
 	    }
 	}
+	$edate = empty($myrow['exdate'])?$myrow['edate']:$myrow['exdate'];
 	$event['title'] = $title;
 	$event['eid'] = $myrow['eid'];
-	$event['date'] = formatTimestamp($myrow['ldate'], _BLOCK_DATE_FMT);
-	$event['_date'] = formatTimestamp($myrow['ldate'], 's');
+	//$event['exid'] = $myrow['exid'];
+	$event['date'] = formatTimestamp($edate, _BLOCK_DATE_FMT);
+	$event['_date'] = formatTimestamp($edate, 's');
 	$event['uname'] = XoopsUser::getUnameFromId($myrow['uid']);
 	$event['post'] = formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT);
 	$event['_post'] = formatTimestamp($myrow['cdate'], 'm');

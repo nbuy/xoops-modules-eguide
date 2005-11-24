@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.12 2005/11/19 18:32:35 nobu Exp $
+// $Id: receipt.php,v 1.13 2005/11/24 08:15:49 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -30,12 +30,17 @@ if ($rvid) {
 
 $result = $xoopsDB->query("SELECT * FROM ".OPTBL." WHERE eid=$eid");
 $opts = $xoopsDB->fetchArray($result);
-$extents = get_extents($eid, $exid);
 
 $result = $xoopsDB->query("SELECT edate, title, uid FROM ".EGTBL." WHERE eid=$eid");
 $head = $xoopsDB->fetchArray($result);
-if (count($extents)==1) $edate = $extents[0]['exdate'];
-else $edate = $head['edate'];
+$edate = $head['edate'];
+if ($exid) {
+    $extents = array();
+    $result = $xoopsDB->query("SELECT exdate FROM ".EXTBL." WHERE exid=$exid");
+    list($edate) = $xoopsDB->fetchRow($result);
+} else {
+    $extents = get_extents($eid, true);
+}
 
 $title = eventdate($edate)." ".htmlspecialchars($head['title']);
 $poster = new XoopsUser($head['uid']);
@@ -156,6 +161,7 @@ case 'edit':
 <table class='evtbl' width='100%'>\n";
     echo "<input type='hidden' name='op' value='save' />\n";
     echo "<input type='hidden' name='rvid' value='$rvid' />\n";
+    echo "<input type='hidden' name='eid' value='$eid' />\n";
     $atr = "align='left' class='bg1'";
     echo "<tr><th $atr>"._MD_RVID."</th><td class='bg3'>$rvid</td></tr>\n";
     echo "<tr><th $atr>"._MD_ORDER_DATE."</th><td class='bg3'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";

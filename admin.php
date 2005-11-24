@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.11 2005/11/19 18:32:34 nobu Exp $
+// $Id: admin.php,v 1.12 2005/11/24 08:15:48 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -22,7 +22,7 @@ $uid = $xoopsUser->getVar('uid');
 
 // set form data
 $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
-	       'persons', 'style');
+	       'persons', 'style'); // integer value default '0'
 $targs = array('title', 'summary', 'body', 'optfield');
 
 $myts =& MyTextSanitizer::getInstance();
@@ -86,7 +86,12 @@ if (isset($_POST['extent_sets'])) {
     $init = true;
 }
 if ($eid) {			// already exists extents
-    $input_extent = '<input type="submit" name="editdate" value="'._MD_EDIT_EXTENT.'"/>';
+    $result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=0", 1);
+    if ($xoopsDB->getRowsNum($result)>0) {
+	$xoops_extent = '';
+    } else {
+	$input_extent = '<input type="submit" name="editdate" value="'._MD_EDIT_EXTENT.'"/>';
+    }
     $result = $xoopsDB->query('SELECT * FROM '.EXTBL.' WHERE eidref='.$eid.' ORDER BY exdate');
     while ($ext = $xoopsDB->fetchArray($result)) {
 	$n = $ext['exid'];
@@ -133,7 +138,9 @@ if ($eid) {			// already exists extents
 $now = time();
 
 if ($op=='save' || $op=='date') {
-    $fields = array('title', 'edate', 'ldate', 'expire', 'summary', 'body', 'style', 'status');
+    // database field names
+    $fields = array('title', 'edate', 'ldate', 'expire', 'summary',
+		    'body', 'style', 'status', 'topicid');
     if ($eid) {
 	$cond = $adm?"":" AND uid=$uid"; // condition update by poster
 	$result = $xoopsDB->query('SELECT status,edate FROM '.EGTBL." WHERE eid=$eid");
@@ -157,7 +164,7 @@ if ($op=='save' || $op=='date') {
 	    $buf .= ', '.$xoopsDB->quoteString($data[$name]);
 	}
 	$xoopsDB->query('INSERT INTO '.EGTBL."($flist) VALUES($buf)");
-	$eid = $xoopsDB->getInsertId();
+	$data['eid'] = $eid = $xoopsDB->getInsertId();
 	foreach ($sets as $v) {
 	    $xoopsDB->query('INSERT INTO '.EXTBL."(eidref, exdate) VALUES($eid, $v)");
 	}
@@ -170,7 +177,8 @@ if ($op=='save' || $op=='date') {
     if ($prev!=$data['status']) user_notify($eid);
     $result = $xoopsDB->query("SELECT eid FROM ".OPTBL." WHERE eid=$eid");
     
-    $ofields = array('reservation', 'strict', 'autoaccept', 'notify', 'persons', 'optfield');
+    $ofields = array('reservation', 'strict', 'autoaccept', 'notify',
+		     'persons', 'optfield');
     if ($xoopsDB->getRowsNum($result)) {
 	$buf = "";
 	foreach ($ofields as $name) {

@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.2 2005/11/19 18:32:34 nobu Exp $
+// $Id: editdate.php,v 1.3 2005/11/24 08:15:48 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -16,13 +16,13 @@ if (!$xoopsDB->getRowsNum($result)) {
 }
 list($edate, $expire, $title) = $xoopsDB->fetchRow($result);
 
-$xoopsTpl->assign('xoops_module_header','<link rel="stylesheet" type="text/css" media="all" href="event.css" />');
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
 $myts =& MyTextSanitizer::getInstance();
 echo '<h2>'.$myts->htmlSpecialChars(eventdate($edate).' '.$title)."</h2>\n";
 
 $now = time();
-$extents = get_extents($eid, 0, true);
+$extents = get_extents($eid, true);
 if (isset($_POST['adds'])) {
     $dels = empty($_POST['dels'])?array():$_POST['dels'];
     $mods = $_POST['mods'];
@@ -91,7 +91,7 @@ if (isset($_POST['adds'])) {
 	}
     }
     if ($chg) {
-	$extents = get_extents($eid, 0, true);
+	$extents = get_extents($eid, true);
 	$xoopsDB->query('UPDATE '.EGTBL." SET ldate=0 WHERE eid=$eid");
     }
 }
@@ -116,7 +116,7 @@ if ($n) {
 	$input = ($tm>$now)?"<input name='mods[$id]' value='$edit' size='16'/>":"";
 	echo "<tr class='$bg'><td align='center'>".
 	    "<input type='checkbox' name='dels[$id]' value='$id' /></td>".
-	    "<td>$date</td><td>$resv</td>".
+	    "<td><a href='event.php?eid=$eid&amp;sub=$id'>$date</a></td><td>$resv</td>".
 	    "<td>$input<td>".
 	    "</tr>\n";
     }
