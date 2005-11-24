@@ -15,6 +15,7 @@
 <{$input_edate}>
 <h3><{$lang_event_expire}></h3>
 <{$input_expire}>
+<{if $input_extent}>
 <p>
   <b><{$lang_event_extent}></b> <{$input_extent}>
 <{if $extent_sets}>
@@ -25,6 +26,7 @@
 </div>
 <{/if}>
 </p>
+<{/if}>
 <h3><{$lang_introtext}></h3>
 <{$summary_textarea}>
 <h3><{$lang_extext}></h3>
