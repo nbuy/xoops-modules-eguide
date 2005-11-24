@@ -1,0 +1,40 @@
+<div class="event">
+  <div class="evhead"><{$event.date}>: <{$event.title}></div>
+<{if $event.catname}>
+  <a href="index.php?cat=<{$event.catid}>">
+  <{if $event.catimg}>
+    <img src="<{$event.catimg}>" alt="<{$event.catname}>" class="catbox" />
+  <{else}>
+    <span class="catbox"><{$event.catname}></span>
+  <{/if}>
+  </a>
+<{/if}>
+  <div class="evinfo"><{$lang_poster}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$lang_postdate}> <{$event.postdate}> (<{$event.hits}>)</div>
+  <p class="evbody"><{$event.disp_summary}></p>
+<{if $event.disp_body}>
+  <p class="evbody"><{$event.disp_body}></p>
+<{/if}>
+<{if $event.persons}>
+<p><{$event.reserv_num}> (<{$event.reserv_reg}>)</p>
+<{/if}>
+<{if $event.eid}>
+  <div class="evlink"><{if $event.isadmin}>[
+<{if $event.reservation}>
+    <a href="receipt.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_reserv_admin}></a> |
+<{/if}>
+    <a href="admin.php?eid=<{$event.eid}>"><{$lang_edit}></a> |
+<{if $event.exid}>
+    <a href="editdate.php?eid=<{$event.eid}>"><{$lang_edit_extent}></a> |
+<{/if}>
+    <a href="admin.php?op=delete&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_delete}></a> ] <{/if}>
+<{if $caldate}>
+    <a href="<{$xoops_url}>/modules/piCal/index.php?caldate=<{$caldate}>"><{$lang_calender}></a>
+<{/if}>
+<{if $lang_detail}>
+    <a href="event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_detail}></a>
+<{else}>
+    <a href="event.php?op=print&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$lang_print}>" border="0" /></a>
+<{/if}>
+  </div>
+<{/if}>
+</div>
