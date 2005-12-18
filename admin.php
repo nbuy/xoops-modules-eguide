@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.12 2005/11/24 08:15:48 nobu Exp $
+// $Id: admin.php,v 1.13 2005/12/18 14:00:08 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -22,7 +22,7 @@ $uid = $xoopsUser->getVar('uid');
 
 // set form data
 $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
-	       'persons', 'style'); // integer value default '0'
+	       'persons', 'style', 'before'); // integer value default '0'
 $targs = array('title', 'summary', 'body', 'optfield');
 
 $myts =& MyTextSanitizer::getInstance();
@@ -44,11 +44,13 @@ if ($op=='new') {
 		  'body'	=> '',
 		  'edate'	=> time()+3600*24, // now + a day
 		  'event'	=> '',
+		  'before'      => $xoopsModuleConfig['close_before'],
 		  'topicid'	=> 1);
 } else {
     if ($eid) {
 	$result = $xoopsDB->query('SELECT * FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL." ON topicid=catid WHERE e.eid=$eid");
 	$data = $xoopsDB->fetchArray($result);
+	$data['before']=$data['closetime']/60;
 	$edate = $data['edate'];
     } else {
 	$data = array();
@@ -68,6 +70,7 @@ if ($op=='new') {
 	    $data[$name] = param($name);
 	}
 	$data['ldate'] = 0;
+	$data['closetime'] = $data['before']*60; // min to sec
 	foreach ($targs as $name) {
 	    $data[$name] = param($name, "");
 	}
@@ -75,7 +78,7 @@ if ($op=='new') {
     }
 }
 if (!isset($data['status'])) {
-    $data['status']=$xoopsModuleConfig['auth']?STAT_NORMAL:STAT_POST;
+    $data['status']=$xoopsModuleConfig['auth']?STAT_POST:STAT_NORMAL;
 }
 
 $extent_sets = array();
@@ -85,6 +88,7 @@ if (isset($_POST['extent_sets'])) {
 } else {
     $init = true;
 }
+$input_extent = '';
 if ($eid) {			// already exists extents
     $result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=0", 1);
     if ($xoopsDB->getRowsNum($result)>0) {
@@ -178,7 +182,7 @@ if ($op=='save' || $op=='date') {
     $result = $xoopsDB->query("SELECT eid FROM ".OPTBL." WHERE eid=$eid");
     
     $ofields = array('reservation', 'strict', 'autoaccept', 'notify',
-		     'persons', 'optfield');
+		     'persons', 'optfield', 'closetime');
     if ($xoopsDB->getRowsNum($result)) {
 	$buf = "";
 	foreach ($ofields as $name) {
@@ -215,7 +219,7 @@ if ($op=='save' || $op=='date') {
 
 include(XOOPS_ROOT_PATH."/header.php");
 
-$xoopsTpl->assign(assign_const());
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
 if ($eid && $op=='delete') {
     $xoopsOption['template_main'] = 'eguide_event.html';
@@ -267,9 +271,7 @@ if ($eid && $op=='delete') {
     }
 
     $input_status = $adm?select_list('status', $ev_stats, $data['status']):'';
-
     $xoopsTpl->assign($data);
-    $xoopsTpl->assign(admin_const());
 
     class myFormDhtmlTextArea extends XoopsFormDhtmlTextArea
     {
@@ -332,27 +334,5 @@ function select_list($name, $options, $def=1) {
     }
     $buf .= "</select></p>\n";
     return $buf;
-}
-
-function admin_const() {
-    return array('lang_title'=>_MD_TITLE,
-		 'lang_event_date'=>_MD_EVENT_DATE,
-		 'lang_event_expire'=>_MD_EVENT_EXPIRE,
-		 'lang_event_category'=>_MD_EVENT_CATEGORY,
-		 'lang_event_extent'=>_MD_EVENT_EXTENT,
-		 'lang_introtext'=>_MD_INTROTEXT,
-		 'lang_extext'=>_MD_EXTEXT,
-		 'lang_event_style'=>_MD_EVENT_STYLE,
-		 'lang_reserv_setting'=>_MD_RESERV_SETTING,
-		 'lang_reserv_desc'=>_MD_RESERV_DESC,
-		 'lang_reserv_stopfull'=>_MD_RESERV_STOPFULL,
-		 'lang_reserv_auto'=>_MD_RESERV_AUTO,
-		 'lang_reserv_notifyposter'=>_MD_RESERV_NOTIFYPOSTER,
-		 'lang_reserv_persons'=>_MD_RESERV_PERSONS,
-		 'lang_reserv_unit'=>_MD_RESERV_UNIT,
-		 'lang_reserv_item'=>_MD_RESERV_ITEM,
-		 'lang_reserv_item_desc'=>_MD_RESERV_ITEM_DESC,
-		 'lang_preview'=>_MD_PREVIEW,
-		 'lang_save'=>_MD_SAVE);
 }
 ?>
