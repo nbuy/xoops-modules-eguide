@@ -1,5 +1,7 @@
 Reservation confirm - {TITLE}
 
+Reservation ID: {RVID}
+
 We received your ordering reservation in this event.
 Please wait until to confirm person.
 
