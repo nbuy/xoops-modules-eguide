@@ -1,6 +1,6 @@
 <?php
 // Event Reciption for Poster
-// $Id: receipt.php,v 1.13 2005/11/24 08:15:49 nobu Exp $
+// $Id: receipt.php,v 1.14 2005/12/27 05:13:53 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -9,20 +9,20 @@ $op = param('op', 'view');
 $rvid=param('rvid');
 $eid= param('eid');
 $exid= param('sub');
+$myts =& MyTextSanitizer::getInstance();
 
 if ($rvid) {
     if ($op=='view') $op = 'one';
     $result = $xoopsDB->query('SELECT * FROM '.RVTBL." WHERE rvid=$rvid");
     $data = $xoopsDB->fetchArray($result);
     $eid = $data['eid'];
+    $status = intval($_POST['status']);
+    $email = $xoopsDB->quoteString(post_filter($_POST['email']));
+    $info = $xoopsDB->quoteString(post_filter($_POST['info']));
     if ($op=='save') {
-	$xoopsDB->query("UPDATE ".RVTBL." SET email='$email', status='$status', info='$info' WHERE rvid=$rvid");
+	$xoopsDB->query("UPDATE ".RVTBL." SET email=$email, status=$status, info=$info WHERE rvid=$rvid");
 	update_reserv($eid, $exid);
-	$op='one';
-    } elseif ($op=='delete') {
-	$xoopsDB->query("DELETE FROM ".RVTBL." WHERE rvid=$rvid AND eid=$eid");
-	update_reserv($eid, $exid);
-	redirect_header("receipt.php?eid=$eid",2,_MD_DBUPDATED);
+	redirect_header("receipt.php?op=one&rvid=$rvid",2,_MD_DBUPDATED);
 	exit;
     }
     $backurl = '<a href="receipt.php?eid='.$data['eid'].($data['exid']?'&amp;sub='.$data['exid']:'').'">'._MD_RESERV_RETURN.'</a>';
@@ -67,6 +67,8 @@ if ($eid) {
     }
 }
 
+$result = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." WHERE eid=$eid AND exid=$exid AND status="._RVSTAT_RESERVED);
+list($nrsv) = $xoopsDB->fetchRow($result);
 $result = $xoopsDB->query("SELECT * FROM ".RVTBL." WHERE eid=$eid AND exid=$exid ORDER BY rvid");
 $nrec = $xoopsDB->getRowsNum($result);
 
@@ -138,7 +140,7 @@ case 'active':
 		$xoopsMailer->setToEmails($data['email']);
 		$xoopsMailer->assign("ORDER_MAIL", $data['email']);
 	    }
-	    $xoopsMailer->setFromName("Event Reservation");
+	    $xoopsMailer->setFromName(_MD_FROM_NAME);
 	    $xoopsMailer->assign("INFO", $data['info']);
 	    $xoopsMailer->assign("RESULT", $yesno==1?
 				 _MD_RESERV_ACTIVE:_MD_RESERV_REFUSE);
@@ -157,16 +159,15 @@ case 'active':
 
 case 'edit':
     echo "<h4>"._MD_RESERV_EDIT."</h4>";
-    echo "<form action='receipt.php' method='post'>
-<table class='evtbl' width='100%'>\n";
+    echo "<form action='receipt.php' method='post'>\n";
     echo "<input type='hidden' name='op' value='save' />\n";
     echo "<input type='hidden' name='rvid' value='$rvid' />\n";
     echo "<input type='hidden' name='eid' value='$eid' />\n";
-    $atr = "align='left' class='bg1'";
-    echo "<tr><th $atr>"._MD_RVID."</th><td class='bg3'>$rvid</td></tr>\n";
-    echo "<tr><th $atr>"._MD_ORDER_DATE."</th><td class='bg3'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";
-    echo "<tr><th $atr>"._MD_EMAIL."</th><td class='bg3'><input size='40' name='email' value='".$data['email']."' /></td></tr>\n";
-    echo "<tr><th $atr>"._MD_STATUS."</th><td class='bg3'>\n";
+    echo "<table class='outer'>\n";
+    echo "<tr><th align='left'>"._MD_RVID."</th><td class='even'>$rvid</td></tr>\n";
+    echo "<tr><th align='left'>"._MD_ORDER_DATE."</th><td class='odd'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";
+    echo "<tr><th align='left'>"._MD_EMAIL."</th><td class='even'><input size='40' name='email' value='".$data['email']."' /></td></tr>\n";
+    echo "<tr><th align='left'>"._MD_STATUS."</th><td class='odd'>\n";
     $s = $data['status'];
     echo "<select name='status'>\n";
     foreach ($rv_stats as $i => $v) {
@@ -174,11 +175,11 @@ case 'edit':
 	echo "<option value='$i'$ck>$v</option>\n";
     }
     echo "</select></td></tr>\n";
-    echo "<tr><th $atr>"._MD_RESERV_ITEM."</th><td class='bg3'>\n";
+    echo "<tr><th align='left'>"._MD_RESERV_ITEM."</th><td class='even'>\n";
     echo "<textarea name='info' cols='40' rows='5'>".
 	htmlspecialchars($data['info'])."</textarea>\n";
     echo "</td></tr>\n";
-    echo "<tr class='bg1'><td colspan='2' align='center'><input type='submit' value='"._MD_SAVECHANGE."' /></td></tr>\n";
+    echo "<tr><th></th><td class='odd'><input type='submit' value='"._MD_SAVECHANGE."' /></td></tr>\n";
     echo "</table>\n</form>\n";
     echo "<p>$backurl</p>\n";
     break;
@@ -186,18 +187,17 @@ case 'edit':
 case 'one':
     echo "<h4>"._MD_RESERV_REC."</h4>";
     $edit = "<a href='receipt.php?op=edit&amp;rvid=$rvid'>"._EDIT."</a>";
-    $del ="<form action='receipt.php' method='post'><input type='checkbox' name='op' value='delete' /><input type='hidden' name='rvid' value='$rvid' />"._MD_RESERV_DEL." <input type='submit' value='"._DELETE."' /></form>";
-    echo "<table class='evtbl'>\n";
-    $atr = "align='left' class='bg1'";
-    echo "<tr><th $atr>"._MD_RVID."</th><td class='bg3' nowrap>$rvid [$edit]</td></tr>\n";
-    echo "<tr><th $atr>"._MD_ORDER_DATE."</th><td class='bg3'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";
-    echo "<tr><th $atr>"._MD_EMAIL."</th><td class='bg3'>".$data['email']."</td></tr>\n";
-    echo "<tr><th $atr>"._MD_STATUS."</th><td class='bg3'>".$rv_stats[$data['status']]."</td></tr>\n";
+    $del ="<a href='reserv.php?op=cancel&amp;rvid=$rvid'>"._MD_RESERV_DEL."</a>";
+    echo "<table class='outer'>\n";
+    $atr = "align='left'";
+    echo "<tr><th $atr>"._MD_RVID."</th><td class='even' nowrap>$rvid &nbsp; [$edit] &nbsp; [$del]</td></tr>\n";
+    echo "<tr><th $atr>"._MD_ORDER_DATE."</th><td class='odd'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";
+    echo "<tr><th $atr>"._MD_EMAIL."</th><td class='even'>".$data['email']."</td></tr>\n";
+    echo "<tr><th $atr>"._MD_STATUS."</th><td class='odd'>".$rv_stats[$data['status']]."</td></tr>\n";
     foreach (explodeinfo($data['info'], $item) as $lab => $v) {
 	if (empty($v)) $v = '&nbsp;';
-	echo "<tr><th $atr>$lab</th><td class='bg3'>".nl2br($v)."</td></tr>\n";
+	echo "<tr><th $atr>$lab</th><td class='even'>".nl2br($v)."</td></tr>\n";
     }
-    echo "<tr><td class='bg3' colspan='2'>$del</td></tr>\n";
     echo "</table>\n";
     echo "<p>$backurl</p>\n";
     break;
@@ -211,31 +211,17 @@ default:
     $rep[] = $title;
     $pat[] ='{EVENT_URL}';
     $rep[] = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":'');
-    $mailmsg = str_replace($pat, $rep, _MD_RESERV_MSG);
+    $mailmsg = htmlspecialchars(str_replace($pat, $rep, _MD_RESERV_MSG));
     
     $max = $xoopsModuleConfig['max_item'];
     $xoopsTpl->assign(array('order_count'=>$nrec,
-			    'lang_order_count'=>_MD_ORDER_COUNT,
-			    'lang_print_date'=>_MD_PRINT_DATE,
+			    'reserv_num'=>sprintf(_MD_RESERV_REG,$nrsv),
 			    'print_date'=>formatTimestamp(time(), _MD_POSTED_FMT),
-			    'lang_operation'=>_MD_OPERATION,
-			    'lang_order_date'=>_MD_ORDER_DATE,
-			    'lang_email'=>_MD_EMAIL,
 			    'labels'=>array_slice($item, 0, $max),
-			    'lang_detail'=>_MD_DETAIL,
-			    'lang_extent_date'=>_MD_EXTENT_DATE,
-			    'lang_reserv_msg'=>$mailmsg,
-			    'lang_reserv_msg_h'=>_MD_RESERV_MSG_H,
-			    'lang_submit'=>_SUBMIT,
+			    'reserv_msg'=>$mailmsg,
 			    'operations'=>
 			    array(_RVSTAT_RESERVED=>_MD_ACTIVATE,
 				  _RVSTAT_REFUSED =>_MD_REFUSE),
-			    'lang_cvs_out'=>_MD_CSV_OUT,
-			    'lang_info_mail'=>_MD_INFO_MAIL,
-			    'lang_print'=>_PRINT,
-			    'lang_summary'=>_MD_SUMMARY,
-			    'lang_sum_item'=>_MD_SUM_ITEM,
-			    'lang_sum'=>_MD_SUM,
 			    ));
 
 
@@ -245,6 +231,7 @@ default:
 	$order['confirm']= $cf = ($order['status']==_RVSTAT_ORDER);
 	if ($cf) $confirm++;
 	$order['date'] = formatTimestamp($order['rdate'], _MD_TIME_FMT);
+	$order['stat']=$rv_stats[$order['status']];
 	$add=array();
 	foreach (explodeinfo($order['info'], $item) as $lab => $v) {
 	    if ($v && isset($mc[$lab])) {
@@ -282,9 +269,12 @@ function update_reserv($eid, $exid) {
     $result = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." WHERE eid=$eid AND exid=$exid AND status="._RVSTAT_RESERVED);
     list($n) = $xoopsDB->fetchRow($result);
     if ($exid) {
+	echo "<div>exid: recount=$n</div>";
 	$xoopsDB->query("UPDATE ".EXTBL." SET reserved=$n WHERE exid=$exid");
     } else {
+	echo "<div>eid: recount=$n</div>";
 	$xoopsDB->query("UPDATE ".OPTBL." SET reserved=$n WHERE eid=$eid");
     }
+    echo $xoopsDB->error();
 }
 ?>

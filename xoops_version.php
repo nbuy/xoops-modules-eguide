@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.24 2005/11/24 08:15:49 nobu Exp $
+// $Id: xoops_version.php,v 1.25 2005/12/27 05:13:53 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "1.91";
+$modversion['version'] = "1.92";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -45,6 +45,8 @@ $modversion['templates'][6]=array('file' => 'eguide_event_print.html',
 				  'description' => _MI_EGUIDE_EVENT_PRINT_TPL);
 $modversion['templates'][7]=array('file' => 'eguide_item.html',
 				  'description' => _MI_EGUIDE_EVENT_ITEM_TPL);
+$modversion['templates'][8]=array('file' => 'eguide_confirm.html',
+				  'description' => _MI_EGUIDE_EVENT_CONF_TPL);
 // Blocks
 $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'name' => _MI_EGUIDE_HEADLINE,
@@ -63,20 +65,24 @@ $modversion['blocks'][2]=array('file' => "ev_top.php",
 			       'template' => 'eguide_block_top.html');
 // Menu
 $module_handler =& xoops_gethandler('module');
-$module =& $module_handler->getByDirname('eguide');
-$config_handler =& xoops_gethandler('config');
-$configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+$module =& $module_handler->getByDirname($modversion['dirname']);
 
 global $xoopsUser;
 $modversion['hasMain'] = 1;
-if (is_object($xoopsUser) &&
-    in_array($configs['group'], $xoopsUser->getGroups())) {
-    $modversion['sub'][1]['name'] = _MI_EGUIDE_SUBMIT;
-    $modversion['sub'][1]['url'] = "admin.php";
-}
-if ($configs['user_notify']) {
-    $modversion['sub'][2]['name'] = _MI_EGUIDE_REG;
-    $modversion['sub'][2]['url'] = "reserv.php?op=register";
+$modversion['sub'][1]['name'] = _MI_EGUIDE_MYLIST;
+$modversion['sub'][1]['url'] = "mylist.php";
+if (is_object($module)&&$module->getVar('isactive')) {
+    $config_handler =& xoops_gethandler('config');
+    $configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+    if (is_object($xoopsUser) &&
+	in_array($configs['group'], $xoopsUser->getGroups())) {
+	$modversion['sub'][2]['name'] = _MI_EGUIDE_SUBMIT;
+	$modversion['sub'][2]['url'] = "admin.php";
+    }
+    if ($configs['user_notify']) {
+	$modversion['sub'][3]['name'] = _MI_EGUIDE_REG;
+	$modversion['sub'][3]['url'] = "reserv.php?op=register";
+    }
 }
 
 // Search
@@ -84,61 +90,90 @@ $modversion['hasSearch'] = 1;
 $modversion['search']['file'] = "include/search.inc.php";
 $modversion['search']['func'] = "eguide_search";
 
+// Comments
+$modversion['hasComments'] = 1;
+$modversion['comments']['pageName'] = 'event.php';
+$modversion['comments']['itemName'] = 'eid';
+
 // Config
 $modversion['hasconfig'] = 1;
-$modversion['config'][1]=array('name' => 'group',
-			       'title' => '_MI_EGUIDE_POSTGROUP',
-			       'description' => '_MI_EGUIDE_POSTGROUP_DESC',
-			       'formtype' => 'group',
-			       'valuetype' => 'int',
-			       'default' => 2);
-$modversion['config'][2]=array('name' => 'notify',
-			       'title' => '_MI_EGUIDE_NOTIFYADMIN',
-			       'description' => '_MI_EGUIDE_NOTIFYADMIN_DESC',
-			       'formtype' => 'yesno',
-			       'valuetype' => 'int',
-			       'default' => 1);
-$modversion['config'][3]=array('name' => 'auth',
-			       'title' => '_MI_EGUIDE_NEEDPOSTAUTH',
-			       'description' => '_MI_EGUIDE_NEEDPOSTAUTH_DESC',
-			       'formtype' => 'yesno',
-			       'valuetype' => 'int',
-			       'default' => 0);
-$modversion['config'][4]=array('name' => 'max_item',
-			       'title' => '_MI_EGUIDE_MAX_LISTITEM',
-			       'description' => '_MI_EGUIDE_MAX_LISTITEM_DESC',
-			       'formtype' => 'text',
-			       'valuetype' => 'int',
-			       'default' => 3);
-$modversion['config'][5]=array('name' => 'max_event',
-			       'title' => '_MI_EGUIDE_MAX_EVENT',
-			       'description' => '_MI_EGUIDE_MAX_LISTITEM_DESC',
-			       'formtype' => 'text',
-			       'valuetype' => 'int',
-			       'default' => 10);
-$modversion['config'][6]=array('name' => 'show_extents',
-			       'title' => '_MI_EGUIDE_SHOW_EXTENTS',
-			       'description' => '_MI_EGUIDE_SHOW_EXTENTS_DESC',
-			       'formtype' => 'yesno',
-			       'valuetype' => 'int',
-			       'default' => 1);
-$modversion['config'][7]=array('name' => 'user_notify',
+$modversion['config'][]=array('name' => 'group',
+			      'title' => '_MI_EGUIDE_POSTGROUP',
+			      'description' => '_MI_EGUIDE_POSTGROUP_DESC',
+			      'formtype' => 'group',
+			      'valuetype' => 'int',
+			      'default' => 2);
+$modversion['config'][]=array('name' => 'notify',
+			      'title' => '_MI_EGUIDE_NOTIFYADMIN',
+			      'description' => '_MI_EGUIDE_NOTIFYADMIN_DESC',
+			      'formtype' => 'yesno',
+			      'valuetype' => 'int',
+			      'default' => 1);
+$modversion['config'][]=array('name' => 'notify_group',
+			      'title' => '_MI_EGUIDE_NOTIFYGROUP',
+			      'description' => '_MI_EGUIDE_NOTIFYGROUP_DESC',
+			      'formtype' => 'group',
+			      'valuetype' => 'int',
+			      'default' => 1);
+$modversion['config'][]=array('name' => 'auth',
+			      'title' => '_MI_EGUIDE_NEEDPOSTAUTH',
+			      'description' => '_MI_EGUIDE_NEEDPOSTAUTH_DESC',
+			      'formtype' => 'yesno',
+			      'valuetype' => 'int',
+			      'default' => 0);
+$modversion['config'][]=array('name' => 'max_item',
+			      'title' => '_MI_EGUIDE_MAX_LISTITEM',
+			      'description' => '_MI_EGUIDE_MAX_LISTITEM_DESC',
+			      'formtype' => 'text',
+			      'valuetype' => 'int',
+			      'default' => 3);
+$modversion['config'][]=array('name' => 'max_event',
+			      'title' => '_MI_EGUIDE_MAX_EVENT',
+			      'description' => '_MI_EGUIDE_MAX_LISTITEM_DESC',
+			      'formtype' => 'text',
+			      'valuetype' => 'int',
+			      'default' => 10);
+$modversion['config'][]=array('name' => 'show_extents',
+			      'title' => '_MI_EGUIDE_SHOW_EXTENTS',
+			      'description' => '_MI_EGUIDE_SHOW_EXTENTS_DESC',
+			      'formtype' => 'yesno',
+			      'valuetype' => 'int',
+			      'default' => 1);
+$modversion['config'][8]=array('name' => 'user_notify',
 			       'title' => '_MI_EGUIDE_USER_NOTIFY',
 			       'description' => '_MI_EGUIDE_USER_NOTIFY_DESC',
 			       'formtype' => 'yesno',
 			       'valuetype' => 'int',
 			       'default' => 1);
-$modversion['config'][8]=array('name' => 'member_only',
-			       'title' => '_MI_EGUIDE_MEMBER',
-			       'description' => '_MI_EGUIDE_MEMBER_DESC',
-			       'formtype' => 'yesno',
-			       'valuetype' => 'int',
-			       'default' => 0);
-$modversion['config'][9]=array('name' => 'use_plugins',
+$modversion['config'][]=array('name' => 'member_only',
+			      'title' => '_MI_EGUIDE_MEMBER',
+			      'description' => '_MI_EGUIDE_MEMBER_DESC',
+			      'formtype' => 'yesno',
+			      'valuetype' => 'int',
+			      'default' => 0);
+$modversion['config'][]=array('name' => 'close_before',
+			      'title' => '_MI_EGUIDE_CLOSEBEFORE',
+			      'description' => '_MI_EGUIDE_CLOSEBEFORE_DESC',
+			      'formtype' => 'text',
+			      'valuetype' => 'int',
+			      'default' => 60);
+$modversion['config'][]=array('name' => 'use_plugins',
 			       'title' => '_MI_EGUIDE_PLUGINS',
 			       'description' => '_MI_EGUIDE_PLUGINS_DESC',
 			       'formtype' => 'yesno',
 			       'valuetype' => 'int',
 			       'default' => 0);
+$modversion['config'][]=array('name' => 'maker_set',
+			      'title' => '_MI_EGUIDE_MARKER',
+			      'description' => '_MI_EGUIDE_MARKER_DESC',
+			      'formtype' => 'textarea',
+			      'valuetype' => 'text',
+			      'default' => _MI_EGUIDE_MARKER_DEF);
+$modversion['config'][]=array('name' => 'use_comment',
+			      'title' => '_MI_EGUIDE_COMMENT',
+			      'description' => '_MI_EGUIDE_COMMENT_DESC',
+			      'formtype' => 'yesno',
+			      'valuetype' => 'int',
+			      'default' => 1);
 
 ?>

@@ -2,25 +2,29 @@
 <{if $event.extents}>
 <div class="evform">
 <form action="event.php">
-<b><{$event.lang_extents}></b>
+<b><{$smarty.const._MD_EXTENT_DATE}></b>
 <input type="hidden" name="eid" value="<{$event.eid}>"/>
 <select name="sub">
 <{foreach from=$event.extents item=ext}>
 <option value="<{$ext.exid}>"><{$ext.date}></option>
 <{/foreach}>
 </select>
-<input type="submit" value="<{$lang_submit}>"/>
+<input type="submit" value="<{$smarty.const._SUBMIT}>"/>
 </form>
+</div>
+<{elseif $message}>
+<div class="evform">
+  <div class="evnote"><{$message}></div>
 </div>
 <{elseif $form}>
 <div class="evform">
-<div class="evtitle"><{$form.title}></div>
+<div class="evtitle"><{$smarty.const._MD_RESERVATION}></div>
 <form action="reserv.php" method="post">
 <table class="outer" align="center" cellspacing="1" border="0">
-<{if $form.lang_email}>
-<tr class="<{cycle values="even, odd"}>"><th><{$form.lang_email}></th><td><input size="40" name="email" value="<{$form.email}>"/>
+<{if !$form.member_only}>
+<tr class="<{cycle values="even, odd"}>"><th><{$smarty.const._MD_EMAIL}></th><td><input size="40" name="email" value="<{$form.email}>"/>
 <{if $form.user_notify}>
-<br/><input type="checkbox" name="notify" /><{$form.lang_notify}>
+<br/><input type="checkbox" name="notify" /><{$smarty.const._MD_NOTIFY_REQUEST}>
 <{/if}>
 </td></tr>
 <{/if}>
@@ -33,19 +37,17 @@
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
 <{/if}>
-<p style="text-align: center;"><input type="submit" value="<{$form.lang_order}>" /></p>
+<p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" /></p>
 </form>
-<{if $form.lang_note || $form.note}><p align='right'><{$form.lang_note}> <{$form.note}></p><{/if}>
-</div>
-<{elseif $message}>
-<div class="evform">
-  <div class="evnote"><{$message}></div>
+<{if $form.lang_note || $form.note}>
+  <p align='right'><{$form.lang_note}> <{$form.note}></p>
+<{/if}>
 </div>
 <{/if}>
 
 <{if $list}>
 <div class="evlist">
-<div class="evtitle"><{$lang_reserv_list}></div>
+<div class="evtitle"><{$smarty.const._MD_RESERV_LIST}></div>
 <table width="100%" cellspacing="1" cellpadding="4" class="outer">
 <tr class="head"><th></th><{foreach from=$labels item=lab}><th><{$lab}></th><{/foreach}></tr>
 <{foreach from=$list item=order key=nc}>
@@ -56,5 +58,23 @@
 <{/foreach}>
 <tr >
 </table>
+</div>
+<{/if}>
+<{if $commentsnav}>
+<!-- XOOPS common comment system -->
+<div style="text-align:center; margin-top:2em; margin-bottom:1em;">
+  <{$commentsnav}>
+  <{$lang_notice}>
+</div>
+<div class="evcomment">
+<!-- start comments loop -->
+<{if $comment_mode == "flat"}>
+<{include file="db:system_comments_flat.html"}>
+<{elseif $comment_mode == "thread"}>
+<{include file="db:system_comments_thread.html"}>
+<{elseif $comment_mode == "nest"}>
+<{include file="db:system_comments_nest.html"}>
+<{/if}>
+<!-- end comments loop -->
 </div>
 <{/if}>

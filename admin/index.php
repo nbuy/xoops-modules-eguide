@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.18 2005/11/19 08:57:14 nobu Exp $
+// $Id: index.php,v 1.19 2005/12/27 05:13:53 nobu Exp $
 include 'admin_header.php';
 
 $self = $_SERVER["SCRIPT_NAME"];
@@ -10,12 +10,16 @@ $eid = param('eid');
 
 function css_tags() { return array("even","odd"); }
 
+xoops_cp_header();
+
 switch($op) {
+default:
+    show_menu();
+
 case "events":
-    xoops_cp_header();
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
     $result = $xoopsDB->query('SELECT o.*,edate,title,uid,status FROM '.EGTBL.
-			      ' e LEFT JOIN '.OPTBL." o ON e.eid=o.eid ORDER BY ldate DESC");
+			      ' e LEFT JOIN '.OPTBL." o ON e.eid=o.eid ORDER BY e.eid DESC");
     $n = 0;
     echo "<form action='$self' method='post'>\n";
     echo "<table cellspacing='1' border='0' class='outer'>\n";
@@ -66,7 +70,6 @@ case "events":
     break;
 
 case "notifies":
-    xoops_cp_header();
     echo "<h4>"._MD_INFO_REQUEST."</h4>";
     $cond = "eid=0";
     if (isset($_GET['q'])) {
@@ -86,7 +89,7 @@ case "notifies":
 	echo "<form action='$self' method='post'>\n".
 	    "<input type='hidden' name='op' value='delnotify' />\n".
 	    "<table cellspacing='1' border='0' class='outer'>\n".
-	    "<tr class='bg4'><th></th><th>"._AM_ORDER_DATE."</th>".
+	    "<tr class='bg4'><th></th><th>"._MD_ORDER_DATE."</th>".
 	    "<th>"._AM_EMAIL."</th></tr>\n";
 	$tags = css_tags();
 	while ($data = $xoopsDB->fetchArray($result)) {
@@ -124,7 +127,6 @@ case "delnotify":
     exit;
 
 case "edit":
-    xoops_cp_header();
     $result = $xoopsDB->query("SELECT eid,edate,cdate,title,uid,status FROM ".EGTBL." WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     $date = eventdate($data['edate']); 
@@ -176,7 +178,6 @@ case "save":
     exit;
 
 case "category":
-    xoops_cp_header();
     echo "<h4>"._AM_CATEGORY."</h4>\n";
     showCategories();
     echo "<h4>"._AM_CATEGORY_NEW."</h4>\n";
@@ -184,7 +185,6 @@ case "category":
     break;
 
 case "catedit":
-    xoops_cp_header();
     echo "<h4>"._AM_CATEGORY."</h4>\n";
     editCategory(intval($_GET['cat']));
     break;
@@ -233,20 +233,6 @@ case "resvCtrl":
     redirect_header("$self?op=events",1,_AM_DBUPDATED);
     exit;
 
-default:
-    xoops_cp_header();
-    include_once("menu.php");
-    $base = XOOPS_URL.'/modules/'.$xoopsModule->dirname();
-    $adminmenu[] = array('title'=>_PREFERENCES,
-			 'link'=>XOOPS_URL.'/modules/system/admin.php?fct=preferences&amp;op=showmod&amp;mod=' . $xoopsModule->getVar('mid'));
-    foreach ($adminmenu as $menu) {
-	$title = $menu['title'];
-	$link = $menu['link'];
-	if (!preg_match('/^https?:\/\/|^\//', $link)) $link = $base.'/'.$link;
-	echo "<p> - <b><a href='$link'>$title</a></b></p>\n";
-    }
-    CloseTable();
-    break;
 }
 
 xoops_cp_footer();
@@ -319,5 +305,25 @@ function editCategory($cat) {
     echo "<input type='hidden' name='catid' value='$id'/>\n";
     echo "<p><input type='submit' value='"._GO."'/>\n";
     echo "</form>\n";
+}
+function show_menu() {
+    global $xoopsConfig, $xoopsModule;
+    include_once XOOPS_ROOT_PATH.'/modules/'.$xoopsModule->getVar('dirname').'/language/'.$xoopsConfig['language'].'/modinfo.php';
+    include_once 'menu.php';
+    $adminmenu[] = array('title'=>_PREFERENCES,
+			 'link'=>XOOPS_URL.'/modules/system/admin.php?fct=preferences&amp;op=showmod&amp;mod=' . $xoopsModule->getVar('mid'));
+    $mark = XOOPS_URL.'/images/pointer.gif';
+    $base = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname');
+
+    echo "<style>div#adminmenu a { background-image: url($mark); background-repeat: no-repeat; background-position: left; padding-left: 12px; padding-right: 15px; white-space: nowrap; }</style>";
+    echo "<div id='adminmenu'>\n";
+    foreach ($adminmenu as $menu) {
+	$title = $menu['title'];
+	$link = $menu['link'];
+	if (!preg_match('/^https?:\/\/|^\//', $link)) $link = $base.'/'.$link;
+	echo "<a href='$link'>$title</a>\n";
+    }
+    echo "</div>\n";
+    echo "<hr/>";
 }
 ?>

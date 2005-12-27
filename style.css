@@ -1,7 +1,9 @@
 /* for eguide module */
 .error { color: #ff0000; font-weight: bold; text-align: left; }
 .evhead { color: #800000; font-size: 120%; font-weight: bold; text-align: left;}
+.evmark { float: right; color: #000000; }
 .evinfo { font-size: 75%; text-align: left;}
+.evprop { font-size: 90%; font-weight: bold; text-align: left; color: #004060; padding-left: 2em; }
 .evbody { text-align: left; }
 .evlink { font-size: 90%; text-align: right;}
 .evline { font-size: 90%; text-align: left;}

@@ -1,23 +1,40 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.12 2005/11/24 08:15:49 nobu Exp $
+// $Id: reserv.php,v 1.13 2005/12/27 05:13:53 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
 $rvid = param('rvid');
 $key = param('key');
 $now=time();
+$myts =& MyTextSanitizer::getInstance();
+
+$member_handler =& xoops_gethandler('member');
+$notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
 
 if (isset($op)) {
     switch ($op) {
     case 'delete':
-	$result = $xoopsDB->query('SELECT email,r.eid,r.exid,r.status,e.uid,IF(exdate,exdate,edate) edate, notify FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.OPTBL.' o ON r.eid=o.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid AND edate<$now");
+	$conf = 'AND confirm='.intval($_POST['key']);
+	if (is_object($xoopsUser)) { // administrator no need confirm
+	    if ($xoopsUser->isAdmin($xoopsModule->getVar('mid'))) $conf = "";
+	    else {
+		$groups = $xoopsUser->groups();
+		if (in_array($xoopsModuleConfig['group'],$groups)) $conf = "";
+	    }
+	}
+	$result = $xoopsDB->query('SELECT email,r.eid,r.exid,r.status,e.uid,r.uid ruid, cdate, counter, style, persons, IF(exdate,exdate,edate) edate, notify, title, closetime,IF(x.reserved IS NULL,o.reserved,x.reserved) reserved FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.OPTBL.' o ON r.eid=o.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid $conf");
 	if ($result && $xoopsDB->getRowsNum($result)) {
+	    
 	    $reserv = $xoopsDB->fetchArray($result);
-	    $eid = $reserv['eid'];
-	    $exid = $reserv['exid'];
-
-	    $result = $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid AND confirm=$key");
+	    if ($reserv['edate']-$reserv['closetime']>$now) {
+		edit_eventdata($reserv);
+		$eid = $reserv['eid'];
+		$exid = $reserv['exid'];
+		$result = $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid $conf");
+	    } else {
+		$result = false;
+	    }
 	} else {
 	    redirect_header('index.php', 3, _MD_RESERV_NOTFOUND);
 	    exit;
@@ -36,24 +53,38 @@ if (isset($op)) {
 		    }
 		}
 	    }
+	    if (empty($_POST['back'])) {
+		$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
+	    } else {
+		$evurl = $myts->makeTboxData4Edit(trim($_POST['back']));
+	    }
 	    if ($reserv['notify']) {
 		$poster = new XoopsUser($reserv['uid']);
 		$title = eventdate($reserv['edate'])." ".$reserv['title'];
 
+		$email = $reserv['email'];
+		if (empty($email)) {
+		    $user = new XoopsUser($reserv['ruid']);
+		    $email = $user->getVar('email');
+		}
+		$body = sprintf(_MD_RESERV_NOTIFY, _MD_RESERV_CANCELED,
+				$email, $title,	$evurl);
 		$xoopsMailer =& getMailer();
 		$xoopsMailer->useMail();
 		$xoopsMailer->setSubject(_MD_RESERV_CANCELED);
-		$xoopsMailer->setBody(sprintf(_MD_RESERV_NOTIFY,
-					      _MD_RESERV_CANCELED, $reserv['email'], $title,
-					      XOOPS_URL."/modules/eguide/event.php?eid=$eid"));
+		$xoopsMailer->setBody($body);
+		$xoopsMailer->setToEmails($email);
 		$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-		$xoopsMailer->setFromName("Event Notify");
-		$xoopsMailer->setToUsers($poster);
+		$xoopsMailer->setFromName(_MD_FROM_NAME);
+		if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
+		    $xoopsMailer->setToUsers($poster);
+		}
+		$xoopsMailer->setToGroups($notify_group);
 		$xoopsMailer->send();
 	    }
-	    redirect_header("index.php",5,_MD_RESERV_CANCELED);
+	    redirect_header($evurl,3,_MD_RESERV_CANCELED);
 	} else {
-	    redirect_header("event.php?eid=$eid",5,_MD_CANCEL_FAIL);
+	    redirect_header($evurl,5,_MD_CANCEL_FAIL);
 	}
 	exit;
     case 'notify':
@@ -90,30 +121,23 @@ switch($op) {
 case 'order':
     echo "<div class='evform'>\n";
     echo "<h3>"._MD_RESERVATION."</h3>\n";
-    $result = $xoopsDB->query('SELECT uid,o.* FROM '.EGTBL.' e,'.OPTBL." o WHERE e.eid=o.eid AND e.eid=$eid");
-    $data = $xoopsDB->fetchArray($result);
     $exid = param('sub');
+    $result = $xoopsDB->query('SELECT uid,o.*,IF(exdate,exdate,edate) edate,title FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
     $err = 0;
     $field = 0;
     $value = "";
-    if ($exid) {
-	$result = $xoopsDB->query('SELECT exdate FROM '.EXTBL." WHERE exid=$exid AND eidref=$eid");
-	if ($xoopsDB->getRowsNum($result)==1) {
-	    list($ldate) = $xoopsDB->fetchRow($result);
-	} else {
-	    $err++;
-	    echo "<div class='error'>"._MD_RESERV_STOP."</div>\n";
-	}
-    } else {
+    $data = $xoopsDB->fetchArray($result);
+    if (!empty($data) && $exid==0) {
 	$result = $xoopsDB->query('SELECT exid FROM '.EXTBL." WHERE eidref=$eid");
-	if ($xoopsDB->getRowsNum($result)) {
-	    $err++;
+	if ($xoopsDB->getRowsNum($result)>0) {
 	    echo "<div class='error'>"._MD_RESERV_STOP."</div>\n";
+	    $err++;
 	}
     }
-    if (empty($data['reservation'])) {
+    if (empty($data['reservation']) ||
+	($data['edate']-$data['closetime'])<$now) {
+	if (!$err) echo "<div class='error'>"._MD_RESERV_STOP."</div>\n";
 	$err++;
-	echo "<div class='error'>"._MD_RESERV_STOP."</div>\n";
     }
     foreach (explode("\n", $data['optfield']) as $n) {
 	$field++;
@@ -176,7 +200,7 @@ case 'order':
     } else {
 	if (!is_object($xoopsUser)) redirect_header($_SERVER['HTTP_REFERER'],2);
 	$email = $xoopsUser->getVar('email');
-	$ml = strtolower($email);
+	$ml = '';
     }
 
     if (!$err) {
@@ -192,7 +216,7 @@ case 'order':
 	if (!$err && $xoopsModuleConfig['use_plugins']) {
 	    include_once 'plugins.php';
 	    foreach ($hooked_function['reserve'] as $func) {
-		if (!$func($eid, $exid, $data['uid'])) {
+		if (!$func($eid, $exid, $data['edate'], $data['uid'])) {
 		    echo "<div class='error'>"._MD_RESERV_PLUGIN_FAIL."</div>";
 		    if ($accept) { // rollback
 			count_reserved($eid, $exid, $strict, $persons, -1);
@@ -210,8 +234,8 @@ case 'order':
 	srand();
 	$conf = rand(10000,99999);
 	$uid = 'NULL';
-	if ($xoopsUser) {
-	    if (strtolower($xoopsUser->getVar('email'))==$ml) {
+	if (is_object($xoopsUser)) {
+	    if ($ml == '' || strtolower($xoopsUser->getVar('email'))==$ml) {
 		$uid = $xoopsUser->getVar('uid');
 	    }
 	}
@@ -220,28 +244,29 @@ case 'order':
 	(eid, exid, uid, rdate, email, info, status, confirm)
 VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$conf')");
 	$rvid = $xoopsDB->getInsertId();
-	$result = $xoopsDB->query('SELECT title, edate, uid FROM '.EGTBL." WHERE eid=$eid");
-	$guide = $xoopsDB->fetchArray($result);
-	if ($exid==0) $ldate = $guide['edate'];
-	$title = eventdate($ldate)." ".$guide['title'];
+	$title = eventdate($data['edate']).": ".$data['title'];
 
-	$poster = new XoopsUser($guide['uid']);
+	$poster = new XoopsUser($data['uid']);
 	$xoopsMailer =& getMailer();
 	$xoopsMailer->useMail();
 	$xoopsMailer->setTemplateDir(XOOPS_ROOT_PATH."/modules/eguide/language/".$xoopsConfig['language']."/");
 	$xoopsMailer->setTemplate($accept?"accept.tpl":"order.tpl");
 	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":''));
 	$xoopsMailer->assign("RVID", $rvid);
+	$xoopsMailer->assign("CANCEL_KEY", $conf);
 	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
 	$xoopsMailer->assign("INFO", _MD_EMAIL.": ".$email."\n".$value);
 	$xoopsMailer->assign("TITLE", $title);
 	$xoopsMailer->setToEmails($email);
 	if ($data['notify']) {
-	    $xoopsMailer->setToEmails($poster->getVar('email'));
+	    if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
+		$xoopsMailer->setToUsers($poster);
+	    }
+	    $xoopsMailer->setToGroups($notify_group);
 	}
 	$xoopsMailer->setSubject(_MD_SUBJECT." - ".$title);
 	$xoopsMailer->setFromEmail($poster->getVar('email'));
-	$xoopsMailer->setFromName("Event Reservation");
+	$xoopsMailer->setFromName(_MD_FROM_NAME);
 	if ($xoopsMailer->send()) {
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
 	    if ($value) {
@@ -265,42 +290,45 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    echo "<div class='error'>"._MD_SEND_ERR."</div>\n";
 	    // delete failer record.
 	    $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid");
-	    $xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved-1 WHERE eid=$eid");
+	    count_reserved($eid, $exid, $strict, $persons, -1);
 	}
     }
     echo "</div>\n";
     break;
 
 case 'cancel':
-    $result = $xoopsDB->query('SELECT e.eid, cdate, title, summary, e.uid, e.status, style, counter, IF(exdate,exdate,edate) edate FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid");
-    echo "<div class='evform'>\n";
+    $result = $xoopsDB->query('SELECT e.eid, cdate, title, summary, e.uid, e.status, style, counter, IF(exdate,exdate,edate) edate, closetime FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid LEFT JOIN ".OPTBL." o ON e.eid=o.eid WHERE rvid=$rvid");
     if ($result && $xoopsDB->getRowsNum($result)) {
 	$data = $xoopsDB->fetchArray($result);
-	if ($edate>$now) {
+	if ($data['edate']-$data['closetime']<$now) {
+	    echo "<div class='evform'>\n";
 	    echo "<div class='error'>"._MD_RESERV_NOCANCEL."</div>\n";
+	    echo "</div>\n";
 	} else {
 	    $eid = $data['eid'];
+	    $key = intval($_GET['key']);
 	    edit_eventdata($data);
-	    echo "<h2>".$data['title']."</h2>\n";
-	    echo "<div class='evbody'>".$data['disp_summary']."</div>\n";
-	    echo "<p /><div>"._MD_EMAIL." ".$data['email']."</div>";
-	    echo "<h3>"._MD_RESERV_CANCEL."<h3>\n";
-	    echo "<form action='reserv.php' method='post'>\n";
-	    echo "<input type='hidden' name='op' value='delete' />\n";
-	    echo "<input type='hidden' name='eid' value='".$data['eid']."' />\n";
-	    echo "<input type='hidden' name='key' value='$key' />\n";
-	    echo "<input type='hidden' name='rvid' value='$rvid' />\n";
-	    echo "<input type='submit' value='"._SUBMIT."' />\n";
-	    echo "</form>\n";
+	    $xoopsOption['template_main'] = 'eguide_confirm.html';
+	    $xoopsTpl->assign('event', $data);
+	    $back = isset($_SERVER['HTTP_REFERER'])?$myts->makeTboxData4Edit($_SERVER['HTTP_REFERER']):'';
+	    $form = "<h3>"._MD_RESERV_CANCEL."</h3>\n".
+		"<form action='reserv.php' method='post'>\n".
+		"<input type='hidden' name='op' value='delete' />\n".
+		"<input type='hidden' name='eid' value='".$data['eid'].
+		"' />\n<input type='hidden' name='key' value='$key' />\n".
+		"<input type='hidden' name='back' value='$back' />\n".
+		"<input type='hidden' name='rvid' value='$rvid' />\n".
+		"<input type='submit' value='"._SUBMIT."' />\n</form>\n";
+	    $xoopsTpl->assign('form', $form);
 	}
     } else {
+	echo "<div class='evform'>\n";
 	echo "<div class='error'>"._MD_RESERV_NOTFOUND."</div>";
+	echo "</div>\n";
     }
-    echo "</div>\n";
     break;
 
 case 'register':
-    OpenTable();
     $email = ($xoopsUser)?$xoopsUser->getVar('email'):"";
     echo "<h2>"._MD_NOTIFY_EVENT."</h2>\n";
     echo "<form action='reserv.php' method='post'>
@@ -309,7 +337,6 @@ case 'register':
     echo "</table>\n";
     echo "<p align='center'>"._MD_NOTIFY_REQUEST."</p>";
     echo "<input type='hidden' name='op' value='notify' />\n</form>\n";
-    CloseTable();
     break;
 }
 include(XOOPS_ROOT_PATH."/footer.php");

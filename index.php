@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.11 2005/11/24 08:15:49 nobu Exp $
+// $Id: index.php,v 1.12 2005/12/27 05:13:53 nobu Exp $
 
 include 'header.php';
 
@@ -29,11 +29,12 @@ if (empty($prev)) {
 
 $opt = isset($_GET['cat'])?' AND topicid='.intval($_GET['cat']):'';
 
-$fields = "e.eid, cdate, IF(exdate,exdate,edate) edate, title, summary, 
+$fields = "e.eid, cdate, persons,title, summary, closetime,
+IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved,
 reservation, uid, status, style, counter, catid, catname, catimg, exid, exdate";
 $result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.
 OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.
-EXTBL." ON e.eid=eidref $ext WHERE $cond$opt ORDER BY edate $ord", $max, $start);
+EXTBL." x ON e.eid=eidref $ext WHERE $cond$opt ORDER BY edate $ord", $max, $start);
 if ($xoopsDB->errno() && $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
     redirect_header('admin/upgrade_1.x.x.php', 5, _MD_NEED_UPGRADE);
     exit;
@@ -48,6 +49,13 @@ if (is_object($xoopsUser)) {
 }
 while ($event = $xoopsDB->fetchArray($result)) {
     $event['isadmin'] = ($isadmin || $event['uid']==$uid);
+    $event['link'] = true;
+    $more = 'event.php?eid='.$event['eid'];
+    if (!empty($event['exid'])) {
+	$event['extent']=true;	// also show editdate link
+	$more .= '&amp;sub='.$event['exid'];
+    }
+    $event['detail'] = $more;
     edit_eventdata($event);
     $events[] = $event;
 }
@@ -56,15 +64,16 @@ include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = 'eguide_index.html';
 
 $xoopsTpl->assign('events', $events);
-$xoopsTpl->assign('lang_detail', _MD_READMORE);
-$xoopsTpl->assign(assign_const());
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
 if (empty($prev)) {
-    $result = $xoopsDB->query('SELECT eid FROM '.EGTBL.' e LEFT JOIN '.EXTBL." ON e.eid=eidref $ext WHERE expire<$now AND status=".STAT_NORMAL.$opt, 1);
-    echo $xoopsDB->error();
-    $p = $xoopsDB->getRowsNum($result);
-    $start += $max;
-    $result = $xoopsDB->query('SELECT eid FROM '.EGTBL.' e LEFT JOIN '.EXTBL." ON e.eid=eidref $ext WHERE expire>$now AND status=".STAT_NORMAL.$opt, 1,$start);
+    if ($page < 2) {
+	$result = $xoopsDB->query('SELECT eid FROM '.EGTBL.' e LEFT JOIN '.EXTBL." ON e.eid=eidref $ext WHERE (edate<$now OR exdate<$now) AND status=".STAT_NORMAL.$opt, 1);
+	$p = $xoopsDB->getRowsNum($result);
+    } else {
+	$p = true;
+    }
+    $result = $xoopsDB->query('SELECT eid FROM '.EGTBL.' e LEFT JOIN '.EXTBL." ON e.eid=eidref $ext WHERE ".$cond.$opt, 1,$start+$max);
     $q = $xoopsDB->getRowsNum($result);	// there is next page
     if (empty($page) || $page==1) {
 	$prev="?prev=1";
@@ -74,15 +83,15 @@ if (empty($prev)) {
 	$page="?page=".($page+1);
     }
 } else {
-    $result = $xoopsDB->query('SELECT eid FROM '.EGTBL.' e LEFT JOIN '.EXTBL." ON e.eid=eidref $ext WHERE edate<$now AND status=".STAT_NORMAL.$opt, 1,$start+$max);
+    $result = $xoopsDB->query('SELECT eid FROM '.EGTBL.' e LEFT JOIN '.EXTBL." ON e.eid=eidref $ext WHERE ".$cond.$opt, 1,$start+$max);
     $p = $xoopsDB->getRowsNum($result);	// there is more prev page?
     $q = true;			// always next page exists.
     if ($prev==1) {
 	$prev="?prev=".($prev+1);
 	$page="?page=1";
     } else {
-	$prev="?prev=".($prev-1);
-	$page="?prev=".($prev+1);
+	$page="?prev=".($prev-1);
+	$prev="?prev=".($prev+1);
     }
 }
 

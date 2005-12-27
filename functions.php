@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.4 2005/11/24 08:15:48 nobu Exp $
+// $Id: functions.php,v 1.5 2005/12/27 05:13:53 nobu Exp $
 
 // exploding addional informations.
 function explodeinfo($info, $item) {
@@ -37,10 +37,19 @@ function xss_filter($text) {
 }
 
 function edit_eventdata(&$data) {
+    global $xoopsModuleConfig;
+
     $myts =& MyTextSanitizer::getInstance();
-    $data['ldate'] = empty($data['exdate'])?$data['edate']:$data['exdate'];
+    $str = $pat = array();
+    $pat[] = '{X_DATE}';
+    $str[] = $data['ldate'] =
+	empty($data['exdate'])?$data['edate']:$data['exdate'];
+    $data['closedate']=$data['ldate']-$data['closetime'];
+    $data['dispclose'] = formatTimestamp($data['closedate'], _MD_TIME_FMT);
     $data['date'] = eventdate($data['ldate']);
-    $data['postdate'] = eventdate($data['cdate']);
+    $pat[] = '{X_TIME}';
+    $str[] = $data['time'] = formatTimestamp($data['ldate'], _MD_STIME_FMT);
+    $data['postdate'] = formatTimestamp($data['cdate'], _MD_TIME_FMT);
     $data['uname'] = XoopsUser::getUnameFromId($data['uid']);
     $data['hits'] = sprintf(_MD_REFER, $data['counter']);
     $br = 0;
@@ -49,28 +58,26 @@ function edit_eventdata(&$data) {
     case 2: $html = 0;
     case 1: $br = 1;
     }
-    $data['disp_summary'] = xss_filter(xss_filter($myts->displayTarea($data['summary'],$html,0,1,1,$br)));
-    $data['disp_body'] = xss_filter($myts->displayTarea($data['body'],$html,0,1,1,$br));
+    $data['disp_summary'] = str_replace($pat,$str,xss_filter($myts->displayTarea($data['summary'],$html,0,1,1,$br)));
+    $data['disp_body'] = str_replace($pat,$str,xss_filter($myts->displayTarea($data['body'],$html,0,1,1,$br)));
     $data['title'] = $myts->htmlSpecialChars($data['title']);
     if (!empty($data['persons'])) {
 	$data['reserv_num']=sprintf(_MD_RESERV_NUM, $data['persons']);
 	$data['reserv_reg']=sprintf(_MD_RESERV_REG, $data['reserved']);
     }
-}
-
-function assign_const() {
-    return array('lang_poster'=>_MD_POSTERC,
-		 'lang_postdate'=>_MD_POSTDATE,
-		 'lang_edit'=>_EDIT,
-		 'lang_edit_extent'=>_MD_EDIT_EXTENT,
-		 'lang_delete'=>_DELETE,
-		 'lang_prev'=>_MD_SHOW_PREV,
-		 'lang_next'=>_MD_SHOW_NEXT,
-		 'lang_reserv_admin'=>_MD_RESERV_ADMIN,
-		 'lang_print'=>_PRINT,
-		 'lang_submit'=>_SUBMIT,
-		 'lang_calender'=>_MD_CALENDER,
-		 'xoops_module_header'=>HEADER_CSS);
+    // fill of seat
+    if ($data['persons']) {
+	
+	$marker = preg_split('/,|[\r\n]+/',$xoopsModuleConfig['maker_set']);
+	$fill=$data['fill']=intval($data['reserved']/$data['persons']*100);
+	if ($data['closedate']<time()) $fill = -1;
+	while(list($k,$v) = array_splice($marker, 0, 2)) {
+	    if ($fill<$k) {
+		$data['fill_mark'] = $v;
+		break;
+	    }
+	}
+    }
 }
 
 function eventform($data) {
@@ -81,13 +88,9 @@ function eventform($data) {
 
     $form = array();
     // reservation form
-    $form['title'] = _MD_RESERVATION;
     $form['email'] = $myts->makeTboxData4Edit(is_object($xoopsUser)?$xoopsUser->email():"");
-    if (!$xoopsModuleConfig['member_only']) {
-	$form['lang_email'] = _MD_EMAIL;
-    }
+    $form['member_only'] = $xoopsModuleConfig['member_only'];
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
-    $form['lang_notify'] = _MD_NOTIFY_REQUEST;
     $items = array();
     $field = 0;
     $note1 = $note2 = "";
@@ -195,7 +198,6 @@ function eventform($data) {
     $form['lang_note'] = $note1;
     $form['note'] = $note2;
     $form['eid'] = empty($data['eid'])?0:$data['eid'];
-    $form['lang_order'] = _MD_ORDER_SEND;
     return $form;
 }
 
@@ -245,7 +247,8 @@ function set_next_event() {
 
 function get_extents($eid, $all=false) {
     global $xoopsDB;
-    $result=$xoopsDB->query('SELECT exid,exdate,reserved FROM '.EXTBL." WHERE eidref=$eid".($all?"":" AND exdate>".time()).' ORDER BY exdate');
+    $result=$xoopsDB->query('SELECT exid,exdate,x.reserved FROM '.EXTBL.' x LEFT JOIN '.OPTBL." o ON eidref=eid WHERE eidref=$eid".($all?"":" AND exdate-closetime>".time()).' ORDER BY exdate');
+    echo $xoopsDB->error();
     $extents = array();
     while ($extent = $xoopsDB->fetchArray($result)) {
 	$extent['date'] = eventdate($extent['exdate']);

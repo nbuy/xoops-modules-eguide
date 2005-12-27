@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.12 2005/11/24 08:15:48 nobu Exp $
+// $Id: event.php,v 1.13 2005/12/27 05:13:53 nobu Exp $
 
 include 'header.php';
 
@@ -15,12 +15,20 @@ $uid = 0;
 if (is_object($xoopsUser)) {
     $isadmin = $xoopsUser->isAdmin($xoopsModule->getVar('mid'));
     $uid = $xoopsUser->getVar('uid');
+    if (!$isadmin) {
+	$result = $xoopsDB->query('SELECT uid FROM '.EGTBL." WHERE eid=$eid AND uid=$uid");
+	if ($xoopsDB->getRowsNum($result)>0) $isadmin = true;
+    }
 }
 
 set_next_event();
 $stc=$isadmin?"":"AND status=".STAT_NORMAL;
 
-$result = $xoopsDB->query('SELECT * FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL." ON e.eid=eidref AND exid=$exid WHERE e.eid=$eid $stc");
+$fields = "e.eid, cdate, persons,title, summary, body, strict, optfield,
+IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
+closetime, reservation, uid, status, style, counter, catid, catname, catimg, 
+exid, exdate";
+$result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL." x ON e.eid=eidref AND exid=$exid WHERE e.eid=$eid $stc");
 
 if (!$result || !$xoopsDB->getRowsNum($result)) {
 	redirect_header("index.php",2,_MD_NOEVENT);
@@ -32,13 +40,14 @@ $now=time();
 $data['exid']=$exid;
 // sub
 $extents = get_extents($eid);
-if (count($extents) && $exid==0) {
+if ($exid) $data['extent']=true; // show editdate link
+else if (count($extents) && $exid==0) {
     if (count($extents)==1) {    // only one extent, chose that.
 	header('Location: '.XOOPS_URL.'/modules/eguide/event.php?eid='.$eid.'&sub='.$extents[0]['exid']);
 	exit;
     }
+    $data['extent']=true;	// also show editdate link
     $data['extents'] = $extents;
-    $data['lang_extents'] = _MD_EXTENT_DATE;
     $data['exdate']=$extents[0]['exdate'];
 }
 
@@ -49,23 +58,24 @@ if ($op != "print") {
 	$xoopsDB->queryF("UPDATE ".EGTBL." SET counter=counter+1 WHERE eid=$eid");
 	$data['counter']++;
     }
+    $data['link'] = true;
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = 'eguide_event.html';
-$xoopsTpl->assign(assign_const());
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 edit_eventdata($data);
 $xoopsTpl->assign('event', $data);
 // check pical exists
 $module_handler =& xoops_gethandler('module');
 $module =& $module_handler->getByDirname('piCal');
 if (is_object($module) && $module->getVar('isactive')==1) {
-    $xoopsTpl->assign('caldate', formatTimestamp($data['ldate'], 'Y-m-d'));
+    $xoopsTpl->assign('caldate', formatTimestamp($data['edate'], 'Y-m-d'));
 }
 // page title
 $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".
-		  $data['date']." ".$data['title']);
-if ($data['ldate'] < $now) {
+		  $data['date'].": ".$data['title']);
+if ($data['closedate'] < $now) {
     if ($data['reservation']) $xoopsTpl->assign('message', _MD_RESERV_CLOSE);
 } elseif ($data['reservation']) {
     $reserved = false;
@@ -73,9 +83,7 @@ if ($data['ldate'] < $now) {
 	$result = $xoopsDB->query("SELECT * FROM ".RVTBL." WHERE eid=$eid AND exid=$exid AND uid=".$xoopsUser->getVar('uid'));
 	$reserved = ($xoopsDB->getRowsNum($result)>0);
     }
-    if ($reserved) {
-	$xoopsTpl->assign('message', _MD_RESERVED);
-    } elseif ($data['strict'] && $data['persons']<=$data['reserved']) {
+    if ($data['strict'] && $data['persons']<=$data['reserved']) {
 	$xoopsTpl->assign('message', _MD_RESERV_FULL);
     } elseif (!is_object($xoopsUser) && $xoopsModuleConfig['member_only']) {
 	$xoopsTpl->assign('message', _MD_RESERV_NEEDLOGIN);
@@ -88,8 +96,9 @@ if ($data['ldate'] < $now) {
 		if (!$ok) break;
 	    }
 	}
-	if ($ok) $xoopsTpl->assign('form', eventform($data));
-	else $xoopsTpl->assign('message', _MD_RESERV_PLUGIN_FAIL);
+	if ($reserved) {
+	    $xoopsTpl->assign('message', _MD_RESERVED);
+	} elseif ($ok) $xoopsTpl->assign('form', eventform($data));
     }
 }
 
@@ -98,6 +107,10 @@ $xoopsTpl->assign(make_lists($data));
 if ($op == "print") {
     $xoopsTpl->display('db:eguide_event_print.html');
     exit;
+}
+
+if ($xoopsModuleConfig['use_comment']) {
+    include XOOPS_ROOT_PATH.'/include/comment_view.php';
 }
 
 include XOOPS_ROOT_PATH.'/footer.php';
@@ -138,8 +151,7 @@ function make_lists($data) {
 		$list[++$nc] = $order;
 	    }
 	}
-	return array('labels'=>$show, 'list'=>$list,
-		     'lang_reserv_list'=>_MD_RESERV_LIST);
+	return array('labels'=>$show, 'list'=>$list);
     }
     return array();
 }

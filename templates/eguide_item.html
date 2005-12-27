@@ -1,5 +1,9 @@
 <div class="event">
-  <div class="evhead"><{$event.date}>: <{$event.title}></div>
+  <div class="evhead">
+    <span class="evmark"><{$event.fill_mark}></span>
+    <{$event.date}>:
+    <{$event.title}>
+  </div>
 <{if $event.catname}>
   <a href="index.php?cat=<{$event.catid}>">
   <{if $event.catimg}>
@@ -9,31 +13,41 @@
   <{/if}>
   </a>
 <{/if}>
-  <div class="evinfo"><{$lang_poster}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$lang_postdate}> <{$event.postdate}> (<{$event.hits}>)</div>
+  <div class="evinfo"><{$smarty.const._MD_POSTERC}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$smarty.const._MD_POSTDATE}> <{$event.postdate}> (<{$event.hits}>)</div>
   <p class="evbody"><{$event.disp_summary}></p>
 <{if $event.disp_body}>
   <p class="evbody"><{$event.disp_body}></p>
 <{/if}>
+<div class="evprop">
+<div><{$smarty.const._MD_STARTTIME}> <{$event.time}></div>
 <{if $event.persons}>
-<p><{$event.reserv_num}> (<{$event.reserv_reg}>)</p>
+<div><{$event.reserv_num}><{if $event.reservation}> (<{$event.reserv_reg}>)<{/if}></div>
 <{/if}>
-<{if $event.eid}>
+<{if $event.dispclose}>
+<div><{$smarty.const._MD_CLOSEDATE}> <{$event.dispclose}></div>
+<{/if}>
+<{if $points_this}>
+<!-- points plugin -->
+<div><{$smarty.const._POINTS_NEED}> <{$points_this}></div>
+<{/if}>
+</div>
+<{if $event.link}>
   <div class="evlink"><{if $event.isadmin}>[
 <{if $event.reservation}>
-    <a href="receipt.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_reserv_admin}></a> |
+    <a href="receipt.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$smarty.const._MD_RESERV_ADMIN}></a> |
 <{/if}>
-    <a href="admin.php?eid=<{$event.eid}>"><{$lang_edit}></a> |
-<{if $event.exid}>
-    <a href="editdate.php?eid=<{$event.eid}>"><{$lang_edit_extent}></a> |
+    <a href="admin.php?eid=<{$event.eid}>"><{$smarty.const._EDIT}></a> |
+<{if $event.extent}>
+    <a href="editdate.php?eid=<{$event.eid}>"><{$smarty.const._MD_EDIT_EXTENT}></a> |
 <{/if}>
-    <a href="admin.php?op=delete&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_delete}></a> ] <{/if}>
+    <a href="admin.php?op=delete&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$smarty.const._DELETE}></a> ] <{/if}>
 <{if $caldate}>
-    <a href="<{$xoops_url}>/modules/piCal/index.php?caldate=<{$caldate}>"><{$lang_calender}></a>
+    <a href="<{$xoops_url}>/modules/piCal/index.php?caldate=<{$caldate}>"><{$smarty.const._MD_CALENDER}></a>
 <{/if}>
-<{if $lang_detail}>
-    <a href="event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$lang_detail}></a>
+<{if $event.detail}>
+    <a href="<{$event.detail}>"><{$smarty.const._MD_READMORE}></a>
 <{else}>
-    <a href="event.php?op=print&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$lang_print}>" border="0" /></a>
+    <a href="event.php?op=print&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$smarty.const._PRINT}>" border="0" /></a>
 <{/if}>
   </div>
 <{/if}>

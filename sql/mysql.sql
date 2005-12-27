@@ -1,5 +1,5 @@
 # Event Guide Module for XOOPS
-# $Id: mysql.sql,v 1.2 2005/11/18 17:08:03 nobu Exp $
+# $Id: mysql.sql,v 1.3 2005/12/27 05:13:53 nobu Exp $
 
 #
 # Table structure for table `eguide`
@@ -37,7 +37,8 @@ CREATE TABLE eguide_category (
 
 # --------------------------------------------------------
 
-INSERT INTO eguide_category VALUES(1, ''); -- Default Category (Noname)
+INSERT INTO eguide_category(catid,catname) VALUES(1, ''); 
+# -- Default Category (Noname)
 
 #
 # Table structure for table `eguide_extent`
@@ -63,6 +64,7 @@ CREATE TABLE eguide_opt (
   notify  tinyint(1),
   persons int(8) unsigned NOT NULL default '0',
   reserved int(8) unsigned NOT NULL default '0',
+  closetime  integer NOT NULL default '0',
   optfield text,
   PRIMARY KEY  (eid)
 ) TYPE=MyISAM;

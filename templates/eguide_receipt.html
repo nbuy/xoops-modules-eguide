@@ -1,27 +1,28 @@
 <div class="evlist">
-<h3><{$lang_reserv_list}></h3>
+<h3><{$smarty.const._MD_RESERV_LIST}></h3>
 
 <{if $extents}>
 <table class="outer">
-<tr class="head"><th><{$lang_extent_date}></th><th><{$lang_order_count}></th><th><{$lang_operation}></th></tr>
+<tr class="head"><th><{$smarty.const._MD_EXTENT_DATE}></th><th><{$smarty.const._MD_ORDER_COUNT}></th><th><{$smarty.const._MD_OPERATION}></th></tr>
 <{foreach from=$extents item=ext}>
 <tr class="<{cycle values="even, odd"}>">
   <td><{$ext.date}></td><td><{$ext.reserved}></td>
-  <td><{if $ext.reserved}><a href="receipt.php?eid=<{$eid}>&amp;sub=<{$ext.exid}>"><{$lang_detail}></a><{/if}></td>
+  <td><{if $ext.reserved}><a href="receipt.php?eid=<{$eid}>&amp;sub=<{$ext.exid}>"><{$smarty.const._MD_DETAIL}></a><{/if}></td>
 </tr>
 <{/foreach}>
 </table>
 <{/if}>
 <{if $list}>
 <table width="100%">
-<tr><td><{$lang_order_count}> <{$order_count}></td><td align="right"><{$lang_print_date}> <{$print_date}></td></tr>
+<tr><td><{$smarty.const._MD_ORDER_COUNT}> <{$order_count}> (<{$reserv_num}>)</td><td align="right"><{$smarty.const._MD_PRINT_DATE}> <{$print_date}></td></tr>
 </table>
 <form action="receipt.php" method="post">
 <table width="100%" cellspacing="1" cellpadding="4" class="outer">
 <tr class="head">
-  <th><{$lang_operation}></th>
-  <th><{$lang_order_date}></th>
-  <th><{$lang_email}></th>
+  <th><{$smarty.const._MD_OPERATION}></th>
+  <th><{$smarty.const._MD_ORDER_DATE}></th>
+  <th><{$smarty.const._MD_STATUS}></th>
+  <th><{$smarty.const._MD_EMAIL}></th>
 <{foreach from=$labels item=lab}>
   <th><{$lab}></th>
 <{/foreach}>
@@ -29,16 +30,20 @@
 <{foreach from=$list item=order}>
 <tr class="<{cycle values="even, odd"}>">
   <td>
-    <a href="receipt.php?rvid=<{$order.rvid}>"><{$lang_detail}></a>
 <{if $order.confirm}>
     <input type="checkbox" name="act[]" value="<{$order.rvid}>" checked />
 <{/if}>
+    <a href="receipt.php?rvid=<{$order.rvid}>"><{$smarty.const._MD_DETAIL}></a> |
+    <a href="reserv.php?op=cancel&rvid=<{$order.rvid}>"><{$smarty.const._DELETE}></a>
   </td>
-  <td nowrap><{$order.date}></td>
+  <td><{$order.date}></td>
+  <td><{$order.stat}></td>
   <td>
-    <a href="mailto:<{$order.email}>"><{$order.email}></a>
 <{if $order.uname}>
-(<a href="<{$xoops_url}>/userinfo.php?uid=<{$order.uid}>"><{$order.uname}></a>)
+<a href="<{$xoops_url}>/userinfo.php?uid=<{$order.uid}>"><{$order.uname}></a>
+<{/if}>
+<{if $order.email}>
+    &lt;<a href="mailto:<{$order.email}>"><{$order.email}></a>&gt;
 <{/if}>
   </td>
 <{foreach from=$order.add item=value}>
@@ -57,23 +62,25 @@
   <option value="<{$value}>"><{$label}></option>
 <{/foreach}>
 </select></td><td>
-<input type="submit" value="<{$lang_submit}>." />
+<input type="submit" value="<{$smarty.const._SUBMIT}>" />
 </td></tr>
 </table>
-<p><b><{$lang_reserv_msg_h}></b></p>
-<textarea name="msg" cols="60" rows="10"><{$lang_reserv_msg}></textarea>
+<p><b><{$smarty.const._MD_RESERV_MSG_H}></b></p>
+<textarea name="msg" cols="60" rows="10"><{$reserv_msg}></textarea>
 <{/if}>
 </form>
 <p align='right'>
-[<a href="receipt.php?op=csv&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$lang_cvs_out}></a>
- | <a href="sendinfo.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$lang_info_mail}></a>] 
-<a href="receipt.php?op=print&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$lang_print}>" border="0" /></a>
+[<a href="receipt.php?op=csv&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_CSV_OUT}></a>
+ | <a href="sendinfo.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_INFO_MAIL}></a>] 
+<a href="receipt.php?op=print&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$smarty.const._PRINT}>" border="0" /></a>
 </p>
+<{else}>
+<div class='evnote'><{$smarty.const._MD_NODATA}></div>
 <{/if}>
 <{if $citem}>
-<div class="evhead"><{$lang_summary}></div>
+<div class="evhead"><{$smarty.const._MD_SUMMARY}></div>
 <table class="evtbl">
-<tr class="head"><th><{$lang_sum_item}></th><th><{$lang_sum}></th></tr>
+<tr class="head"><th><{$smarty.const._MD_SUM_ITEM}></th><th><{$smarty.const._MD_SUM}></th></tr>
 <{foreach from=$citem key=label item=count}>
 <tr class="<{cycle values="even, odd"}>"><td><{$label}></td><td align='right'><{$count}></td></tr>
 <{/foreach}>

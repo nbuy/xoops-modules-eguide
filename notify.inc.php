@@ -17,9 +17,9 @@ function event_notify($op, $data) {
 	    $note = ($data['status'] == STAT_POST)?_MD_APPROVE_REQ:"";
 	    $xoopsMailer->assign("EVENT_NOTE", "");
 	    $xoopsMailer->setBody(_MD_NOTIFY_NEW);
-	    $xoopsMailer->setToEmails($to);
+	    $xoopsMailer->setToGroups($xoopsModuleConfig['notify_group']);
 	    $xoopsMailer->setFromEmail($to);
-	    $xoopsMailer->setFromName("Event Notify");
+	    $xoopsMailer->setFromName(_MD_FROM_NAME);
 	    $xoopsMailer->send();
 	}
 	break;
@@ -52,7 +52,7 @@ function user_notify($eid) {
 	$xoopsMailer->setSubject(_MD_NEWSUB." - $title");
 	$xoopsMailer->setBody(_MD_NEW_NOTIFY);
 	$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-	$xoopsMailer->setFromName("Event Notify");
+	$xoopsMailer->setFromName(_MD_FROM_NAME);
 	$xoopsMailer->assign("SITENAME", $xoopsConfig['sitename']);
 	$xoopsMailer->assign("TITLE", $title);
 	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");

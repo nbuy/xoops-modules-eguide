@@ -6,18 +6,20 @@
 <form action="admin.php?eid=<{$eid}>" method="post" class="evbody">
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td>
-<h3><{$lang_title}></h3>
+<h3><{$smarty.const._MD_TITLE}></h3>
 <input type="text" name="title" id="title" value="<{$title}>" size="60" maxlength="80" />
-</td><{if $input_category}><td><h3><{$lang_event_category}></h3>
+</td><{if $input_category}><td>
+<h3><{$smarty.const._MD_EVENT_CATEGORY}></h3>
 <{$input_category}></td><{/if}></tr>
 </table>
-<h3><{$lang_event_date}></h3>
+<h3><{$smarty.const._MD_EVENT_DATE}></h3>
 <{$input_edate}>
-<h3><{$lang_event_expire}></h3>
+<h3><{$smarty.const._MD_EVENT_EXPIRE}></h3>
 <{$input_expire}>
+<div><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" size="4" value="<{$before}>"/></div>
 <{if $input_extent}>
 <p>
-  <b><{$lang_event_extent}></b> <{$input_extent}>
+  <b><{$smarty.const._MD_EVENT_EXTENT}></b> <{$input_extent}>
 <{if $extent_sets}>
 <div class="extents">
 <{foreach from=$extent_sets item=ext}>
@@ -27,31 +29,31 @@
 <{/if}>
 </p>
 <{/if}>
-<h3><{$lang_introtext}></h3>
+<h3><{$smarty.const._MD_INTROTEXT}></h3>
 <{$summary_textarea}>
-<h3><{$lang_extext}></h3>
+<h3><{$smarty.const._MD_EXTEXT}></h3>
 <textarea name="body" wrap="virtual" cols="60" rows="10"><{$body}></textarea>
 
-<h3><{$lang_event_style}></h3>
+<h3><{$smarty.const._MD_EVENT_STYLE}></h3>
 <{$input_style}>
 
-<h3><{$lang_reserv_setting}></h3>
-<div><input type="checkbox" name="reservation" value="1"<{if $reservation}> checked<{/if}>/> <{$lang_reserv_desc}></div>
+<h3><{$smarty.const._MD_RESERV_SETTING}></h3>
+<div><input type="checkbox" name="reservation" value="1"<{if $reservation}> checked<{/if}>/> <{$smarty.const._MD_RESERV_DESC}></div>
 <div>
-  <input type="checkbox" name="strict" value="1"<{if $strict}> checked<{/if}>/> <{$lang_reserv_stopfull}>
-  <input type="checkbox" name="autoaccept" value="1"<{if $autoaccept}> checked<{/if}>/> <{$lang_reserv_auto}>
+  <input type="checkbox" name="strict" value="1"<{if $strict}> checked<{/if}>/> <{$smarty.const._MD_RESERV_STOPFULL}>
+  <input type="checkbox" name="autoaccept" value="1"<{if $autoaccept}> checked<{/if}>/> <{$smarty.const._MD_RESERV_AUTO}>
 </div>
-<div><input type="checkbox" name="notify" value="1"<{if $notify}> checked<{/if}>/> <{$lang_reserv_notifyposter}></div>
-<div><b><{$lang_reserv_persons}></b> <input type="text" name="persons" value="<{$persons}>" size="3" /> <{$lang_reserv_unit}></div>
-<h3><{$lang_reserv_item}></h3>
+<div><input type="checkbox" name="notify" value="1"<{if $notify}> checked<{/if}>/> <{$smarty.const._MD_RESERV_NOTIFYPOSTER}></div>
+<div><b><{$smarty.const._MD_RESERV_PERSONS}></b> <input type="text" name="persons" value="<{$persons}>" size="3" /> <{$smarty.const._MD_RESERV_UNIT}></div>
+<h3><{$smarty.const._MD_RESERV_ITEM}></h3>
 <textarea name="optfield" wrap="virtual" cols="60" rows="5"><{$optfield}></textarea>
-<div class="evinfo"><{$lang_reserv_item_desc}></div>
+<div class="evinfo"><{$smarty.const._MD_RESERV_ITEM_DESC}></div>
 <{if $input_status}>
 <p><{$input_status}></p>
 <{/if}>
 <p>
-<input type="submit" name="preview" value="<{$lang_preview}>" />
-<input type="submit" name="save" value="<{$lang_save}>" />
+<input type="submit" name="preview" value="<{$smarty.const._MD_PREVIEW}>" />
+<input type="submit" name="save" value="<{$smarty.const._MD_SAVE}>" />
 </p>
 </form>
 </div>
