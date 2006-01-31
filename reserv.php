@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.13 2005/12/27 05:13:53 nobu Exp $
+// $Id: reserv.php,v 1.14 2006/01/31 12:32:52 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -217,7 +217,9 @@ case 'order':
 	    include_once 'plugins.php';
 	    foreach ($hooked_function['reserve'] as $func) {
 		if (!$func($eid, $exid, $data['edate'], $data['uid'])) {
-		    echo "<div class='error'>"._MD_RESERV_PLUGIN_FAIL."</div>";
+		    $message = $xoopsTpl->get_template_vars('message');
+		    if (empty($message)) $message = _MD_RESERV_PLUGIN_FAIL;
+		    echo "<div class='error'>".$message."</div>";
 		    if ($accept) { // rollback
 			count_reserved($eid, $exid, $strict, $persons, -1);
 		    }
