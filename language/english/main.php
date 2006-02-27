@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.5 2005/12/27 08:29:43 nobu Exp $
+// $Id: main.php,v 1.6 2006/02/27 17:32:43 nobu Exp $
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
 define("_MD_DATE_FMT", "Y-m-d (D)");
@@ -134,6 +134,7 @@ define('_MD_YEARC','year %d');
 define('_MD_TIMEC','Time');
 
 define('_MD_RESERV_DEFAULT_ITEM',"Name*,size=40\nAddress\n");
+define('_MD_RESERV_DEFAULT_MEMBER',"");
 
 // notification message
 define('_MD_APPROVE_REQ','Please confirm the event and Approve it.');

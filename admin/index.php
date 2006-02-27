@@ -1,7 +1,9 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.19 2005/12/27 05:13:53 nobu Exp $
+// $Id: index.php,v 1.20 2006/02/27 17:32:43 nobu Exp $
+
 include 'admin_header.php';
+include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
 
 $self = $_SERVER["SCRIPT_NAME"];
 
@@ -12,16 +14,22 @@ function css_tags() { return array("even","odd"); }
 
 xoops_cp_header();
 
+show_menu();
 switch($op) {
 default:
-    show_menu();
-
 case "events":
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
+    $result = $xoopsDB->query('SELECT count(eid) FROM '.EGTBL);
+    list($count) = $xoopsDB->fetchRow($result);
+    $max = $xoopsModuleConfig['max_list'];
+    $start = isset($_GET['start'])?intval($_GET['start']):0;
+    $nav = new XoopsPageNav($count, $max, $start, "start", 'op=events');
+
     $result = $xoopsDB->query('SELECT o.*,edate,title,uid,status FROM '.EGTBL.
-			      ' e LEFT JOIN '.OPTBL." o ON e.eid=o.eid ORDER BY e.eid DESC");
+			      ' e LEFT JOIN '.OPTBL." o ON e.eid=o.eid ORDER BY e.eid DESC",$max,$start);
     $n = 0;
     echo "<form action='$self' method='post'>\n";
+    if ($count>$max) echo "<div>".$nav->renderNav()."</div>";
     echo "<table cellspacing='1' border='0' class='outer'>\n";
     echo "<tr class='bg4'><th>"._AM_RESERVATION."</th><th>".
 	_AM_EVENT_DAY."</th><th>"._AM_TITLE."</th>";
@@ -315,15 +323,18 @@ function show_menu() {
     $mark = XOOPS_URL.'/images/pointer.gif';
     $base = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname');
 
-    echo "<style>div#adminmenu a { background-image: url($mark); background-repeat: no-repeat; background-position: left; padding-left: 12px; padding-right: 15px; white-space: nowrap; }</style>";
-    echo "<div id='adminmenu'>\n";
+    echo "<style>
+div#adminmenu a { background-color: #dddddd; white-space: nowrap; }
+</style>";
+    $cur = '/^https?'.preg_quote('://'.$_SERVER["HTTP_HOST"].$_SERVER[ 'REQUEST_URI' ],'/').'$/';
+    $ancker = array();
     foreach ($adminmenu as $menu) {
 	$title = $menu['title'];
 	$link = $menu['link'];
 	if (!preg_match('/^https?:\/\/|^\//', $link)) $link = $base.'/'.$link;
-	echo "<a href='$link'>$title</a>\n";
+	$opt = (preg_match($cur, $link))?" style='background: #ffcccc;'":'';
+	$ancker[] = "<a href='$link'$opt>$title</a>\n";
     }
-    echo "</div>\n";
-    echo "<hr/>";
+    echo "<div id='adminmenu'>\n".join(' | ', $ancker)."</div>\n<hr/>\n";
 }
 ?>

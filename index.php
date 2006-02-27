@@ -1,11 +1,19 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.12 2005/12/27 05:13:53 nobu Exp $
+// $Id: index.php,v 1.13 2006/02/27 17:32:43 nobu Exp $
 
 include 'header.php';
 
 $prev = param('prev');
 $page = param('page');
+
+if ($page<0) {
+    $prev = -$page;
+    $page=0;
+} elseif ($prev<0) {
+    $page = -$prev;
+    $prev = 0;
+}
 
 set_next_event();
 

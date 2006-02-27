@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.13 2005/12/18 14:00:08 nobu Exp $
+// $Id: admin.php,v 1.14 2006/02/27 17:32:43 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -38,7 +38,8 @@ if ($op=='new') {
 		  'strict'	=> 1, // order when full: 0=continue, 1=stop
 		  'persons'	=> 10, // how many persons/sheet in room
 		  'optfield'	=>
-		  $xoopsModuleConfig['member_only']?'':_MD_RESERV_DEFAULT_ITEM,
+		  $xoopsModuleConfig['member_only']?
+				  _MD_RESERV_DEFAULT_MEMBER:_MD_RESERV_DEFAULT_ITEM,
 		  'title'	=> '', // contents
 		  'summary'	=> '',
 		  'body'	=> '',

@@ -14,7 +14,7 @@
    padding-bottom: 0.5em;
 }
 .evtbl th { text-align: left; vertical-align: top; }
-.event, .evform, .evlist { border: solid thin grey; padding: 0.5em; margin-bottom: 1em;}
+.event, .evform, .evlist { border-bottom: solid thin #c0c0c0; padding: 1em; }
 .evms td { background-color: #ffeeee; padding: 5px; }
 .evop td { background-color: #ffccff; padding: 5px; }
 .catbox { float: right; }

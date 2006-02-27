@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.5 2005/12/27 08:29:43 nobu Exp $
+// $Id: modinfo.php,v 1.6 2006/02/27 17:32:43 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -33,6 +33,8 @@ define("_MI_EGUIDE_NEEDPOSTAUTH","Do you need to approve New Event");
 define("_MI_EGUIDE_NEEDPOSTAUTH_DESC","Need to approve New Event by site administrator");
 define("_MI_EGUIDE_MAX_LISTITEM","Display additional items in list");
 define("_MI_EGUIDE_MAX_LISTITEM_DESC","Display items entry order additional form");
+define("_MI_EGUIDE_MAX_LISTLINES","Display list items in a page");
+define("_MI_EGUIDE_MAX_LISTLINES_DESC","How many item lines in a page");
 define("_MI_EGUIDE_MAX_EVENT","Display events in top page");
 define("_MI_EGUIDE_MAX_EVENT_DESC","Number of listed events in top page");
 define("_MI_EGUIDE_SHOW_EXTENTS","Show Multiple Entry");
@@ -59,4 +61,5 @@ define("_MI_EGUIDE_ADMIN_TPL", "Event Entry Form");
 define("_MI_EGUIDE_RECEIPT_PRINT_TPL", "Reservations List for Print");
 define("_MI_EGUIDE_EVENT_ITEM_TPL", "Item of Event Showup");
 define("_MI_EGUIDE_EVENT_CONF_TPL", "Event Confirmation Form");
+define("_MI_EGUIDE_EVENT_LIST_TPL", "Reserved Event List");
 ?>

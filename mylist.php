@@ -1,30 +1,34 @@
 <?php
 // Event Guide - Personal reservation event list
-// $Id: mylist.php,v 1.1 2005/12/27 08:29:43 nobu Exp $
+// $Id: mylist.php,v 1.2 2006/02/27 17:32:43 nobu Exp $
 
 include 'header.php';
+include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
 
 if (!is_object($xoopsUser)) {
     redirect_header(XOOPS_URL.'/user.php', 1, _NOPERM);
 }
 $uid = $xoopsUser->getVar('uid');
 
-
 include XOOPS_ROOT_PATH.'/header.php';
-echo "<h2>"._MD_MYLIST."</h2>\n";
-$res = $xoopsDB->query('SELECT r.eid,r.exid, r.rdate, e.title, IF(exdate,exdate,edate) edate FROM '.RVTBL.' r,'.EGTBL.' e LEFT JOIN '.EXTBL." x ON r.eid=eidref AND r.exid=x.exid WHERE r.uid=$uid AND r.eid=e.eid ORDER BY rvid");
-echo $xoopsDB->error();
-echo "<table class='outer'>\n";
-echo "<tr><th>"._MD_ORDER_DATE."</th><th>"._MD_TITLE."</th></tr>\n";
-$n = 0;
+$xoopsOption['template_main'] = 'eguide_mylist.html';
+
+$res = $xoopsDB->query('SELECT count(rvid) FROM '.RVTBL.' WHERE uid='.$uid);
+list($rvcount) = $xoopsDB->fetchRow($res);
+$rvmax = $xoopsModuleConfig['max_list'];
+$rvstart = isset($_GET['start'])?intval($_GET['start']):0;
+$nav = new XoopsPageNav($rvcount, $rvmax, $rvstart, "start");
+if ($rvcount>$rvmax) $xoopsTpl->assign('navigation',$nav->renderNav());
+
+$res = $xoopsDB->query('SELECT r.eid,r.exid, r.rdate, e.title, IF(exdate,exdate,edate) edate, rvid, confirm, closetime FROM '.RVTBL.' r,'.EGTBL.' e LEFT JOIN '.EXTBL.' x ON r.eid=eidref AND r.exid=x.exid LEFT JOIN '.OPTBL." o ON r.eid=o.eid WHERE r.uid=$uid AND r.eid=e.eid ORDER BY edate DESC", $rvmax, $rvstart);
+
+$now = time();
 while ($data = $xoopsDB->fetchArray($res)) {
-    $bg = ($n++%2)?'even':'odd';
-    $url = 'event.php?eid='.$data['eid'];
     if ($data['exid']) $url .= '&sub='.$data['exid'];
-    $title = "<a href='$url'>".eventdate($data['edate']).": ".$data['title']."</a>";
-    echo "<tr class='$bg'><td>".formatTimestamp($data['rdate'], _MD_TIME_FMT).
-	"</td><td>$title</td></tr>\n";
+    $data['edate_fmt'] = eventdate($data['edate']);
+    $data['cancel']=($data['edate']-$data['closetime'])>$now;
+    $data['rdate_fmt']=formatTimestamp($data['rdate'], _MD_TIME_FMT);
+    $xoopsTpl->append('reserved', $data);
 }
-echo "</table>";
 include XOOPS_ROOT_PATH.'/footer.php';
 ?>

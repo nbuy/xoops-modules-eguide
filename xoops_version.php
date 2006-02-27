@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.26 2005/12/27 08:43:48 nobu Exp $
+// $Id: xoops_version.php,v 1.27 2006/02/27 17:32:43 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "1.95";
+$modversion['version'] = "1.96";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -47,6 +47,8 @@ $modversion['templates'][7]=array('file' => 'eguide_item.html',
 				  'description' => _MI_EGUIDE_EVENT_ITEM_TPL);
 $modversion['templates'][8]=array('file' => 'eguide_confirm.html',
 				  'description' => _MI_EGUIDE_EVENT_CONF_TPL);
+$modversion['templates'][9]=array('file' => 'eguide_mylist.html',
+				  'description' => _MI_EGUIDE_EVENT_LIST_TPL);
 // Blocks
 $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'name' => _MI_EGUIDE_HEADLINE,
@@ -127,6 +129,12 @@ $modversion['config'][]=array('name' => 'max_item',
 			      'formtype' => 'text',
 			      'valuetype' => 'int',
 			      'default' => 3);
+$modversion['config'][]=array('name' => 'max_list',
+			      'title' => '_MI_EGUIDE_MAX_LISTLINES',
+			      'description' => '_MI_EGUIDE_MAX_LISTLINES_DESC',
+			      'formtype' => 'text',
+			      'valuetype' => 'int',
+			      'default' => 50);
 $modversion['config'][]=array('name' => 'max_event',
 			      'title' => '_MI_EGUIDE_MAX_EVENT',
 			      'description' => '_MI_EGUIDE_MAX_LISTITEM_DESC',

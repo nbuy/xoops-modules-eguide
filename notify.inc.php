@@ -17,7 +17,14 @@ function event_notify($op, $data) {
 	    $note = ($data['status'] == STAT_POST)?_MD_APPROVE_REQ:"";
 	    $xoopsMailer->assign("EVENT_NOTE", "");
 	    $xoopsMailer->setBody(_MD_NOTIFY_NEW);
-	    $xoopsMailer->setToGroups($xoopsModuleConfig['notify_group']);
+	    $member_handler =& xoops_gethandler('member');
+	    $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
+	    $uid = $xoopsUser->getVar('uid');
+	    foreach ($users as $user) {
+		if ($user->getVar('uid') != $uid) {
+		    $xoopsMailer->setToUsers($user);
+		}
+	    }
 	    $xoopsMailer->setFromEmail($to);
 	    $xoopsMailer->setFromName(_MD_FROM_NAME);
 	    $xoopsMailer->send();
