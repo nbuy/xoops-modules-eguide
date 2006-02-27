@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.14 2006/01/31 12:32:52 nobu Exp $
+// $Id: reserv.php,v 1.15 2006/02/27 17:30:44 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -48,15 +48,16 @@ if (isset($op)) {
 	    if ($xoopsModuleConfig['use_plugins']) {
 		include_once 'plugins.php';
 		foreach ($hooked_function['cancel'] as $func) {
-		    if (!$func($eid, $exid, $reserv['uid'])) {
+		    if (!$func($eid, $exid, $reserv['ruid'], $reserv['uid'])) {
 			echo "Cancel failed";
 		    }
 		}
 	    }
+	    $evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
 	    if (empty($_POST['back'])) {
-		$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
+		$back = $evurl;
 	    } else {
-		$evurl = $myts->makeTboxData4Edit(trim($_POST['back']));
+		$back = $myts->makeTboxData4Edit(trim($_POST['back']));
 	    }
 	    if ($reserv['notify']) {
 		$poster = new XoopsUser($reserv['uid']);
@@ -82,9 +83,9 @@ if (isset($op)) {
 		$xoopsMailer->setToGroups($notify_group);
 		$xoopsMailer->send();
 	    }
-	    redirect_header($evurl,3,_MD_RESERV_CANCELED);
+	    redirect_header($back,3,_MD_RESERV_CANCELED);
 	} else {
-	    redirect_header($evurl,5,_MD_CANCEL_FAIL);
+	    redirect_header($back,5,_MD_CANCEL_FAIL);
 	}
 	exit;
     case 'notify':
@@ -122,7 +123,7 @@ case 'order':
     echo "<div class='evform'>\n";
     echo "<h3>"._MD_RESERVATION."</h3>\n";
     $exid = param('sub');
-    $result = $xoopsDB->query('SELECT uid,o.*,IF(exdate,exdate,edate) edate,title FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
+    $result = $xoopsDB->query('SELECT uid,o.*,IF(exdate,exdate,edate) edate,title,summary FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
     $err = 0;
     $field = 0;
     $value = "";
@@ -254,11 +255,16 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$xoopsMailer->setTemplateDir(XOOPS_ROOT_PATH."/modules/eguide/language/".$xoopsConfig['language']."/");
 	$xoopsMailer->setTemplate($accept?"accept.tpl":"order.tpl");
 	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":''));
+	if ($uid != 'NULL') {
+	    $xoopsMailer->assign("REQ_UNAME", $xoopsUser->getVar('uname'));
+	    $xoopsMailer->assign("REQ_NAME", $xoopsUser->getVar('name'));
+	}
 	$xoopsMailer->assign("RVID", $rvid);
 	$xoopsMailer->assign("CANCEL_KEY", $conf);
 	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
 	$xoopsMailer->assign("INFO", _MD_EMAIL.": ".$email."\n".$value);
 	$xoopsMailer->assign("TITLE", $title);
+	$xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
 	$xoopsMailer->setToEmails($email);
 	if ($data['notify']) {
 	    if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
@@ -295,6 +301,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    count_reserved($eid, $exid, $strict, $persons, -1);
 	}
     }
+    echo '<p><a href="'.$_SERVER['HTTP_REFERER'].'">'._MD_BACK.'</a></p>';
     echo "</div>\n";
     break;
 
