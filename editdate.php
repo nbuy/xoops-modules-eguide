@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.3 2005/11/24 08:15:48 nobu Exp $
+// $Id: editdate.php,v 1.4 2006/03/30 05:47:46 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -31,9 +31,13 @@ if (isset($_POST['adds'])) {
     foreach ($extents as $data) {
 	$id = $data['exid'];
 	if (isset($dels[$id])) {
-	    $xoopsDB->query('DELETE FROM '.RVTBL." WHERE eid=$eid AND exid=$id");
-	    $xoopsDB->query('DELETE FROM '.EXTBL." WHERE exid=$id");
-	    $chg++;
+	    if ($data['exdate']>$now && $data['reserved']) {
+		echo "<div class='error'>".formatTimestamp($data['exdate'], 'Y-m-d H:i').' - '._MD_DATEDELETE_ERR."</div>\n";
+	    } else {
+		$xoopsDB->query('DELETE FROM '.RVTBL." WHERE eid=$eid AND exid=$id");
+		$xoopsDB->query('DELETE FROM '.EXTBL." WHERE exid=$id");
+		$chg++;
+	    }
 	} elseif (isset($mods[$id])) {
 	    $exdate = $data['exdate'];
 	    $pre = formatTimestamp($exdate, 'Y-m-d H:i');
@@ -114,8 +118,8 @@ if ($n) {
 	$resv = $data['reserved'];
 	$bg = ($n++%2)?'even':'odd';
 	$input = ($tm>$now)?"<input name='mods[$id]' value='$edit' size='16'/>":"";
-	echo "<tr class='$bg'><td align='center'>".
-	    "<input type='checkbox' name='dels[$id]' value='$id' /></td>".
+	$check = ($resv&&$tm>$now)?"-":"<input type='checkbox' name='dels[$id]' value='$id'/>";
+	echo "<tr class='$bg'><td align='center'>$check</td>".
 	    "<td><a href='event.php?eid=$eid&amp;sub=$id'>$date</a></td><td>$resv</td>".
 	    "<td>$input<td>".
 	    "</tr>\n";
