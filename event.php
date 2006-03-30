@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.13 2005/12/27 05:13:53 nobu Exp $
+// $Id: event.php,v 1.14 2006/03/30 02:50:02 nobu Exp $
 
 include 'header.php';
 
@@ -28,7 +28,9 @@ $fields = "e.eid, cdate, persons,title, summary, body, strict, optfield,
 IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
 closetime, reservation, uid, status, style, counter, catid, catname, catimg, 
 exid, exdate";
-$result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL." x ON e.eid=eidref AND exid=$exid WHERE e.eid=$eid $stc");
+$result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
+' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.
+" x ON e.eid=eidref WHERE e.eid=$eid $stc".($exid?' AND exid='.$exid:''));
 
 if (!$result || !$xoopsDB->getRowsNum($result)) {
 	redirect_header("index.php",2,_MD_NOEVENT);
