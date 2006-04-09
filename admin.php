@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.14 2006/02/27 17:32:43 nobu Exp $
+// $Id: admin.php,v 1.15 2006/04/09 17:31:33 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -22,8 +22,8 @@ $uid = $xoopsUser->getVar('uid');
 
 // set form data
 $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
-	       'persons', 'style', 'before'); // integer value default '0'
-$targs = array('title', 'summary', 'body', 'optfield');
+	       'persons', 'style'); // integer value default '0'
+$targs = array('title', 'summary', 'body', 'optfield', 'before');
 
 $myts =& MyTextSanitizer::getInstance();
 $xoopsOption['template_main'] = 'eguide_admin.html';
@@ -36,7 +36,8 @@ if ($op=='new') {
 		  'autoaccept'	=> 1, // order to: 0=confirm, 1=accepted
 		  'notify'	=> 1, // notify to poster: 0=nothing, 1=send
 		  'strict'	=> 1, // order when full: 0=continue, 1=stop
-		  'persons'	=> 10, // how many persons/sheet in room
+		  'persons'	=> $xoopsModuleConfig['default_persons'], 
+		  // how many persons/sheet in room
 		  'optfield'	=>
 		  $xoopsModuleConfig['member_only']?
 				  _MD_RESERV_DEFAULT_MEMBER:_MD_RESERV_DEFAULT_ITEM,
@@ -45,13 +46,13 @@ if ($op=='new') {
 		  'body'	=> '',
 		  'edate'	=> time()+3600*24, // now + a day
 		  'event'	=> '',
-		  'before'      => $xoopsModuleConfig['close_before'],
+		  'before'      => time_to_str($xoopsModuleConfig['close_before']*60),
 		  'topicid'	=> 1);
 } else {
     if ($eid) {
 	$result = $xoopsDB->query('SELECT * FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL." ON topicid=catid WHERE e.eid=$eid");
 	$data = $xoopsDB->fetchArray($result);
-	$data['before']=$data['closetime']/60;
+	$data['before']=time_to_str($data['closetime']);
 	$edate = $data['edate'];
     } else {
 	$data = array();
@@ -70,11 +71,11 @@ if ($op=='new') {
 	foreach ($iargs as $name) {
 	    $data[$name] = param($name);
 	}
-	$data['ldate'] = 0;
-	$data['closetime'] = $data['before']*60; // min to sec
 	foreach ($targs as $name) {
 	    $data[$name] = param($name, "");
 	}
+	$data['ldate'] = 0;
+	$data['closetime'] = time_to_sec($data['before']);
 	if ($adm) $data['status'] = param('status');
     }
 }
@@ -249,7 +250,7 @@ if ($eid && $op=='delete') {
 
     if ($op == 'preview') {
 	$views = array('edate', 'cdate', 'ldate', 'title', 'summary', 'body',
-		       'persons', 'reserved',
+		       'persons', 'reserved', 'closetime',
 		       'style', 'uid', 'counter', 'catid', 'catimg', 'catname');
 	$event = array();
 	if (empty($data['cdate'])) {
@@ -280,12 +281,15 @@ if ($eid && $op=='delete') {
     }
     $summary = isset($data['summary'])?$data['summary']:'';
     $textarea = new myFormDhtmlTextArea('', 'summary', $summary, 10, 60);
+    $nlab = $xoopsModuleConfig['label_persons'];
+    if ($nlab) $nlab = sprintf(_MD_RESERV_LABEL_DESC, $nlab);
     $xoopsTpl->assign(array('input_edate'=>datefield('edate',$data['edate']),
 			    'input_expire'=>$input_expire,
 			    'input_category'=>$input_category,
 			    'input_extent'=>$input_extent,
 			    'input_status'=>$input_status,
 			    'extent_sets'=>$extent_sets,
+			    'label_desc'=>$nlab,
 			    'summary_textarea'=>$textarea->render(),
 			    'input_style'=>select_list('style', $edit_style, $data['style']),
 			    ));
@@ -320,7 +324,7 @@ function datefield($prefix, $time) {
 }
 
 function select_value($fmt, $name, $from, $to, $def=0, $step=1) {
-    $buf = "<select name='$name'>\n";
+    $buf = "<select name='$name' id='$name'>\n";
     for ($i = $from; $i<=$to; $i+=$step) {
 	$buf .= "<option value='$i'".($i==$def?" selected":"").">".sprintf($fmt, $i)."</option>\n";
     }
@@ -335,5 +339,26 @@ function select_list($name, $options, $def=1) {
     }
     $buf .= "</select></p>\n";
     return $buf;
+}
+
+function time_to_str($sec) {
+    $unit = split(',',_MD_TIME_UNIT);
+    if (($sec >= 86400) && ($sec % 86400) == 0) { // days
+	return ($sec / 86400).$unit[0];
+    } elseif (($sec >= 3600) && ($sec % 3600 == 0)) { // hours
+	return ($sec / 3600).$unit[1];
+    }
+    return intval($sec / 60).$unit[2];
+}
+
+function time_to_sec($str) {
+    $unit = split(',',_MD_TIME_REG);
+    $v = intval($str);
+    if (preg_match('/^\d+'.$unit[0].'$/i', $str)) {
+	return $v * 86400;
+    } elseif (preg_match('/^\d+'.$unit[1].'?$/i', $str)) {
+	return $v * 3600;
+    }
+    return $v * 60;
 }
 ?>

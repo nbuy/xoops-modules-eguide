@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.14 2006/03/30 02:50:02 nobu Exp $
+// $Id: event.php,v 1.15 2006/04/09 17:31:33 nobu Exp $
 
 include 'header.php';
 
@@ -37,6 +37,7 @@ if (!$result || !$xoopsDB->getRowsNum($result)) {
 	exit();
 }
 $data = $xoopsDB->fetchArray($result);
+$_GET['cat']=$data['catid'];	// for notification
 $now=time();
 
 $data['exid']=$exid;

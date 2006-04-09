@@ -3,7 +3,7 @@
 <{/if}>
 <div class="event">
 <h2><{$lang_event_edit}></h2>
-<form action="admin.php?eid=<{$eid}>" method="post" class="evbody">
+<form action="admin.php<{if $eid}>?eid=<{$eid}><{/if}>" method="post" class="evbody" name="evform" id="evform">
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td>
 <h3><{$smarty.const._MD_TITLE}></h3>
@@ -16,7 +16,7 @@
 <{$input_edate}>
 <h3><{$smarty.const._MD_EVENT_EXPIRE}></h3>
 <{$input_expire}>
-<div><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" size="4" value="<{$before}>"/></div>
+<div><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>"/> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></div>
 <{if $input_extent}>
 <p>
   <b><{$smarty.const._MD_EVENT_EXTENT}></b> <{$input_extent}>
@@ -47,7 +47,7 @@
 <div><b><{$smarty.const._MD_RESERV_PERSONS}></b> <input type="text" name="persons" value="<{$persons}>" size="3" /> <{$smarty.const._MD_RESERV_UNIT}></div>
 <h3><{$smarty.const._MD_RESERV_ITEM}></h3>
 <textarea name="optfield" wrap="virtual" cols="60" rows="5"><{$optfield}></textarea>
-<div class="evinfo"><{$smarty.const._MD_RESERV_ITEM_DESC}></div>
+<div class="evinfo"><{$smarty.const._MD_RESERV_ITEM_DESC}> <{$label_desc}></div>
 <{if $input_status}>
 <p><{$input_status}></p>
 <{/if}>

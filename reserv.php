@@ -1,79 +1,135 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.15 2006/02/27 17:30:44 nobu Exp $
+// $Id: reserv.php,v 1.16 2006/04/09 17:31:33 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
 $rvid = param('rvid');
 $key = param('key');
 $now=time();
+$nlab = $xoopsModuleConfig['label_persons'];
 $myts =& MyTextSanitizer::getInstance();
 
 $member_handler =& xoops_gethandler('member');
 $notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
 
-if (isset($op)) {
-    switch ($op) {
-    case 'delete':
-	$conf = 'AND confirm='.intval($_POST['key']);
-	if (is_object($xoopsUser)) { // administrator no need confirm
-	    if ($xoopsUser->isAdmin($xoopsModule->getVar('mid'))) $conf = "";
-	    else {
-		$groups = $xoopsUser->groups();
-		if (in_array($xoopsModuleConfig['group'],$groups)) $conf = "";
-	    }
-	}
-	$result = $xoopsDB->query('SELECT email,r.eid,r.exid,r.status,e.uid,r.uid ruid, cdate, counter, style, persons, IF(exdate,exdate,edate) edate, notify, title, closetime,IF(x.reserved IS NULL,o.reserved,x.reserved) reserved FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.OPTBL.' o ON r.eid=o.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid $conf");
-	if ($result && $xoopsDB->getRowsNum($result)) {
-	    
-	    $reserv = $xoopsDB->fetchArray($result);
-	    if ($reserv['edate']-$reserv['closetime']>$now) {
-		edit_eventdata($reserv);
-		$eid = $reserv['eid'];
-		$exid = $reserv['exid'];
-		$result = $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid $conf");
-	    } else {
-		$result = false;
-	    }
-	} else {
-	    redirect_header('index.php', 3, _MD_RESERV_NOTFOUND);
+if ($xoopsModuleConfig['member_only'] && !is_object($xoopsUser)) {
+    redirect_header(XOOPS_URL."/user.php",2,_NOPERM);
+    exit;
+}
+
+$isadmin = $xoopsUser->isAdmin($xoopsModule->getVar('mid'));
+
+function reserv_permit($ruid, $euid, $confirm) {
+    global $xoopsUser, $xoopsModule, $xoopsModuleConfig, $isadmin;
+    if (!is_object($xoopsUser)) {
+	if ($xoopsModuleConfig['member_only']) return false;
+	return $confirm==param('key');
+    }
+    // administrator has permit
+    if ($isadmin) return true;
+    if ($xoopsModuleConfig['member_only']) {
+	$uid = $xoopsUser->getVar('uid');
+	// reservation person
+	if ($uid==$ruid && $confirm==param('key')) return true;
+	// event poster
+	if ($uid==$euid) return true;
+    }
+    return false;
+}
+
+function template_dir() {
+    global $xoopsModule, $xoopsConfig;
+    $dir = dirname(__FILE__).'/language/';
+    if (file_exists($dir.$xoopsConfig['language'])) {
+	$dir .= $xoopsConfig['language'];
+    } else {
+	$dir .= 'english';
+    }
+    return $dir.'/mail_template/';
+}
+
+switch ($op) {
+case 'delete':
+    $result = $xoopsDB->query('SELECT email,r.eid,r.exid,r.status,e.uid,r.uid ruid, info, confirm, optfield, cdate, counter, style, persons, IF(exdate,exdate,edate) edate, notify, title, closetime,IF(x.reserved IS NULL,o.reserved,x.reserved) reserved FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.OPTBL.' o ON r.eid=o.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid");
+    if (!$result || $xoopsDB->getRowsNum($result)==0) {
+	$result = false;
+    } else {		// there is reservation
+	$data = $xoopsDB->fetchArray($result);
+	$evurl = XOOPS_URL.'/modules/eguide/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
+
+	if (!reserv_permit($data['ruid'], $data['uid'], $data['confirm'])) {
+	    redirect_header($evurl, 3, _MD_RESERV_NOTFOUND);
 	    exit;
 	}
-	if ($result) {
-	    if ($exid && $reserv['status']) {
-		$xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved-1 WHERE exid=$exid");
+    }
+    if ($result) {
+	$vals = explodeinfo($data['info'], $data['optfield']);
+	$num = 1;
+	if (isset($vals[$nlab])) {
+	    $num = intval($vals[$nlab]);
+	    if ($num<1) $num = 1;
+	}
+	if ($isadmin || $data['edate']-$data['closetime']>$now) {
+	    edit_eventdata($data);
+	    $eid = $data['eid'];
+	    $exid = $data['exid'];
+	    $result = $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid $conf");
+	} else {
+	    $result = false;
+	}
+    } else {
+	redirect_header('index.php', 3, _MD_RESERV_NOTFOUND);
+	exit;
+    }
+    if ($result) {
+	$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
+	if ($data['status']!=_RVSTAT_REFUSED) {
+	    if ($exid) {
+		$xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved-$num WHERE exid=$exid");
 	    } else {
-		$xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved-1 WHERE eid=$eid");
+		$xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved-$num WHERE eid=$eid");
 	    }
 	    if ($xoopsModuleConfig['use_plugins']) {
 		include_once 'plugins.php';
 		foreach ($hooked_function['cancel'] as $func) {
-		    if (!$func($eid, $exid, $reserv['ruid'], $reserv['uid'])) {
+		    if (!$func($eid, $exid, $data['ruid'], $data['uid'])) {
 			echo "Cancel failed";
 		    }
 		}
 	    }
-	    $evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
-	    if (empty($_POST['back'])) {
-		$back = $evurl;
-	    } else {
-		$back = $myts->makeTboxData4Edit(trim($_POST['back']));
-	    }
-	    if ($reserv['notify']) {
-		$poster = new XoopsUser($reserv['uid']);
-		$title = eventdate($reserv['edate'])." ".$reserv['title'];
+	    if ($data['notify']) {
+		$poster = new XoopsUser($data['uid']);
+		$title = eventdate($data['edate'])." ".$data['title'];
+		$email = $data['email'];
 
-		$email = $reserv['email'];
-		if (empty($email)) {
-		    $user = new XoopsUser($reserv['ruid']);
-		    $email = $user->getVar('email');
-		}
-		$body = sprintf(_MD_RESERV_NOTIFY, _MD_RESERV_CANCELED,
-				$email, $title,	$evurl);
 		$xoopsMailer =& getMailer();
 		$xoopsMailer->useMail();
-		$xoopsMailer->setSubject(_MD_RESERV_CANCELED);
-		$xoopsMailer->setBody($body);
+
+		if ($xoopsModuleConfig['member_only']) {
+		    $user = new XoopsUser($data['ruid']);
+		    $email = $user->getVar('email');
+		    $uinfo = sprintf("%s: %s (%s)\n%s: %s\n", _MD_UNAME,
+				     $user->getVar('uname'),
+				     $user->getVar('name'),
+				     _MD_EMAIL, $email);
+		} else {
+		    $uinfo = sprintf("%s: %s\n", _MD_EMAIL, $data['email']);
+		}
+		if (is_object($xoopsUser)) {
+		    $xoopsMailer->assign("REQ_UNAME", $xoopsUser->getVar('uname'));
+		    $xoopsMailer->assign("REQ_NAME", $xoopsUser->getVar('name'));
+		} else {
+		    $xoopsMailer->assign("REQ_UNAME", '*anonymous*');
+		    $xoopsMailer->assign("REQ_NAME", $xoopsConfig['anonymous']);
+		}
+		$xoopsMailer->assign("TITLE", eventdate($data['edate'])." ".$data['title']);
+		$xoopsMailer->assign("EVENT_URL", $evurl);
+		$xoopsMailer->assign("INFO", $uinfo.$data['info']);
+		$xoopsMailer->assign("RVID", $rvid);
+		$xoopsMailer->setSubject(_MD_CANCEL.' - '.$title);
+		$xoopsMailer->setTemplateDir(template_dir());
+		$xoopsMailer->setTemplate('cancel.tpl');
 		$xoopsMailer->setToEmails($email);
 		$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
 		$xoopsMailer->setFromName(_MD_FROM_NAME);
@@ -83,157 +139,119 @@ if (isset($op)) {
 		$xoopsMailer->setToGroups($notify_group);
 		$xoopsMailer->send();
 	    }
-	    redirect_header($back,3,_MD_RESERV_CANCELED);
+	}
+	if (empty($_POST['back'])) {
+	    $back = $evurl;
 	} else {
-	    redirect_header($back,5,_MD_CANCEL_FAIL);
+	    $back = $myts->makeTboxData4Edit(trim($_POST['back']));
 	}
-	exit;
-    case 'notify':
-	$email = param('email', '');
-	if (preg_match('/^[\w\-_\.]+@[\w\-_\.]+$/', $email)) {
-	    $ml = $xoopsDB->quoteString(strtolower($email));
-	    $reg = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE email=$ml AND eid=0");
-	    if ($xoopsDB->getRowsNum($reg)==0) {
-		$conf = rand(10000,99999);
-		$uid = $xoopsUser?$xoopsUser->getVar('uid'):"NULL";
-		$xoopsDB->query('INSERT INTO '.RVTBL.
-"(eid,uid,rdate,email,status,confirm) VALUES (0,$uid,$now,$ml,1,'$conf')");
-		$msg = _MD_REGISTERED;
-	    } else {
-		$msg = _MD_DUP_REGISTER;
-	    }
+	redirect_header($back,3,_MD_RESERV_CANCELED);
+    } else {
+	redirect_header($back,5,_MD_CANCEL_FAIL);
+    }
+    exit;
+
+case 'notify':
+    $email = param('email', '');
+    if (preg_match('/^[\w\-_\.]+@[\w\-_\.]+$/', $email)) {
+	$ml = $xoopsDB->quoteString(strtolower($email));
+	$reg = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE email=$ml AND eid=0");
+	if ($xoopsDB->getRowsNum($reg)==0) {
+	    $conf = rand(10000,99999);
+	    $uid = $xoopsUser?$xoopsUser->getVar('uid'):"NULL";
+	    $xoopsDB->query('INSERT INTO '.RVTBL.
+			    "(eid,uid,rdate,email,status,confirm) VALUES (0,$uid,$now,$ml,1,'$conf')");
+	    $msg = _MD_REGISTERED;
 	} else {
-	    $msg = _MD_MAIL_ERR;
+	    $msg = _MD_DUP_REGISTER;
 	}
-	redirect_header("index.php",5,$msg);
+    } else {
+	$msg = _MD_MAIL_ERR;
+    }
+    redirect_header("index.php",5,$msg);
+    exit;
+case 'register':
+    if (empty($xoopsModuleConfig['user_notify'])) {
+	redirect_header($_SERVER['HTTP_REFERER'],2,_NOPERM);
 	exit;
-    case 'register':
-	if (empty($xoopsModuleConfig['user_notify'])) {
-	    redirect_header($_SERVER['HTTP_REFERER'],2,_NOPERM);
-	    exit;
-	}
     }
 }
 
 include(XOOPS_ROOT_PATH."/header.php");
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 $eid = param('eid');
+$exid = param('sub');
+$errs = array();
+
 switch($op) {
 case 'order':
-    echo "<div class='evform'>\n";
-    echo "<h3>"._MD_RESERVATION."</h3>\n";
-    $exid = param('sub');
     $result = $xoopsDB->query('SELECT uid,o.*,IF(exdate,exdate,edate) edate,title,summary FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
-    $err = 0;
-    $field = 0;
-    $value = "";
     $data = $xoopsDB->fetchArray($result);
     if (!empty($data) && $exid==0) {
 	$result = $xoopsDB->query('SELECT exid FROM '.EXTBL." WHERE eidref=$eid");
-	if ($xoopsDB->getRowsNum($result)>0) {
-	    echo "<div class='error'>"._MD_RESERV_STOP."</div>\n";
-	    $err++;
-	}
+	if ($xoopsDB->getRowsNum($result)>0) $errs[] = _MD_RESERV_STOP;
     }
     if (empty($data['reservation']) ||
 	($data['edate']-$data['closetime'])<$now) {
-	if (!$err) echo "<div class='error'>"._MD_RESERV_STOP."</div>\n";
-	$err++;
+	if (empty($errs)) $errs[] = _MD_RESERV_STOP;
     }
-    foreach (explode("\n", $data['optfield']) as $n) {
-	$field++;
-	if (preg_match('/^\s*#/', $n)) continue;
-	if (preg_match('/^\s*$/', $n)) continue;
-	$a = explode(",", preg_replace('/[\n\r]/',"", $n));
-	$name = preg_replace('/^!\s*/', '', array_shift($a));
-	$type = "text";
-	if (isset($a[0])) {
-	    switch (strtolower(array_shift($a))) {
-	    case "checkbox":
-		$type = 'checkbox';
-		break;
-	    case 'textarea':
-		$type = 'textarea';
-		break;
-	    }
-	}
-	if ($type == 'checkbox') {
-	    $v = "";
-	    for ($i=1; $i<=count($a); $i++) {
-		$n = "opt${field}_$i";
-		if (isset($_POST[$n])) {
-		    $v .= (($v=="")?"":",").$_POST[$n];
-		}
-	    }
+    $vals = get_opt_values($data['optfield'], $errs);
+    $value = "";
+    foreach ($vals as $name => $val) {
+	if (preg_match('/\n/', $val)) {
+	    $value .= "$name: \\\n$val\n";
 	} else {
-	    $v = $_POST["opt$field"];
-	    if ($type=='textarea') $v = "\\\n$v";
+	    $value .= "$name: $val\n";
 	}
-	if (preg_match('/\*$/', $name)) {
-	    // check for NULL
-	    if (preg_match('/^\s*$/', $v)) {
-		echo "<div class='error'>$name: $v - "._MD_NOITEM_ERR."</div>\n";
-		$err++;
-	    }
-	} elseif (preg_match('/\#$/', $name)) {
-	    // check Number
-	    if (!preg_match('/^\d+$/', $v)) {
-		echo "<div class='error'>$name: $v - "._MD_NUMITEM_ERR."</div>\n";
-		$err++;
-	    }
-	}
-	$name = preg_replace('/[\*#]$/', "", $name);
-	$value .= sprintf("%s: %s\n", $name, $v);
     }
     // duplicate check
     if (!$xoopsModuleConfig['member_only']) {
 	$email = param('email', '');
 	if (!preg_match('/^[\w\-_\.]+@[\w\-_\.]+$/', $email)) {
-	    echo "<div class='error'>"._MD_EMAIL.": $email - "._MD_MAIL_ERR."</div>\n";
-	    $err++;
+	    $errs[] =  _MD_EMAIL.": $email - "._MD_MAIL_ERR;
 	}
 	$ml = strtolower($email);
-	$result = $xoopsDB->query('SELECT rvid FROM'.RVTBL." WHERE eid=$eid AND exid=$exid AND email=".$xoopsDB->quoteString($ml));
-	if ($xoopsDB->getRowsNum($result)) {
-	    echo "<div class='error'>$email - "._MD_DUP_ERR."</div>";
-	    $err++;
-	}
+	$result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND email=".$xoopsDB->quoteString($ml));
     } else {
 	if (!is_object($xoopsUser)) redirect_header($_SERVER['HTTP_REFERER'],2);
-	$email = $xoopsUser->getVar('email');
+	$result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND uid=".$xoopsUser->getVar('uid'));
+	$email = $xoopsUser->getVar('uname');
 	$ml = '';
     }
+    if ($xoopsDB->getRowsNum($result)) {
+	$errs[] = "$email - "._MD_DUP_ERR;
+    }
 
-    if (!$err) {
+    if (empty($errs)) {
 	$accept = $data['autoaccept'];
 	$strict = $data['strict'];
 	$persons = $data['persons'];
-	if ($accept && !count_reserved($eid, $exid, $strict, $persons)) {
-	    echo "<div class='error'>"._MD_RESERV_FULL."</div>";
-	    $err++;
+	$num = 1;
+	if ($nlab && isset($vals[$nlab])) {
+	    $num =  intval($vals[$nlab]);
+	    if ($num<1) $num = 1;
+	}
+	if (!count_reserved($eid, $exid, $strict, $persons, $num)) {
+	    $a = '/^https?:'.preg_quote(preg_replace('/^https?:/','', XOOPS_URL), '/').'/';
+	    // note: 
+	    $errs[] = preg_match($a,$_SERVER['HTTP_REFERER'])?_MD_RESERV_FULL:_ERRORS;
 	}
 
 	// plugin reserved
-	if (!$err && $xoopsModuleConfig['use_plugins']) {
+	if (empty($errs) && $xoopsModuleConfig['use_plugins']) {
 	    include_once 'plugins.php';
 	    foreach ($hooked_function['reserve'] as $func) {
 		if (!$func($eid, $exid, $data['edate'], $data['uid'])) {
-		    $message = $xoopsTpl->get_template_vars('message');
-		    if (empty($message)) $message = _MD_RESERV_PLUGIN_FAIL;
-		    echo "<div class='error'>".$message."</div>";
-		    if ($accept) { // rollback
-			count_reserved($eid, $exid, $strict, $persons, -1);
-		    }
-		    $err++;
+		    $msg = $xoopsTpl->get_template_vars('message');
+		    $errs[] = empty($msg)?_MD_RESERV_PLUGIN_FAIL:$msg;
+		    count_reserved($eid, $exid, $strict, $persons, -$num);
 		    break;
 		}
 	    }
 	}
     }
 
-    if ($err) {
-	echo "<p><input type='button' value='"._MD_BACK."' onclick='javascript:history.go(-1);' /></p>";
-    } else {
+    if (empty($errs)) {
 	srand();
 	$conf = rand(10000,99999);
 	$uid = 'NULL';
@@ -248,21 +266,26 @@ case 'order':
 VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$conf')");
 	$rvid = $xoopsDB->getInsertId();
 	$title = eventdate($data['edate']).": ".$data['title'];
-
+	$url = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/event.php?eid='.$eid.($exid?"&sub=$exid":'');
 	$poster = new XoopsUser($data['uid']);
 	$xoopsMailer =& getMailer();
 	$xoopsMailer->useMail();
-	$xoopsMailer->setTemplateDir(XOOPS_ROOT_PATH."/modules/eguide/language/".$xoopsConfig['language']."/");
+	$xoopsMailer->setTemplateDir(template_dir());
 	$xoopsMailer->setTemplate($accept?"accept.tpl":"order.tpl");
-	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":''));
-	if ($uid != 'NULL') {
-	    $xoopsMailer->assign("REQ_UNAME", $xoopsUser->getVar('uname'));
-	    $xoopsMailer->assign("REQ_NAME", $xoopsUser->getVar('name'));
+	$xoopsMailer->assign("EVENT_URL", $url);
+	if ($xoopsModuleConfig['member_only']) {
+	    $email = $xoopsUser->getVar('email');
+	    $uinfo = sprintf("%s: %s (%s)\n%s: %s\n", _MD_UNAME,
+			     $xoopsUser->getVar('uname'),
+			     $xoopsUser->getVar('name'),
+			     _MD_EMAIL, $email);
+	} else {
+	    $uinfo = sprintf("%s: %s\n", _MD_EMAIL, $email);
 	}
 	$xoopsMailer->assign("RVID", $rvid);
 	$xoopsMailer->assign("CANCEL_KEY", $conf);
 	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
-	$xoopsMailer->assign("INFO", _MD_EMAIL.": ".$email."\n".$value);
+	$xoopsMailer->assign("INFO", $uinfo.$value);
 	$xoopsMailer->assign("TITLE", $title);
 	$xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
 	$xoopsMailer->setToEmails($email);
@@ -272,10 +295,12 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    }
 	    $xoopsMailer->setToGroups($notify_group);
 	}
-	$xoopsMailer->setSubject(_MD_SUBJECT." - ".$title);
+	$xoopsMailer->setSubject(_MD_SUBJECT.' - '.$title);
 	$xoopsMailer->setFromEmail($poster->getVar('email'));
 	$xoopsMailer->setFromName(_MD_FROM_NAME);
 	if ($xoopsMailer->send()) {
+	    echo "<div class='evform'>\n";
+	    echo "<h3>"._MD_RESERVATION."</h3>\n";
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
 	    if ($value) {
 		echo "<h3>"._MD_RESERV_CONF."</h3>";
@@ -298,18 +323,80 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    echo "<div class='error'>"._MD_SEND_ERR."</div>\n";
 	    // delete failer record.
 	    $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid");
-	    count_reserved($eid, $exid, $strict, $persons, -1);
+	    count_reserved($eid, $exid, $strict, $persons, -$num);
+	}
+	$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
+	echo "<p><a href='$evurl'>$title</a></p>";
+	echo "</div>\n";
+    }
+    if (empty($errs)) break;
+
+case 'confirm':
+    $xoopsOption['template_main'] = 'eguide_confirm.html';
+
+    $result = $xoopsDB->query('SELECT uid,o.optfield,IF(exdate,exdate,edate) edate,title,persons,if(x.reserved,x.reserved,o.reserved) reserved, strict, title, summary FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
+    $data = $xoopsDB->fetchArray($result);
+    $opts = $data['optfield'];
+    $vals = get_opt_values($opts, $errs);
+    $emhide = "";
+    $num = 1;
+    if ($nlab && isset($vals[$nlab])) {
+	$num = intval($vals[$nlab]);
+	if ($num<1) $num = 1;
+	if ($data['strict']) {
+	    if ($data['persons']<$data['reserved']) {
+		$errs[] = _MD_RESERV_FULL;
+	    } elseif ($data['persons']<($data['reserved']+$num)) {
+		$errs[] = sprintf($nlab._MD_RESERV_TOMATCH, $num,$data['persons']-$data['reserved']);
+	    }
 	}
     }
-    echo '<p><a href="'.$_SERVER['HTTP_REFERER'].'">'._MD_BACK.'</a></p>';
-    echo "</div>\n";
+    if (isset($_POST['email'])) {
+	$email = $myts->makeTboxData4Edit($_POST['email']);
+	$vals=array_merge(array(_MD_EMAIL=>$email), $vals);
+	$emhide = "<input type='hidden' name='email' value='$email'/>\n";
+	if (!empty($_POST['notify'])) {
+	    $emhide .= "<input type='hidden' name='notify' value='".
+		$myts->makeTboxData4Edit($_POST['notify'])."'/>\n";
+	}
+    }
+    $xoopsTpl->assign('lang_title', eventdate($data['edate']).": ".$data['title']);
+    $xoopsTpl->assign('event', edit_eventdata($data));
+
+    $xoopsTpl->assign('errors', $errs);
+    $xoopsTpl->assign('values', $vals);
+    $form = "";
+    if (!$errs) {
+	$n = 0;
+	$xoopsTpl->assign('submit',
+	     "<form action='reserv.php?op=order' method='post'>".
+	     "<input type='hidden' name='eid' value='$eid'/>\n".
+	     $emhide.join("\n", get_opt_values($opts, $errs, true)).
+	     "\n<input type='submit' value='"._MD_ORDER_CONF."'/>\n".
+	     ($exid?"<input type='hidden' name='exid' value='$exid'/>\n":"").
+	     "</form>");
+    }
+    $xoopsTpl->assign('cancel', "<form action='event.php?eid=$eid".
+		      ($exid?'&sub='.$exid:''). "' method='post'>".$emhide.
+		      join("\n", get_opt_values($opts, $errs, true)).
+		      "\n<input type='submit' value='"._MD_BACK."'/>\n".
+		      "</from>\n");
     break;
 
 case 'cancel':
-    $result = $xoopsDB->query('SELECT e.eid, cdate, title, summary, e.uid, e.status, style, counter, IF(exdate,exdate,edate) edate, closetime FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid LEFT JOIN ".OPTBL." o ON e.eid=o.eid WHERE rvid=$rvid");
-    if ($result && $xoopsDB->getRowsNum($result)) {
+    $result = $xoopsDB->query('SELECT e.eid, r.exid, confirm, cdate, title, summary, e.uid, e.status, style, counter, IF(exdate,exdate,edate) edate, closetime, r.uid ruid FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid LEFT JOIN ".OPTBL." o ON e.eid=o.eid WHERE rvid=$rvid");
+    if (!$result || $xoopsDB->getRowsNum($result)==0) {
+	$result = false;
+    } else {		// there is reservation
 	$data = $xoopsDB->fetchArray($result);
-	if ($data['edate']-$data['closetime']<$now) {
+	$evurl = XOOPS_URL.'/modules/eguide/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
+	if (!reserv_permit($data['ruid'], $data['uid'], $data['confirm'])) {
+	    redirect_header($evurl,5,_MD_CANCEL_FAIL);
+	    exit;
+	}
+    }
+    if ($result) {
+	if (!$isadmin && $data['edate']-$data['closetime']<$now) {
 	    echo "<div class='evform'>\n";
 	    echo "<div class='error'>"._MD_RESERV_NOCANCEL."</div>\n";
 	    echo "</div>\n";
@@ -319,7 +406,11 @@ case 'cancel':
 	    edit_eventdata($data);
 	    $xoopsOption['template_main'] = 'eguide_confirm.html';
 	    $xoopsTpl->assign('event', $data);
-	    $back = isset($_SERVER['HTTP_REFERER'])?$myts->makeTboxData4Edit($_SERVER['HTTP_REFERER']):'';
+	    if (isset($_GET['back'])) {
+		$back =  $myts->stripSlashesGPC($_GET['back']);
+	    } else {
+		$back = isset($_SERVER['HTTP_REFERER'])?$myts->makeTboxData4Edit($_SERVER['HTTP_REFERER']):'';
+	    }
 	    $form = "<h3>"._MD_RESERV_CANCEL."</h3>\n".
 		"<form action='reserv.php' method='post'>\n".
 		"<input type='hidden' name='op' value='delete' />\n".
@@ -328,7 +419,7 @@ case 'cancel':
 		"<input type='hidden' name='back' value='$back' />\n".
 		"<input type='hidden' name='rvid' value='$rvid' />\n".
 		"<input type='submit' value='"._SUBMIT."' />\n</form>\n";
-	    $xoopsTpl->assign('form', $form);
+	    $xoopsTpl->assign('submit', $form);
 	}
     } else {
 	echo "<div class='evform'>\n";
@@ -362,13 +453,77 @@ function getTitle($eid) {
 function count_reserved($eid, $exid, $strict, $persons, $value=1) {
     global $xoopsDB;
     if ($exid) {
-	$cond = "exid=$exid".($data['strict']?" AND reserved<".$data['persons']:"");
-	$res = $xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved+$value WHERE $cond");
+	$cond = "exid=$exid";
+	$tbl = EXTBL;
     } else {
-	$cond = "eid=$eid".($data['strict']?" AND reserved<persons":"");
-	$res = $xoopsDB->query('UPDATE '.OPTBL." SET reserved=reserved+$value WHERE $cond");
+	$cond = "eid=$eid";
+	$tbl = OPTBL;
     }
+    $cond .= $strict?" AND reserved<=".($persons-$value):"";
+    $res = $xoopsDB->query("UPDATE $tbl SET reserved=reserved+$value WHERE $cond");
     return $res && $xoopsDB->getAffectedRows();
 }
 
+function get_opt_values($optfield, &$errs, $hidden=false) {
+    $myts =& MyTextSanitizer::getInstance();
+    $result = array();
+    $field = 0;
+    foreach (explode("\n", $optfield) as $n) {
+	$field++;
+	if (preg_match('/^\s*#/', $n)) continue;
+	if (preg_match('/^\s*$/', $n)) continue;
+	$a = explode(",", preg_replace('/[\n\r]/',"", $n));
+	$name = preg_replace('/^!\s*/', '', array_shift($a));
+	$type = "text";
+	if (isset($a[0])) {
+	    switch (strtolower(array_shift($a))) {
+	    case "checkbox":
+		$type = 'checkbox';
+		break;
+	    case 'textarea':
+		$type = 'textarea';
+		break;
+	    }
+	}
+	$input = "";
+	if ($type == 'checkbox') {
+	    $v = "";
+	    for ($i=1; $i<=count($a); $i++) {
+		$n = "opt${field}_$i";
+		if (isset($_POST[$n])) {
+		    $vv = $myts->stripSlashesGPC($_POST[$n]);
+		    $v .= (($v=="")?"":",").$vv;
+		    if ($hidden) {
+			$input .= "<input type='hidden' name='$n' value='".
+			    $myts->makeTboxData4Edit($vv)."'/>";
+		    }
+		}
+	    }
+	} else {
+	    $v = $myts->stripSlashesGPC($_POST["opt$field"]);
+	    if ($hidden) {
+		$input .= "<input type='hidden' name='opt$field' value='".
+		    $myts->makeTboxData4Edit($v)."'/>";
+	    }
+	    // remove control char except textarea
+	    if ($type!='textarea') $v = preg_replace('/[\x00-\x1f]/', '', $v);
+	}
+	$mast = preg_match('/\*$/', $name);
+	$nums = preg_match('/\#$/', $name);
+	$name = preg_replace('/[\*\#]$/', "", $name);
+	if ($mast) {
+	    // check for NULL
+	    if (preg_match('/^\s*$/', $v)) {
+		$errs[] = "$name: $v - "._MD_NOITEM_ERR;
+	    }
+	} elseif ($nums) {
+	    // check Number
+	    if (!preg_match('/^-?\d+$/', $v)) {
+		$errs[] = "$name: $v - "._MD_NUMITEM_ERR;
+	    }
+	}
+	$result[$name] = $hidden?$input:$v;
+    }
+    return $result;
+}
 ?>

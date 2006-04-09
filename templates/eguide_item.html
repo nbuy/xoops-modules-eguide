@@ -15,9 +15,6 @@
 <{/if}>
   <div class="evinfo"><{$smarty.const._MD_POSTERC}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$smarty.const._MD_POSTDATE}> <{$event.postdate}> (<{$event.hits}>)</div>
   <p class="evbody"><{$event.disp_summary}></p>
-<{if $event.disp_body}>
-  <p class="evbody"><{$event.disp_body}></p>
-<{/if}>
 <div class="evprop">
 <div><{$smarty.const._MD_STARTTIME}> <{$event.time}></div>
 <{if $event.persons}>
@@ -31,6 +28,11 @@
 <div><{$smarty.const._POINTS_NEED}> <{$points_this}></div>
 <{/if}>
 </div>
+<{if $event.disp_body}>
+  <p class="evbody"><{$event.disp_body}></p>
+<{elseif $event.expire}>
+  <p><a href="event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>#form"><{$smarty.const._MD_RESERV_FORM}></a></p>
+<{/if}>
 <{if $event.link}>
   <div class="evlink"><{if $event.isadmin}>[
 <{if $event.reservation}>

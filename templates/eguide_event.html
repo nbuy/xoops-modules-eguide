@@ -18,21 +18,20 @@
 </div>
 <{elseif $form}>
 <div class="evform">
-<div class="evtitle"><{$smarty.const._MD_RESERVATION}></div>
-<form action="reserv.php" method="post">
+<div class="evtitle"><a name="form"><{$smarty.const._MD_RESERVATION}></a></div>
+<form action="reserv.php?op=<{$form.op}>" method="post">
 <table class="outer" align="center" cellspacing="1" border="0">
 <{if !$form.member_only}>
-<tr class="<{cycle values="even, odd"}>"><th><{$smarty.const._MD_EMAIL}></th><td><input size="40" name="email" value="<{$form.email}>"/>
+<tr class="evms"><th><{$smarty.const._MD_EMAIL}>*</th><td><input size="40" name="email" value="<{$form.email}>"/>
 <{if $form.user_notify}>
 <br/><input type="checkbox" name="notify" /><{$smarty.const._MD_NOTIFY_REQUEST}>
 <{/if}>
 </td></tr>
 <{/if}>
 <{foreach from=$form.items item=fm}>
-<tr class="<{$fm.attr}>"><th><{$fm.label}></th><td><{$fm.value}></td></tr>
+<tr class="<{$fm.attr}>"><th><{$fm.label}></th><td><{$fm.value}><{$fm.comment}></td></tr>
 <{/foreach}>
 </table>
-<input type="hidden" name="op" value="order" />
 <input type="hidden" name="eid" value="<{$form.eid}>" />
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
@@ -78,3 +77,4 @@
 <!-- end comments loop -->
 </div>
 <{/if}>
+<{include file='db:system_notification_select.html'}>

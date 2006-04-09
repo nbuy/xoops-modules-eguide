@@ -1,23 +1,25 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.20 2006/02/27 17:32:43 nobu Exp $
+// $Id: index.php,v 1.21 2006/04/09 17:31:33 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
 
 $self = $_SERVER["SCRIPT_NAME"];
 
-$op = param('op', '');
+$op = param('op', 'events');
 $eid = param('eid');
 
 function css_tags() { return array("even","odd"); }
 
 xoops_cp_header();
 
-show_menu();
-switch($op) {
-default:
-case "events":
+include 'mymenu.php';
+
+$myts =& MyTextSanitizer::getInstance();
+$tags = css_tags();
+switch ($op) {
+case 'events':
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
     $result = $xoopsDB->query('SELECT count(eid) FROM '.EGTBL);
     list($count) = $xoopsDB->fetchRow($result);
@@ -31,11 +33,10 @@ case "events":
     echo "<form action='$self' method='post'>\n";
     if ($count>$max) echo "<div>".$nav->renderNav()."</div>";
     echo "<table cellspacing='1' border='0' class='outer'>\n";
-    echo "<tr class='bg4'><th>"._AM_RESERVATION."</th><th>".
+    echo "<tr><th>"._AM_RESERVATION."</th><th>".
 	_AM_EVENT_DAY."</th><th>"._AM_TITLE."</th>";
     echo "<th>"._AM_POSTER."</th><th>"._AM_DISP_STATUS."</th>";
     echo "<th>"._AM_OPERATION."</th></tr>\n";
-    $tags = css_tags();
     while ($data = $xoopsDB->fetchArray($result)) {
 	$bg = $tags[$n++%2];
 	$eid = $data['eid'];
@@ -46,7 +47,7 @@ case "events":
 	$s = $data['status'];
 	$sn = $ev_stats[$data['status']];
 	if ($s == STAT_DELETED) {
-	    $sn = "<a href='../admin.php?op=delete&amp;eid=$eid'>$sn</a>";
+	    $sn = "<a href='../admin.php?op=delete&eid=$eid'>$sn</a>";
 	} elseif ($s == STAT_POST) {
 	    $sn = "<strong>$sn</strong>";
 	}
@@ -60,8 +61,8 @@ case "events":
 	}
 	    
 	$edit = "<a href='../admin.php?eid=$eid'>"._EDIT."</a>".
-	    " <a href='$self?op=edit&amp;eid=$eid'>"._AM_EDIT."</a>".
-	    " <a href='../admin.php?op=delete&amp;eid=$eid'>"._DELETE."</a>";
+	    " <a href='$self?op=edit&eid=$eid'>"._AM_EDIT."</a>".
+	    " <a href='../admin.php?op=delete&eid=$eid'>"._DELETE."</a>";
 	echo "<tr class='$bg'><td align='center'>$mk</td><td>$date</td><td>$title</td>";
 	echo "<td>$u</td><td>$sn</td><td>$edit</td></tr>\n";
     }
@@ -77,7 +78,7 @@ case "events":
     CloseTable();
     break;
 
-case "notifies":
+case 'notifies':
     echo "<h4>"._MD_INFO_REQUEST."</h4>";
     $cond = "eid=0";
     if (isset($_GET['q'])) {
@@ -97,9 +98,8 @@ case "notifies":
 	echo "<form action='$self' method='post'>\n".
 	    "<input type='hidden' name='op' value='delnotify' />\n".
 	    "<table cellspacing='1' border='0' class='outer'>\n".
-	    "<tr class='bg4'><th></th><th>"._MD_ORDER_DATE."</th>".
+	    "<tr><th></th><th>"._MD_ORDER_DATE."</th>".
 	    "<th>"._AM_EMAIL."</th></tr>\n";
-	$tags = css_tags();
 	while ($data = $xoopsDB->fetchArray($result)) {
 	    $bg = $tags[$n++%2];
 	    $rvid = $data['rvid'];
@@ -123,7 +123,7 @@ case "notifies":
     CloseTable();
     break;
 
-case "delnotify":
+case 'delnotify':
     foreach ($_POST as $i => $v) {
 	if (preg_match('/^rm\d+$/', $i, $d)) {
 	    if (empty($cond)) $cond = "rvid=$v";
@@ -134,7 +134,7 @@ case "delnotify":
     redirect_header("$self?op=notifies",1,_AM_DBUPDATED);
     exit;
 
-case "edit":
+case 'edit':
     $result = $xoopsDB->query("SELECT eid,edate,cdate,title,uid,status FROM ".EGTBL." WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     $date = eventdate($data['edate']); 
@@ -178,26 +178,26 @@ case "edit":
     CloseTable();
     break;
 
-case "save":
+case 'save':
     $status = param('status');
     $uid = param('uid');
     $result = $xoopsDB->query("UPDATE ".EGTBL." SET uid=$uid, status=$status WHERE eid=$eid");
     redirect_header("$self?op=events",1,_AM_DBUPDATED);
     exit;
 
-case "category":
+case 'category':
     echo "<h4>"._AM_CATEGORY."</h4>\n";
     showCategories();
     echo "<h4>"._AM_CATEGORY_NEW."</h4>\n";
     editCategory(0);
     break;
 
-case "catedit":
+case 'catedit':
     echo "<h4>"._AM_CATEGORY."</h4>\n";
     editCategory(intval($_GET['cat']));
     break;
 
-case "catsave":
+case 'catsave':
     $catid=intval($_POST['catid']);
     $catname=$xoopsDB->quoteString(param('catname',''));
     $catdesc=$xoopsDB->quoteString(param('catdesc',''));
@@ -210,7 +210,7 @@ case "catsave":
     redirect_header("$self?op=category",1,_AM_DBUPDATED);
     exit;
 
-case "catdel":
+case 'catdel':
     $dels = $_POST['dels'];
     foreach (array_keys($dels) as $i) {
 	$dels[$i] = intval($i);
@@ -219,7 +219,7 @@ case "catdel":
     redirect_header("$self?op=category",1,_AM_DBUPDATED);
     exit;
 
-case "resvCtrl":
+case 'resvCtrl':
     $rv = isset($_POST['rv'])?$_POST['rv']:array();
     $ck = isset($_POST['ck'])?$_POST['ck']:array();
     $off = $on = "";
@@ -241,6 +241,35 @@ case "resvCtrl":
     redirect_header("$self?op=events",1,_AM_DBUPDATED);
     exit;
 
+case 'about':
+    $help = '../language/'.$xoopsConfig['language'].'/help.html';
+    if (!file_exists($help)) $help = '../language/english/help.html';
+    list($h, $b) = preg_split('/<\/?body>/', file_get_contents($help));
+    echo $b;
+    break;
+case 'summary':
+    echo "<h4>"._AM_SUMMARY."</h4>\n";
+    $now = time();
+    $show = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/event.php';
+    $result = $xoopsDB->query('SELECT e.eid,if(x.exid,x.exid,0) exid, IF(exdate,exdate,edate) exdate,title,uid,status,persons,IF(x.reserved,x.reserved,o.reserved) reserved FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref AND exdate>$now ORDER BY e.eid DESC,exdate DESC");
+    echo $xoopsDB->error();
+    echo "<table cellpadding='1' border='0' cellspacing='1' class='outer'>";
+    $n = 0;
+    echo "<tr><th colspan='2'>ID</th><th>"._MD_EXTENT_DATE."</th><th>"._AM_TITLE."</th>".
+	"<th>"._AM_POSTER."</th><th>"._MD_RESERV_PERSONS."</th><th>"._AM_RESERVATION."</th></tr>\n";
+    while ($data=$xoopsDB->fetchArray($result)) {
+	$bg = $tags[$n++%2];
+	$eid = $data['eid'];
+	$exid = $data['exid'];
+	$param = 'eid='.$eid;
+	if ($exid) $param .= '&sub='.$exid;
+	$date = eventdate($data['exdate']);
+	$title = "<a href='$show?$param'>".$myts->makeTboxData4Show($data['title'])."</a>";
+	$uname = uid_to_ancker($data['uid']);
+	echo "<tr class='$bg'><td>$eid</td><td>$exid</td><td>$date</td><td>$title</td><td>$uname</td><td>".$data['persons']."</td><td>".$data['reserved']."</td></tr>\n";
+    }
+    echo "</table>";
+    break;
 }
 
 xoops_cp_footer();
@@ -268,7 +297,7 @@ function showCategories() {
 	    $img = "";
 	}
 	if (!empty($img)) $img = "<img src='$img' alt='$name'/>";
-	$edit="<a href='index.php?op=catedit&amp;cat=$id'>"._EDIT."</a>";
+	$edit="<a href='index.php?op=catedit&cat=$id'>"._EDIT."</a>";
 	if ($count) {
 	    $del="-";
 	} else {
@@ -314,27 +343,11 @@ function editCategory($cat) {
     echo "<p><input type='submit' value='"._GO."'/>\n";
     echo "</form>\n";
 }
-function show_menu() {
-    global $xoopsConfig, $xoopsModule;
-    include_once XOOPS_ROOT_PATH.'/modules/'.$xoopsModule->getVar('dirname').'/language/'.$xoopsConfig['language'].'/modinfo.php';
-    include_once 'menu.php';
-    $adminmenu[] = array('title'=>_PREFERENCES,
-			 'link'=>XOOPS_URL.'/modules/system/admin.php?fct=preferences&amp;op=showmod&amp;mod=' . $xoopsModule->getVar('mid'));
-    $mark = XOOPS_URL.'/images/pointer.gif';
-    $base = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname');
-
-    echo "<style>
-div#adminmenu a { background-color: #dddddd; white-space: nowrap; }
-</style>";
-    $cur = '/^https?'.preg_quote('://'.$_SERVER["HTTP_HOST"].$_SERVER[ 'REQUEST_URI' ],'/').'$/';
-    $ancker = array();
-    foreach ($adminmenu as $menu) {
-	$title = $menu['title'];
-	$link = $menu['link'];
-	if (!preg_match('/^https?:\/\/|^\//', $link)) $link = $base.'/'.$link;
-	$opt = (preg_match($cur, $link))?" style='background: #ffcccc;'":'';
-	$ancker[] = "<a href='$link'$opt>$title</a>\n";
+function uid_to_ancker($uid) {
+    if ($uid) {
+	$path = XOOPS_URL.'/userinfo.php?uid=';
+	return "<a href='$path$uid'>".XoopsUser::getUnameFromId($uid).'</a>';
     }
-    echo "<div id='adminmenu'>\n".join(' | ', $ancker)."</div>\n<hr/>\n";
+    return "-";
 }
 ?>

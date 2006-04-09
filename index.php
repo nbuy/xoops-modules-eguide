@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.13 2006/02/27 17:32:43 nobu Exp $
+// $Id: index.php,v 1.14 2006/04/09 17:31:33 nobu Exp $
 
 include 'header.php';
 
@@ -58,10 +58,11 @@ if (is_object($xoopsUser)) {
 while ($event = $xoopsDB->fetchArray($result)) {
     $event['isadmin'] = ($isadmin || $event['uid']==$uid);
     $event['link'] = true;
+    $event['expire'] = ($event['edate']-$event['closetime']) > $now;
     $more = 'event.php?eid='.$event['eid'];
     if (!empty($event['exid'])) {
 	$event['extent']=true;	// also show editdate link
-	$more .= '&amp;sub='.$event['exid'];
+	$more .= '&sub='.$event['exid'];
     }
     $event['detail'] = $more;
     edit_eventdata($event);
@@ -103,10 +104,14 @@ if (empty($prev)) {
     }
 }
 
-if ($opt) $opt = "&amp;cat=".intval($_GET['cat']);
+if ($opt) $opt = "&cat=".intval($_GET['cat']);
 
 if ($p) $xoopsTpl->assign('page_prev', $prev.$opt);
 if ($q) $xoopsTpl->assign('page_next', $page.$opt);
+if (count($events)==0 && !$p) {
+    unset($xoopsOption['template_main']);
+    echo _MD_NODATA;
+}
 
 include XOOPS_ROOT_PATH.'/footer.php';
 ?>

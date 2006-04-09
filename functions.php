@@ -1,9 +1,22 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.5 2005/12/27 05:13:53 nobu Exp $
+// $Id: functions.php,v 1.6 2006/04/09 17:31:33 nobu Exp $
 
 // exploding addional informations.
+function explodeopts($opts) {
+    $myitem = array();
+    foreach (explode("\n",preg_replace('/\r/','',$opts)) as $ln) {
+	// comment line
+	if (preg_match('/^\s*#/', $ln)||preg_match('/^\s*$/', $ln)) continue;
+	$fld = explode(",", $ln);
+	$lab = preg_replace('/^!\s*/', '', preg_replace('/[\*#]$/', "", array_shift($fld)));
+	$myitem[] =  $lab;
+    }
+    return $myitem;
+}
+
 function explodeinfo($info, $item) {
+    if (!is_array($item)) $item = explodeopts($item);
     $ln = explode("\n", preg_replace('/\r/','',$info));
     $n = 0;
     $result = array();
@@ -78,6 +91,7 @@ function edit_eventdata(&$data) {
 	    }
 	}
     }
+    return $data;
 }
 
 function eventform($data) {
@@ -87,14 +101,16 @@ function eventform($data) {
     if (empty($data['reservation'])) return null;
 
     $form = array();
+    $optfield = $data['optfield'];
     // reservation form
-    $form['email'] = $myts->makeTboxData4Edit(is_object($xoopsUser)?$xoopsUser->email():"");
-    $form['member_only'] = $xoopsModuleConfig['member_only'];
+    $email = isset($_POST['email'])?$_POST['email']:'';
+    if (empty($email)) $email = is_object($xoopsUser)?$xoopsUser->email():"";
+    $form['email'] = $myts->makeTboxData4Edit($email);
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $items = array();
     $field = 0;
     $note1 = $note2 = "";
-    foreach (explode("\n", $data['optfield']) as $n) {
+    foreach (explode("\n", $optfield) as $n) {
 	$field++;
 	$n = preg_replace("/\s*[\n\r]/", "", $n);
 	if ($n=="") continue;
@@ -106,7 +122,7 @@ function eventform($data) {
 	} else {
 	    $opt = explode(",", $n);
 	    $name = array_shift($opt);
-	    if (preg_match('/\*$/', $name)) {
+	    if (preg_match('/[\*#]$/', $name)) {
 		$attr = 'evms';
 		$note1 = _MD_ORDER_NOTE1;
 	    }
@@ -117,7 +133,7 @@ function eventform($data) {
 	    }
 	    $v = "";
 	    if ($xoopsUser && preg_match(_MD_NAME, $name)) {
-		$v = htmlspecialchars($xoopsUser->name());
+		$v = htmlspecialchars($xoopsUser->getVar('name'));
 	    }
 	    $type = "text";
 	    $aname = isset($opt[0])?strtolower($opt[0]):"";
@@ -137,6 +153,9 @@ function eventform($data) {
 	    $comment = "";
 	    $fname = "opt$field";
 	    $sub = 0;
+	    if (isset($_POST[$fname])) {
+		$v = $myts->stripSlashesGPC($_POST[$fname]);
+	    }
 	    foreach ($opt as $op) {
 		if (preg_match("/^#/",$op)) {
 		    $comment .= preg_replace("/^#/","",$op);
@@ -157,7 +176,11 @@ function eventform($data) {
 		    break;
 		default:
 		    $an = preg_replace('/\+$/', "", $aname);
-		    $ck = ($an != $aname)?" checked":"";
+		    if ($v) {
+			$ck = ($an == $v)?" checked":"";
+		    } else {
+			$ck = ($an != $aname)?" checked":"";
+		    }
 		    if ($type=='radio') {
 			$sub++;
 			if (isset($args[1])) {
@@ -165,12 +188,21 @@ function eventform($data) {
 			} else {
 			    $opts .= "<input type='$type' name='$fname' value='$an'$ck />$an &nbsp; ";
 			}
+		    } elseif (($type=='text' || $type='textarea')) {
+			if (!isset($_POST[$fname])) {
+			    $v .= ($v==""?"":",").str_replace('\n', "\n", $op);
+			}
 		    } elseif ($type=='checkbox') {
 			$sub++;
+			$iname = $fname.'_'.$sub;
+			if (isset($_POST[$iname])) {
+			    $v = $myts->stripSlashesGPC($_POST[$iname]);
+			    $ck = ($an==$v)?' checked':'';
+			}
 			if (isset($args[1])) {
-			    $opts .= "<input type='$type' name='${fname}_$sub' value='$an'$ck />".$args[1]." &nbsp; ";
+			    $opts .= "<input type='$type' name='$iname' value='$an'$ck/>".$args[1]." &nbsp; ";
 			} else {
-			    $opts .= "<input type='$type' name='${fname}_$sub' value='$an'$ck />$an &nbsp; ";
+			    $opts .= "<input type='$type' name='$iname' value='$an'$ck/>$an &nbsp; ";
 			}
 		    } elseif ($type=='select') {
 			if ($ck != "") $ck = " selected";
@@ -194,6 +226,10 @@ function eventform($data) {
 	if ($attr=='') $attr = (count($items)%2)?'even':'odd';
 	$items[] = array('attr'=>$attr, 'label'=>$name, 'value'=>$opts, 'comment'=>$comment);
     }
+    $mo = $xoopsModuleConfig['member_only'];
+    $form['member_only'] = $mo;
+    $form['op'] = ($xoopsModuleConfig['has_confirm']&&
+		   (count($items)||!$mo))?'confirm':'order';
     $form['items'] = $items;
     $form['lang_note'] = $note1;
     $form['note'] = $note2;
@@ -248,7 +284,6 @@ function set_next_event() {
 function get_extents($eid, $all=false) {
     global $xoopsDB;
     $result=$xoopsDB->query('SELECT exid,exdate,x.reserved FROM '.EXTBL.' x LEFT JOIN '.OPTBL." o ON eidref=eid WHERE eidref=$eid".($all?"":" AND exdate-closetime>".time()).' ORDER BY exdate');
-    echo $xoopsDB->error();
     $extents = array();
     while ($extent = $xoopsDB->fetchArray($result)) {
 	$extent['date'] = eventdate($extent['exdate']);

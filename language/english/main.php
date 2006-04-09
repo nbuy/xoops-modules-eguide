@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.6 2006/02/27 17:32:43 nobu Exp $
+// $Id: main.php,v 1.7 2006/04/09 17:31:34 nobu Exp $
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
 define("_MD_DATE_FMT", "Y-m-d (D)");
@@ -16,7 +16,8 @@ define("_MD_NOTIFY_EVENT",  "Notification of new events");
 define("_MD_NOTIFY_REQUEST","Notify me by mail when other new events are posted");
 define("_MD_ORDER_NOTE1","'*'required items. ");
 define("_MD_ORDER_NOTE2","'[ ]' item to be displayed on list of participants.");
-define("_MD_ORDER_SEND","Reservation");
+define('_MD_ORDER_SEND','Reservation');
+define('_MD_ORDER_CONF','Confirm');
 
 define("_MD_EVENT_NONE","There is no event guide");
 define("_MD_BACK","Back");
@@ -46,6 +47,7 @@ define("_MD_RESERV_CANCEL","Are you sure you want to cancel?");
 define("_MD_RESERV_CANCELED","Event reservation has been canceled");
 define("_MD_RESERV_NOTIFY","%s\n\nOrdering Email: %s\nReservation Event: %s\n  %s\n");
 define("_MD_RESERV_FULL","Reservations have been stopped, because the event is now fully booked.");
+define('_MD_RESERV_TOMATCH',' %d is too match (%d left)');
 define("_MD_CANCEL_FAIL","Failed to cancel");
 define("_MD_NODATA","There is No Data");
 define("_MD_NOEVENT","No Event Listed");
@@ -57,7 +59,10 @@ define("_MD_DATEC","Event Date:");
 define('_MD_POSTDATE','Registered');
 define('_MD_STARTTIME','Starting Event');
 define('_MD_CLOSEDATE','Close Order');
-define('_MD_CLOSEBEFORE','Closeing time before(N min before from start)');
+define('_MD_CLOSEBEFORE','Closeing time before');
+define('_MD_CLOSEBEFORE_DESC','before from start (e.g.: 3days, 2hour, 50min)');
+define('_MD_TIME_UNIT','days,hour,min');
+define('_MD_TIME_REG','d(ay)?s?,h(our)?,min');
 define('_MD_CALENDER','Go Calender');
 define("_MD_REFER","%d hits");
 define("_MD_RESERV_LIST","List of participants");
@@ -78,17 +83,19 @@ define("_MD_SAVECHANGE","Save Changes");
 define("_MD_RESERV_DEL","Delete reservation");
 define("_MD_DETAIL","Detail");
 define("_MD_RESERV_MSG","{TITLE}\n{EVENT_URL}\n
-for this event to order\n
-    In {ORDER_MAIL}\n
-reservation result are {RESULT}\n
+reservation ID {RVID} result are {RESULT}\n
 Ordering Data:
 ------------
-{INFO}------------
+{INFO}------------\n
+Approved by {REQ_UNAME}\n
+If you want to cancel this order, please access following:
+  {CANCEL_URL}
 ");
 define("_MD_RESERV_MSG_H","Sending message for reservation");
 define("_MD_ACTIVATE","Approved");
 define("_MD_REFUSE","Refused");
 define("_MD_CSV_OUT","CSV Output");
+define('_MD_EXPORT_CHARSET', 'UTF-8');
 define("_MD_INFO_MAIL","Sending Mail");
 define("_MD_SUMMARY","Summary");
 define("_MD_SUM_ITEM","Summary Item");
@@ -118,6 +125,7 @@ define('_MD_RESERV_PERSONS','Max no. of Persons');
 define('_MD_RESERV_UNIT','');
 define('_MD_RESERV_ITEM','Additional Items');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">About Additional Items format</a>');
+define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
 define('_MD_APPROVE','Approve Display');
 define('_MD_PREVIEW','Preview');
 define('_MD_SAVE','save');

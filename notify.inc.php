@@ -11,11 +11,12 @@ function event_notify($op, $data) {
 	    $title = $data['title'];
 	    $edate = eventdate($data['edate']);
 	    $xoopsMailer->setSubject(_MD_NEWSUB." - $edate $title");
-	    $xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=".$data['eid']);
-	    $xoopsMailer->assign("EVENT_TITLE", $title);
-	    $xoopsMailer->assign("EVENT_DATE", $edate);
 	    $note = ($data['status'] == STAT_POST)?_MD_APPROVE_REQ:"";
-	    $xoopsMailer->assign("EVENT_NOTE", "");
+	    $tags = array('EVENT_TITLE'=> $title,
+			  'EVENT_DATE' => $edate,
+			  'EVENT_NOTE' => $note,
+			  'EVENT_URL'  => XOOPS_URL."/modules/eguide/event.php?eid=".$data['eid']);
+	    $xoopsMailer->assign($tags);
 	    $xoopsMailer->setBody(_MD_NOTIFY_NEW);
 	    $member_handler =& xoops_gethandler('member');
 	    $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
@@ -41,12 +42,24 @@ function user_notify($eid) {
     $tbl = $xoopsDB->prefix("eguide");
     $rsv = $xoopsDB->prefix("eguide_reserv");
 
-    $result = $xoopsDB->query("SELECT title,edate,expire,status FROM $tbl WHERE eid=$eid");
-    if (empty($result)) {
+    $result = $xoopsDB->query("SELECT title,edate,expire,status,topicid FROM $tbl WHERE eid=$eid");
+    if (!$result || $xoopsDB->getRowsNum($result)==0) {
 	echo "<div class='error'>Not found Event(eid='$eid')</div>\n";
+	return;
     }
     $data = $xoopsDB->fetchArray($result);
     $title = eventdate($data['edate'])." ".$data['title'];
+
+    // using XOOPS2 notification system
+	    
+    $tags = array('EVENT_TITLE'=> $title,
+		  'EVENT_DATE' => eventdate($data['edate']),
+		  'EVENT_NOTE' => '',
+		  'EVENT_URL'  => XOOPS_URL."/modules/eguide/event.php?eid=$eid");
+    $notification_handler =& xoops_gethandler('notification');
+    $notification_handler->triggerEvent('global', 0, 'new', $tags);
+    $notification_handler->triggerEvent('category', $data['topicid'], 'new', $tags);
+
 
     if (!$xoopsModuleConfig['user_notify'] ||
 	$data['expire']<time() ||

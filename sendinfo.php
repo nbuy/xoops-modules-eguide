@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.9 2005/12/27 05:13:53 nobu Exp $
+// $Id: sendinfo.php,v 1.10 2006/04/09 17:31:33 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -20,17 +20,29 @@ if ($op=="doit") {
     $xoopsMailer =& getMailer();
     $xoopsMailer->useMail();
     $xoopsMailer->setSubject($title);
-    $xoopsMailer->setBody($body);
+    $xoopsMailer->setBody(param('body',''));
     $xoopsMailer->setFromEmail($xoopsUser->email());
     $xoopsMailer->setFromName(_MD_FROM_NAME);
     $xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");
-    $req = (isset($request))?" OR eid=0":""; 
-    if (empty($status)) $status=1;
-    $result = $xoopsDB->query("SELECT email FROM ".RVTBL." WHERE (eid=$eid AND status=$status AND exid=$exid)$req GROUP BY email");
+    $req = param('request')?" OR eid=0":"";
+    $status = param('status');
+    if (empty($status)) $status=_RVSTAT_RESERVED;
+    $result = $xoopsDB->query("SELECT email,uid FROM ".RVTBL." WHERE (eid=$eid AND status=$status AND exid=$exid)$req");
+    $emails = array();
+    $uids = array();
     while ($data = $xoopsDB->fetchArray($result)) {
-	$xoopsMailer->setToEmails($data['email']);
+	if (empty($data['uid'])) $emails[] = $data['email'];
+	else $uids[] = $data['uid'];
     }
-    if (isset($self)&&$self) $xoopsMailer->setToUsers($xoopsUser); // send self
+    if (param('self')) $uids[] = $xoopsUser->getVar('uid'); // send self
+    $emails = array_unique($emails);
+    if ($emails) $xoopsMailer->setToEmails($emails);
+    $member_handler =& xoops_gethandler('member');
+    $users = array();
+    foreach (array_unique($uids) as $uid) {
+	$users[] =& $member_handler->getUser($uid);
+    }
+    if ($users) $xoopsMailer->setToUsers($users);
     if ($xoopsMailer->send()) {
 	echo "<p><b>"._MD_INFO_MAILOK."</b></p>\n";
 	echo $xoopsMailer->getSuccess();
@@ -61,6 +73,7 @@ if ($op=="doit") {
     echo "$notify<br />\n";
     echo "<input type='hidden' name='op' value='doit' />\n".
 	"<input type='hidden' name='eid' value='$eid' />\n".
+	"<input type='hidden' name='sub' value='$exid' />\n".
 	"<p><b>"._MD_TITLE."</b> ".
 	"<input name='title' size='60' value='$title' /></p>\n".
 	"<p><textarea name='body' cols='60' rows='10'>"._MD_INFO_DEFAULT."</textarea></p>\n".

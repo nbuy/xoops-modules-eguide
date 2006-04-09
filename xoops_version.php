@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.27 2006/02/27 17:32:43 nobu Exp $
+// $Id: xoops_version.php,v 1.28 2006/04/09 17:31:33 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "1.96";
+$modversion['version'] = "1.98";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -49,6 +49,8 @@ $modversion['templates'][8]=array('file' => 'eguide_confirm.html',
 				  'description' => _MI_EGUIDE_EVENT_CONF_TPL);
 $modversion['templates'][9]=array('file' => 'eguide_mylist.html',
 				  'description' => _MI_EGUIDE_EVENT_LIST_TPL);
+$modversion['templates'][10]=array('file' => 'eguide_confirm.html',
+				  'description' => _MI_EGUIDE_EVENT_CONFIRM_TPL);
 // Blocks
 $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'name' => _MI_EGUIDE_HEADLINE,
@@ -69,22 +71,32 @@ $modversion['blocks'][2]=array('file' => "ev_top.php",
 $module_handler =& xoops_gethandler('module');
 $module =& $module_handler->getByDirname($modversion['dirname']);
 
-global $xoopsUser;
+global $xoopsUser,$xoopsDB;
 $modversion['hasMain'] = 1;
-$modversion['sub'][1]['name'] = _MI_EGUIDE_MYLIST;
-$modversion['sub'][1]['url'] = "mylist.php";
 if (is_object($module)&&$module->getVar('isactive')) {
     $config_handler =& xoops_gethandler('config');
+    $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix('eguide_category').' ORDER BY catid');
+    if ($xoopsDB->getRowsNum($res)>1) {
+	while ($data = $xoopsDB->fetchArray($res)) {
+	    $modversion['sub'][] =
+		array('name' => _MI_EGUIDE_CATEGORY_MARK.$data['catname'],
+		      'url' => 'index.php?cat='.$data['catid']);
+	}
+    }
     $configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
     if (is_object($xoopsUser) &&
 	in_array($configs['group'], $xoopsUser->getGroups())) {
-	$modversion['sub'][2]['name'] = _MI_EGUIDE_SUBMIT;
-	$modversion['sub'][2]['url'] = "admin.php";
+	$modversion['sub'][] =
+	    array('name' => _MI_EGUIDE_SUBMIT, 'url' => 'admin.php');
     }
     if ($configs['user_notify']) {
-	$modversion['sub'][3]['name'] = _MI_EGUIDE_REG;
-	$modversion['sub'][3]['url'] = "reserv.php?op=register";
+	$modversion['sub'][] =
+	    array('name' => _MI_EGUIDE_REG, 'url' => 'reserv.php?op=register');
     }
+}
+if (is_object($xoopsUser)) {
+    $modversion['sub'][]=
+	array('name' => _MI_EGUIDE_MYLIST, 'url' => 'mylist.php');
 }
 
 // Search
@@ -147,24 +159,42 @@ $modversion['config'][]=array('name' => 'show_extents',
 			      'formtype' => 'yesno',
 			      'valuetype' => 'int',
 			      'default' => 1);
-$modversion['config'][8]=array('name' => 'user_notify',
-			       'title' => '_MI_EGUIDE_USER_NOTIFY',
-			       'description' => '_MI_EGUIDE_USER_NOTIFY_DESC',
-			       'formtype' => 'yesno',
-			       'valuetype' => 'int',
-			       'default' => 1);
+$modversion['config'][]=array('name' => 'user_notify',
+			      'title' => '_MI_EGUIDE_USER_NOTIFY',
+			      'description' => '_MI_EGUIDE_USER_NOTIFY_DESC',
+			      'formtype' => 'yesno',
+			      'valuetype' => 'int',
+			      'default' => 1);
 $modversion['config'][]=array('name' => 'member_only',
 			      'title' => '_MI_EGUIDE_MEMBER',
 			      'description' => '_MI_EGUIDE_MEMBER_DESC',
 			      'formtype' => 'yesno',
 			      'valuetype' => 'int',
 			      'default' => 0);
+$modversion['config'][]=array('name' => 'has_confirm',
+			      'title' => '_MI_EGUIDE_ORDERCONF',
+			      'description' => '_MI_EGUIDE_ORDERCONF_DESC',
+			      'formtype' => 'yesno',
+			      'valuetype' => 'int',
+			      'default' => 0);
+$modversion['config'][]=array('name' => 'label_persons',
+			      'title' => '_MI_EGUIDE_LAB_PERSONS',
+			      'description' => '_MI_EGUIDE_LAB_PERSONS_DESC',
+			      'formtype' => 'text',
+			      'valuetype' => 'text',
+			      'default' => '');
 $modversion['config'][]=array('name' => 'close_before',
 			      'title' => '_MI_EGUIDE_CLOSEBEFORE',
 			      'description' => '_MI_EGUIDE_CLOSEBEFORE_DESC',
 			      'formtype' => 'text',
 			      'valuetype' => 'int',
 			      'default' => 60);
+$modversion['config'][]=array('name' => 'default_persons',
+			      'title' => '_MI_EGUIDE_PERSONS',
+			      'description' => '_MI_EGUIDE_PERSONS_DESC',
+			      'formtype' => 'text',
+			      'valuetype' => 'int',
+			      'default' => 10);
 $modversion['config'][]=array('name' => 'use_plugins',
 			       'title' => '_MI_EGUIDE_PLUGINS',
 			       'description' => '_MI_EGUIDE_PLUGINS_DESC',
@@ -183,5 +213,50 @@ $modversion['config'][]=array('name' => 'use_comment',
 			      'formtype' => 'yesno',
 			      'valuetype' => 'int',
 			      'default' => 1);
+
+// Notification
+
+$modversion['hasNotification'] = 1;
+$modversion['notification']['lookup_file'] = 'include/notification.inc.php';
+$modversion['notification']['lookup_func'] = 'eguide_notify_iteminfo';
+
+$modversion['notification']['category'][1] =
+    array('name' => 'global',
+	  'title' => _MI_EGUIDE_GLOBAL_NOTIFY,
+	  'description' => _MI_EGUIDE_GLOBAL_NOTIFY_DESC,
+/*	  'item_name' => 'cat',*/
+	  'subscribe_from' => array('index.php','event.php')
+	);
+$modversion['notification']['category'][2] =
+    array('name' => 'category',
+	  'title' => _MI_EGUIDE_CATEGORY_NOTIFY,
+	  'description' => _MI_EGUIDE_CATEGORY_NOTIFY_DESC,
+	  'item_name' => 'cat',
+	  'subscribe_from' => array('index.php','event.php')
+	);
+$modversion['notification']['category'][3] =
+    array('name' => 'event',
+	  'title' => _MI_EGUIDE_CATEGORY_BOOKMARK,
+	  'description' => _MI_EGUIDE_CATEGORY_BOOKMARK_DESC,
+	  'item_name' => 'eid',
+	  'subscribe_from' => 'event.php',
+	  'allow_bookmark'=> 1
+	);
+$modversion['notification']['event'][1]=
+    array('name' => 'new',
+	  'category' => 'global',
+	  'title' => _MI_EGUIDE_NEWPOST_NOTIFY,
+	  'caption' => _MI_EGUIDE_NEWPOST_NOTIFY_CAP,
+	  'description' => '',
+	  'mail_template' => 'notify',
+	  'mail_subject' => _MI_EGUIDE_NEWPOST_SUBJECT);
+$modversion['notification']['event'][2]=
+    array('name' => 'new',
+	  'category' => 'category',
+	  'title' => _MI_EGUIDE_NEWPOST_NOTIFY,
+	  'caption' => _MI_EGUIDE_CNEWPOST_NOTIFY_CAP,
+	  'description' => '',
+	  'mail_template' => 'notify',
+	  'mail_subject' => _MI_EGUIDE_NEWPOST_SUBJECT);
 
 ?>

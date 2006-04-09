@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.6 2006/02/27 17:32:43 nobu Exp $
+// $Id: modinfo.php,v 1.7 2006/04/09 17:31:34 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -17,10 +17,10 @@ define("_MI_EGUIDE_HEADLINE_DESC","Upcomming Recent Event List");
 define("_MI_EGUIDE_HEADLINE2","New Events");
 define("_MI_EGUIDE_HEADLINE2_DESC","Newer Posted Event List");
 
-define("_MI_EGUIDE_CONFIG","Module Configuration");
 define("_MI_EGUIDE_EVENTS","Event article Operation");
 define("_MI_EGUIDE_NOTIFIES","Notify to New registers");
 define("_MI_EGUIDE_CATEGORY","Event Categories");
+define("_MI_EGUIDE_CATEGORY_MARK","Category - ");
 
 // Configuration variable for this module
 define("_MI_EGUIDE_POSTGROUP","Group of Event Post");
@@ -42,9 +42,13 @@ define("_MI_EGUIDE_SHOW_EXTENTS_DESC","When event has multiple entry, show each 
 define("_MI_EGUIDE_USER_NOTIFY","User requested notification of new event");
 define("_MI_EGUIDE_USER_NOTIFY_DESC","YES - Enable notification mail, NO - disable.");
 define("_MI_EGUIDE_MEMBER","Event entry need to LOGIN");
-define("_MI_EGUIDE_MEMBER_DESC","Only login user can be entry event. (No entry email address)");
+define("_MI_EGUIDE_MEMBER_DESC","Only login user can be reservation event. (Not use email address)");
+define("_MI_EGUIDE_ORDERCONF","Has confirm page");
+define("_MI_EGUIDE_ORDERCONF_DESC","Display confirm page when reservation submit");
 define("_MI_EGUIDE_CLOSEBEFORE","Close Time Before (min)");
 define("_MI_EGUIDE_CLOSEBEFORE_DESC","Event entry close time before setting minits.");
+define("_MI_EGUIDE_PERSONS","Persons default value");
+define("_MI_EGUIDE_PERSONS_DESC","Reservation persons in event post form");
 define("_MI_EGUIDE_PLUGINS","Use Other moudle plugins");
 define("_MI_EGUIDE_PLUGINS_DESC","Internal Control accept entry form other modules");
 define("_MI_EGUIDE_COMMENT","Allow Comments");
@@ -62,4 +66,5 @@ define("_MI_EGUIDE_RECEIPT_PRINT_TPL", "Reservations List for Print");
 define("_MI_EGUIDE_EVENT_ITEM_TPL", "Item of Event Showup");
 define("_MI_EGUIDE_EVENT_CONF_TPL", "Event Confirmation Form");
 define("_MI_EGUIDE_EVENT_LIST_TPL", "Reserved Event List");
+define("_MI_EGUIDE_EVENT_CONFIRM_TPL", "Reservation Confirmation");
 ?>

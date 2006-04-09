@@ -1,4 +1,5 @@
 <div class="evlist">
+<h3><a href="event.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$title}></a></h3>
 <h3><{$smarty.const._MD_RESERV_LIST}></h3>
 
 <{if $extents}>
@@ -22,7 +23,6 @@
   <th><{$smarty.const._MD_OPERATION}></th>
   <th><{$smarty.const._MD_ORDER_DATE}></th>
   <th><{$smarty.const._MD_STATUS}></th>
-  <th><{$smarty.const._MD_EMAIL}></th>
 <{foreach from=$labels item=lab}>
   <th><{$lab}></th>
 <{/foreach}>
