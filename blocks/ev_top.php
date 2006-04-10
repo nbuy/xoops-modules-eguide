@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.12 2005/11/24 08:16:04 nobu Exp $
+// $Id: ev_top.php,v 1.13 2006/04/10 11:35:14 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -33,7 +33,7 @@ function b_event_top_show($options) {
 	    }
 	} else {
 	    if (strlen($title) >= $options[2]) {
-		$title = $myts->makeTarea(substr($myrow['title'],0,($options[2] -1)))."...";
+		$title = $myts->makeTboxData4Show(substr($myrow['title'],0,($options[2] -1)))."...";
 	    }
 	}
 	$edate = empty($myrow['exdate'])?$myrow['edate']:$myrow['exdate'];
