@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.7 2006/04/09 17:31:34 nobu Exp $
+// $Id: modinfo.php,v 1.8 2006/04/11 05:22:01 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -20,7 +20,9 @@ define("_MI_EGUIDE_HEADLINE2_DESC","Newer Posted Event List");
 define("_MI_EGUIDE_EVENTS","Event article Operation");
 define("_MI_EGUIDE_NOTIFIES","Notify to New registers");
 define("_MI_EGUIDE_CATEGORY","Event Categories");
+define("_MI_EGUIDE_SUMMARY","Summary of Reservation");
 define("_MI_EGUIDE_CATEGORY_MARK","Category - ");
+define("_MI_EGUIDE_ABOUT","about eguide");
 
 // Configuration variable for this module
 define("_MI_EGUIDE_POSTGROUP","Group of Event Post");
@@ -47,6 +49,8 @@ define("_MI_EGUIDE_ORDERCONF","Has confirm page");
 define("_MI_EGUIDE_ORDERCONF_DESC","Display confirm page when reservation submit");
 define("_MI_EGUIDE_CLOSEBEFORE","Close Time Before (min)");
 define("_MI_EGUIDE_CLOSEBEFORE_DESC","Event entry close time before setting minits.");
+define("_MI_EGUIDE_LAB_PERSONS","Label of persons");
+define("_MI_EGUIDE_LAB_PERSONS_DESC","Extra field label in reservation form for how many persons");
 define("_MI_EGUIDE_PERSONS","Persons default value");
 define("_MI_EGUIDE_PERSONS_DESC","Reservation persons in event post form");
 define("_MI_EGUIDE_PLUGINS","Use Other moudle plugins");
@@ -67,4 +71,18 @@ define("_MI_EGUIDE_EVENT_ITEM_TPL", "Item of Event Showup");
 define("_MI_EGUIDE_EVENT_CONF_TPL", "Event Confirmation Form");
 define("_MI_EGUIDE_EVENT_LIST_TPL", "Reserved Event List");
 define("_MI_EGUIDE_EVENT_CONFIRM_TPL", "Reservation Confirmation");
+
+// Notifications
+define('_MI_EGUIDE_GLOBAL_NOTIFY', 'Grobal in module');
+define('_MI_EGUIDE_GLOBAL_NOTIFY_DESC', 'Notification in Event Guide module');
+define('_MI_EGUIDE_CATEGORY_NOTIFY', 'Current category');
+define('_MI_EGUIDE_CATEGORY_NOTIFY_DESC', 'Notification at category in Event Guide module');
+define('_MI_EGUIDE_CATEGORY_BOOKMARK', 'Current event');
+define('_MI_EGUIDE_CATEGORY_BOOKMARK_DESC', 'Notifcation at current event in Event Guide module');
+
+define('_MI_EGUIDE_NEWPOST_SUBJECT', 'New Event - {EVENT_TITLE}');
+define('_MI_EGUIDE_NEWPOST_NOTIFY', 'New event post');
+define('_MI_EGUIDE_NEWPOST_NOTIFY_CAP', 'Notify when new event posted');
+define('_MI_EGUIDE_CNEWPOST_NOTIFY', 'New event post in category');
+define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', 'Notify when new event posted in current category');
 ?>

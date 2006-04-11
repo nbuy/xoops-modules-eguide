@@ -1,10 +1,10 @@
 <?php
-//%%%%%%	Admin Module Name  Articles 	%%%%%
+// Event Guide Module Administration message catalogue
+// $Id: admin.php,v 1.7 2006/04/11 05:22:01 nobu Exp $
 define("_AM_DBUPDATED","Database Updated");
 define("_AM_TITLE","Title");
 define("_AM_POSTER","Poster");
 define("_AM_EDITARTICLE","Edit an Event");
-define("_AM_DATE_FMT","Y-m-d");
 define("_AM_TIME_FMT","m-d H:i");
 define("_AM_POST_FMT","Y-m-d H:i");
 define("_AM_POSTED","Posted on");
@@ -21,6 +21,8 @@ define("_AM_CAT_NAME","Category Name");
 define("_AM_CAT_IMG","Image");
 define("_AM_CAT_DESC","Description");
 
+define("_AM_SUMMARY", "Reservation Summary");
+
 define("_AM_CANCEL","Cancel");
 define("_AM_EMAIL","Email");
 
@@ -28,5 +30,4 @@ define("_AM_RESERVATION","Reservation");
 define("_AM_EVENT_DAY","Event Date");
 define("_AM_RECEIPT","Entry List");
 define("_AM_COUNT","Count");
-
 ?>

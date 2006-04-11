@@ -17,7 +17,7 @@ function event_notify($op, $data) {
 			  'EVENT_NOTE' => $note,
 			  'EVENT_URL'  => XOOPS_URL."/modules/eguide/event.php?eid=".$data['eid']);
 	    $xoopsMailer->assign($tags);
-	    $xoopsMailer->setBody(_MD_NOTIFY_NEW);
+	    $xoopsMailer->setBody(_MD_ADMIN_NOTIFY_NEW);
 	    $member_handler =& xoops_gethandler('member');
 	    $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
 	    $uid = $xoopsUser->getVar('uid');
@@ -70,7 +70,7 @@ function user_notify($eid) {
 	$xoopsMailer =& getMailer();
 	$xoopsMailer->useMail();
 	$xoopsMailer->setSubject(_MD_NEWSUB." - $title");
-	$xoopsMailer->setBody(_MD_NEW_NOTIFY);
+	$xoopsMailer->setBody(_MD_NOTIFY_NEW);
 	$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
 	$xoopsMailer->setFromName(_MD_FROM_NAME);
 	$xoopsMailer->assign("SITENAME", $xoopsConfig['sitename']);
