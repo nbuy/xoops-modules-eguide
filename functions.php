@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.6 2006/04/09 17:31:33 nobu Exp $
+// $Id: functions.php,v 1.7 2006/04/11 16:56:38 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -188,7 +188,7 @@ function eventform($data) {
 			} else {
 			    $opts .= "<input type='$type' name='$fname' value='$an'$ck />$an &nbsp; ";
 			}
-		    } elseif (($type=='text' || $type='textarea')) {
+		    } elseif (($type=='text' || $type=='textarea')) {
 			if (!isset($_POST[$fname])) {
 			    $v .= ($v==""?"":",").str_replace('\n', "\n", $op);
 			}

@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.15 2006/04/09 17:31:33 nobu Exp $
+// $Id: receipt.php,v 1.16 2006/04/11 16:56:38 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -115,7 +115,7 @@ if ($nrec && $op=='csv') {
 	if (function_exists("mb_convert_encoding")) {
 	    $out = mb_convert_encoding($out, _MD_EXPORT_CHARSET, _CHARSET);
 	} elseif (function_exists("iconv")) {
-	    $out = iconv(_MD_EXPORT_CHARSET, $charset, $out);
+	    $out = iconv(_MD_EXPORT_CHARSET, _CHARSET, $out);
 	}
     }
     echo $out;
@@ -239,7 +239,7 @@ case 'one':
     if (!$mo) $values[_MD_EMAIL] = $myts->makeTareaData4Edit($data['email']);
     $values[_MD_STATUS] = $rv_stats[$data['status']];
     foreach (explodeinfo($data['info'], $data['optfield']) as $lab => $v) {
-	if (empty($v)) $v = '&nbsp;';
+	if (empty($v)) $v = '';
 	$values[$lab] = $myts->displayTarea($v);
     }
     $xoopsTpl->assign('xoops_module_header', HEADER_CSS);

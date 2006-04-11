@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.21 2006/04/09 17:31:33 nobu Exp $
+// $Id: index.php,v 1.22 2006/04/11 16:56:38 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -11,6 +11,7 @@ $op = param('op', 'events');
 $eid = param('eid');
 
 function css_tags() { return array("even","odd"); }
+if ($op == 'summary_csv') summary_csv();
 
 xoops_cp_header();
 
@@ -247,26 +248,44 @@ case 'about':
     list($h, $b) = preg_split('/<\/?body>/', file_get_contents($help));
     echo $b;
     break;
+
 case 'summary':
     echo "<h4>"._AM_SUMMARY."</h4>\n";
     $now = time();
+    $result = $xoopsDB->query('SELECT count(eid) FROM '.EGTBL.' LEFT JOIN '.EXTBL." ON eid=eidref");
+    list($count) = $xoopsDB->fetchRow($result);
+    $max = $xoopsModuleConfig['max_list'];
+    $start = isset($_GET['start'])?intval($_GET['start']):0;
+    $nav = new XoopsPageNav($count, $max, $start, "start", 'op=summary');
     $show = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/event.php';
-    $result = $xoopsDB->query('SELECT e.eid,if(x.exid,x.exid,0) exid, IF(exdate,exdate,edate) exdate,title,uid,status,persons,IF(x.reserved,x.reserved,o.reserved) reserved FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref AND exdate>$now ORDER BY e.eid DESC,exdate DESC");
-    echo $xoopsDB->error();
-    echo "<table cellpadding='1' border='0' cellspacing='1' class='outer'>";
+    $receipt = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/receipt.php';
+    $result = $xoopsDB->query('SELECT e.eid,if(x.exid,x.exid,0) exid, IF(exdate,exdate,edate) exdate,title,uid,status,persons,IF(x.reserved,x.reserved,o.reserved) reserved FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref ORDER BY exdate DESC,e.eid DESC", $max, $start);
+
+    echo "<table width='100%'>\n<tr><td>".sprintf(_MD_INFO_COUNT,$start+1).
+	"/$count</td><td align='center'>";
+    if ($count>$max) echo $nav->renderNav();
+    echo "</td><td align='right'><a href='index.php?op=summary_csv'>"._MD_CSV_OUT."</a></td></tr>\n</table>\n";
+
+    echo "<table cellpadding='1' border='0' cellspacing='1' width='100%' class='outer'>";
     $n = 0;
-    echo "<tr><th colspan='2'>ID</th><th>"._MD_EXTENT_DATE."</th><th>"._AM_TITLE."</th>".
+    echo "<tr><th>ID</th><th>"._MD_EXTENT_DATE."</th><th>"._AM_TITLE."</th>".
 	"<th>"._AM_POSTER."</th><th>"._MD_RESERV_PERSONS."</th><th>"._AM_RESERVATION."</th></tr>\n";
     while ($data=$xoopsDB->fetchArray($result)) {
 	$bg = $tags[$n++%2];
 	$eid = $data['eid'];
 	$exid = $data['exid'];
+	$id = $eid;
+	if ($exid) $id .= '-'.$exid;
 	$param = 'eid='.$eid;
 	if ($exid) $param .= '&sub='.$exid;
 	$date = eventdate($data['exdate']);
 	$title = "<a href='$show?$param'>".$myts->makeTboxData4Show($data['title'])."</a>";
 	$uname = uid_to_ancker($data['uid']);
-	echo "<tr class='$bg'><td>$eid</td><td>$exid</td><td>$date</td><td>$title</td><td>$uname</td><td>".$data['persons']."</td><td>".$data['reserved']."</td></tr>\n";
+	$reserved = $data['reserved'];
+	if ($reserved) $reserved = "<a href='$receipt?$param'>$reserved</a>";
+	echo "<tr class='$bg'><td>$id<td>$date</td><td>$title</td>".
+	    "<td>$uname</td><td align='right'>".$data['persons'].
+	    "</td><td align='right'>$reserved</td></tr>\n";
     }
     echo "</table>";
     break;
@@ -277,7 +296,6 @@ xoops_cp_footer();
 function showCategories() {
     global $xoopsDB;
     $myts =& MyTextSanitizer::getInstance();
-    //$res = $xoopsDB->query('SELECT * FROM '.CATBL.' ORDER BY catid');
     $res = $xoopsDB->query('SELECT c.*,count(topicid) count FROM '.CATBL.' c LEFT JOIN '.EGTBL.' ON catid=topicid GROUP BY catid ORDER BY catid');
 
     echo "<form action='index.php?op=catdel' method='post'>\n";
@@ -349,5 +367,33 @@ function uid_to_ancker($uid) {
 	return "<a href='$path$uid'>".XoopsUser::getUnameFromId($uid).'</a>';
     }
     return "-";
+}
+
+function summary_csv() {
+    global $xoopsDB;
+    function _q($x) { return '"'.preg_replace('/"/', '""', $x).'"'; }
+    $file = "eguide_summary_".formatTimestamp(time(),"Ymd").".csv";
+    header("Content-Type: text/plain; Charset="._MD_EXPORT_CHARSET);
+    header('Content-Disposition:attachment;filename="'.$file.'"');
+
+    $result = $xoopsDB->query('SELECT e.eid,if(x.exid,x.exid,0) exid, IF(exdate,exdate,edate) exdate,title,uid,status,persons,IF(x.reserved,x.reserved,o.reserved) reserved FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref ORDER BY exdate DESC,e.eid DESC");
+    $out = '"'.join('","',array("ID","",_MD_EXTENT_DATE,_AM_TITLE,_AM_POSTER,_MD_RESERV_PERSONS,_AM_RESERVATION))."\"\n";
+    while ($data=$xoopsDB->fetchArray($result)) {
+	$date = eventdate($data['exdate']);
+	$poster = XoopsUser::getUnameFromId($date['uid']);
+	$exid = $data['exid']?$data['exid']:'';
+	$out .= join(',',array($data['eid'],$exid,_q($date),
+			       _q($data['title']),_q($poster),
+			       $data['persons'],$data['reserved']))."\n";
+    }
+    if (_MD_EXPORT_CHARSET != _CHARSET) {
+	if (function_exists("mb_convert_encoding")) {
+	    $out = mb_convert_encoding($out, _MD_EXPORT_CHARSET, _CHARSET);
+	} elseif (function_exists("iconv")) {
+	    $out = iconv(_MD_EXPORT_CHARSET, _CHARSET, $out);
+	}
+    }
+    echo $out;
+    exit;
 }
 ?>
