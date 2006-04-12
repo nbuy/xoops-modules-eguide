@@ -7,8 +7,9 @@
 <link href="<{$xoops_url}>/favicon.ico" rel="SHORTCUT ICON" />
 </head>
 <body>
+<h2><{$title}></h2>
 <div class="evlist">
-<h3><{$lang_reserv_list}></h3>
+<h3><{$smarty.const._MD_RESERV_LIST}></h3>
 
 <table width="100%">
 <tr><td><{$smarty.const._MD_ORDER_COUNT}> <{$order_count}> (<{$reserv_num}>)</td><td align="right"><{$smarty.const._MD_PRINT_DATE}> <{$print_date}></td></tr>
@@ -17,7 +18,6 @@
 <tr class="head">
   <th><{$smarty.const._MD_ORDER_DATE}></th>
   <th><{$smarty.const._MD_STATUS}></th>
-  <th><{$smarty.const._MD_EMAIL}></th>
 <{foreach from=$labels item=lab}>
   <th><{$lab}></th>
 <{/foreach}>

@@ -34,6 +34,7 @@
     <input type="checkbox" name="act[]" value="<{$order.rvid}>" checked />
 <{/if}>
     <a href="receipt.php?rvid=<{$order.rvid}>"><{$smarty.const._MD_DETAIL}></a> |
+    <a href="receipt.php?op=edit&rvid=<{$order.rvid}>"><{$smarty.const._EDIT}></a> |
     <a href="reserv.php?op=cancel&rvid=<{$order.rvid}>"><{$smarty.const._DELETE}></a>
   </td>
   <td><{$order.date}></td>

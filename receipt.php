@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.16 2006/04/11 16:56:38 nobu Exp $
+// $Id: receipt.php,v 1.17 2006/04/12 05:10:17 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -21,23 +21,26 @@ if ($rvid) {
     }
     $data = $xoopsDB->fetchArray($result);
     $eid = $data['eid'];
-    $exid = $data['eid'];
+    $exid = $data['exid'];
     $status = intval($_POST['status']);
     $email = $xoopsDB->quoteString(post_filter($_POST['email']));
-    $info = $xoopsDB->quoteString(post_filter($_POST['info']));
+    $info = post_filter($_POST['info']);
+    $back = 'receipt.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
+    $backanc = "<a href='$back'>"._MD_RESERV_RETURN."</a>";
     if ($op=='save') {
 	$vals = explodeinfo($data['info'], $data['optfield']);
 	$num = ($data['status']!=_RVSTAT_REFUSED)?
 	     (isset($vals[$nlab])?$vals[$nlab]:1):0;
-	$xoopsDB->query("UPDATE ".RVTBL." SET email=$email, status=$status, info=$info WHERE rvid=$rvid");
-	$vals = explodeinfo($data['info'], $data['optfield']);
+	$xoopsDB->query("UPDATE ".RVTBL." SET email=$email, status=$status,".
+			'info='.$xoopsDB->quoteString($info).
+			" WHERE rvid=$rvid");
+	$vals = explodeinfo($info, $data['optfield']);
 	$nnum = ($status!=_RVSTAT_REFUSED)?
 	     (isset($vals[$nlab])?$vals[$nlab]:1):0;
 	update_reserv($eid, $exid, $nnum-$num);
-	redirect_header("receipt.php?op=one&rvid=$rvid",2,_MD_DBUPDATED);
+	redirect_header($back, 2, _MD_DBUPDATED);
 	exit;
     }
-    $backurl = '<a href="receipt.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'').'">'._MD_RESERV_RETURN.'</a>';
 }
 
 $result = $xoopsDB->query("SELECT * FROM ".OPTBL." WHERE eid=$eid");
@@ -225,7 +228,7 @@ case 'edit':
     echo "</td></tr>\n";
     echo "<tr><th></th><td class='odd'><input type='submit' value='"._MD_SAVECHANGE."' /></td></tr>\n";
     echo "</table>\n</form>\n";
-    echo "<p>$backurl</p>\n";
+    echo "<p align='center'>$backanc</p>\n";
     break;
 
 case 'one':
@@ -246,7 +249,7 @@ case 'one':
     edit_eventdata($head);
     $xoopsTpl->assign('event', edit_eventdata($head));
     $xoopsTpl->assign('values', $values);
-    $xoopsTpl->assign('form', $backurl);
+    $xoopsTpl->assign('submit', $backanc);
     break;
 
 default:
