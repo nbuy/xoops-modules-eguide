@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.16 2006/04/09 17:31:33 nobu Exp $
+// $Id: reserv.php,v 1.17 2006/04/19 17:59:39 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -18,7 +18,7 @@ if ($xoopsModuleConfig['member_only'] && !is_object($xoopsUser)) {
     exit;
 }
 
-$isadmin = $xoopsUser->isAdmin($xoopsModule->getVar('mid'));
+$isadmin = is_object($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->getVar('mid'));
 
 function reserv_permit($ruid, $euid, $confirm) {
     global $xoopsUser, $xoopsModule, $xoopsModuleConfig, $isadmin;
@@ -38,15 +38,17 @@ function reserv_permit($ruid, $euid, $confirm) {
     return false;
 }
 
-function template_dir() {
-    global $xoopsModule, $xoopsConfig;
-    $dir = dirname(__FILE__).'/language/';
-    if (file_exists($dir.$xoopsConfig['language'])) {
-	$dir .= $xoopsConfig['language'];
+function template_dir($file='') {
+    global $xoopsConfig;
+    $lang = $xoopsConfig['language'];
+    $dir = dirname(__FILE__).'/language/%s/mail_template/%s';
+    $path = sprintf($dir,$lang, $file);
+    if (file_exists($path)) {
+	$path = sprintf($dir,$lang, '');
     } else {
-	$dir .= 'english';
+	$path = sprintf($dir,'english', '');
     }
-    return $dir.'/mail_template/';
+    return $path;
 }
 
 switch ($op) {
@@ -128,7 +130,7 @@ case 'delete':
 		$xoopsMailer->assign("INFO", $uinfo.$data['info']);
 		$xoopsMailer->assign("RVID", $rvid);
 		$xoopsMailer->setSubject(_MD_CANCEL.' - '.$title);
-		$xoopsMailer->setTemplateDir(template_dir());
+		$xoopsMailer->setTemplateDir(template_dir('cancel.tpl'));
 		$xoopsMailer->setTemplate('cancel.tpl');
 		$xoopsMailer->setToEmails($email);
 		$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
@@ -185,9 +187,10 @@ $errs = array();
 
 switch($op) {
 case 'order':
-    $result = $xoopsDB->query('SELECT uid,o.*,IF(exdate,exdate,edate) edate,title,summary FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
+    $result = $xoopsDB->query('SELECT uid,o.*,IF(exdate,exdate,edate) edate,cdate,title,summary FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     if (!empty($data) && $exid==0) {
+	var_dump( $_POST);
 	$result = $xoopsDB->query('SELECT exid FROM '.EXTBL." WHERE eidref=$eid");
 	if ($xoopsDB->getRowsNum($result)>0) $errs[] = _MD_RESERV_STOP;
     }
@@ -270,8 +273,9 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$poster = new XoopsUser($data['uid']);
 	$xoopsMailer =& getMailer();
 	$xoopsMailer->useMail();
-	$xoopsMailer->setTemplateDir(template_dir());
-	$xoopsMailer->setTemplate($accept?"accept.tpl":"order.tpl");
+	$tplfile = $accept?"accept.tpl":"order.tpl";
+	$xoopsMailer->setTemplateDir(template_dir($tplfile));
+	$xoopsMailer->setTemplate($tplfile);
 	$xoopsMailer->assign("EVENT_URL", $url);
 	if ($xoopsModuleConfig['member_only']) {
 	    $email = $xoopsUser->getVar('email');
@@ -334,7 +338,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 case 'confirm':
     $xoopsOption['template_main'] = 'eguide_confirm.html';
 
-    $result = $xoopsDB->query('SELECT uid,o.optfield,IF(exdate,exdate,edate) edate,title,persons,if(x.reserved,x.reserved,o.reserved) reserved, strict, title, summary FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
+    $result = $xoopsDB->query('SELECT uid,o.optfield,IF(exdate,exdate,edate) edate,cdate,title,persons,if(x.reserved,x.reserved,o.reserved) reserved, strict, title, summary FROM '.EGTBL.' e,'.OPTBL.' o LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=o.eid AND e.eid=$eid");
     $data = $xoopsDB->fetchArray($result);
     $opts = $data['optfield'];
     $vals = get_opt_values($opts, $errs);
@@ -373,7 +377,7 @@ case 'confirm':
 	     "<input type='hidden' name='eid' value='$eid'/>\n".
 	     $emhide.join("\n", get_opt_values($opts, $errs, true)).
 	     "\n<input type='submit' value='"._MD_ORDER_CONF."'/>\n".
-	     ($exid?"<input type='hidden' name='exid' value='$exid'/>\n":"").
+	     ($exid?"<input type='hidden' name='sub' value='$exid'/>\n":"").
 	     "</form>");
     }
     $xoopsTpl->assign('cancel', "<form action='event.php?eid=$eid".

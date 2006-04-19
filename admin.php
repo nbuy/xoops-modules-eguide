@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.15 2006/04/09 17:31:33 nobu Exp $
+// $Id: admin.php,v 1.16 2006/04/19 17:59:39 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -273,6 +273,7 @@ if ($eid && $op=='delete') {
     }
 
     $input_status = $adm?select_list('status', $ev_stats, $data['status']):'';
+    edit_eventdata($data);
     $xoopsTpl->assign($data);
 
     class myFormDhtmlTextArea extends XoopsFormDhtmlTextArea

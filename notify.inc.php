@@ -53,7 +53,7 @@ function user_notify($eid) {
     // using XOOPS2 notification system
 	    
     $tags = array('EVENT_TITLE'=> $title,
-		  'EVENT_DATE' => eventdate($data['edate']),
+		  'EVENT_DATE' => formatTimestamp($data['edate'], _MD_TIME_FMT),
 		  'EVENT_NOTE' => '',
 		  'EVENT_URL'  => XOOPS_URL."/modules/eguide/event.php?eid=$eid");
     $notification_handler =& xoops_gethandler('notification');
