@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.22 2006/04/11 16:56:38 nobu Exp $
+// $Id: index.php,v 1.23 2006/04/19 18:00:02 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -243,10 +243,9 @@ case 'resvCtrl':
     exit;
 
 case 'about':
-    $help = '../language/'.$xoopsConfig['language'].'/help.html';
-    if (!file_exists($help)) $help = '../language/english/help.html';
-    list($h, $b) = preg_split('/<\/?body>/', file_get_contents($help));
-    echo $b;
+    $file = isset($_GET['file'])?
+	$myts->stripSlashesGPC($_GET['file']):"help.html";
+    display_lang_file($file, 'index.php?op=about&file=');
     break;
 
 case 'summary':
@@ -395,5 +394,37 @@ function summary_csv() {
     }
     echo $out;
     exit;
+}
+
+function display_lang_file($file, $link='') {
+    global $xoopsConfig;
+    if (empty($link)) {
+	$link = preg_replace('/&?file=[^&]*|\?$/', '', $_SERVER['REQUEST_URI']);
+	$link .= preg_match('/\?/', $link)?'&':'?';
+	$link .= 'file=';
+    }
+    $file = preg_replace('/^\/+/','',preg_replace('/\/?\\.\\.?\/|\/+/', '/', $file));
+    $lang = "language/".$xoopsConfig['language'];
+    $help = "../$lang/$file";
+    if (!file_exists($help)) {
+	$lang = 'language/english';
+	$help = "../$lang/$file";
+    }
+    $content = file_get_contents($help);
+    list($h, $b) = preg_split('/<\/?body>/', $content);
+    if (empty($b)) $b =& $content;
+
+    // link image
+    // need quote! (sence has protocol)
+    // follow only 1 level depth folder
+    $pat = array('/\ssrc=\'([^#][^\':]*)\'/',
+		 '/\ssrc="([^#][^":]*)"/',
+		 '/\shref=\'([^#][^\':]*)\'/',
+		 '/\shref="([^#][^\':]*)"/');
+    $rep = array(" src='../$lang/\$1'",
+		 " src=\"../$lang/\$1\"",
+		 " href='$link\$1'",
+		 " href=\"$link\$1\"");
+    echo preg_replace($pat, $rep, $b);
 }
 ?>
