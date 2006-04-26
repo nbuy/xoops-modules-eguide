@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.18 2006/04/20 07:20:47 nobu Exp $
+// $Id: reserv.php,v 1.19 2006/04/26 10:35:05 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -190,7 +190,7 @@ switch($op) {
 case 'order':
     $data = fetch_event($eid, $exid);
     $vals = get_opt_values($data['optfield'], $errs);
-    $errs = check_prev_order($data, $vals);
+    check_prev_order($data, $vals, $errs);
     $value = "";
     foreach ($vals as $name => $val) {
 	if (preg_match('/\n/', $val)) {
@@ -324,7 +324,7 @@ case 'confirm':
     $data = fetch_event($eid, $exid);
     $opts = $data['optfield'];
     $vals = get_opt_values($opts, $errs);
-    $errs = check_prev_order($data, $vals);
+    check_prev_order($data, $vals, $errs);
 
     $emhide = "";
     $num = 1;
@@ -490,10 +490,10 @@ function get_opt_values($optfield, &$errs, $hidden=false) {
 	    // remove control char except textarea
 	    if ($type!='textarea') $v = preg_replace('/[\x00-\x1f]/', '', $v);
 	}
-	$mast = preg_match('/\*$/', $name);
+	$must = preg_match('/\*$/', $name);
 	$nums = preg_match('/\#$/', $name);
 	$name = preg_replace('/[\*\#]$/', "", $name);
-	if ($mast) {
+	if ($must) {
 	    // check for NULL
 	    if (preg_match('/^\s*$/', $v)) {
 		$errs[] = "$name: $v - "._MD_NOITEM_ERR;
@@ -523,9 +523,8 @@ LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=$eid");
 
 // check condition before entry event
 // return errors (go on if empty)
-function check_prev_order($data, $vals) {
+function check_prev_order($data, $vals, &$errs) {
     global $xoopsModuleConfig, $xoopsDB;
-    $errs = array();
     $eid = $data['eid'];
     $exid = intval($data['exid']);
     // stopping if multiple event but no have exid (missing?)
