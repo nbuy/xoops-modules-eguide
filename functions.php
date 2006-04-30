@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.7 2006/04/11 16:56:38 nobu Exp $
+// $Id: functions.php,v 1.8 2006/04/30 18:29:51 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -138,6 +138,7 @@ function eventform($data) {
 	    $type = "text";
 	    $aname = isset($opt[0])?strtolower($opt[0]):"";
 	    switch ($aname) {
+		case "hidden":
 		case "text":
 		case "checkbox":
 		case "radio":
@@ -146,6 +147,7 @@ function eventform($data) {
 		    $type = $aname;
 		    array_shift($opt);
 	    }
+	    if ($type=='hidden') continue;
 	    $size = 60;
 	    $cols = 40;
 	    $rows = 5;

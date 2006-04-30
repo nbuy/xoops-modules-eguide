@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.19 2006/04/26 10:35:05 nobu Exp $
+// $Id: reserv.php,v 1.20 2006/04/30 18:29:51 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -456,19 +456,22 @@ function get_opt_values($optfield, &$errs, $hidden=false) {
 	if (preg_match('/^\s*$/', $n)) continue;
 	$a = explode(",", preg_replace('/[\n\r]/',"", $n));
 	$name = preg_replace('/^!\s*/', '', array_shift($a));
+	$fname = preg_replace('/[\*\#]$/', "", $name);
 	$type = "text";
 	if (isset($a[0])) {
-	    switch (strtolower(array_shift($a))) {
+	    $ty = strtolower(array_shift($a));
+	    switch ($ty) {
+	    case 'hidden':
+		if (!$hidden) $result[$fname] = join(',', $a);
 	    case "checkbox":
-		$type = 'checkbox';
-		break;
 	    case 'textarea':
-		$type = 'textarea';
+		$type = $ty;
 		break;
 	    }
 	}
 	$input = "";
-	if ($type == 'checkbox') {
+	if ($type == 'hidden') continue;
+	elseif ($type == 'checkbox') {
 	    $v = "";
 	    for ($i=1; $i<=count($a); $i++) {
 		$n = "opt${field}_$i";
@@ -492,19 +495,18 @@ function get_opt_values($optfield, &$errs, $hidden=false) {
 	}
 	$must = preg_match('/\*$/', $name);
 	$nums = preg_match('/\#$/', $name);
-	$name = preg_replace('/[\*\#]$/', "", $name);
 	if ($must) {
 	    // check for NULL
 	    if (preg_match('/^\s*$/', $v)) {
-		$errs[] = "$name: $v - "._MD_NOITEM_ERR;
+		$errs[] = "$fname: $v - "._MD_NOITEM_ERR;
 	    }
 	} elseif ($nums) {
 	    // check Number
 	    if (!preg_match('/^-?\d+$/', $v)) {
-		$errs[] = "$name: $v - "._MD_NUMITEM_ERR;
+		$errs[] = "$fname: $v - "._MD_NUMITEM_ERR;
 	    }
 	}
-	$result[$name] = $hidden?$input:$v;
+	$result[$fname] = $hidden?$input:$v;
     }
     return $result;
 }

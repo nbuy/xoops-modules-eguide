@@ -120,13 +120,13 @@ td,th { padding: 4px; background: #e8e8e8;}
     </table>
   </blockquote>
 
-  <a name="form"><h2>Additional fileld Formats</h2></a>
+  <a name="form"><h2>Additional fields Format</h2></a>
   <strong>In Reservation</strong>
   Additonal items set to FORM when used order to make reservation.
   These additional items are setup with the following formats:
   <blockquote>
       line ::= ["!"]item-name["*"][,type[,argument...]]<p />
-      type ::= {text|checkbox|radio|textarea|select}<br />
+      type ::= {text|checkbox|radio|textarea|select|hidden}<br />
       argument ::= [value ["+"] "="] label
   </blockquote>
   <ul>
@@ -153,6 +153,7 @@ td,th { padding: 4px; background: #e8e8e8;}
       <tr><td>Selection,radio,Item1+,Item2,Item3</td><td>Selection <input type='radio' name='samp4' value='1' checked /> Item1 &nbsp; <input type='radio' name='samp4' value='2' /> Item2 &nbsp; <input type='radio' name='samp4' value='3' /> Item3 &nbsp; </td></tr>
       <tr><td>Selection,checkbox,Item1+,Item2,Item3</td><td>Selection <input type='checkbox' name='samp5_1' checked /> Item1 &nbsp; <input type='checkbox' name='samp5_2' /> Item2 &nbsp; <input type='checkbox' name='samp5_3' /> Item3 &nbsp; </td></tr>
       <tr><td>Selection,select,Item1,Item2,Item3</td><td>Selection <select name='samp6'><option>Item1</option><option>Item2</option><option>Item3</option></select></td></tr>
+      <tr><td>Label,hidden,value</td><td><em>(not display in form - present only input values)</em></td></tr>
       <tr><td>#message text</td><td>message text</td></tr>
     </table>
   </form>
@@ -160,6 +161,7 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"><h2>Changes</h2></a>
 
 <dl>
+  <dd>2006/05/01 add 'hidden' field in additonal items</dd>
   <dd>2006/04/10 Event Guide Module 2.0 Beta</dd>
   <ul>
     <li>allow XOOPS notification</li>
@@ -234,6 +236,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.16 2006/04/11 05:22:01 nobu Exp $
+$Id: help.html,v 1.17 2006/04/30 18:29:51 nobu Exp $
 </body>
 </html>
