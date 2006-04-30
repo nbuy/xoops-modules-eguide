@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.13 2006/04/10 11:35:14 nobu Exp $
+// $Id: ev_top.php,v 1.14 2006/04/30 18:28:05 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -9,7 +9,6 @@ function b_event_top_show($options) {
     $moddir = 'eguide';
     $modurl = XOOPS_URL."/modules/$moddir";
 
-    $content = "";
     $now = time();
     if ($options[3]) {
         $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>$now AND status=0 ORDER BY cdate DESC";
