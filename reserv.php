@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.20 2006/04/30 18:29:51 nobu Exp $
+// $Id: reserv.php,v 1.21 2006/05/06 15:09:41 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -462,7 +462,9 @@ function get_opt_values($optfield, &$errs, $hidden=false) {
 	    $ty = strtolower(array_shift($a));
 	    switch ($ty) {
 	    case 'hidden':
-		if (!$hidden) $result[$fname] = join(',', $a);
+		if (!$hidden) {
+		    $_POST["opt$field"] = $result[$fname] = join(',', $a);
+		}
 	    case "checkbox":
 	    case 'textarea':
 		$type = $ty;
