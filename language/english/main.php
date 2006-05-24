@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.8 2006/04/11 05:22:01 nobu Exp $
+// $Id: main.php,v 1.9 2006/05/24 04:48:58 nobu Exp $
 define("_MD_RESERV_FORM","Reservation Hear");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
@@ -16,7 +16,9 @@ define('_MD_UNAME','Username');
 define("_MD_SUBJECT","Confirm");
 define("_MD_NOTIFY_EVENT",  "Notification of new events");
 define("_MD_NOTIFY_REQUEST","Notify me by mail when other new events are posted");
-define("_MD_ORDER_NOTE1","'*'required items. ");
+define('_MD_REQUIRE_MARK', '<em>*</em>');
+define('_MD_LISTITEM_FMT', '[%s]');
+define("_MD_ORDER_NOTE1","'"._MD_REQUIRE_MARK."'required items. ");
 define("_MD_ORDER_NOTE2","'[ ]' item to be displayed on list of participants.");
 define('_MD_ORDER_SEND','Reservation');
 define('_MD_ORDER_CONF','Confirm');
@@ -42,6 +44,7 @@ define("_MD_RESERV_ACCEPT","Sending confirmation email");
 define("_MD_RESERV_STOP","Reservations have been halted.");
 define("_MD_RESERV_CONF","Order information");
 define("_MD_RESERV_ADMIN","Reservation list");
+define("_MD_RESERV_REGISTER","Register reservation");
 
 define("_MD_RESERV_ACTIVE"," is accepted.");
 define("_MD_RESERV_REFUSE"," is refused.");

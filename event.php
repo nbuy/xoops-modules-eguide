@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.15 2006/04/09 17:31:33 nobu Exp $
+// $Id: event.php,v 1.16 2006/05/24 04:48:58 nobu Exp $
 
 include 'header.php';
 
@@ -33,8 +33,8 @@ $result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
 " x ON e.eid=eidref WHERE e.eid=$eid $stc".($exid?' AND exid='.$exid:''));
 
 if (!$result || !$xoopsDB->getRowsNum($result)) {
-	redirect_header("index.php",2,_MD_NOEVENT);
-	exit();
+    redirect_header("index.php",2,_MD_NOEVENT);
+    exit();
 }
 $data = $xoopsDB->fetchArray($result);
 $_GET['cat']=$data['catid'];	// for notification

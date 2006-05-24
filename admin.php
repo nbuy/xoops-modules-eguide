@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.16 2006/04/19 17:59:39 nobu Exp $
+// $Id: admin.php,v 1.17 2006/05/24 04:48:58 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -96,7 +96,9 @@ if ($eid) {			// already exists extents
     if ($xoopsDB->getRowsNum($result)>0) {
 	$xoops_extent = '';
     } else {
-	$input_extent = '<input type="submit" name="editdate" value="'._MD_EDIT_EXTENT.'"/>';
+	$save = _MD_EDIT_EXTENT."("._MD_SAVE.")";
+	$input_extent = "<input type='submit' name='editdate' value='$save'/> 
+&nbsp; <a href='editdate.php?eid=$eid'>"._MD_EDIT_EXTENT."</a>";
     }
     $result = $xoopsDB->query('SELECT * FROM '.EXTBL.' WHERE eidref='.$eid.' ORDER BY exdate');
     while ($ext = $xoopsDB->fetchArray($result)) {
@@ -223,6 +225,17 @@ include(XOOPS_ROOT_PATH."/header.php");
 
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
+// DHTML calendar
+include_once XOOPS_ROOT_PATH.'/language/'.$xoopsConfig['language'].'/calendar.php';
+if (!empty($ev_week)) $xoopsTpl->assign('weekname', $ev_week);
+$xoopsTpl->assign('calrange', array(2000,2015));
+
+$monthname = array();
+for ($i=1; $i<=12; $i++) {
+    $monthname[$i] = sprintf(_MD_MONTHC, $i);
+}
+//$xoopsTpl->assign('monthname', $monthname);
+
 if ($eid && $op=='delete') {
     $xoopsOption['template_main'] = 'eguide_event.html';
     edit_eventdata($data);
@@ -300,22 +313,21 @@ include(XOOPS_ROOT_PATH."/footer.php");
 
 // make to unix time from separate fields.
 function getDateField($p) {
-    global $_POST;
-    if (empty($_POST["${p}year"])) return 0;
+    global $xoopsUser;
+    if (empty($_POST["${p}ymd"])) return 0;
+    list($y, $m, $d) = split('-', $_POST["${p}ymd"]);
     return userTimeToServerTime(mktime($_POST["${p}hour"],$_POST["${p}min"], 0,
-		  $_POST["${p}month"], $_POST["${p}day"], $_POST["${p}year"]));
+				       $m, $d, $y), $xoopsUser->getVar("timezone_offset"));
 }
 
 function datefield($prefix, $time) {
-    list($y, $m, $d, $h, $i) = split(' ', formatTimestamp($time, "Y m j G i"));
-    $buf = select_value(_MD_YEARC, "${prefix}year", $y-10, $y+10, $y);
-    $buf .= "&nbsp;\n";
-    $buf .= select_value(_MD_MONTHC, "${prefix}month", 1, 12, $m);
-    $buf .= "&nbsp;\n";
-    $buf .= select_value(_MD_DAYC, "${prefix}day", 1, 31, $d);
-    $buf .= "&nbsp;\n";
+    list($h, $i) = split(' ', formatTimestamp($time, "G i"));
+    $buf = "<input id='${prefix}ymd' name='${prefix}ymd' size='12' value='".formatTimestamp($time, "Y-m-d")."'/> ";
+    $buf .= "<script language='javascript'><!-- 
+document.write('<input type=\"button\" value=\""._MD_CAL."\" onClick=\"showCalendar(\\'${prefix}ymd\\')\">');
+--></script>\n";
 
-    $buf .= "&nbsp;"._MD_TIMEC;
+    $buf .= "&nbsp;"._MD_TIMEC." ";
     $buf .= select_value("%02d", "${prefix}hour", 0, 23, $h);
     $buf .= " : ";
 

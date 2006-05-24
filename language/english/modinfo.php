@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.8 2006/04/11 05:22:01 nobu Exp $
+// $Id: modinfo.php,v 1.9 2006/05/24 04:48:58 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -63,6 +63,7 @@ define("_MI_EGUIDE_MARKER_DEF","0,[Close]\n50,[Empty]\n100,[Many]\n101,[Full]\n"
 // Templates
 define("_MI_EGUIDE_INDEX_TPL", "Event Guide Top page list");
 define("_MI_EGUIDE_EVENT_TPL", "Detail of Event");
+define("_MI_EGUIDE_ENTRY_TPL", "Reservation entry");
 define("_MI_EGUIDE_EVENT_PRINT_TPL", "Detail of Event for Print");
 define("_MI_EGUIDE_RECEIPT_TPL", "Reservations List");
 define("_MI_EGUIDE_ADMIN_TPL", "Event Entry Form");

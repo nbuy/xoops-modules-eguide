@@ -3,6 +3,103 @@
 <{/if}>
 <div class="event">
 <h2><{$lang_event_edit}></h2>
+<!-- for DHTML calendar -->
+<link rel="stylesheet" type="text/css" media="all" href="<{$xoops_url}>/include/calendar-blue.css" />
+<script type="text/javascript" src="<{$xoops_url}>/include/calendar.js"></script>
+<script type="text/javascript">
+<!--
+var calendar = null;
+
+function selected(cal, date) {
+  cal.sel.value = date;
+}
+
+function closeHandler(cal) {
+  cal.hide();
+  Calendar.removeEvent(document, "mousedown", checkCalendar);
+}
+
+function checkCalendar(ev) {
+  var el = Calendar.is_ie ? Calendar.getElement(ev) : Calendar.getTargetElement(ev);
+  for (; el != null; el = el.parentNode)
+    if (el == calendar.element || el.tagName == "A") break;
+  if (el == null) {
+    calendar.callCloseHandler(); Calendar.stopEvent(ev);
+  }
+}
+function showCalendar(id) {
+  var el = xoopsGetElementById(id);
+  if (calendar != null) {
+    calendar.hide();
+  } else {
+    var cal = new Calendar(true, <{if $jstime}><{$jstime}><{else}>'null'<{/if}>, selected, closeHandler);
+    calendar = cal;
+    cal.setRange(<{$calrange[0]}>, <{$calrange[1]}>);
+    calendar.create();
+  }
+  calendar.sel = el;
+  calendar.parseDate(el.value);
+  calendar.showAtElement(el);
+  Calendar.addEvent(document, "mousedown", checkCalendar);
+  return false;
+}
+
+Calendar._DN = new Array
+<{if $weekname}>
+("<{$weekname.Sun}>", "<{$weekname.Mon}>", "<{$weekname.Tue}>",
+ "<{$weekname.Wed}>", "<{$weekname.Thu}>", "<{$weekname.Fri}>",
+ "<{$weekname.Sat}>", "<{$weekname.Sun}>");
+<{else}>
+("Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat", "Sun");
+<{/if}>
+
+Calendar._MN = new Array
+<{if $monthname}>
+(<{foreach from=$monthname item=month}>"<{$month}>",<{/foreach}>,"");
+<{else}>
+("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+ "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+<{/if}>
+
+Calendar._TT = {};
+<{if $calsetting}>
+Calendar._TT["TOGGLE"] = "<{$calsetting._CAL_TGL1STD}>";
+Calendar._TT["PREV_YEAR"] = "<{$calsetting._CAL_PREVYR}>";
+Calendar._TT["PREV_MONTH"] = "<{$calsetting._CAL_PREVMNTH}>";
+Calendar._TT["GO_TODAY"] = "<{$calsetting._CAL_GOTODAY}>";
+Calendar._TT["NEXT_MONTH"] = "<{$calsetting._CAL_NXTMNTH}>";
+Calendar._TT["NEXT_YEAR"] = "<{$calsetting._CAL_NEXTYR}>";
+Calendar._TT["SEL_DATE"] = "<{$calsetting._CAL_SELDATE}>";
+Calendar._TT["DRAG_TO_MOVE"] = "<{$calsetting._CAL_DRAGMOVE}>";
+Calendar._TT["PART_TODAY"] = "(<{$calsetting._CAL_TODAY}>)";
+Calendar._TT["MON_FIRST"] = "<{$calsetting._CAL_DISPM1ST}>";
+Calendar._TT["SUN_FIRST"] = "<{$calsetting._CAL_DISPS1ST}>";
+Calendar._TT["CLOSE"] = "<{$calsetting._CLOSE}>";
+Calendar._TT["TODAY"] = "<{$calsetting._CAL_TODAY}>";
+<{else}>
+Calendar._TT["TOGGLE"] = "<{$smarty.const._CAL_TGL1STD}>";
+Calendar._TT["PREV_YEAR"] = "<{$smarty.const._CAL_PREVYR}>";
+Calendar._TT["PREV_MONTH"] = "<{$smarty.const._CAL_PREVMNTH}>";
+Calendar._TT["GO_TODAY"] = "<{$smarty.const._CAL_GOTODAY}>";
+Calendar._TT["NEXT_MONTH"] = "<{$smarty.const._CAL_NXTMNTH}>";
+Calendar._TT["NEXT_YEAR"] = "<{$smarty.const._CAL_NEXTYR}>";
+Calendar._TT["SEL_DATE"] = "<{$smarty.const._CAL_SELDATE}>";
+Calendar._TT["DRAG_TO_MOVE"] = "<{$smarty.const._CAL_DRAGMOVE}>";
+Calendar._TT["PART_TODAY"] = "(<{$smarty.const._CAL_TODAY}>)";
+Calendar._TT["MON_FIRST"] = "<{$smarty.const._CAL_DISPM1ST}>";
+Calendar._TT["SUN_FIRST"] = "<{$smarty.const._CAL_DISPS1ST}>";
+Calendar._TT["CLOSE"] = "<{$smarty.const._CLOSE}>";
+Calendar._TT["TODAY"] = "<{$smarty.const._CAL_TODAY}>";
+<{/if}>
+
+// date formats
+Calendar._TT["DEF_DATE_FORMAT"] = "y-mm-dd";
+Calendar._TT["TT_DATE_FORMAT"] = "y-mm-dd";
+
+Calendar._TT["WK"] = "";
+//-->
+</script>
+
 <form action="admin.php<{if $eid}>?eid=<{$eid}><{/if}>" method="post" class="evbody" name="evform" id="evform">
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td>

@@ -1,0 +1,95 @@
+<?php
+// Reservation Entry by Poster
+// $Id: entry.php,v 1.1 2006/05/24 04:48:58 nobu Exp $
+
+include 'header.php';
+$_GET['op'] = '';	// only for poster
+include 'perm.php';
+
+$eid = param('eid');
+$exid = param('sub');
+$data = fetch_event($eid, $exid, true);
+$errs = array();
+$now=time();
+
+if (isset($_POST['eid'])) {
+    include 'reserv_func.php';
+    $myts =& MyTextSanitizer::getInstance();
+
+    $vals = get_opt_values($data['optfield'], $errs, false, false);
+    check_prev_order($data, $vals, $errs, true);
+    $value = "";
+    foreach ($vals as $name => $val) {
+	if (preg_match('/\n/', $val)) {
+	    $value .= "$name: \\\n$val\n";
+	} else {
+	    $value .= "$name: $val\n";
+	}
+    }
+    $url = XOOPS_URL.'/modules/'.basename(dirname(__FILE__)).'/receipt.php?eid='.$eid;
+    if ($exid) $url .= '&sub='.$exid;
+    if (!$errs) {
+	$data['closetime'] = 0;	// override close order time
+	$accept = $data['autoaccept'];
+	$strict = $data['strict'];
+	$persons = $data['persons'];
+	$num = 1;
+	$nlab = $xoopsModuleConfig['label_persons'];
+	if ($nlab && isset($vals[$nlab])) {
+	    $num =  intval($vals[$nlab]);
+	    if ($num<1) $num = 1;
+	}
+	if (count_reserved($eid, $exid, $strict, $persons, $num)) {
+	    srand();
+	    $conf = rand(10000,99999);
+	    $ml = $xoopsDB->quoteString($myts->stripSlashesGPC($_POST['email']));
+	    $uid = $xoopsUser->getVar('uid');
+	    $xoopsDB->query('INSERT INTO '.RVTBL." 
+(eid,exid,uid,rdate,email,status,confirm,info) VALUES
+($eid,$exid,$uid,$now,$ml,"._RVSTAT_RESERVED.",$conf,".
+			    $xoopsDB->quoteString($value).")");
+	    
+	    redirect_header($url, 1, _MD_DBUPDATED);
+	    exit;
+	} else $errs[] = _MD_RESERV_FULL;
+    }
+}
+
+if (empty($data)) {
+	redirect_header("index.php",2,_MD_NOEVENT);
+	exit();
+}
+
+$data['exid']=$exid;
+$data['isadmin'] = true;
+$data['link'] = true;
+include XOOPS_ROOT_PATH.'/header.php';
+$xoopsOption['template_main'] = 'eguide_entry.html';
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+edit_eventdata($data);
+$xoopsTpl->assign('event', $data);
+if ($errs) $xoopsTpl->assign('errors', $errs);
+// check pical exists
+$module_handler =& xoops_gethandler('module');
+$module =& $module_handler->getByDirname('piCal');
+if (is_object($module) && $module->getVar('isactive')==1) {
+    $xoopsTpl->assign('caldate', formatTimestamp($data['edate'], 'Y-m-d'));
+}
+// page title
+$xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | "._MD_RESERVATION);
+if ($data['closedate'] < $now) {
+    if ($data['reservation']) $xoopsTpl->assign('message', _MD_RESERV_CLOSE);
+} elseif ($data['reservation']) {
+    $reserved = false;
+    if ($data['strict'] && $data['persons']<=$data['reserved']) {
+	$xoopsTpl->assign('message', _MD_RESERV_FULL);
+    } else {
+	if (empty($_POST['email'])) $_POST['email'] = '';
+	$form = eventform($data);
+	$form['lang_email'] = preg_replace('/\\*$/', _MD_EMAIL);
+	$xoopsTpl->assign('form', $form);
+    }
+}
+
+include XOOPS_ROOT_PATH.'/footer.php';
+?>

@@ -13,10 +13,15 @@
 <{/foreach}>
 </table>
 <{/if}>
-<{if $list}>
 <table width="100%">
-<tr><td><{$smarty.const._MD_ORDER_COUNT}> <{$order_count}> (<{$reserv_num}>)</td><td align="right"><{$smarty.const._MD_PRINT_DATE}> <{$print_date}></td></tr>
+<tr>
+  <td>[ <a href="entry.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_RESERV_REGISTER}></a> ] &nbsp; 
+  <{$smarty.const._MD_ORDER_COUNT}> <{$order_count}> (<{$reserv_num}>)
+  </td>
+  <td align="right"><{$smarty.const._MD_PRINT_DATE}> <{$print_date}></td>
+</tr>
 </table>
+<{if $list}>
 <form action="receipt.php" method="post">
 <table width="100%" cellspacing="1" cellpadding="4" class="outer">
 <tr class="head">
@@ -71,12 +76,14 @@
 <{/if}>
 </form>
 <p align='right'>
-[<a href="receipt.php?op=csv&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_CSV_OUT}></a>
- | <a href="sendinfo.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_INFO_MAIL}></a>] 
+[
+<a href="receipt.php?op=csv&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_CSV_OUT}></a>
+ | <a href="sendinfo.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_INFO_MAIL}></a>
+] 
 <a href="receipt.php?op=print&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$smarty.const._PRINT}>" border="0" /></a>
 </p>
 <{else}>
-<div class='evnote'><{$smarty.const._MD_NODATA}></div>
+<p class='evnote'><{$smarty.const._MD_NODATA}></p>
 <{/if}>
 <{if $citem}>
 <div class="evhead"><{$smarty.const._MD_SUMMARY}></div>

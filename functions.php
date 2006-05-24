@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.8 2006/04/30 18:29:51 nobu Exp $
+// $Id: functions.php,v 1.9 2006/05/24 04:48:58 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -8,7 +8,7 @@ function explodeopts($opts) {
     foreach (explode("\n",preg_replace('/\r/','',$opts)) as $ln) {
 	// comment line
 	if (preg_match('/^\s*#/', $ln)||preg_match('/^\s*$/', $ln)) continue;
-	$fld = explode(",", $ln);
+	$fld = preg_split("/,\s*/", $ln);
 	$lab = preg_replace('/^!\s*/', '', preg_replace('/[\*#]$/', "", array_shift($fld)));
 	$myitem[] =  $lab;
     }
@@ -103,8 +103,9 @@ function eventform($data) {
     $form = array();
     $optfield = $data['optfield'];
     // reservation form
-    $email = isset($_POST['email'])?$_POST['email']:'';
-    if (empty($email)) $email = is_object($xoopsUser)?$xoopsUser->email():"";
+    if (isset($_POST['email'])) {
+	$email = $myts->stripSlashesGPC($_POST['email']);
+    } else $email = is_object($xoopsUser)?$xoopsUser->email():"";
     $form['email'] = $myts->makeTboxData4Edit($email);
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $items = array();
@@ -120,7 +121,7 @@ function eventform($data) {
 	    $type = "#";
 	    $name = "&nbsp;";
 	} else {
-	    $opt = explode(",", $n);
+	    $opt = preg_split("/,\\s*/", $n);
 	    $name = array_shift($opt);
 	    if (preg_match('/[\*#]$/', $name)) {
 		$attr = 'evms';
@@ -224,17 +225,18 @@ function eventform($data) {
 		$opts = "<select name='$fname'>\n$opts</select>";
 	    }
 	}
-	if ($attr=='evop') $name = "[$name]";
+	$name = preg_replace('/\\*$/', _MD_REQUIRE_MARK, $name);
+	if ($attr=='evop') $name = sprintf(_MD_LISTITEM_FMT, $name);
 	if ($attr=='') $attr = (count($items)%2)?'even':'odd';
-	$items[] = array('attr'=>$attr, 'label'=>$name, 'value'=>$opts, 'comment'=>$comment);
+	$items[] = array('attr'=>$attr, 'label'=>$name,
+			 'value'=>$opts, 'comment'=>$comment);
     }
     $mo = $xoopsModuleConfig['member_only'];
     $form['member_only'] = $mo;
     $form['op'] = ($xoopsModuleConfig['has_confirm']&&
 		   (count($items)||!$mo))?'confirm':'order';
     $form['items'] = $items;
-    $form['lang_note'] = $note1;
-    $form['note'] = $note2;
+    $form['note'] = $note1.(!empty($note1)&&!empty($note2)?" ":"").$note2;
     $form['eid'] = empty($data['eid'])?0:$data['eid'];
     return $form;
 }
@@ -311,5 +313,19 @@ function get_category() {
 	$list[$id] = $name;
     }
     return $list;
+}
+
+// fetch event data set
+function fetch_event($eid, $exid, $admin=false) {
+    global $xoopsDB;
+    $stc=$admin?"":"AND status=".STAT_NORMAL;
+    $fields = "e.eid, cdate, persons,title, summary, body, optfield,
+IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
+closetime, reservation, uid, status, style, counter, catid, catname, catimg, 
+exid, exdate, strict, autoaccept, notify";
+    $result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
+' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.
+" x ON e.eid=eidref WHERE e.eid=$eid $stc".($exid?' AND exid='.$exid:''));
+    return $xoopsDB->fetchArray($result);
 }
 ?>

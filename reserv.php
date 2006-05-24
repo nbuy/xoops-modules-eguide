@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.21 2006/05/06 15:09:41 nobu Exp $
+// $Id: reserv.php,v 1.22 2006/05/24 04:48:58 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -76,6 +76,12 @@ case 'delete':
 	    edit_eventdata($data);
 	    $eid = $data['eid'];
 	    $exid = $data['exid'];
+	    if ($isadmin || (is_object($xoopsUser) &&
+			     $data['uid']==$xoopsUser->getVar('uid'))) {
+		$conf = "";
+	    } else {
+		$conf = "AND confirm=".intval($_POST['key']);
+	    }
 	    $result = $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid $conf");
 	} else {
 	    $result = false;
@@ -180,7 +186,9 @@ case 'register':
     }
 }
 
+include 'reserv_func.php';
 include(XOOPS_ROOT_PATH."/header.php");
+
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 $eid = param('eid');
 $exid = param('sub');
@@ -189,7 +197,7 @@ $errs = array();
 switch($op) {
 case 'order':
     $data = fetch_event($eid, $exid);
-    $vals = get_opt_values($data['optfield'], $errs);
+    $vals = get_opt_values($data['optfield'], $errs, false, false);
     check_prev_order($data, $vals, $errs);
     $value = "";
     foreach ($vals as $name => $val) {
@@ -275,7 +283,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$xoopsMailer->assign("INFO", $uinfo.$value);
 	$xoopsMailer->assign("TITLE", $title);
 	$xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
-	$xoopsMailer->setToEmails($email);
+	if (!empty($email)) $xoopsMailer->setToEmails($email);
 	if ($data['notify']) {
 	    if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
 		$xoopsMailer->setToUsers($poster);
@@ -291,7 +299,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
 	    if ($value) {
 		echo "<h3>"._MD_RESERV_CONF."</h3>";
-		echo "<blockquote class='evbody'>".nl2br($value)."</blockquote>";
+		echo "<blockquote class='evbody'>".$myts->displayTarea($value)."</blockquote>";
 	    }
 	    //
 	    // register user notify request
@@ -357,14 +365,14 @@ case 'confirm':
 		      ($exid?'&sub='.$exid:''). "' method='post'>".$emhide.
 		      join("\n", get_opt_values($opts, $errs, true)).
 		      "\n<input type='submit' value='"._MD_BACK."'/>\n".
-		      "</from>\n");
+		      "</form>\n");
     break;
 
 case 'cancel':
-    $result = $xoopsDB->query('SELECT eid,exid FROM '.RVTBL.' WHERE rvid='.$rvid);
+    $result = $xoopsDB->query('SELECT eid,exid,uid,confirm FROM '.RVTBL.' WHERE rvid='.$rvid);
     if ($result) {
 	if ($xoopsDB->getRowsNum($result)) {
-	    list($eid, $exid) = $xoopsDB->fetchRow($result);
+	    list($eid, $exid, $ruid, $conf) = $xoopsDB->fetchRow($result);
 	} else $result = false;
     }
     if (!$result || $xoopsDB->getRowsNum($result)==0) {
@@ -372,10 +380,12 @@ case 'cancel':
     } else {		// there is reservation
 	$data = fetch_event($eid, $exid);
 	$evurl = XOOPS_URL.'/modules/eguide/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
-	if (!reserv_permit($data['ruid'], $data['uid'], $data['confirm'])) {
+	if (!reserv_permit($ruid, $data['uid'], $conf)) {
 	    redirect_header($evurl,5,_MD_CANCEL_FAIL);
 	    exit;
 	}
+	$data['confirm'] = $conf;
+	$data['ruid'] = $ruid;
     }
     if ($result) {
 	if (!$isadmin && $data['edate']-$data['closetime']<$now) {
@@ -421,159 +431,6 @@ case 'register':
     echo "<input type='hidden' name='op' value='notify' />\n</form>\n";
     break;
 }
+
 include(XOOPS_ROOT_PATH."/footer.php");
-exit;
-
-function getTitle($eid) {
-    global $xoopsDB;
-
-    $result = $xoopsDB->query("SELECT title, edate, uid FROM ".
-			      $xoopsDB->prefix("eguide")." WHERE eid=$eid");
-    return $xoopsDB->fetchArray($result);
-}
-
-function count_reserved($eid, $exid, $strict, $persons, $value=1) {
-    global $xoopsDB;
-    if ($exid) {
-	$cond = "exid=$exid";
-	$tbl = EXTBL;
-    } else {
-	$cond = "eid=$eid";
-	$tbl = OPTBL;
-    }
-    $cond .= $strict?" AND reserved<=".($persons-$value):"";
-    $res = $xoopsDB->query("UPDATE $tbl SET reserved=reserved+$value WHERE $cond");
-    return $res && $xoopsDB->getAffectedRows();
-}
-
-function get_opt_values($optfield, &$errs, $hidden=false) {
-    $myts =& MyTextSanitizer::getInstance();
-    $result = array();
-    $field = 0;
-    foreach (explode("\n", $optfield) as $n) {
-	$field++;
-	if (preg_match('/^\s*#/', $n)) continue;
-	if (preg_match('/^\s*$/', $n)) continue;
-	$a = explode(",", preg_replace('/[\n\r]/',"", $n));
-	$name = preg_replace('/^!\s*/', '', array_shift($a));
-	$fname = preg_replace('/[\*\#]$/', "", $name);
-	$type = "text";
-	if (isset($a[0])) {
-	    $ty = strtolower(array_shift($a));
-	    switch ($ty) {
-	    case 'hidden':
-		if (!$hidden) {
-		    $_POST["opt$field"] = $result[$fname] = join(',', $a);
-		}
-	    case "checkbox":
-	    case 'textarea':
-		$type = $ty;
-		break;
-	    }
-	}
-	$input = "";
-	if ($type == 'hidden') continue;
-	elseif ($type == 'checkbox') {
-	    $v = "";
-	    for ($i=1; $i<=count($a); $i++) {
-		$n = "opt${field}_$i";
-		if (isset($_POST[$n])) {
-		    $vv = $myts->stripSlashesGPC($_POST[$n]);
-		    $v .= (($v=="")?"":",").$vv;
-		    if ($hidden) {
-			$input .= "<input type='hidden' name='$n' value='".
-			    $myts->makeTboxData4Edit($vv)."'/>";
-		    }
-		}
-	    }
-	} else {
-	    $v = $myts->stripSlashesGPC($_POST["opt$field"]);
-	    if ($hidden) {
-		$input .= "<input type='hidden' name='opt$field' value='".
-		    $myts->makeTboxData4Edit($v)."'/>";
-	    }
-	    // remove control char except textarea
-	    if ($type!='textarea') $v = preg_replace('/[\x00-\x1f]/', '', $v);
-	}
-	$must = preg_match('/\*$/', $name);
-	$nums = preg_match('/\#$/', $name);
-	if ($must) {
-	    // check for NULL
-	    if (preg_match('/^\s*$/', $v)) {
-		$errs[] = "$fname: $v - "._MD_NOITEM_ERR;
-	    }
-	} elseif ($nums) {
-	    // check Number
-	    if (!preg_match('/^-?\d+$/', $v)) {
-		$errs[] = "$fname: $v - "._MD_NUMITEM_ERR;
-	    }
-	}
-	$result[$fname] = $hidden?$input:$v;
-    }
-    return $result;
-}
-
-// fetch event data set
-function fetch_event($eid, $exid) {
-    global $xoopsDB;
-    $result = $xoopsDB->query('SELECT 
-e.eid, x.exid, uid, o.optfield, reservation, autoaccept, strict, 
-IF(exdate,exdate,edate) edate, cdate, title, persons, summary,
-if(x.reserved,x.reserved,o.reserved) reserved 
-FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid 
-LEFT JOIN '.EXTBL." x ON e.eid=eidref AND x.exid=$exid WHERE e.eid=$eid");
-    return $xoopsDB->fetchArray($result);
-}
-
-// check condition before entry event
-// return errors (go on if empty)
-function check_prev_order($data, $vals, &$errs) {
-    global $xoopsModuleConfig, $xoopsDB;
-    $eid = $data['eid'];
-    $exid = intval($data['exid']);
-    // stopping if multiple event but no have exid (missing?)
-    if (!empty($data) && empty($data['exid'])) {
-	$result = $xoopsDB->query('SELECT exid FROM '.EXTBL." WHERE eidref=$eid");
-	if ($xoopsDB->getRowsNum($result)>0) $errs[] = _MD_RESERV_STOP." (1)";
-    }
-    // stop reservation or limit over
-    if (empty($data['reservation']) ||
-	($data['edate']-$data['closetime'])<time()) {
-	if (empty($errs)) $errs[] = _MD_RESERV_STOP;
-    }
-
-    // order duplicate check
-    if (!$xoopsModuleConfig['member_only']) {
-	$email = param('email', '');
-	if (!preg_match('/^[\w\-_\.]+@[\w\-_\.]+$/', $email)) {
-	    $errs[] =  _MD_EMAIL.": $email - "._MD_MAIL_ERR;
-	}
-	$ml = strtolower($email);
-	$result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND email=".$xoopsDB->quoteString($ml));
-    } else {
-	global $xoopsUser;
-	if (!is_object($xoopsUser)) redirect_header($_SERVER['HTTP_REFERER'],2);
-	$result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND uid=".$xoopsUser->getVar('uid'));
-	$email = $xoopsUser->getVar('uname');
-	$ml = '';
-    }
-    if ($xoopsDB->getRowsNum($result)) {
-	$errs[] = "$email - "._MD_DUP_ERR;
-    }
-    // checking is there any seat?
-    $num = 1;			// how many orders?
-    $nlab = $xoopsModuleConfig['label_persons'];
-    if ($nlab && isset($vals[$nlab])) {
-	$num =  intval($vals[$nlab]);
-	if ($num<1) $num = 1;
-    }
-    if ($data['strict']) {
-	if ($data['persons']<=$data['reserved']) {
-	    $errs[] = _MD_RESERV_FULL;
-	} elseif ($data['persons']<($data['reserved']+$num)) {
-	    $errs[] = sprintf($nlab._MD_RESERV_TOMATCH, $num,$data['persons']-$data['reserved']);
-	}
-    }
-    return $errs;
-}
 ?>

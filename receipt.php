@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.18 2006/04/12 05:15:31 nobu Exp $
+// $Id: receipt.php,v 1.19 2006/05/24 04:48:58 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -309,8 +309,7 @@ default:
 		    }
 		}
 	    }
-	    if ($v=="") $v="&nbsp;";
-	    if (count($add) < $max) $add[] = $v;
+	    if (count($add) < $max) $add[] = htmlspecialchars($v);
 	}
 	$order['add'] = $add;
 	if ($order['uid']) {

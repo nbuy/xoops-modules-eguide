@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.28 2006/04/09 17:31:33 nobu Exp $
+// $Id: xoops_version.php,v 1.29 2006/05/24 04:48:58 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "1.98";
+$modversion['version'] = "1.99";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -31,26 +31,28 @@ $modversion['adminindex'] = "admin/index.php";
 $modversion['adminmenu'] = "admin/menu.php";
 
 // Templates
-$modversion['templates'][1]=array('file' => 'eguide_index.html',
-				  'description' => _MI_EGUIDE_INDEX_TPL);
-$modversion['templates'][2]=array('file' => 'eguide_event.html',
-				  'description' => _MI_EGUIDE_EVENT_TPL);
-$modversion['templates'][3]=array('file' => 'eguide_receipt.html',
-				  'description' => _MI_EGUIDE_RECEIPT_TPL);
-$modversion['templates'][4]=array('file' => 'eguide_admin.html',
-				  'description' => _MI_EGUIDE_ADMIN_TPL);
-$modversion['templates'][5]=array('file' => 'eguide_receipt_print.html',
-				  'description' => _MI_EGUIDE_RECEIPT_PRINT_TPL);
-$modversion['templates'][6]=array('file' => 'eguide_event_print.html',
-				  'description' => _MI_EGUIDE_EVENT_PRINT_TPL);
-$modversion['templates'][7]=array('file' => 'eguide_item.html',
-				  'description' => _MI_EGUIDE_EVENT_ITEM_TPL);
-$modversion['templates'][8]=array('file' => 'eguide_confirm.html',
-				  'description' => _MI_EGUIDE_EVENT_CONF_TPL);
-$modversion['templates'][9]=array('file' => 'eguide_mylist.html',
-				  'description' => _MI_EGUIDE_EVENT_LIST_TPL);
-$modversion['templates'][10]=array('file' => 'eguide_confirm.html',
-				  'description' => _MI_EGUIDE_EVENT_CONFIRM_TPL);
+$modversion['templates'][]=array('file' => 'eguide_index.html',
+				 'description' => _MI_EGUIDE_INDEX_TPL);
+$modversion['templates'][]=array('file' => 'eguide_event.html',
+				 'description' => _MI_EGUIDE_EVENT_TPL);
+$modversion['templates'][]=array('file' => 'eguide_entry.html',
+				 'description' => _MI_EGUIDE_ENTRY_TPL);
+$modversion['templates'][]=array('file' => 'eguide_receipt.html',
+				 'description' => _MI_EGUIDE_RECEIPT_TPL);
+$modversion['templates'][]=array('file' => 'eguide_admin.html',
+				 'description' => _MI_EGUIDE_ADMIN_TPL);
+$modversion['templates'][]=array('file' => 'eguide_receipt_print.html',
+				 'description' => _MI_EGUIDE_RECEIPT_PRINT_TPL);
+$modversion['templates'][]=array('file' => 'eguide_event_print.html',
+				 'description' => _MI_EGUIDE_EVENT_PRINT_TPL);
+$modversion['templates'][]=array('file' => 'eguide_item.html',
+				 'description' => _MI_EGUIDE_EVENT_ITEM_TPL);
+$modversion['templates'][]=array('file' => 'eguide_confirm.html',
+				 'description' => _MI_EGUIDE_EVENT_CONF_TPL);
+$modversion['templates'][]=array('file' => 'eguide_mylist.html',
+				 'description' => _MI_EGUIDE_EVENT_LIST_TPL);
+$modversion['templates'][]=array('file' => 'eguide_confirm.html',
+				 'description' => _MI_EGUIDE_EVENT_CONFIRM_TPL);
 // Blocks
 $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'name' => _MI_EGUIDE_HEADLINE,
