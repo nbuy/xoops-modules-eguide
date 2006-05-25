@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.22 2006/05/24 04:48:58 nobu Exp $
+// $Id: reserv.php,v 1.23 2006/05/25 19:07:53 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -9,9 +9,6 @@ $key = param('key');
 $now=time();
 $nlab = $xoopsModuleConfig['label_persons'];
 $myts =& MyTextSanitizer::getInstance();
-
-$member_handler =& xoops_gethandler('member');
-$notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
 
 if ($xoopsModuleConfig['member_only'] && !is_object($xoopsUser)) {
     redirect_header(XOOPS_URL."/user.php",2,_NOPERM);
@@ -36,19 +33,6 @@ function reserv_permit($ruid, $euid, $confirm) {
 	if ($uid==$euid) return true;
     }
     return false;
-}
-
-function template_dir($file='') {
-    global $xoopsConfig;
-    $lang = $xoopsConfig['language'];
-    $dir = dirname(__FILE__).'/language/%s/mail_template/%s';
-    $path = sprintf($dir,$lang, $file);
-    if (file_exists($path)) {
-	$path = sprintf($dir,$lang, '');
-    } else {
-	$path = sprintf($dir,'english', '');
-    }
-    return $path;
 }
 
 switch ($op) {
@@ -116,14 +100,13 @@ case 'delete':
 
 		if ($xoopsModuleConfig['member_only']) {
 		    $user = new XoopsUser($data['ruid']);
-		    $email = $user->getVar('email');
-		    $uinfo = sprintf("%s: %s (%s)\n%s: %s\n", _MD_UNAME,
+		    $uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
 				     $user->getVar('uname'),
-				     $user->getVar('name'),
-				     _MD_EMAIL, $email);
+				     $user->getVar('name'));
 		} else {
-		    $uinfo = sprintf("%s: %s\n", _MD_EMAIL, $data['email']);
-		}
+		    $uinfo = "";
+		} 
+		if ($email) $uinfo .= sprintf("%s: %s\n", _MD_EMAIL, $email);
 		if (is_object($xoopsUser)) {
 		    $xoopsMailer->assign("REQ_UNAME", $xoopsUser->getVar('uname'));
 		    $xoopsMailer->assign("REQ_NAME", $xoopsUser->getVar('name'));
@@ -138,12 +121,14 @@ case 'delete':
 		$xoopsMailer->setSubject(_MD_CANCEL.' - '.$title);
 		$xoopsMailer->setTemplateDir(template_dir('cancel.tpl'));
 		$xoopsMailer->setTemplate('cancel.tpl');
-		$xoopsMailer->setToEmails($email);
+		if ($email) $xoopsMailer->setToEmails($email);
 		$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
 		$xoopsMailer->setFromName(_MD_FROM_NAME);
 		if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
 		    $xoopsMailer->setToUsers($poster);
 		}
+		$member_handler =& xoops_gethandler('member');
+		$notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
 		$xoopsMailer->setToGroups($notify_group);
 		$xoopsMailer->send();
 	    }
@@ -209,10 +194,8 @@ case 'order':
     }
     if (!$xoopsModuleConfig['member_only']) {
 	$email = param('email', '');
-	$ml = strtolower($email);
     } else {
-	$email = $xoopsUser->getVar('uname');
-	$ml = '';
+	$email = '';
     }
 
     if (empty($errs)) {
@@ -246,54 +229,20 @@ case 'order':
 
     if (empty($errs)) {
 	srand();
-	$conf = rand(10000,99999);
+	$data['confirm'] = $conf = rand(10000,99999);
 	$uid = 'NULL';
 	if (is_object($xoopsUser)) {
 	    if ($ml == '' || strtolower($xoopsUser->getVar('email'))==$ml) {
 		$uid = $xoopsUser->getVar('uid');
 	    }
 	}
-	$ml = $xoopsDB->quoteString($ml);
+	$ml = $xoopsDB->quoteString($email);
 	$accept = $data['autoaccept'];
 	$xoopsDB->query('INSERT INTO '.RVTBL."
 	(eid, exid, uid, rdate, email, info, status, confirm)
 VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$conf')");
-	$rvid = $xoopsDB->getInsertId();
-	$title = eventdate($data['edate']).": ".$data['title'];
-	$url = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/event.php?eid='.$eid.($exid?"&sub=$exid":'');
-	$poster = new XoopsUser($data['uid']);
-	$xoopsMailer =& getMailer();
-	$xoopsMailer->useMail();
-	$tplfile = $accept?"accept.tpl":"order.tpl";
-	$xoopsMailer->setTemplateDir(template_dir($tplfile));
-	$xoopsMailer->setTemplate($tplfile);
-	$xoopsMailer->assign("EVENT_URL", $url);
-	if ($xoopsModuleConfig['member_only']) {
-	    $email = $xoopsUser->getVar('email');
-	    $uinfo = sprintf("%s: %s (%s)\n%s: %s\n", _MD_UNAME,
-			     $xoopsUser->getVar('uname'),
-			     $xoopsUser->getVar('name'),
-			     _MD_EMAIL, $email);
-	} else {
-	    $uinfo = sprintf("%s: %s\n", _MD_EMAIL, $email);
-	}
-	$xoopsMailer->assign("RVID", $rvid);
-	$xoopsMailer->assign("CANCEL_KEY", $conf);
-	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
-	$xoopsMailer->assign("INFO", $uinfo.$value);
-	$xoopsMailer->assign("TITLE", $title);
-	$xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
-	if (!empty($email)) $xoopsMailer->setToEmails($email);
-	if ($data['notify']) {
-	    if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
-		$xoopsMailer->setToUsers($poster);
-	    }
-	    $xoopsMailer->setToGroups($notify_group);
-	}
-	$xoopsMailer->setSubject(_MD_SUBJECT.' - '.$title);
-	$xoopsMailer->setFromEmail($poster->getVar('email'));
-	$xoopsMailer->setFromName(_MD_FROM_NAME);
-	if ($xoopsMailer->send()) {
+	$data['rvid'] = $rvid = $xoopsDB->getInsertId();
+	if (order_notify($data, $email, $value)) {
 	    echo "<div class='evform'>\n";
 	    echo "<h3>"._MD_RESERVATION."</h3>\n";
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
@@ -321,7 +270,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    count_reserved($eid, $exid, $strict, $persons, -$num);
 	}
 	$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
-	echo "<p><a href='$evurl'>$title</a></p>";
+	echo "<p><a href='$evurl'>".eventdate($data['edate']).": ".$data['title']."</a></p>";
 	echo "</div>\n";
     }
     if (empty($errs)) break;

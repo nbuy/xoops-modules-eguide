@@ -1,6 +1,6 @@
 <?php
 // Reservation Entry by Poster
-// $Id: entry.php,v 1.1 2006/05/24 04:48:58 nobu Exp $
+// $Id: entry.php,v 1.2 2006/05/25 19:07:53 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -41,14 +41,16 @@ if (isset($_POST['eid'])) {
 	}
 	if (count_reserved($eid, $exid, $strict, $persons, $num)) {
 	    srand();
-	    $conf = rand(10000,99999);
-	    $ml = $xoopsDB->quoteString($myts->stripSlashesGPC($_POST['email']));
+	    $data['confirm'] = $conf = rand(10000,99999);
+	    $email = param('email', '');
+	    $ml = $xoopsDB->quoteString($email);
 	    $uid = $xoopsUser->getVar('uid');
 	    $xoopsDB->query('INSERT INTO '.RVTBL." 
 (eid,exid,uid,rdate,email,status,confirm,info) VALUES
 ($eid,$exid,$uid,$now,$ml,"._RVSTAT_RESERVED.",$conf,".
 			    $xoopsDB->quoteString($value).")");
-	    
+	    $data['rvid'] = $xoopsDB->getInsertId();
+	    order_notify($data, $email, $value); // error ignore
 	    redirect_header($url, 1, _MD_DBUPDATED);
 	    exit;
 	} else $errs[] = _MD_RESERV_FULL;

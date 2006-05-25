@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.9 2006/05/24 04:48:58 nobu Exp $
+// $Id: functions.php,v 1.10 2006/05/25 19:07:53 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -327,5 +327,64 @@ exid, exdate, strict, autoaccept, notify";
 ' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.
 " x ON e.eid=eidref WHERE e.eid=$eid $stc".($exid?' AND exid='.$exid:''));
     return $xoopsDB->fetchArray($result);
+}
+
+function template_dir($file='') {
+    global $xoopsConfig;
+    $lang = $xoopsConfig['language'];
+    $dir = dirname(__FILE__).'/language/%s/mail_template/%s';
+    $path = sprintf($dir,$lang, $file);
+    if (file_exists($path)) {
+	$path = sprintf($dir,$lang, '');
+    } else {
+	$path = sprintf($dir,'english', '');
+    }
+    return $path;
+}
+
+function order_notify($data, $email, $value) {
+    global $xoopsModuleConfig, $xoopsUser, $xoopsModule;
+
+    $poster = new XoopsUser($data['uid']);
+    $eid = $data['eid'];
+    $exid = $data['exid'];
+    $url = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/event.php?eid='.$eid.($exid?"&sub=$exid":'');
+
+    $xoopsMailer =& getMailer();
+    $xoopsMailer->useMail();
+    $tplfile = $data['autoaccept']?"accept.tpl":"order.tpl";
+    $xoopsMailer->setTemplateDir(template_dir($tplfile));
+    $xoopsMailer->setTemplate($tplfile);
+    $xoopsMailer->assign("EVENT_URL", $url);
+    if ($xoopsModuleConfig['member_only']) {
+	$uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
+			 $xoopsUser->getVar('uname'),
+			 $xoopsUser->getVar('name'));
+    } else {
+	$uinfo = "";
+    }
+    if ($email) $uinfo .= sprintf("%s: %s\n", _MD_EMAIL, $email);
+    $rvid = $data['rvid'];
+    $conf = $data['confirm'];
+    $xoopsMailer->assign("RVID", $rvid);
+    $xoopsMailer->assign("CANCEL_KEY", $conf);
+    $xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
+    $xoopsMailer->assign("INFO", $uinfo.$value);
+    $title = eventdate($data['edate']).": ".$data['title'];
+    $xoopsMailer->assign("TITLE", $title);
+    $xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
+    if (!empty($email)) $xoopsMailer->setToEmails($email);
+    if ($data['notify']) {
+	if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
+	    $xoopsMailer->setToUsers($poster);
+	}
+	$member_handler =& xoops_gethandler('member');
+	$notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
+	$xoopsMailer->setToGroups($notify_group);
+    }
+    $xoopsMailer->setSubject(_MD_SUBJECT.' - '.$title);
+    $xoopsMailer->setFromEmail($poster->getVar('email'));
+    $xoopsMailer->setFromName(_MD_FROM_NAME);
+    return $xoopsMailer->send();
 }
 ?>
