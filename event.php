@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.17 2006/05/25 04:09:09 nobu Exp $
+// $Id: event.php,v 1.18 2006/05/25 04:33:15 nobu Exp $
 
 include 'header.php';
 
@@ -71,8 +71,8 @@ if (is_object($module) && $module->getVar('isactive')==1) {
     $pidate = formatTimestamp($data['edate'], 'Y-m-d');
     if (empty($_GET['caldate'])) {
 	$_GET['caldate'] = $pidate;
-	$_POST['pical_jumpcaldate'] = true; // pical cache disable hack
     }
+    $_POST['pical_jumpcaldate'] = true; // pical cache disable hack
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
