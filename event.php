@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.16 2006/05/24 04:48:58 nobu Exp $
+// $Id: event.php,v 1.17 2006/05/25 04:09:09 nobu Exp $
 
 include 'header.php';
 
@@ -64,17 +64,23 @@ if ($op != "print") {
     $data['link'] = true;
 }
 
+// check pical exists
+$module_handler =& xoops_gethandler('module');
+$module =& $module_handler->getByDirname('piCal');
+if (is_object($module) && $module->getVar('isactive')==1) {
+    $pidate = formatTimestamp($data['edate'], 'Y-m-d');
+    if (empty($_GET['caldate'])) {
+	$_GET['caldate'] = $pidate;
+	$_POST['pical_jumpcaldate'] = true; // pical cache disable hack
+    }
+}
+
 include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = 'eguide_event.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 edit_eventdata($data);
 $xoopsTpl->assign('event', $data);
-// check pical exists
-$module_handler =& xoops_gethandler('module');
-$module =& $module_handler->getByDirname('piCal');
-if (is_object($module) && $module->getVar('isactive')==1) {
-    $xoopsTpl->assign('caldate', formatTimestamp($data['edate'], 'Y-m-d'));
-}
+if (isset($pidate)) $xoopsTpl->assign('caldate', $pidate);
 // page title
 $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".
 		  $data['date'].": ".$data['title']);
