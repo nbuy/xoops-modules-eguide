@@ -22,6 +22,7 @@
 <div class="evtitle"><{$smarty.const._MD_RESERVATION}></div>
 <form action="reserv.php?op=<{$form.op}>" method="post">
 <table class="outer" align="center" cellspacing="1" border="0">
+<tr><th colspan="2"><{$event.date}>: <{$event.title}></th></tr>
 <{if !$form.member_only}>
 <tr class="evms"><th><{$smarty.const._MD_EMAIL}>*</th><td><input size="40" name="email" value="<{$form.email}>"/>
 <{if $form.user_notify}>

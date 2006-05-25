@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.4 2006/03/30 05:47:46 nobu Exp $
+// $Id: editdate.php,v 1.5 2006/05/25 14:57:04 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -53,7 +53,7 @@ if (isset($_POST['adds'])) {
 		$hh = formatTimestamp($exdate, 'H');
 		$mm = formatTimestamp($exdate, 'i');
 	    }
-	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy));
+	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy), $xoopsUser->getVar("timezone_offset"));
 	    if ($exdate != $tm) {
 		if ($tm >= $edate && $tm < $expire && $tm > $now) {
 		    $post = formatTimestamp($tm, 'Y-m-d H:i');
@@ -85,7 +85,7 @@ if (isset($_POST['adds'])) {
 	    } else {
 		$hour = $defh; $min = $defi;
 	    }
-	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy));
+	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy), $xoopsUser->getVar("timezone_offset"));
 	    if ($tm >= $edate && $tm < $expire && $tm > $now) {
 		$xoopsDB->query('INSERT INTO '.EXTBL."(eidref,exdate)VALUES($eid,$tm)");
 		$chg++;
