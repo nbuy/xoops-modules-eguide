@@ -3,7 +3,7 @@
 function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc=true){
 	global $xoopsDB;
 	$opt = $desc?", summary":"";
-	$sql = "SELECT eid,uid,title,edate$opt FROM ".$xoopsDB->prefix("eguide")." WHERE status=0";
+	$sql = "SELECT eid,uid,title,edate,cdate$opt FROM ".$xoopsDB->prefix("eguide")." WHERE status=0";
 	//$sql .= " AND expire>".time();
 	if ( $userid != 0 ) {
 		$sql .= " AND uid=".$userid." ";
@@ -25,8 +25,9 @@ function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc=true
  	while($myrow = $xoopsDB->fetchArray($result)){
 	    //$ret[$i]['image'] = "images/forum.gif";
 		$ret[$i]['link'] = "event.php?eid=".$myrow['eid']."";
-		$ret[$i]['title'] = $myrow['title'];
-		$ret[$i]['time'] = $myrow['edate'];
+		$ret[$i]['title'] = formatTimestamp($myrow['edate'], 's').' '.
+		    $myrow['title'];
+		$ret[$i]['time'] = $myrow['cdate'];
 		$ret[$i]['uid'] = $myrow['uid'];
 		if ($desc) $ret[$i]['description'] = $myrow['summary'];
 		$i++;

@@ -1,18 +1,37 @@
 <div class="evlist">
-<h3><a href="event.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$title}></a></h3>
-<h3><{$smarty.const._MD_RESERV_LIST}></h3>
-
+<table>
+<tr>
+  <td><a href="event.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>" class="evhead"><{$title}></a></td>
+  <td>
+    [ <a href="admin.php?eid=<{$eid}>"><{$smarty.const._EDIT}></a>
+    | <a href="editdate.php?eid=<{$eid}>"><{$smarty.const._MD_EDIT_EXTENT}></a>
+    ]
+  </td>
+</tr>
+</table>
+<p/>
 <{if $extents}>
 <table class="outer">
-<tr class="head"><th><{$smarty.const._MD_EXTENT_DATE}></th><th><{$smarty.const._MD_ORDER_COUNT}></th><th><{$smarty.const._MD_OPERATION}></th></tr>
+<tr class="head">
+  <th><{$smarty.const._MD_EXTENT_DATE}></th>
+  <th><{$smarty.const._MD_ORDER_COUNT}></th>
+  <th><{$smarty.const._MD_RESERV_PERSONS}></th>
+  <th><{$smarty.const._MD_OPERATION}></th>
+</tr>
 <{foreach from=$extents item=ext}>
 <tr class="<{cycle values="even, odd"}>">
-  <td><{$ext.date}></td><td><{$ext.reserved}></td>
-  <td><{if $ext.reserved}><a href="receipt.php?eid=<{$eid}>&amp;sub=<{$ext.exid}>"><{$smarty.const._MD_DETAIL}></a><{/if}></td>
+  <td><a href="receipt.php?eid=<{$eid}>&amp;sub=<{$ext.exid}>"><{$ext.date}></a></td>
+  <td align="right"><{$ext.reserved}></td>
+  <td align="right"><{$ext.persons}></td>
+  <td align="center">
+    <a href="entry.php?eid=<{$eid}>&amp;sub=<{$ext.exid}>"><{$smarty.const._MD_RESERV_REGISTER}></a>
+  </td>
 </tr>
 <{/foreach}>
 </table>
-<{/if}>
+<{else}>
+<h3><{$smarty.const._MD_RESERV_LIST}></h3>
+
 <table width="100%">
 <tr>
   <td>[ <a href="entry.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_RESERV_REGISTER}></a> ] &nbsp; 
@@ -77,7 +96,8 @@
 </form>
 <p align='right'>
 [
-<a href="receipt.php?op=csv&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_CSV_OUT}></a>
+ <a href="receipt.php?op=csv&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_CSV_OUT}></a>
+ | <a href="export.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_EXPORT_OUT}></a>
  | <a href="sendinfo.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><{$smarty.const._MD_INFO_MAIL}></a>
 ] 
 <a href="receipt.php?op=print&amp;eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$smarty.const._PRINT}>" border="0" /></a>
@@ -95,3 +115,4 @@
 </table>
 <{/if}>
 </div>
+<{/if}>

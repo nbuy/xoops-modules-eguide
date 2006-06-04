@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.18 2006/05/25 04:33:15 nobu Exp $
+// $Id: event.php,v 1.19 2006/06/04 07:04:02 nobu Exp $
 
 include 'header.php';
 
@@ -22,21 +22,7 @@ if (is_object($xoopsUser)) {
 }
 
 set_next_event();
-$stc=$isadmin?"":"AND status=".STAT_NORMAL;
-
-$fields = "e.eid, cdate, persons,title, summary, body, strict, optfield,
-IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
-closetime, reservation, uid, status, style, counter, catid, catname, catimg, 
-exid, exdate";
-$result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
-' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.
-" x ON e.eid=eidref WHERE e.eid=$eid $stc".($exid?' AND exid='.$exid:''));
-
-if (!$result || !$xoopsDB->getRowsNum($result)) {
-    redirect_header("index.php",2,_MD_NOEVENT);
-    exit();
-}
-$data = $xoopsDB->fetchArray($result);
+$data = fetch_event($eid, $exid, $isadmin);
 $_GET['cat']=$data['catid'];	// for notification
 $now=time();
 
@@ -46,7 +32,7 @@ $extents = get_extents($eid);
 if ($exid) $data['extent']=true; // show editdate link
 else if (count($extents) && $exid==0) {
     if (count($extents)==1) {    // only one extent, chose that.
-	header('Location: '.XOOPS_URL.'/modules/eguide/event.php?eid='.$eid.'&sub='.$extents[0]['exid']);
+	header('Location: '.EGUIDE_URL.'/event.php?eid='.$eid.'&sub='.$extents[0]['exid']);
 	exit;
     }
     $data['extent']=true;	// also show editdate link
@@ -66,7 +52,8 @@ if ($op != "print") {
 
 // check pical exists
 $module_handler =& xoops_gethandler('module');
-$module =& $module_handler->getByDirname('piCal');
+$module =& $module_handler->getByDirname(PICAL);
+
 if (is_object($module) && $module->getVar('isactive')==1) {
     $pidate = formatTimestamp($data['edate'], 'Y-m-d');
     if (empty($_GET['caldate'])) {
@@ -127,6 +114,7 @@ include XOOPS_ROOT_PATH.'/footer.php';
 function make_lists($data) {
     global $xoopsDB;
     $eid = $data['eid'];
+    $exid = $data['exid'];
     $myts =& MyTextSanitizer::getInstance();
     if ($data['reservation'] && !empty($data['reserved'])) {
 	$show = array();
@@ -142,7 +130,7 @@ function make_lists($data) {
 	}
 	$list = array();
 	if (count($show)) {
-	    $result = $xoopsDB->query('SELECT * FROM '.RVTBL." WHERE eid=$eid AND status="._RVSTAT_RESERVED.' ORDER BY rdate');
+	    $result = $xoopsDB->query('SELECT * FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND status="._RVSTAT_RESERVED.' ORDER BY rdate');
 	    $nc = 0;
 	    while($rdata = $xoopsDB->fetchArray($result)) {
 		$a = explodeinfo($rdata['info'], $item);

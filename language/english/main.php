@@ -1,9 +1,9 @@
 <?php
-// $Id: main.php,v 1.9 2006/05/24 04:48:58 nobu Exp $
+// $Id: main.php,v 1.10 2006/06/04 07:04:03 nobu Exp $
 define("_MD_RESERV_FORM","Reservation Hear");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
-define("_MD_DATE_FMT", "Y-m-d (D)");
+define('_MD_SDATE_FMT', 'Y-m-d');
 define('_MD_STIME_FMT', 'H:i');
 // Localization Transrate Weekly date name
 //global $ev_week;
@@ -69,7 +69,6 @@ define("_MD_SHOW_PREV","Previous Events");
 define("_MD_SHOW_NEXT","Upcoming Events");
 
 define("_MD_POSTERC","Poster");
-define("_MD_DATEC","Event Date:");
 define('_MD_POSTDATE','Registered');
 define('_MD_STARTTIME','Starting Event');
 define('_MD_CLOSEDATE','Close Event');
@@ -78,6 +77,7 @@ define('_MD_CLOSEBEFORE_DESC','before from start (e.g.: 3days, 2hour, 50min)');
 define('_MD_TIME_UNIT','days,hour,min');
 define('_MD_TIME_REG','d(ay)?s?,h(our)?,min');
 define('_MD_CALENDER','Go Calender');
+define('_MD_CAL_MONDAY_FIRST', true);
 define("_MD_REFER","%d hits");
 define("_MD_RESERV_LIST","List of participants");
 
@@ -96,19 +96,11 @@ define("_MD_PRINT_DATE","Print Date");
 define("_MD_SAVECHANGE","Save Changes");
 define("_MD_RESERV_DEL","Delete reservation");
 define("_MD_DETAIL","Detail");
-define("_MD_RESERV_MSG","{TITLE}\n{EVENT_URL}\n
-reservation ID {RVID} result are {RESULT}\n
-Ordering Data:
-------------
-{INFO}------------\n
-Approved by {REQ_UNAME}\n
-If you want to cancel this order, please access following:
-  {CANCEL_URL}
-");
 define("_MD_RESERV_MSG_H","Sending message for reservation");
 define("_MD_ACTIVATE","Approved");
 define("_MD_REFUSE","Refused");
-define("_MD_CSV_OUT","CSV Output");
+define("_MD_CSV_OUT","CSV Format");
+define("_MD_EXPORT_OUT","Excel Format");
 define('_MD_EXPORT_CHARSET', 'UTF-8');
 define("_MD_INFO_MAIL","Sending Mail");
 define("_MD_SUMMARY","Summary");
@@ -124,6 +116,7 @@ define("_MD_EVENT_EXPIRE","Finish Display");
 define('_MD_EVENT_EXTENT','Repeat Open');
 define('_MD_EVENT_CATEGORY','Category');
 define('_MD_EDIT_EXTENT','Edit Open Date');
+define('_MD_EXTENT_REPEAT','Repeats');
 define('_MD_EXTENT_DATE','Open Date');
 define('_MD_ADD_EXTENT','Add Open Date');
 define('_MD_ADD_EXTENT_DESC','Additional Open Date Time in "YYYY-MM-DD HH:MM" format (Multiple entry separate in newline)');
@@ -160,18 +153,6 @@ define('_MD_RESERV_DEFAULT_MEMBER',"");
 
 // notification message
 define('_MD_APPROVE_REQ','Please confirm the event and Approve it.');
-define('_MD_ADMIN_NOTIFY_NEW',"Register New Event.\n
- Date: {EVENT_DATE}
-Title: {EVENT_TITLE}\n{EVENT_URL}\n
-{EVENT_NOTE}");
-define('_MD_NOTIFY_NEW',"{SITENAME}
-A new event has been registered.\n
-{TITLE}
-  {EVENT_URL}\n
-This event will be sent to your registered address.
-If you want no further event notifications, please remove your registration at URL:\n
-  {CANCEL_URL}
-");
 //%%%%%%	File Name sendinfo.php 	%%%%%
 define("_MD_INFO_TITLE","Information Mail to Send");
 define("_MD_INFO_CONDITION","Send to");
@@ -186,10 +167,9 @@ define("_MD_INFO_MAILNG","Failed to send mail");
 define("_MD_FROM_NAME","Event Guide");
 
 global $expire_set,$edit_style,$ev_stats,$ev_extents;
-$expire_set = array("+0"=>"Same Day", "+86400"=>"Next Day", "+172800"=>"2 days",
-		    "+259200"=>"3 days","+604800"=>"1 week",
-		    "+2592000"=>"1 month", "+7948800"=>"3 month",
-		    "+15768000"=>"6 month");
+$expire_set = array(""=>"-- Use text --", "+0"=>"Same Day", "+3600"=>"an hour",
+		    "+86400"=>"Next Day", "+172800"=>"2 days",
+		    "+259200"=>"3 days","+604800"=>"1 week");
 
 $edit_style=array(0=>"only XOOPS tags",
 		  1=>"New line makes tag &lt;br&gt;",

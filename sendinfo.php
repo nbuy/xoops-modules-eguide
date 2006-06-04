@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.10 2006/04/09 17:31:33 nobu Exp $
+// $Id: sendinfo.php,v 1.11 2006/06/04 07:04:02 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -10,20 +10,24 @@ $eid = param('eid');
 $exid = param('sub');
 
 include(XOOPS_ROOT_PATH."/header.php");
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
-$result = $xoopsDB->query("SELECT edate, title, uid, exdate FROM ".EGTBL." LEFT JOIN ".EXTBL." ON eid=eidref AND exid=$exid WHERE eid=$eid");
+$result = $xoopsDB->query("SELECT IF(exdate,exdate,edate) edate, title, uid FROM ".EGTBL." LEFT JOIN ".EXTBL." ON eid=eidref AND exid=$exid WHERE eid=$eid");
 $data = $xoopsDB->fetchArray($result);
-$edate = empty($data['exdate'])?$data['edate']:$data['exdate'];
-$title = "Re: ".eventdate($edate)." ".htmlspecialchars($data['title']);
+$edate = eventdate($data['edate']);
+$title = $edate." ".htmlspecialchars($data['title']);
 
+$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
+echo "<p><a href='$evurl' class='evhead'>$title</a></p>\n";
 if ($op=="doit") {
+    $title = param('title', '');
     $xoopsMailer =& getMailer();
     $xoopsMailer->useMail();
     $xoopsMailer->setSubject($title);
     $xoopsMailer->setBody(param('body',''));
     $xoopsMailer->setFromEmail($xoopsUser->email());
     $xoopsMailer->setFromName(_MD_FROM_NAME);
-    $xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");
+    $xoopsMailer->assign("EVENT_URL", EGUIDE_URL."/event.php?eid=$eid");
     $req = param('request')?" OR eid=0":"";
     $status = param('status');
     if (empty($status)) $status=_RVSTAT_RESERVED;
@@ -53,7 +57,7 @@ if ($op=="doit") {
 } else {
     $result = $xoopsDB->query("SELECT status, count(rvid) FROM ".RVTBL." WHERE eid=$eid AND exid=$exid GROUP BY status");
     
-    echo "<h4>"._MD_INFO_TITLE."</h4>\n";
+    echo "<h3>"._MD_INFO_TITLE."</h3>\n";
     echo "<form action='sendinfo.php' method='post'>\n";
     echo "<b>"._MD_INFO_CONDITION."</b> ";
     if ($xoopsDB->getRowsNum($result)) {
@@ -75,7 +79,7 @@ if ($op=="doit") {
 	"<input type='hidden' name='eid' value='$eid' />\n".
 	"<input type='hidden' name='sub' value='$exid' />\n".
 	"<p><b>"._MD_TITLE."</b> ".
-	"<input name='title' size='60' value='$title' /></p>\n".
+	"<input name='title' size='60' value='Re: $title' /></p>\n".
 	"<p><textarea name='body' cols='60' rows='10'>"._MD_INFO_DEFAULT."</textarea></p>\n".
 	"<p><input type='checkbox' name='self' value='1' checked /> ".sprintf(_MD_INFO_SELF, $xoopsUser->email())."</p>\n".
 	"<input type='submit' value='"._SUBMIT."' />\n".

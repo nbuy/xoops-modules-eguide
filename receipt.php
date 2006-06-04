@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.19 2006/05/24 04:48:58 nobu Exp $
+// $Id: receipt.php,v 1.20 2006/06/04 07:04:02 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -16,7 +16,7 @@ if ($rvid) {
     if ($op=='view') $op = 'one';
     $result = $xoopsDB->query('SELECT r.*, optfield FROM '.RVTBL.' r, '.OPTBL." o WHERE rvid=$rvid AND r.eid=o.eid");
     if (!$result || $xoopsDB->getRowsNum($result)==0) {
-	redirect_header(XOOPS_URL.'/modules/eguide/', 2, _NOPERM);
+	redirect_header(EGUIDE_URL.'/', 2, _NOPERM);
 	exit;
     }
     $data = $xoopsDB->fetchArray($result);
@@ -93,22 +93,47 @@ $nrec = $xoopsDB->getRowsNum($result);
 // output records in CSV format
 $mo = $xoopsModuleConfig['member_only'];
 if ($nrec && $op=='csv') {
-    // field name
-    $out = '"'._MD_ORDER_DATE.'","'.($mo?'':_MD_EMAIL.'","')._MD_UNAME.'"';
-    if (count($item)) {
-	$out .= ',"'.join('","', preg_replace('/\"/', '""',$item)).'"';
-    }
-    $out .= "\n";
-    // body
-    while ($a = $xoopsDB->fetchArray($result)) {
-	$out .= '"'.formatTimestamp($a['rdate'], _MD_TIME_FMT).'","'.
-	    ($mo?'':$a['email'].'","').
-	    XoopsUser::getUnameFromId($a['uid']).'"';
-	foreach (explodeinfo($a['info'], $item) as $lab => $v) {
-	    if ($v) $v = '"'.preg_replace('/\"/', '""', $v).'"';
-	    $out .= ",$v";
+    $outs = array();
+    if ($xoopsModuleConfig['export_field']) {
+	$temp = $item;
+	array_unshift($temp, _MD_ORDER_DATE,_MD_EMAIL, _MD_UNAME);
+	$exports = preg_split('/\\s*,\\s*/',$xoopsModuleConfig['export_field']);
+	foreach ($exports as $k) {
+	    if ($k == '*') {	// left all
+		foreach ($temp as $v) {
+		    if (!isset($outs[$v])) $outs[$v] = true;
+		}
+		break;
+	    } elseif (preg_match('/^\\d+$/', $k)) {	// present position
+		if (isset($temp[$k])) {
+		    $outs[$temp[$k]] = true;
+		}
+	    } elseif ($k == '' || in_array($k, $temp)) { // present name
+		$outs[$k] = true;
+	    }
 	}
-	$out .= "\n";
+    }
+    $outs = array_keys($outs);
+    $temp = array();
+    foreach($outs as $v) {
+	$temp[] = '"'.preg_replace('/"/', '""', $v).'"';
+    }
+    $out = join(',',$temp)."\n";
+    // body
+    $member_handler =& xoops_gethandler('member');
+    while ($a = $xoopsDB->fetchArray($result)) {
+	$row = explodeinfo($a['info'], $item);
+	$row[_MD_EMAIL] = $a['email'];
+	$row[_MD_ORDER_DATE] = formatTimestamp($a['rdate']);
+	$user = $member_handler->getUser($a['uid']);
+	$name = is_object($user)?$user->getVar('name'):'';
+	$row[_MD_UNAME] = is_object($user)?$user->getVar('uname').($name?" ($name)":""):$xoopsConfig['anonymous'];
+	$temp = array();
+	foreach ($outs as $k) {
+	    $v = $row[$k];
+	    $temp[] = '"'.preg_replace('/\"/', '""', $v).'"';
+	}
+	$out .= join(',',$temp)."\n";
     }
 
     $file = "eguide_".formatTimestamp(time(),"Ymd").".csv";
@@ -126,13 +151,14 @@ if ($nrec && $op=='csv') {
 }
 
 include(XOOPS_ROOT_PATH."/header.php");
+$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
 if (count($extents)>1) {
     $xoopsTpl->assign('extents', $extents);
 }
 $xoopsTpl->assign(array('title'=>$title,
 			'eid'=>$eid, 'exid'=>$exid));
-$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
+$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
 switch ($op) {
 case 'active':
     $result = $xoopsDB->query('SELECT optfield FROM '.OPTBL.' WHERE eid='.$eid);
@@ -140,6 +166,7 @@ case 'active':
     $labs = explodeopts($optfield);
     $isnum = in_array($nlab, $labs);
     $cnt = 0;
+    echo "<p><a href='$evurl' class='evhead'>$title</a></p>\n";
     foreach ($_POST['act'] as $i) {
 	$rvid = intval($i);
 	$yesno = param('yesno');
@@ -166,7 +193,7 @@ case 'active':
 	    $xoopsMailer->assign('REQ_NAME', $xoopsUser->getVar('name'));
 	    $xoopsMailer->setFromName(_MD_FROM_NAME);
 	    $xoopsMailer->assign("INFO", $uinfo.$data['info']);
-	    $curl = XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=".$data['confirm'];
+	    $curl = EGUIDE_URL."/reserv.php?op=cancel&rvid=$rvid&key=".$data['confirm'];
 	    $xoopsMailer->assign('RVID', $rvid);
 	    $xoopsMailer->assign('CANCEL_URL', $curl);
 	    if ($yesno==_RVSTAT_RESERVED) {
@@ -201,7 +228,6 @@ case 'active':
 	}
     }
     update_reserv($eid, $exid, $cnt);
-    echo "<p><a href='$evurl'>$title</a></p>\n";
     break;
 
 case 'edit':
@@ -245,7 +271,6 @@ case 'one':
 	if (empty($v)) $v = '';
 	$values[$lab] = $myts->displayTarea($v);
     }
-    $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
     edit_eventdata($head);
     $xoopsTpl->assign('event', edit_eventdata($head));
     $xoopsTpl->assign('values', $values);
@@ -262,8 +287,9 @@ default:
     $pat[] = '{TITLE}';
     $rep[] = $title;
     $pat[] ='{EVENT_URL}';
-    $rep[] = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":'');
-    $mailmsg = htmlspecialchars(str_replace($pat, $rep, _MD_RESERV_MSG));
+    $rep[] = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":'');
+    $template = file_get_contents(template_dir('confirm.tpl')."/confirm.tpl");
+    $mailmsg = htmlspecialchars(str_replace($pat, $rep, $template));
     $max = $xoopsModuleConfig['max_item'];
     $xoopsTpl->assign(array('order_count'=>$nrec,
 			    'reserv_num'=>sprintf(_MD_RESERV_REG,$nrsv),

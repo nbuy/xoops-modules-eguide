@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.17 2006/05/24 04:48:58 nobu Exp $
+// $Id: admin.php,v 1.18 2006/06/04 07:04:02 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -44,15 +44,17 @@ if ($op=='new') {
 		  'title'	=> '', // contents
 		  'summary'	=> '',
 		  'body'	=> '',
+		  'counter'	=> 0,
+		  'reserved'	=> 0,
 		  'edate'	=> time()+3600*24, // now + a day
 		  'event'	=> '',
-		  'before'      => time_to_str($xoopsModuleConfig['close_before']*60),
+		  'expire'	=> $xoopsModuleConfig['expire_after']*60,
+		  'closetime'      => $xoopsModuleConfig['close_before']*60,
 		  'topicid'	=> 1);
 } else {
     if ($eid) {
 	$result = $xoopsDB->query('SELECT * FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL." ON topicid=catid WHERE e.eid=$eid");
 	$data = $xoopsDB->fetchArray($result);
-	$data['before']=time_to_str($data['closetime']);
 	$edate = $data['edate'];
     } else {
 	$data = array();
@@ -61,7 +63,7 @@ if ($op=='new') {
     if ($op == 'preview' || $op == 'save' || $op == 'date') {
 	$edate = getDateField("edate");
 	if (isset($_POST['expire'])) {
-	    $expire = $edate + intval($_POST['expire']);
+	    $expire = empty($_POST['expire'])?time_to_sec($_POST['expire_text']):intval($_POST['expire']);
 	} else {
 	    $expire = getDateField('expire');
 	}
@@ -93,9 +95,7 @@ if (isset($_POST['extent_sets'])) {
 $input_extent = '';
 if ($eid) {			// already exists extents
     $result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=0", 1);
-    if ($xoopsDB->getRowsNum($result)>0) {
-	$xoops_extent = '';
-    } else {
+    if ($xoopsDB->getRowsNum($result)==0) {
 	$save = _MD_EDIT_EXTENT."("._MD_SAVE.")";
 	$input_extent = "<input type='submit' name='editdate' value='$save'/> 
 &nbsp; <a href='editdate.php?eid=$eid'>"._MD_EDIT_EXTENT."</a>";
@@ -110,15 +110,15 @@ if ($eid) {			// already exists extents
     }
 } else {
     $extents = param('extents',"none");
+    $repeat = param('repeat',1);
     $input_extent = select_list('extents', $ev_extents, $extents);
+    $input_extent .= ' &nbsp; '._MD_EXTENT_REPEAT." <input size='2' value='$repeat' name='repeat'/>";
     $step = 86400;		// sec/day
     switch ($extents) {
     case 'weekly':
 	$step = $step * 7;
     case 'daily':
-	$n=0;
-	for ($i=$edate; $i<$expire; $i += $step) {
-	    $n++;
+	for ($n=0, $i=$edate; $n<$repeat; $n++, $i += $step) {
 	    $v = $init?true:isset($sets[$n]);
 	    $extent_sets[] =
 		array('exdate'=>$i, 'no'=>$n,
@@ -128,10 +128,8 @@ if ($eid) {			// already exists extents
 	break;
     case 'monthly':
 	list($y, $m, $d, $h, $i) = split(' ', formatTimestamp($edate, "Y m j G i"));
-	for ($n=0; $n<9999;) {
+	for ($n=0; $n<$repeat; $n++) {
 	    $i = userTimeToServerTime(mktime($h,$i, 0, $m+$n, $d, $y));
-	    $n++;
-	    if ($i>$expire) break;
 	    $v = $init?true:isset($sets[$n]);
 	    $extent_sets[] =
 		array('exdate'=>$i, 'no'=>$n,
@@ -174,7 +172,7 @@ if ($op=='save' || $op=='date') {
 	$xoopsDB->query('INSERT INTO '.EGTBL."($flist) VALUES($buf)");
 	$data['eid'] = $eid = $xoopsDB->getInsertId();
 	foreach ($sets as $v) {
-	    $xoopsDB->query('INSERT INTO '.EXTBL."(eidref, exdate) VALUES($eid, $v)");
+	    if ($v) $xoopsDB->query('INSERT INTO '.EXTBL."(eidref, exdate) VALUES($eid, $v)");
 	}
 	event_notify('new', $data);
     }
@@ -202,7 +200,7 @@ if ($op=='save' || $op=='date') {
 	$xoopsDB->query("INSERT INTO ".OPTBL."($flist) VALUES($buf)");
     }
     if ($op == 'date') {
-	header('Location: '.XOOPS_URL.'/modules/eguide/editdate.php?eid='.$eid);
+	header('Location: '.EGUIDE_URL.'/editdate.php?eid='.$eid);
     } else {
 	redirect_header("event.php?eid=$eid",2,_MD_DBUPDATED);
     }
@@ -228,13 +226,14 @@ $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 // DHTML calendar
 include_once XOOPS_ROOT_PATH.'/language/'.$xoopsConfig['language'].'/calendar.php';
 if (!empty($ev_week)) $xoopsTpl->assign('weekname', $ev_week);
+if (!empty($ev_month)) $xoopsTpl->assign('monthname', $ev_month);
 $xoopsTpl->assign('calrange', array(2000,2015));
 
-$monthname = array();
-for ($i=1; $i<=12; $i++) {
-    $monthname[$i] = sprintf(_MD_MONTHC, $i);
+$check = array('title'=>_MD_TITLE, 'summary'=>_MD_INTROTEXT);
+foreach ($check as $k=>$v) {
+    $check[$k] = sprintf(_FORM_ENTER, $v);
 }
-//$xoopsTpl->assign('monthname', $monthname);
+$xoopsTpl->assign('check', $check);
 
 if ($eid && $op=='delete') {
     $xoopsOption['template_main'] = 'eguide_event.html';
@@ -248,11 +247,10 @@ if ($eid && $op=='delete') {
 </form><b>"._MD_EVENT_DEL_DESC."</b></div>\n".
 (($adm)?"<div class='evnote'>"._MD_EVENT_DEL_ADMIN."</div>\n":''));
 } else {
-    if (empty($data['expire'])) {
-	$input_expire = select_list('expire', $expire_set, '+86400');
-    } else {
-	$input_expire = datefield('expire', $data['expire']);
-    }
+    $expire = $data['expire']>$data['edate']?$data['expire']-$data['edate']:$data['expire'];
+    $str = isset($expire_set["+$expire"])?"":htmlspecialchars(time_to_str($expire));
+    $input_expire = "<input name='expire_text' size='8' value='$str' onchange='document.evform.expire.selectedIndex=0' /> ".
+	select_list('expire', $expire_set, $expire);
 
     $cats = get_category();
     if (count($cats) > 1) {
@@ -279,13 +277,18 @@ if ($eid && $op=='delete') {
 	    $event[$name] = $data[$name];
 	}
 	edit_eventdata($event);
-	$xoopsTpl->assign('form', eventform($data));
+	$form = eventform($data);
+	$form['submit_opts'] = 'disabled';
+	$xoopsTpl->assign('form', $form);
 	$xoopsTpl->assign('event',$event);
     } else {
 	$xoopsTpl->assign('event','');
     }
 
     $input_status = $adm?select_list('status', $ev_stats, $data['status']):'';
+    if (empty($data['before'])) {
+	$data['before']=time_to_str($data['closetime']);
+    }
     edit_eventdata($data);
     $xoopsTpl->assign($data);
 
@@ -350,7 +353,7 @@ function select_list($name, $options, $def=1) {
     foreach ($options as $i => $v) {
 	$buf .= "<option value='$i'".($i==$def?" selected":"").">$v</option>\n";
     }
-    $buf .= "</select></p>\n";
+    $buf .= "</select>\n";
     return $buf;
 }
 

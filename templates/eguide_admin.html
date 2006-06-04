@@ -32,7 +32,7 @@ function showCalendar(id) {
   if (calendar != null) {
     calendar.hide();
   } else {
-    var cal = new Calendar(true, <{if $jstime}><{$jstime}><{else}>'null'<{/if}>, selected, closeHandler);
+    var cal = new Calendar(<{if $smarty.const._MD_CAL_MONDAY_FIRST}>true<{else}>false<{/if}>, <{if $jstime}><{$jstime}><{else}>'null'<{/if}>, selected, closeHandler);
     calendar = cal;
     cal.setRange(<{$calrange[0]}>, <{$calrange[1]}>);
     calendar.create();
@@ -55,7 +55,7 @@ Calendar._DN = new Array
 
 Calendar._MN = new Array
 <{if $monthname}>
-(<{foreach from=$monthname item=month}>"<{$month}>",<{/foreach}>,"");
+(<{foreach from=$monthname item=month}>"<{$month}>",<{/foreach}>"");
 <{else}>
 ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
@@ -100,7 +100,7 @@ Calendar._TT["WK"] = "";
 //-->
 </script>
 
-<form action="admin.php<{if $eid}>?eid=<{$eid}><{/if}>" method="post" class="evbody" name="evform" id="evform">
+<form action="admin.php<{if $eid}>?eid=<{$eid}><{/if}>" method="post" class="evbody" name="evform" id="evform" onsubmit="return xoopsFormValidate_evform();">
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td>
 <h3><{$smarty.const._MD_TITLE}></h3>
@@ -111,9 +111,10 @@ Calendar._TT["WK"] = "";
 </table>
 <h3><{$smarty.const._MD_EVENT_DATE}></h3>
 <{$input_edate}>
-<h3><{$smarty.const._MD_EVENT_EXPIRE}></h3>
-<{$input_expire}>
-<div><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>"/> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></div>
+<br/>
+<fieldset>
+<p><b><{$smarty.const._MD_EVENT_EXPIRE}></b> <{$input_expire}></p>
+<p><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>"/> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></p>
 <{if $input_extent}>
 <p>
   <b><{$smarty.const._MD_EVENT_EXTENT}></b> <{$input_extent}>
@@ -126,6 +127,7 @@ Calendar._TT["WK"] = "";
 <{/if}>
 </p>
 <{/if}>
+</fieldset>
 <h3><{$smarty.const._MD_INTROTEXT}></h3>
 <{$summary_textarea}>
 <h3><{$smarty.const._MD_EXTEXT}></h3>
@@ -153,4 +155,14 @@ Calendar._TT["WK"] = "";
 <input type="submit" name="save" value="<{$smarty.const._MD_SAVE}>" />
 </p>
 </form>
+<script type='text/javascript'>
+<!--//
+function xoopsFormValidate_evform() {
+    myform = window.document.evform;
+<{foreach from=$check key=name item=msg}>
+if ( myform.<{$name}>.value == "" ) { window.alert("<{$msg}>"); myform.<{$name}>.focus(); return false; }
+<{/foreach}>
+return true;
+}
+//--></script>
 </div>

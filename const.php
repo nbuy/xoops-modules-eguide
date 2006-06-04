@@ -16,5 +16,8 @@ define('EXTBL', $xoopsDB->prefix("eguide_extent"));
 define('RVTBL', $xoopsDB->prefix("eguide_reserv"));
 
 define('HEADER_CSS', '<link rel="stylesheet" type="text/css" media="all" href="style.css" />');
-
+$mydirname = basename(dirname(__FILE__));
+define('PICAL', 'piCal');	// piCal dirname
+define('EGUIDE_URL', XOOPS_URL.'/modules/'.$mydirname);
+define('EGUIDE_PATH', XOOPS_ROOT_PATH.'/modules/'.$mydirname);
 ?>

@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.10 2006/05/25 19:07:53 nobu Exp $
+// $Id: functions.php,v 1.11 2006/06/04 07:04:02 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -35,7 +35,7 @@ function explodeinfo($info, $item) {
 	    $result[$lab] = "$v";
 	} else {
 	    global $xoopsConfig;
-	    if ($xoopsConfig['debug']) {
+	    if (isset($xoopsConfig['debug']) && $xoopsConfig['debug']) {
 		echo "<span class='error'>".$item[$n].",$a</span>";
 	    }
 	    break;
@@ -50,7 +50,7 @@ function xss_filter($text) {
 }
 
 function edit_eventdata(&$data) {
-    global $xoopsModuleConfig;
+    global $xoopsModuleConfig, $xoopsUser;
 
     $myts =& MyTextSanitizer::getInstance();
     $str = $pat = array();
@@ -62,8 +62,9 @@ function edit_eventdata(&$data) {
     $data['date'] = eventdate($data['ldate']);
     $pat[] = '{X_TIME}';
     $str[] = $data['time'] = formatTimestamp($data['ldate'], _MD_STIME_FMT);
-    $data['postdate'] = formatTimestamp($data['cdate'], _MD_TIME_FMT);
-    $data['uname'] = XoopsUser::getUnameFromId($data['uid']);
+    $post = isset($data['cdate'])?$data['cdate']:time();
+    $data['postdate'] = formatTimestamp($post, _MD_TIME_FMT);
+    $data['uname'] = isset($data['uid'])?XoopsUser::getUnameFromId($data['uid']):$xoopsUser->getVar('uname');
     $data['hits'] = sprintf(_MD_REFER, $data['counter']);
     $br = 0;
     $html = 1;
@@ -108,6 +109,7 @@ function eventform($data) {
     } else $email = is_object($xoopsUser)?$xoopsUser->email():"";
     $form['email'] = $myts->makeTboxData4Edit($email);
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
+    $form['check'] = array();
     $items = array();
     $field = 0;
     $note1 = $note2 = "";
@@ -116,6 +118,7 @@ function eventform($data) {
 	$n = preg_replace("/\s*[\n\r]/", "", $n);
 	if ($n=="") continue;
 	$attr = "";
+	$require = false;
 	if (preg_match('/^\s*#/', $n)) {
 	    $opts = preg_replace('/^\s*#\s*/', "", $n);
 	    $type = "#";
@@ -124,6 +127,7 @@ function eventform($data) {
 	    $opt = preg_split("/,\\s*/", $n);
 	    $name = array_shift($opt);
 	    if (preg_match('/[\*#]$/', $name)) {
+		$require = true;
 		$attr = 'evms';
 		$note1 = _MD_ORDER_NOTE1;
 	    }
@@ -225,6 +229,7 @@ function eventform($data) {
 		$opts = "<select name='$fname'>\n$opts</select>";
 	    }
 	}
+	if ($require) $form['check'][$fname] = preg_replace('/\\*$/', '', $name);
 	$name = preg_replace('/\\*$/', _MD_REQUIRE_MARK, $name);
 	if ($attr=='evop') $name = sprintf(_MD_LISTITEM_FMT, $name);
 	if ($attr=='') $attr = (count($items)%2)?'even':'odd';
@@ -287,7 +292,7 @@ function set_next_event() {
 
 function get_extents($eid, $all=false) {
     global $xoopsDB;
-    $result=$xoopsDB->query('SELECT exid,exdate,x.reserved FROM '.EXTBL.' x LEFT JOIN '.OPTBL." o ON eidref=eid WHERE eidref=$eid".($all?"":" AND exdate-closetime>".time()).' ORDER BY exdate');
+    $result=$xoopsDB->query('SELECT exid,exdate,expersons,x.reserved,if(expersons IS NULL,persons,expersons) persons FROM '.EXTBL.' x LEFT JOIN '.OPTBL." o ON eidref=eid WHERE eidref=$eid".($all?"":" AND exdate-closetime>".time()).' ORDER BY exdate');
     $extents = array();
     while ($extent = $xoopsDB->fetchArray($result)) {
 	$extent['date'] = eventdate($extent['exdate']);
@@ -297,8 +302,8 @@ function get_extents($eid, $all=false) {
 }
 
 function eventdate($time) {
-    global $ev_week;
-    $str = formatTimestamp($time, _MD_DATE_FMT);
+    global $ev_week, $xoopsModuleConfig;
+    $str = formatTimestamp($time, $xoopsModuleConfig['date_format']);
     if (isset($ev_week)) {
 	$str = str_replace(array_keys($ev_week), $ev_week, $str);
     }
@@ -319,7 +324,8 @@ function get_category() {
 function fetch_event($eid, $exid, $admin=false) {
     global $xoopsDB;
     $stc=$admin?"":"AND status=".STAT_NORMAL;
-    $fields = "e.eid, cdate, persons,title, summary, body, optfield,
+    $fields = "e.eid, cdate, title, summary, body, optfield,
+IF(expersons IS NULL, persons, expersons) persons,
 IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
 closetime, reservation, uid, status, style, counter, catid, catname, catimg, 
 exid, exdate, strict, autoaccept, notify";
@@ -368,9 +374,9 @@ function order_notify($data, $email, $value) {
     $conf = $data['confirm'];
     $xoopsMailer->assign("RVID", $rvid);
     $xoopsMailer->assign("CANCEL_KEY", $conf);
-    $xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=$rvid&key=$conf");
+    $xoopsMailer->assign("CANCEL_URL", EGUIDE_URL."/reserv.php?op=cancel&rvid=$rvid&key=$conf");
     $xoopsMailer->assign("INFO", $uinfo.$value);
-    $title = eventdate($data['edate']).": ".$data['title'];
+    $title = eventdate($data['edate'])." ".$data['title'];
     $xoopsMailer->assign("TITLE", $title);
     $xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
     if (!empty($email)) $xoopsMailer->setToEmails($email);

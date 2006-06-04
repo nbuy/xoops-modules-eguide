@@ -1,7 +1,7 @@
 <?php
 global $hooked_function;
 $hooked_function = array('check'=>array(), 'reserve'=>array(), 'cancel'=>array());
-$dir = XOOPS_ROOT_PATH.'/modules/eguide/plugins';
+$dir = EGUIDE_PATH.'/plugins';
 if ($xoopsModuleConfig['use_plugins'] && is_dir($dir)) {
     $dh = opendir($dir);
     while ($file = readdir($dh)) {

@@ -1,8 +1,8 @@
 <div class="event">
-  <div class="evhead">
+  <div>
     <span class="evmark"><{$event.fill_mark}></span>
-    <{$event.date}>:
-    <{$event.title}>
+    <a href="event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>" class="evhead">
+    <{$event.date}> &nbsp; <{$event.title}></a>
   </div>
 <{if $event.catname}>
   <a href="index.php?cat=<{$event.catid}>">

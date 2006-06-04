@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.23 2006/05/25 19:07:53 nobu Exp $
+// $Id: reserv.php,v 1.24 2006/06/04 07:04:02 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -42,7 +42,7 @@ case 'delete':
 	$result = false;
     } else {		// there is reservation
 	$data = $xoopsDB->fetchArray($result);
-	$evurl = XOOPS_URL.'/modules/eguide/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
+	$evurl = EGUIDE_URL.'/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
 
 	if (!reserv_permit($data['ruid'], $data['uid'], $data['confirm'])) {
 	    redirect_header($evurl, 3, _MD_RESERV_NOTFOUND);
@@ -75,7 +75,7 @@ case 'delete':
 	exit;
     }
     if ($result) {
-	$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
+	$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
 	if ($data['status']!=_RVSTAT_REFUSED) {
 	    if ($exid) {
 		$xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved-$num WHERE exid=$exid");
@@ -119,8 +119,9 @@ case 'delete':
 		$xoopsMailer->assign("INFO", $uinfo.$data['info']);
 		$xoopsMailer->assign("RVID", $rvid);
 		$xoopsMailer->setSubject(_MD_CANCEL.' - '.$title);
-		$xoopsMailer->setTemplateDir(template_dir('cancel.tpl'));
-		$xoopsMailer->setTemplate('cancel.tpl');
+		$tpl = 'cancel.tpl';
+		$xoopsMailer->setTemplateDir(template_dir($tpl));
+		$xoopsMailer->setTemplate($tpl);
 		if ($email) $xoopsMailer->setToEmails($email);
 		$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
 		$xoopsMailer->setFromName(_MD_FROM_NAME);
@@ -242,8 +243,10 @@ case 'order':
 	(eid, exid, uid, rdate, email, info, status, confirm)
 VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$conf')");
 	$data['rvid'] = $rvid = $xoopsDB->getInsertId();
+	$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
 	if (order_notify($data, $email, $value)) {
 	    echo "<div class='evform'>\n";
+	    echo "<p><a href='$evurl' class='evhead'>".htmlspecialchars(eventdate($data['edate'])." &nbsp; ".$data['title'])."</a></p>";
 	    echo "<h3>"._MD_RESERVATION."</h3>\n";
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
 	    if ($value) {
@@ -269,8 +272,6 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid");
 	    count_reserved($eid, $exid, $strict, $persons, -$num);
 	}
-	$evurl = XOOPS_URL."/modules/eguide/event.php?eid=$eid".($exid?"&sub=$exid":"");
-	echo "<p><a href='$evurl'>".eventdate($data['edate']).": ".$data['title']."</a></p>";
 	echo "</div>\n";
     }
     if (empty($errs)) break;
@@ -294,7 +295,7 @@ case 'confirm':
 		$myts->makeTboxData4Edit($_POST['notify'])."'/>\n";
 	}
     }
-    $xoopsTpl->assign('lang_title', eventdate($data['edate']).": ".$data['title']);
+
     $xoopsTpl->assign('event', edit_eventdata($data));
 
     $xoopsTpl->assign('errors', $errs);
@@ -328,7 +329,7 @@ case 'cancel':
 	$result = false;
     } else {		// there is reservation
 	$data = fetch_event($eid, $exid);
-	$evurl = XOOPS_URL.'/modules/eguide/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
+	$evurl = EGUIDE_URL.'/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
 	if (!reserv_permit($ruid, $data['uid'], $conf)) {
 	    redirect_header($evurl,5,_MD_CANCEL_FAIL);
 	    exit;

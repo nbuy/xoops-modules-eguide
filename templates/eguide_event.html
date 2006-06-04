@@ -20,9 +20,9 @@
 <a name="form"></a>
 <div class="evform">
 <div class="evtitle"><{$smarty.const._MD_RESERVATION}></div>
-<form action="reserv.php?op=<{$form.op}>" method="post">
+<form action="reserv.php?op=<{$form.op}>" name="order" method="post" onsubmit="return xoopsFormValidate_order();">
 <table class="outer" align="center" cellspacing="1" border="0">
-<tr><th colspan="2"><{$event.date}>: <{$event.title}></th></tr>
+<tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
 <{if !$form.member_only}>
 <tr class="evms"><th><{$smarty.const._MD_EMAIL}>*</th><td><input size="40" name="email" value="<{$form.email}>"/>
 <{if $form.user_notify}>
@@ -38,8 +38,18 @@
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
 <{/if}>
-<p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" /></p>
+<p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" <{$form.submit_opts}>/></p>
 </form>
+<script type='text/javascript'>
+<!--//
+function xoopsFormValidate_order() {
+    myform = window.document.order;
+<{foreach from=$form.check key=name item=msg}>
+if ( myform.<{$name}>.value == "" ) { window.alert("<{$msg}>"); myform.<{$name}>.focus(); return false; }
+<{/foreach}>
+return true;
+}
+//--></script>
 <{if $form.lang_note || $form.note}>
   <p align='right'><{$form.lang_note}> <{$form.note}></p>
 <{/if}>

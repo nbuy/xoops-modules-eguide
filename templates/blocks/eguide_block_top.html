@@ -1,16 +1,16 @@
 <{if $block.detail}> 
 <{foreach item=event from=$block.events}>
 <div><{$event.date}>
-   <a href="<{$xoops_url}>/modules/eguide/event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$event.title}></a> 
+   <a href="<{$block.module_url}>/event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$event.title}></a> 
    (<a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a> <{$event.post}>)
 </div>
 <{/foreach}>
 <{else}>
 <{foreach item=event from=$block.events}>
-<div><{$event.date}> <a href="<{$xoops_url}>/modules/eguide/event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$event.title}></a></div>
+<div><{$event.date}> <a href="<{$block.module_url}>/event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$event.title}></a></div>
 <{/foreach}>
 <{/if}>
 <{if $block.waiting}>
-<p><a href="<{$xoops_url}>/modules/eguide/admin/index.php?op=events"><{$block.lang_waiting}></a>: <{$block.waiting}></p>
+<p><a href="<{$block.module_url}>/admin/index.php?op=events"><{$block.lang_waiting}></a>: <{$block.waiting}></p>
 <{/if}>
-<div class="evmore"><a href="<{$xoops_url}>/modules/eguide/"><{$block.lang_more}></a></div>
+<div class="evmore"><a href="<{$block.module_url}>/"><{$block.lang_more}></a></div>

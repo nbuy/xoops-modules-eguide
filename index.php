@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.14 2006/04/09 17:31:33 nobu Exp $
+// $Id: index.php,v 1.15 2006/06/04 07:04:02 nobu Exp $
 
 include 'header.php';
 
@@ -22,8 +22,9 @@ $max = $xoopsModuleConfig['max_event'];
 $cond = 'status='.STAT_NORMAL;
 
 if (empty($prev)) {
-    $cond .= " AND expire>$now"; // show upcomming event
-    $cond .= " AND (exdate>$now OR exdate IS NULL)";
+    // show upcomming event (constant is gurd value)
+    $cond .= " AND ((expire>=edate AND expire>$now) OR (expire<edate AND (IF(exdate,exdate,edate)+expire)>$now))";
+    //$cond .= " AND (exdate>$now OR exdate IS NULL)";
     $start = (empty($page)?0:$page-1)*$max;
     $ord = 'ASC';
     $ext = $xoopsModuleConfig['show_extents']?'':'AND ldate=exdate';
@@ -37,8 +38,10 @@ if (empty($prev)) {
 
 $opt = isset($_GET['cat'])?' AND topicid='.intval($_GET['cat']):'';
 
-$fields = "e.eid, cdate, persons,title, summary, closetime,
-IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved,
+$fields = "e.eid, cdate, title, summary, closetime,
+IF(expersons IS NULL,persons, expersons) persons,
+IF(exdate,exdate,edate) edate, 
+IF(x.reserved,x.reserved,o.reserved) reserved,
 reservation, uid, status, style, counter, catid, catname, catimg, exid, exdate";
 $result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.
 OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.

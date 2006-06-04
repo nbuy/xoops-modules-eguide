@@ -1,5 +1,5 @@
 # Event Guide Module for XOOPS
-# $Id: mysql.sql,v 1.3 2005/12/27 05:13:53 nobu Exp $
+# $Id: mysql.sql,v 1.4 2006/06/04 07:04:03 nobu Exp $
 
 #
 # Table structure for table `eguide`
@@ -48,6 +48,7 @@ CREATE TABLE eguide_extent (
   exid    integer NOT NULL auto_increment,
   eidref  integer NOT NULL,
   exdate  integer NOT NULL,
+  expersons  integer,
   reserved int(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (exid)
 ) TYPE=MyISAM;

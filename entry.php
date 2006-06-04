@@ -1,6 +1,6 @@
 <?php
 // Reservation Entry by Poster
-// $Id: entry.php,v 1.2 2006/05/25 19:07:53 nobu Exp $
+// $Id: entry.php,v 1.3 2006/06/04 07:04:02 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -73,7 +73,7 @@ $xoopsTpl->assign('event', $data);
 if ($errs) $xoopsTpl->assign('errors', $errs);
 // check pical exists
 $module_handler =& xoops_gethandler('module');
-$module =& $module_handler->getByDirname('piCal');
+$module =& $module_handler->getByDirname(PICAL);
 if (is_object($module) && $module->getVar('isactive')==1) {
     $xoopsTpl->assign('caldate', formatTimestamp($data['edate'], 'Y-m-d'));
 }

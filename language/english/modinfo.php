@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.9 2006/05/24 04:48:58 nobu Exp $
+// $Id: modinfo.php,v 1.10 2006/06/04 07:04:03 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -11,6 +11,7 @@ define("_MI_EGUIDE_DESC","Event Detail display and Reservation system");
 // Names of blocks for this module (Not all module has blocks)
 define("_MI_EGUIDE_MYLIST","Reserved Events");
 define("_MI_EGUIDE_SUBMIT","Register New Event");
+define("_MI_EGUIDE_COLLECT","Settings collection");
 define("_MI_EGUIDE_REG","Notify me of new events");
 define("_MI_EGUIDE_HEADLINE","Event Guide");
 define("_MI_EGUIDE_HEADLINE_DESC","Upcomming Recent Event List");
@@ -51,6 +52,11 @@ define("_MI_EGUIDE_CLOSEBEFORE","Close Time Before (min)");
 define("_MI_EGUIDE_CLOSEBEFORE_DESC","Event entry close time before setting minits.");
 define("_MI_EGUIDE_LAB_PERSONS","Label of persons");
 define("_MI_EGUIDE_LAB_PERSONS_DESC","Extra field label in reservation form for how many persons");
+define("_MI_EGUIDE_DATE_FORMAT","Date Foramt");
+define("_MI_EGUIDE_DATE_FORMAT_DESC","Open Event Date(Time) display format. Using PHP date function format.");
+define("_MI_EGUIDE_DATE_FORMAT_DEF","D, d M Y");
+define("_MI_EGUIDE_EXPIRE_AFTER","Expire Time");
+define("_MI_EGUIDE_EXPIRE_AFTER_DESC","Event expired on top page when after event start time in minites.");
 define("_MI_EGUIDE_PERSONS","Persons default value");
 define("_MI_EGUIDE_PERSONS_DESC","Reservation persons in event post form");
 define("_MI_EGUIDE_PLUGINS","Use Other moudle plugins");
@@ -72,6 +78,7 @@ define("_MI_EGUIDE_EVENT_ITEM_TPL", "Item of Event Showup");
 define("_MI_EGUIDE_EVENT_CONF_TPL", "Event Confirmation Form");
 define("_MI_EGUIDE_EVENT_LIST_TPL", "Reserved Event List");
 define("_MI_EGUIDE_EVENT_CONFIRM_TPL", "Reservation Confirmation");
+define("_MI_EGUIDE_COLLECT_TPL", "Reservation setting collection");
 
 // Notifications
 define('_MI_EGUIDE_GLOBAL_NOTIFY', 'Grobal in module');

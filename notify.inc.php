@@ -15,9 +15,11 @@ function event_notify($op, $data) {
 	    $tags = array('EVENT_TITLE'=> $title,
 			  'EVENT_DATE' => $edate,
 			  'EVENT_NOTE' => $note,
-			  'EVENT_URL'  => XOOPS_URL."/modules/eguide/event.php?eid=".$data['eid']);
+			  'EVENT_URL'  => EGUIDE_URL."/event.php?eid=".$data['eid']);
 	    $xoopsMailer->assign($tags);
-	    $xoopsMailer->setBody(_MD_ADMIN_NOTIFY_NEW);
+	    $tpl = 'notify_admin_new.tpl';
+	    $xoopsMailer->setTemplateDir(template_dir($tpl));
+	    $xoopsMailer->setTemplate($tpl);
 	    $member_handler =& xoops_gethandler('member');
 	    $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
 	    $uid = $xoopsUser->getVar('uid');
@@ -48,14 +50,14 @@ function user_notify($eid) {
 	return;
     }
     $data = $xoopsDB->fetchArray($result);
-    $title = eventdate($data['edate'])." ".$data['title'];
+    $title = $data['title'];
 
     // using XOOPS2 notification system
 	    
     $tags = array('EVENT_TITLE'=> $title,
 		  'EVENT_DATE' => formatTimestamp($data['edate'], _MD_TIME_FMT),
 		  'EVENT_NOTE' => '',
-		  'EVENT_URL'  => XOOPS_URL."/modules/eguide/event.php?eid=$eid");
+		  'EVENT_URL'  => EGUIDE_URL."/event.php?eid=$eid");
     $notification_handler =& xoops_gethandler('notification');
     $notification_handler->triggerEvent('global', 0, 'new', $tags);
     $notification_handler->triggerEvent('category', $data['topicid'], 'new', $tags);
@@ -70,13 +72,15 @@ function user_notify($eid) {
 	$xoopsMailer =& getMailer();
 	$xoopsMailer->useMail();
 	$xoopsMailer->setSubject(_MD_NEWSUB." - $title");
-	$xoopsMailer->setBody(_MD_NOTIFY_NEW);
+	$tpl = 'notify_user_new.tpl';
+	$xoopsMailer->setTemplateDir(template_dir($tpl));
+	$xoopsMailer->setTemplate($tpl);
 	$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
 	$xoopsMailer->setFromName(_MD_FROM_NAME);
 	$xoopsMailer->assign("SITENAME", $xoopsConfig['sitename']);
 	$xoopsMailer->assign("TITLE", $title);
-	$xoopsMailer->assign("EVENT_URL", XOOPS_URL."/modules/eguide/event.php?eid=$eid");
-	$xoopsMailer->assign("CANCEL_URL", XOOPS_URL."/modules/eguide/reserv.php?op=cancel&rvid=".$data['rvid']."&key=".$data['confirm']);
+	$xoopsMailer->assign("EVENT_URL", EGUIDE_URL."/event.php?eid=$eid");
+	$xoopsMailer->assign("CANCEL_URL", EGUIDE_URL."/reserv.php?op=cancel&rvid=".$data['rvid']."&key=".$data['confirm']);
 	$xoopsMailer->setToEmails($data['email']);
 	if (!$xoopsMailer->send()) {
 	    echo "<div class='error'>".$xoopsMailer->getErrors()."</div>\n";

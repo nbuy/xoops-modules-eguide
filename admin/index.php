@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.24 2006/05/24 04:48:58 nobu Exp $
+// $Id: index.php,v 1.25 2006/06/04 07:04:03 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -303,7 +303,7 @@ function showCategories() {
 	$count = $data['count'];
 	if (preg_match('/^\//', $img)) $img = XOOPS_URL.$img;
 	elseif (!empty($img) && !preg_match('/^https?:/', $img)) {
-	    $img = XOOPS_URL."/modules/eguide";
+	    $img = EGUIDE_URL;
 	} else {
 	    $img = "";
 	}

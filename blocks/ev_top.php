@@ -1,27 +1,30 @@
 <?php
-// $Id: ev_top.php,v 1.14 2006/04/30 18:28:05 nobu Exp $
+// $Id: ev_top.php,v 1.15 2006/06/04 07:04:03 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
 function b_event_top_show($options) {
     global $xoopsDB, $xoopsUser;
     $myts =& MyTextSanitizer::getInstance();
-    $moddir = 'eguide';
-    $modurl = XOOPS_URL."/modules/$moddir";
+    $dirname = basename(dirname(dirname(__FILE__)));
+    $modurl = XOOPS_URL."/modules/$dirname";
 
     $now = time();
     if ($options[3]) {
-        $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE expire>$now AND status=0 ORDER BY cdate DESC";
+        $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE edate>$now AND status=0 ORDER BY cdate DESC";
     } else {
-	$sql = "SELECT eid, title, edate, cdate, uid, exid, exdate  FROM ".$xoopsDB->prefix("eguide").' LEFT JOIN '.$xoopsDB->prefix("eguide_extent")." ON eid=eidref AND ldate=exdate WHERE expire>$now AND status=0 ORDER BY ldate";
+	$sql = "SELECT eid, title, IF(exdate,exdate,edate) edate, cdate, uid, exid FROM ".$xoopsDB->prefix("eguide").' LEFT JOIN '.$xoopsDB->prefix("eguide_extent")." ON eid=eidref WHERE ((expire>=edate AND expire>$now) OR (expire<edate AND IF(exdate,exdate,edate)+expire>$now)) AND status=0 ORDER BY edate";
     }
     if(!isset($options[1])) $options[1]=10;
     $result = $xoopsDB->query($sql, $options[1], 0);
+    echo $xoopsDB->error();
 
     $block = array('lang_nodata'=>_BLOCK_EV_NONE,
 		   'lang_waiting'=>_BLOCK_EV_WAIT,
 		   'lang_more'=>_BLOCK_EV_MORE,
 		   'detail'=>$options[0],
+		   'dirname'=>$dirname,
+		   'module_url'=>$modurl,
 		   'events'=>array());
     while ( $myrow = $xoopsDB->fetchArray($result) ) {
 	$event = array();
@@ -38,7 +41,7 @@ function b_event_top_show($options) {
 	$edate = empty($myrow['exdate'])?$myrow['edate']:$myrow['exdate'];
 	$event['title'] = $title;
 	$event['eid'] = $myrow['eid'];
-	//$event['exid'] = $myrow['exid'];
+	if (isset($myrow['exid'])) $event['exid'] = $myrow['exid'];
 	$event['date'] = formatTimestamp($edate, _BLOCK_DATE_FMT);
 	$event['_date'] = formatTimestamp($edate, 's');
 	$event['uname'] = XoopsUser::getUnameFromId($myrow['uid']);
@@ -47,7 +50,7 @@ function b_event_top_show($options) {
 	$event['uid'] = $myrow['uid'];
 	$block['events'][] = $event;
     }
-    $mod = XoopsModule::getByDirname($moddir);
+    $mod = XoopsModule::getByDirname($dirname);
     if ($xoopsUser && $xoopsUser->isAdmin($mod->mid())) {
 	$result = $xoopsDB->query("SELECT count(eid) FROM ".$xoopsDB->prefix("eguide")." WHERE status=1");
 	if ($xoopsDB->getRowsNum($result)) {
