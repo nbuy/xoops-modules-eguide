@@ -31,10 +31,10 @@
 <form method="post">
 <div><{$smarty.const._MD_RESERV_PERSONS}>: <{$event.persons}><{$smarty.const._MD_RESERV_UNIT}></div>
 <table cellspacing="1" cellpading="2" class="outer">
-  <tr><th><{$labels[0]}></th><th><{$labels[1]}></th><th colspan="2"><{$labels[2]}></th><th><{$labels[3]}></th></tr>
+  <tr><th align="center"><{$labels[0]}></th><th><{$labels[1]}></th><th colspan="2"><{$labels[2]}></th><th><{$labels[3]}></th></tr>
   <{foreach from=$extents item=ext}>
   <tr class="<{cycle values="even, odd"}>">
-    <td><{if $ext.reserved}>-<{else}><input type="checkbox" name="dels[<{$ext.exid}>]" value="<{$ext.exid}>"/><{/if}></td>
+    <td align="center"><{if $ext.reserved}>-<{else}><input type="checkbox" name="dels[<{$ext.exid}>]" value="<{$ext.exid}>"/><{/if}></td>
     <td><a href="event.php?eid=<{$ext.eid}>&amp;sub=<{$ext.exid}>"><{$ext.date}></a></td>
     <td align="right"><{$ext.reserved}></td><td>(<{if $ext.expersons}><{$ext.expersons}><{else}>-<{/if}>)</td>
     <td align="center">
