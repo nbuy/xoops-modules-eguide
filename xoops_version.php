@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.30 2006/06/04 07:04:03 nobu Exp $
+// $Id: xoops_version.php,v 1.31 2006/06/06 05:17:21 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
 $modversion['version'] = "1.99";
@@ -53,6 +53,8 @@ $modversion['templates'][]=array('file' => 'eguide_mylist.html',
 				 'description' => _MI_EGUIDE_EVENT_LIST_TPL);
 $modversion['templates'][]=array('file' => 'eguide_confirm.html',
 				 'description' => _MI_EGUIDE_EVENT_CONFIRM_TPL);
+$modversion['templates'][]=array('file' => 'eguide_editdate.html',
+				 'description' => _MI_EGUIDE_EDITDATE_TPL);
 $modversion['templates'][]=array('file' => 'eguide_collect.html',
 				 'description' => _MI_EGUIDE_COLLECT_TPL);
 $modversion['templates'][]=array('file' => 'eguide_excel.xml',
@@ -202,13 +204,13 @@ $modversion['config'][]=array('name' => 'close_before',
 			      'description' => '_MI_EGUIDE_CLOSEBEFORE_DESC',
 			      'formtype' => 'text',
 			      'valuetype' => 'int',
-			      'default' => 60*24);
+			      'default' => 60);
 $modversion['config'][]=array('name' => 'expire_after',
 			      'title' => '_MI_EGUIDE_EXPIRE_AFTER',
 			      'description' => '_MI_EGUIDE_EXPIRE_AFTER_DESC',
 			      'formtype' => 'text',
 			      'valuetype' => 'int',
-			      'default' => 60);
+			      'default' => 60*24);
 $modversion['config'][]=array('name' => 'default_persons',
 			      'title' => '_MI_EGUIDE_PERSONS',
 			      'description' => '_MI_EGUIDE_PERSONS_DESC',

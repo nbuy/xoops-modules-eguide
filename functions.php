@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.11 2006/06/04 07:04:02 nobu Exp $
+// $Id: functions.php,v 1.12 2006/06/06 05:17:21 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -63,7 +63,7 @@ function edit_eventdata(&$data) {
     $pat[] = '{X_TIME}';
     $str[] = $data['time'] = formatTimestamp($data['ldate'], _MD_STIME_FMT);
     $post = isset($data['cdate'])?$data['cdate']:time();
-    $data['postdate'] = formatTimestamp($post, _MD_TIME_FMT);
+    $data['postdate'] = formatTimestamp($post, _MD_POSTED_FMT);
     $data['uname'] = isset($data['uid'])?XoopsUser::getUnameFromId($data['uid']):$xoopsUser->getVar('uname');
     $data['hits'] = sprintf(_MD_REFER, $data['counter']);
     $br = 0;
@@ -392,5 +392,18 @@ function order_notify($data, $email, $value) {
     $xoopsMailer->setFromEmail($poster->getVar('email'));
     $xoopsMailer->setFromName(_MD_FROM_NAME);
     return $xoopsMailer->send();
+}
+
+if(!function_exists("file_get_contents")) {
+    // have php 4.2 later
+    function file_get_contents($filename) {
+	$fp = fopen($filename, "rb");
+	if (!$fp) return false;
+	$contents = "";
+	while (! feof($fp)) {
+	    $contents .= fread($fp, 4096);
+	}
+	return $contents;
+    }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 // Event collection setting by Poster
-// $Id: collect.php,v 1.1 2006/06/04 07:04:02 nobu Exp $
+// $Id: collect.php,v 1.2 2006/06/06 05:17:21 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -49,22 +49,26 @@ $xoopsOption['template_main'] = 'eguide_collect.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
 $num = $xoopsDB->getRowsNum($result);
-$tline = array();
-$cells = array();
-$event = array();
+
+$dateline = $timeline = $cells = $event = array();
 $peid = 0;			// prime event id
 while ($data = $xoopsDB->fetchArray($result)) {
     $edate = $data['edate'];
-    $day = formatTimestamp($edate, _MD_SDATE_FMT);
-    $time = formatTimestamp($edate, _MD_STIME_FMT);
+    $data['date']=eventdate($edate);
+    $day = formatTimestamp($edate, 'Y-m-d');
+    $time = formatTimestamp($edate, 'H:i');
     $eid = $data['eid'];
     if (!isset($event[$eid])) {
 	$event[$eid] = edit_eventdata($data);
 	if (!$peid && $data['exid']) $peid = $data['eid'];
     }
-    if (isset($tline[$time])) $tline[$time]++;
-    else $tline[$time] = 1;
-    if (!isset($cells[$day])) $cells[$day] = array();
+    if (!isset($timeline[$time])) {
+	$timeline[$time] = formatTimestamp($edate, _MD_STIME_FMT);
+    }
+    if (!isset($cells[$day])) {
+	$cells[$day] = array();
+	$dateline[$day] = formatTimestamp($edate, _MD_SDATE_FMT);
+    }
     if (isset($cells[$day][$time])) {
 	$cells[$day][$time][] = $data;
     } else {
@@ -72,20 +76,17 @@ while ($data = $xoopsDB->fetchArray($result)) {
     }
 }
 
-
-if (empty($xoopsModuleConfig['time_defs'])) {
-    $timeline = array_keys($tline);
-} else {
-    $timeline = array_unique(array_merge(array_keys($tline),
-		 preg_split('/\\s*,\\s*/', $xoopsModuleConfig['time_defs'])));
-    sort($timeline);
+if (!empty($xoopsModuleConfig['time_defs'])) {
+    foreach (explode(',', $xoopsModuleConfig['time_defs']) as $tm) {
+	$timeline[$tm]=date(_MD_STIME_FMT, strtotime($tm));
+    }
 }
+ksort($timeline);
 $xoopsTpl->assign('event', $event);
 $xoopsTpl->assign('peid', $peid);
 $xoopsTpl->assign('timeline', $timeline);
+$xoopsTpl->assign('dateline', $dateline);
 $xoopsTpl->assign('cells', $cells);
-$xoopsTpl->assign('export', file_exists(EGUIDE_PATH.'/export.php'));
-$xoopsTpl->assign('lang_export', _MD_EXPORT_OUT);
 
 include XOOPS_ROOT_PATH.'/footer.php';
 ?>

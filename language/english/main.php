@@ -1,15 +1,15 @@
 <?php
-// $Id: main.php,v 1.10 2006/06/04 07:04:03 nobu Exp $
+// $Id: main.php,v 1.11 2006/06/06 05:17:21 nobu Exp $
 define("_MD_RESERV_FORM","Reservation Hear");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
-define('_MD_SDATE_FMT', 'Y-m-d');
+define('_MD_SDATE_FMT', 'D, j M Y');
 define('_MD_STIME_FMT', 'H:i');
 // Localization Transrate Weekly date name
 //global $ev_week;
 //$ev_week = array('Sun'=>'S', 'Mon'=>'M','Tue'=>'T', 'Wed'=>'W','Thu'=>'U','Fri'=>'F', 'Sat'=>'A');
-define("_MD_POSTED_FMT", "Y-m-d H:i");
-define("_MD_TIME_FMT", "Y-m-d H:i");
+define("_MD_POSTED_FMT", "j M Y H:i");
+define("_MD_TIME_FMT", "j M Y H:i");
 define("_MD_READMORE","More...");
 define("_MD_EMAIL","EMail Address");
 define('_MD_UNAME','Username');
@@ -77,6 +77,7 @@ define('_MD_CLOSEBEFORE_DESC','before from start (e.g.: 3days, 2hour, 50min)');
 define('_MD_TIME_UNIT','days,hour,min');
 define('_MD_TIME_REG','d(ay)?s?,h(our)?,min');
 define('_MD_CALENDER','Go Calender');
+define('_MD_CAL','Calender');
 define('_MD_CAL_MONDAY_FIRST', true);
 define("_MD_REFER","%d hits");
 define("_MD_RESERV_LIST","List of participants");

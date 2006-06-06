@@ -1,6 +1,6 @@
 <?php
 // Export event reservations in Excel/XML format
-// $Id: export.php,v 1.1 2006/06/04 07:04:02 nobu Exp $
+// $Id: export.php,v 1.2 2006/06/06 05:17:21 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/template.php';
@@ -8,17 +8,6 @@ $_GET['op'] = '';	// only for poster
 include 'perm.php';
 
 $eid = intval($_GET['eid']);
-
-if (isset($_GET['line'])) {
-    $max_rows=intval($_GET['line']);
-    $max_sect=max(1,intval(40/$max_rows));
-} elseif (isset($_GET['sub'])) { // only one page
-    $max_sect=1;
-    $max_rows=40;
-} else {
-    $max_sect=5;
-    $max_rows=8;
-}
 
 $result = $xoopsDB->query("SELECT optfield FROM ".OPTBL." WHERE eid=$eid");
 list($optfield) = $xoopsDB->fetchRow($result);
@@ -38,6 +27,17 @@ if (isset($_GET['sub'])) {
 $result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.
 OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.
 EXTBL." x ON e.eid=eidref WHERE $cond ORDER BY edate");
+
+if (isset($_GET['line'])) {
+    $max_rows=intval($_GET['line']);
+    $max_sect=max(1,intval(40/$max_rows));
+} elseif ($xoopsDB->getRowsNum($result)==1) { // only one page
+    $max_sect=1;
+    $max_rows=40;
+} else {
+    $max_sect=5;
+    $max_rows=8;
+}
 
 $sheets = array();
 

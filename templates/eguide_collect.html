@@ -7,11 +7,9 @@
   <td>
     [
       <a href="admin.php?eid=<{$eid}>"><{$smarty.const._EDIT}></a>
+      | <a href="export.php?eid=<{$event.eid}>"}><{$smarty.const._MD_EXPORT_OUT}></a>
       <{if $ev.exid}>
       | <a href="editdate.php?eid=<{$eid}>"}><{$smarty.const._MD_EDIT_EXTENT}></a>
-      <{/if}>
-      <{if $export}>
-      | <a href="export.php?eid=<{$eid}>"}><{$lang_export}></a>
       <{/if}>
     ]
   </td>
@@ -38,20 +36,20 @@
 <table class="outer" cellspacing="1" cellpading="2">
 <tr><th></th><{foreach from=$timeline item=time}><th><{$time}></th><{/foreach}></tr>
 <{foreach from=$cells key=day item=cell}>
-  <tr class="<{cycle values="even, odd"}>"><th><{$day}></th>
+  <tr class="<{cycle values="even, odd"}>"><th><{$dateline[$day]}></th>
   <{foreach from=$timeline key=time item=disp}>
     <td align="center">
       <{if $cell[$time]}>
         <{foreach from=$cell[$time] item=ev}>
 	  <div><{$smarty.const._MD_RESERV_PERSONS}>
 	    <input size="2" name="persons[<{$ev.eid}><{if $ev.exid}>-<{$ev.exid}><{/if}>]" value="<{if $ev.exid}><{$ev.expersons}><{else}><{$ev.persons}><{/if}>"/><br/>
-	    <a href="entry.php?eid=<{$ev.eid}><{if $ev.exid}>&sub=<{$ev.exid}><{/if}>" title="<{$ev.edate}> <{$ev.title}>"><{$smarty.const._REGISTER}></a>
-	    <a href="receipt.php?eid=<{$ev.eid}><{if $ev.exid}>&sub=<{$ev.exid}><{/if}>" title="<{$ev.edate}> <{$ev.title}>"><{$smarty.const._MD_DETAIL}></a>
+	    <a href="entry.php?eid=<{$ev.eid}><{if $ev.exid}>&sub=<{$ev.exid}><{/if}>" title="<{$ev.date}> <{$ev.title}>"><{$smarty.const._REGISTER}></a>
+	    <a href="receipt.php?eid=<{$ev.eid}><{if $ev.exid}>&sub=<{$ev.exid}><{/if}>" title="<{$ev.date}> <{$ev.title}>"><{$smarty.const._MD_DETAIL}></a>
             (<{$ev.reserved}>/<{$ev.persons}>)
 	  </div>
         <{/foreach}>
       <{elseif $peid}>
-	<a href="editdate.php?eid=<{$peid}>&adds=<{$day}>+<{$time}>"><{$smarty.const._MD_ADD_EXTENT}></a>
+	<a href="editdate.php?eid=<{$peid}>&adds=<{$day}>+<{$time}>" title="<{$day}> <{$time}> <{$event[$peid].title}>"><{$smarty.const._MD_ADD_EXTENT}></a>
       <{/if}>
     </td>
   <{/foreach}>
