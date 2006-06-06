@@ -39,7 +39,7 @@
 <tr><th></th><{foreach from=$timeline item=time}><th><{$time}></th><{/foreach}></tr>
 <{foreach from=$cells key=day item=cell}>
   <tr class="<{cycle values="even, odd"}>"><th><{$day}></th>
-  <{foreach from=$timeline item=time}>
+  <{foreach from=$timeline key=time item=disp}>
     <td align="center">
       <{if $cell[$time]}>
         <{foreach from=$cell[$time] item=ev}>
