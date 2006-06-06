@@ -288,7 +288,7 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
      ss:Color="#000000"/>
    </Borders>
-   <NumberFormat ss:Format="yyyy&quot;年&quot;m&quot;月&quot;d&quot;日&quot;\(ddd\);@"/>
+   <NumberFormat ss:Format="yyyy&quot;年&quot;m&quot;月&quot;d&quot;日&quot;\(aaa\);@"/>
   </Style>
  </Styles>
 <{foreach from=$sheets key=sname item=sheet}>
