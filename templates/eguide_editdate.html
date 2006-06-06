@@ -35,7 +35,7 @@
   <{foreach from=$extents item=ext}>
   <tr class="<{cycle values="even, odd"}>">
     <td align="center"><{if $ext.reserved}>-<{else}><input type="checkbox" name="dels[<{$ext.exid}>]" value="<{$ext.exid}>"/><{/if}></td>
-    <td><a href="event.php?eid=<{$ext.eid}>&amp;sub=<{$ext.exid}>"><{$ext.date}></a></td>
+    <td><a href="event.php?eid=<{$event.eid}>&amp;sub=<{$ext.exid}>"><{$ext.date}></a></td>
     <td align="right"><{$ext.reserved}></td><td>(<{if $ext.expersons}><{$ext.expersons}><{else}>-<{/if}>)</td>
     <td align="center">
     <{if $ext.edit}>
