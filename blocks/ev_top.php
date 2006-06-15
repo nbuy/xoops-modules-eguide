@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.15 2006/06/04 07:04:03 nobu Exp $
+// $Id: ev_top.php,v 1.16 2006/06/15 04:56:11 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -17,7 +17,6 @@ function b_event_top_show($options) {
     }
     if(!isset($options[1])) $options[1]=10;
     $result = $xoopsDB->query($sql, $options[1], 0);
-    echo $xoopsDB->error();
 
     $block = array('lang_nodata'=>_BLOCK_EV_NONE,
 		   'lang_waiting'=>_BLOCK_EV_WAIT,
