@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.18 2006/06/04 07:04:02 nobu Exp $
+// $Id: admin.php,v 1.19 2006/06/16 17:54:15 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -227,7 +227,8 @@ $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 include_once XOOPS_ROOT_PATH.'/language/'.$xoopsConfig['language'].'/calendar.php';
 if (!empty($ev_week)) $xoopsTpl->assign('weekname', $ev_week);
 if (!empty($ev_month)) $xoopsTpl->assign('monthname', $ev_month);
-$xoopsTpl->assign('calrange', array(2000,2015));
+$y = formatTimestamp(time(), 'Y');
+$xoopsTpl->assign('calrange', array($y-10,$y+10));
 
 $check = array('title'=>_MD_TITLE, 'summary'=>_MD_INTROTEXT);
 foreach ($check as $k=>$v) {
@@ -359,9 +360,9 @@ function select_list($name, $options, $def=1) {
 
 function time_to_str($sec) {
     $unit = split(',',_MD_TIME_UNIT);
-    if (($sec >= 86400) && ($sec % 86400) == 0) { // days
+    if ((abs($sec) >= 86400) && ($sec % 86400) == 0) { // days
 	return ($sec / 86400).$unit[0];
-    } elseif (($sec >= 3600) && ($sec % 3600 == 0)) { // hours
+    } elseif ((abs($sec) >= 3600) && ($sec % 3600 == 0)) { // hours
 	return ($sec / 3600).$unit[1];
     }
     return intval($sec / 60).$unit[2];
@@ -370,9 +371,9 @@ function time_to_str($sec) {
 function time_to_sec($str) {
     $unit = split(',',_MD_TIME_REG);
     $v = intval($str);
-    if (preg_match('/^\d+'.$unit[0].'$/i', $str)) {
+    if (preg_match('/^-?\d+'.$unit[0].'$/i', $str)) {
 	return $v * 86400;
-    } elseif (preg_match('/^\d+'.$unit[1].'?$/i', $str)) {
+    } elseif (preg_match('/^-?\d+'.$unit[1].'?$/i', $str)) {
 	return $v * 3600;
     }
     return $v * 60;
