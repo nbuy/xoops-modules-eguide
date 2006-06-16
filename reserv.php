@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.24 2006/06/04 07:04:02 nobu Exp $
+// $Id: reserv.php,v 1.25 2006/06/16 16:53:25 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -246,7 +246,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
 	if (order_notify($data, $email, $value)) {
 	    echo "<div class='evform'>\n";
-	    echo "<p><a href='$evurl' class='evhead'>".htmlspecialchars(eventdate($data['edate'])." &nbsp; ".$data['title'])."</a></p>";
+	    echo "<p><a href='$evurl' class='evhead'>".eventdate($data['edate'])." &nbsp; ".htmlspecialchars($data['title'])."</a></p>";
 	    echo "<h3>"._MD_RESERVATION."</h3>\n";
 	    echo "<p><b>"._MD_RESERV_ACCEPT."</b></p>";
 	    if ($value) {
