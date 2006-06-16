@@ -7,6 +7,7 @@
 <link href="<{$xoops_url}>/favicon.ico" rel="SHORTCUT ICON" />
 </head>
 <body>
+<div class="header"><img src="<{$xoops_url}>/images/logo.gif" alt="<{$xoops_sitename}>"/></div>
 <{include file="db:eguide_item.html"}>
 <{if $list}>
 <div class="evlist">
@@ -23,5 +24,12 @@
 </table>
 </div>
 <{/if}>
+<div class="footer">
+<div><{$lang_comefrom}></div>
+<div><a href="<{$smarty.const.EGUIDE_URL}>/"><{$smarty.const.EGUIDE_URL}>/</a></div>
+<br/>
+<div><{$smarty.const._MD_URLFOREVENT}></div>
+<div><a href="<{$smarty.const.EGUIDE_URL}>/event.php?eid=<{$event.eid}><{if $event.exid}>&sub=<{$event.exid}><{/if}>"><{$smarty.const.EGUIDE_URL}>/event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}></a></div>
+</div>
 </body>
 </html>

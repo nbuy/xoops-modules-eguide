@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.19 2006/06/04 07:04:02 nobu Exp $
+// $Id: event.php,v 1.20 2006/06/16 18:41:02 nobu Exp $
 
 include 'header.php';
 
@@ -101,6 +101,8 @@ if ($data['closedate'] < $now) {
 $xoopsTpl->assign(make_lists($data));
 
 if ($op == "print") {
+    $xoopsOption['template_main'] = 'eguide_event_print.html';
+    $xoopsTpl->assign('lang_comefrom', sprintf(_MD_THISCOMESFROM, $xoopsConfig['sitename']));
     $xoopsTpl->display('db:eguide_event_print.html');
     exit;
 }
