@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.19 2006/06/16 17:54:15 nobu Exp $
+// $Id: admin.php,v 1.20 2006/07/20 17:59:25 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -171,8 +171,10 @@ if ($op=='save' || $op=='date') {
 	}
 	$xoopsDB->query('INSERT INTO '.EGTBL."($flist) VALUES($buf)");
 	$data['eid'] = $eid = $xoopsDB->getInsertId();
-	foreach ($sets as $v) {
-	    if ($v) $xoopsDB->query('INSERT INTO '.EXTBL."(eidref, exdate) VALUES($eid, $v)");
+	if (!empty($sets)) {
+	    foreach ($sets as $v) {
+		if ($v) $xoopsDB->query('INSERT INTO '.EXTBL."(eidref, exdate) VALUES($eid, $v)");
+	    }
 	}
 	event_notify('new', $data);
     }
