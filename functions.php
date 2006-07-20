@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.12 2006/06/06 05:17:21 nobu Exp $
+// $Id: functions.php,v 1.13 2006/07/20 18:12:12 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -229,7 +229,7 @@ function eventform($data) {
 		$opts = "<select name='$fname'>\n$opts</select>";
 	    }
 	}
-	if ($require) $form['check'][$fname] = preg_replace('/\\*$/', '', $name);
+	if ($require) $form['check'][$fname] = preg_replace('/\\*$/', '', $name).": ".strip_tags(_MD_ORDER_NOTE1);
 	$name = preg_replace('/\\*$/', _MD_REQUIRE_MARK, $name);
 	if ($attr=='evop') $name = sprintf(_MD_LISTITEM_FMT, $name);
 	if ($attr=='') $attr = (count($items)%2)?'even':'odd';
@@ -366,6 +366,7 @@ function order_notify($data, $email, $value) {
 	$uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
 			 $xoopsUser->getVar('uname'),
 			 $xoopsUser->getVar('name'));
+	$xoopsMailer->setToUsers($xoopsUser);
     } else {
 	$uinfo = "";
     }

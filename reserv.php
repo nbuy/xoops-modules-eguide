@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.25 2006/06/16 16:53:25 nobu Exp $
+// $Id: reserv.php,v 1.26 2006/07/20 18:12:12 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -103,6 +103,7 @@ case 'delete':
 		    $uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
 				     $user->getVar('uname'),
 				     $user->getVar('name'));
+		    $xoopsMailer->setToUsers($user);
 		} else {
 		    $uinfo = "";
 		} 
@@ -233,7 +234,7 @@ case 'order':
 	$data['confirm'] = $conf = rand(10000,99999);
 	$uid = 'NULL';
 	if (is_object($xoopsUser)) {
-	    if ($ml == '' || strtolower($xoopsUser->getVar('email'))==$ml) {
+	    if (empty($ml) || strtolower($xoopsUser->getVar('email'))==$ml) {
 		$uid = $xoopsUser->getVar('uid');
 	    }
 	}
