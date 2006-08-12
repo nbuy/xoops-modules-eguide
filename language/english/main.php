@@ -1,6 +1,6 @@
 <?php
-// $Id: main.php,v 1.11 2006/06/06 05:17:21 nobu Exp $
-define("_MD_RESERV_FORM","Reservation Hear");
+// $Id: main.php,v 1.12 2006/08/12 17:09:27 nobu Exp $
+define("_MD_RESERV_FORM","Reservation Here");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
 define('_MD_SDATE_FMT', 'D, j M Y');
@@ -71,7 +71,7 @@ define("_MD_SHOW_NEXT","Upcoming Events");
 define("_MD_POSTERC","Poster");
 define('_MD_POSTDATE','Registered');
 define('_MD_STARTTIME','Starting Event');
-define('_MD_CLOSEDATE','Close Event');
+define('_MD_CLOSEDATE','Close Reservation');
 define('_MD_CLOSEBEFORE','Close time before');
 define('_MD_CLOSEBEFORE_DESC','before from start (e.g.: 3days, 2hour, 50min)');
 define('_MD_TIME_UNIT','days,hour,min');
