@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.26 2006/07/20 18:12:12 nobu Exp $
+// $Id: reserv.php,v 1.27 2006/08/12 17:09:59 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -18,20 +18,18 @@ if ($xoopsModuleConfig['member_only'] && !is_object($xoopsUser)) {
 $isadmin = is_object($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->getVar('mid'));
 
 function reserv_permit($ruid, $euid, $confirm) {
-    global $xoopsUser, $xoopsModule, $xoopsModuleConfig, $isadmin;
+    global $xoopsUser, $xoopsModule, $isadmin;
     if (!is_object($xoopsUser)) {
 	if ($xoopsModuleConfig['member_only']) return false;
 	return $confirm==param('key');
     }
     // administrator has permit
     if ($isadmin) return true;
-    if ($xoopsModuleConfig['member_only']) {
-	$uid = $xoopsUser->getVar('uid');
-	// reservation person
-	if ($uid==$ruid && $confirm==param('key')) return true;
-	// event poster
-	if ($uid==$euid) return true;
-    }
+    $uid = $xoopsUser->getVar('uid');
+    // reservation person
+    if ($uid==$ruid && $confirm==param('key')) return true;
+    // event poster
+    if ($uid==$euid) return true;
     return false;
 }
 
