@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.20 2006/06/16 18:41:02 nobu Exp $
+// $Id: event.php,v 1.21 2006/08/16 16:24:36 nobu Exp $
 
 include 'header.php';
 
@@ -23,6 +23,10 @@ if (is_object($xoopsUser)) {
 
 set_next_event();
 $data = fetch_event($eid, $exid, $isadmin);
+if (empty($data)) {
+    redirect_header('index.php', 3, _NOPERM);
+    exit;
+}
 $_GET['cat']=$data['catid'];	// for notification
 $now=time();
 

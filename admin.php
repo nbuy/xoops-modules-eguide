@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.20 2006/07/20 17:59:25 nobu Exp $
+// $Id: admin.php,v 1.21 2006/08/16 16:24:36 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -23,7 +23,7 @@ $uid = $xoopsUser->getVar('uid');
 // set form data
 $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
 	       'persons', 'style'); // integer value default '0'
-$targs = array('title', 'summary', 'body', 'optfield', 'before');
+$targs = array('title', 'summary', 'body', 'optfield', 'before', 'redirect');
 
 $myts =& MyTextSanitizer::getInstance();
 $xoopsOption['template_main'] = 'eguide_admin.html';
@@ -186,7 +186,7 @@ if ($op=='save' || $op=='date') {
     $result = $xoopsDB->query("SELECT eid FROM ".OPTBL." WHERE eid=$eid");
     
     $ofields = array('reservation', 'strict', 'autoaccept', 'notify',
-		     'persons', 'optfield', 'closetime');
+		     'persons', 'optfield', 'closetime', 'redirect');
     if ($xoopsDB->getRowsNum($result)) {
 	$buf = "";
 	foreach ($ofields as $name) {

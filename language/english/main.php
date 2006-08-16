@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.12 2006/08/12 17:09:27 nobu Exp $
+// $Id: main.php,v 1.13 2006/08/16 16:24:36 nobu Exp $
 define("_MD_RESERV_FORM","Reservation Here");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
@@ -134,6 +134,8 @@ define('_MD_RESERV_UNIT','');
 define('_MD_RESERV_ITEM','Additional Items');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">About Additional Items format</a>');
 define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
+define('_MD_RESERV_REDIRECT','Redirect After Reservation URL');
+define('_MD_RESERV_REDIRECT_DESC','Set a number waiting seconds. e.g.: "4;http://..."');
 define('_MD_APPROVE','Approve Display');
 define('_MD_PREVIEW','Preview');
 define('_MD_SAVE','save');

@@ -20,7 +20,7 @@
 <{if $event.persons}>
 <div><{$event.reserv_num}><{if $event.reservation}> (<{$event.reserv_reg}>)<{/if}></div>
 <{/if}>
-<{if $event.dispclose}>
+<{if $event.dispclose && $event.reservation}>
 <div><{$smarty.const._MD_CLOSEDATE}> <{$event.dispclose}></div>
 <{/if}>
 <{if $points_this}>

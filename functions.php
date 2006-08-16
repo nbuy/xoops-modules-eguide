@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.13 2006/07/20 18:12:12 nobu Exp $
+// $Id: functions.php,v 1.14 2006/08/16 16:24:36 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -115,7 +115,7 @@ function eventform($data) {
     $note1 = $note2 = "";
     foreach (explode("\n", $optfield) as $n) {
 	$field++;
-	$n = preg_replace("/\s*[\n\r]/", "", $n);
+	$n = rtrim($n);
 	if ($n=="") continue;
 	$attr = "";
 	$require = false;
@@ -124,7 +124,23 @@ function eventform($data) {
 	    $type = "#";
 	    $name = "&nbsp;";
 	} else {
-	    $opt = preg_split("/,\\s*/", $n);
+	    $opt = array(); 
+	    $p = 0;
+	    $len = strlen($n);
+	    while ($p < $len) {
+		$w = '';
+		while ($p < $len) {
+		    $c = $n[$p++];
+		    if ($c == ',') break;
+		    if($c == '\\' && $p<$len) {
+			$c = $n[$p++];
+			if ($c == 'n') $c = "\n";
+			elseif ($c != '\\' && $c != ',') $c = "\\$c";
+		    }
+		    $w .= $c;
+		}
+		$opt[] = $w; 
+	    }
 	    $name = array_shift($opt);
 	    if (preg_match('/[\*#]$/', $name)) {
 		$require = true;
@@ -137,9 +153,6 @@ function eventform($data) {
 		$note2 = _MD_ORDER_NOTE2;
 	    }
 	    $v = "";
-	    if ($xoopsUser && preg_match(_MD_NAME, $name)) {
-		$v = htmlspecialchars($xoopsUser->getVar('name'));
-	    }
 	    $type = "text";
 	    $aname = isset($opt[0])?strtolower($opt[0]):"";
 	    switch ($aname) {
@@ -160,6 +173,7 @@ function eventform($data) {
 	    $comment = "";
 	    $fname = "opt$field";
 	    $sub = 0;
+	    $prop = '';
 	    if (isset($_POST[$fname])) {
 		$v = $myts->stripSlashesGPC($_POST[$fname]);
 	    }
@@ -181,6 +195,9 @@ function eventform($data) {
 		case "cols":
 		    $cols = $args[1];
 		    break;
+		case 'prop':
+		   $prop = $args[1]; 
+		   break; 
 		default:
 		    $an = preg_replace('/\+$/', "", $aname);
 		    if ($v) {
@@ -191,13 +208,13 @@ function eventform($data) {
 		    if ($type=='radio') {
 			$sub++;
 			if (isset($args[1])) {
-			    $opts .= "<input type='$type' name='$fname' value='$an'$ck />".$args[1]." &nbsp; ";
+			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>".$args[1]." &nbsp; ";
 			} else {
-			    $opts .= "<input type='$type' name='$fname' value='$an'$ck />$an &nbsp; ";
+			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>$an &nbsp; ";
 			}
 		    } elseif (($type=='text' || $type=='textarea')) {
 			if (!isset($_POST[$fname])) {
-			    $v .= ($v==""?"":",").str_replace('\n', "\n", $op);
+			    $v .= ($v==""?"":",").$op;
 			}
 		    } elseif ($type=='checkbox') {
 			$sub++;
@@ -207,9 +224,9 @@ function eventform($data) {
 			    $ck = ($an==$v)?' checked':'';
 			}
 			if (isset($args[1])) {
-			    $opts .= "<input type='$type' name='$iname' value='$an'$ck/>".$args[1]." &nbsp; ";
+			    $opts .= "<input type='$type' name='$iname' value='$an'$ck $prop/>".$args[1]." &nbsp; ";
 			} else {
-			    $opts .= "<input type='$type' name='$iname' value='$an'$ck/>$an &nbsp; ";
+			    $opts .= "<input type='$type' name='$iname' value='$an'$ck $prop/>$an &nbsp; ";
 			}
 		    } elseif ($type=='select') {
 			if ($ck != "") $ck = " selected";
@@ -221,12 +238,16 @@ function eventform($data) {
 		    }
 		}
 	    }
+	    if (empty($v) && !isset($_POST[$fname]) &&
+		$xoopsUser && preg_match(_MD_NAME, $name)) {
+		$v = htmlspecialchars($xoopsUser->getVar('name'));
+	    }
 	    if ($type == "text") {
-		$opts .= "<input size='$size' name='$fname' value='$v' />";
+		$opts .= "<input size='$size' name='$fname' value='$v' $prop/>";
 	    } elseif ($type == "textarea") {
-		$opts .= "<textarea name='$fname' rows='$rows' cols='$cols' wrap='virtual'>$v</textarea>";
+		$opts .= "<textarea name='$fname' rows='$rows' cols='$cols' wrap='virtual' $prop>$v</textarea>";
 	    } elseif ($type == "select") {
-		$opts = "<select name='$fname'>\n$opts</select>";
+		$opts = "<select name='$fname' $prop>\n$opts</select>";
 	    }
 	}
 	if ($require) $form['check'][$fname] = preg_replace('/\\*$/', '', $name).": ".strip_tags(_MD_ORDER_NOTE1);
@@ -328,7 +349,7 @@ function fetch_event($eid, $exid, $admin=false) {
 IF(expersons IS NULL, persons, expersons) persons,
 IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
 closetime, reservation, uid, status, style, counter, catid, catname, catimg, 
-exid, exdate, strict, autoaccept, notify";
+exid, exdate, strict, autoaccept, notify, redirect";
     $result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
 ' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.
 " x ON e.eid=eidref WHERE e.eid=$eid $stc".($exid?' AND exid='.$exid:''));

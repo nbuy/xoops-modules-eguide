@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.33 2006/08/12 17:17:30 nobu Exp $
+// $Id: xoops_version.php,v 1.34 2006/08/16 16:24:36 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "2.01";
+$modversion['version'] = "2.1";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -24,6 +24,9 @@ $modversion['tables'][1] = "eguide_opt";
 $modversion['tables'][2] = "eguide_reserv";
 $modversion['tables'][3] = "eguide_category";
 $modversion['tables'][4] = "eguide_extent";
+
+// OnUpdate - upgrade DATABASE 
+$modversion['onUpdate'] = "onupdate.php";
 
 // Admin things
 $modversion['hasAdmin'] = 1;

@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.27 2006/08/12 17:09:59 nobu Exp $
+// $Id: reserv.php,v 1.28 2006/08/16 16:24:36 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -244,6 +244,17 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$data['rvid'] = $rvid = $xoopsDB->getInsertId();
 	$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
 	if (order_notify($data, $email, $value)) {
+	    $url = '';
+	    if (!empty($data['redirect'])) {
+		$url = $data['redirect'];
+		$sec = 3;
+		if (preg_match('/^(\d+);/', $url, $d)) {
+		    $sec = $d[1];
+		    $url = preg_replace('/^(\d+);/', '', $url);
+		}
+		$xoopsTpl->assign('xoops_module_header', HEADER_CSS.sprintf('
+<meta http-equiv="Refresh" content="%u; url=%s" />', $sec, htmlspecialchars($url)));
+	    }
 	    echo "<div class='evform'>\n";
 	    echo "<p><a href='$evurl' class='evhead'>".eventdate($data['edate'])." &nbsp; ".htmlspecialchars($data['title'])."</a></p>";
 	    echo "<h3>"._MD_RESERVATION."</h3>\n";
@@ -252,6 +263,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 		echo "<h3>"._MD_RESERV_CONF."</h3>";
 		echo "<blockquote class='evbody'>".$myts->displayTarea($value)."</blockquote>";
 	    }
+	    if ($url) echo "<p>".sprintf(_IFNOTRELOAD, $url)."</p>";
 	    //
 	    // register user notify request
 	    //

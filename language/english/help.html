@@ -137,9 +137,12 @@ td,th { padding: 4px; background: #e8e8e8;}
        </div>
     <li>"*" means you need input something.</li>
     <li>"#" is a message in the FORM (displayed comments).</li>
-    <li>"," is a delimiter. (Use HTML special char when used in arguments)</li>
+    <li>"," is a delimiter. Include part of strings, using escape in "\".</li>
     <li>value equivalent label when it suppressed.</li>
     <li>"+" Selected items (checkbox, radio, select) default value.</li>
+    <li>Other arguments to be default value in text items(text, textarea).</li>
+    <li>A part of argument makes attribute in inputs (text: "size=n", textarea: "cols=n" "rows=n").</li>
+    <li>Using "prop=string" argument, makes any attributes in input.</li>
   </ul>
 
   <h3>examples:</h3>
@@ -149,7 +152,7 @@ td,th { padding: 4px; background: #e8e8e8;}
       <tr bgcolor="#d0d0d0"><th>setup</th><th>Displayed form</th></tr>
       <tr><td>Name*</td><td>Name* <input name='samp1' /></td></tr>
       <tr><td>Name*,size=5</td><td>Name* <input name='samp2' size=5 /></td></tr>
-      <tr><td>Name*,size=5,#comment text</td><td>Name* <input name='samp3' size=5 /> comment text</td></tr>
+      <tr><td>Name*,size=10,value,#comment text</td><td>Name* <input name='samp3' size='10' value='value'/> comment text</td></tr>
       <tr><td>Selection,radio,Item1+,Item2,Item3</td><td>Selection <input type='radio' name='samp4' value='1' checked /> Item1 &nbsp; <input type='radio' name='samp4' value='2' /> Item2 &nbsp; <input type='radio' name='samp4' value='3' /> Item3 &nbsp; </td></tr>
       <tr><td>Selection,checkbox,Item1+,Item2,Item3</td><td>Selection <input type='checkbox' name='samp5_1' checked /> Item1 &nbsp; <input type='checkbox' name='samp5_2' /> Item2 &nbsp; <input type='checkbox' name='samp5_3' /> Item3 &nbsp; </td></tr>
       <tr><td>Selection,select,Item1,Item2,Item3</td><td>Selection <select name='samp6'><option>Item1</option><option>Item2</option><option>Item3</option></select></td></tr>
@@ -161,6 +164,8 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"><h2>Changes</h2></a>
 
 <dl>
+  <dd>2006/08/16 add redirect url setting after reservation</dd>
+  <dd>2006/08/16 revised escape in additional items and extent "prop" attribute (from Craig Taylor)</dd>
   <dd>2006/08/13 eguide 2.01</dd>
   <dd>2006/08/13 fix mistake resources</dd>
   <dd>2006/08/13 fix cancel failer when login user do cancel</dd>
@@ -172,6 +177,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.23 2006/08/12 17:47:41 nobu Exp $
+$Id: help.html,v 1.24 2006/08/16 16:24:36 nobu Exp $
 </body>
 </html>

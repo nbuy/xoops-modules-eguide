@@ -1,6 +1,6 @@
 <?php
 // reservation functions
-// $Id: reserv_func.php,v 1.1 2006/05/24 04:48:58 nobu Exp $
+// $Id: reserv_func.php,v 1.2 2006/08/16 16:24:36 nobu Exp $
 
 function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
     $myts =& MyTextSanitizer::getInstance();
@@ -107,7 +107,7 @@ function check_prev_order($data, $vals, &$errs, $force=false) {
 	$ml = '';
     }
     if ($result && $xoopsDB->getRowsNum($result)) {
-	$errs[] =  _MD_EMAIL.": ".htmlspecialchars($email)." - "._MD_MAIL_ERR;
+	$errs[] =  _MD_EMAIL.": ".htmlspecialchars($email)." - "._MD_DUP_ERR;
     }
     // checking is there any seat?
     $num = 1;			// how many orders?
