@@ -1,6 +1,6 @@
 <?php
 # eguide module onUpdate proceeding.
-# $Id: onupdate.php,v 1.1 2006/08/16 16:24:36 nobu Exp $
+# $Id: onupdate.php,v 1.2 2006/08/16 16:57:10 nobu Exp $
 
 global $xoopsDB;
 include dirname(__FILE__)."/const.php";
@@ -62,7 +62,7 @@ if ($xoopsDB->errno()) { // check exists
 
 // after 2.0b2 added
 add_field(EXTBL, 'expersons', 'INTEGER', 'exdate');
-// after 2.01 added
+// after 2.1 added
 add_field(OPTBL, 'redirect', "varchar(128) NOT NULL default ''", 'optfield');
 
 function add_field($table, $field, $type, $after) {
