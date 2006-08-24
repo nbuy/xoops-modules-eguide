@@ -42,10 +42,15 @@
 </form>
 <script type='text/javascript'>
 <!--//
+function checkItem(obj) {
+  if (obj.value == "" && obj.selectedIndex == null) return true;
+  if (obj.selectedIndex != null && obj.options[obj.selectedIndex].text=="") return true;
+  return false;
+}
 function xoopsFormValidate_order() {
     myform = window.document.order;
 <{foreach from=$form.check key=name item=msg}>
-if ( myform.<{$name}>.value == "" ) { window.alert("<{$msg}>"); myform.<{$name}>.focus(); return false; }
+if ( checkItem(myform.<{$name}>) ) { window.alert("<{$msg}>"); myform.<{$name}>.focus(); return false; }
 <{/foreach}>
 return true;
 }

@@ -1,7 +1,25 @@
 <?php
-// $Id: ev_top.php,v 1.16 2006/06/15 04:56:11 nobu Exp $
+// $Id: ev_top.php,v 1.17 2006/08/24 07:49:52 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
+
+if (!function_exists("eguide_marker")) {
+    function eguide_marker($full) {
+	global $marker;
+	if (empty($marker)) {
+	    $module_handler =& xoops_gethandler('module');
+	    $module =& $module_handler->getByDirname('eguide');
+	    $config_handler =& xoops_gethandler('config');
+	    $config =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+	    $marker = preg_split('/,|[\r\n]+/',$config['maker_set']);
+	}
+	$tmp = $marker;
+	while(list($k,$v) = array_splice($tmp, 0, 2)) {
+	    if ($full<$k) return $v;
+	}
+	return '';
+    }
+ }
 
 function b_event_top_show($options) {
     global $xoopsDB, $xoopsUser;
@@ -11,9 +29,16 @@ function b_event_top_show($options) {
 
     $now = time();
     if ($options[3]) {
-        $sql = "SELECT eid, title, edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." WHERE edate>$now AND status=0 ORDER BY cdate DESC";
+	$sql = "SELECT eid, title, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." LEFT JOIN ".$xoopsDB->prefix("eguide_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) AND status=0 GROUP BY eid ORDER BY cdate DESC";
     } else {
-	$sql = "SELECT eid, title, IF(exdate,exdate,edate) edate, cdate, uid, exid FROM ".$xoopsDB->prefix("eguide").' LEFT JOIN '.$xoopsDB->prefix("eguide_extent")." ON eid=eidref WHERE ((expire>=edate AND expire>$now) OR (expire<edate AND IF(exdate,exdate,edate)+expire>$now)) AND status=0 ORDER BY edate";
+	$sql = "SELECT e.eid, title, IF(exdate,exdate,edate) edate, cdate, uid,
+exid, IF(x.reserved,x.reserved,o.reserved)/persons*100 as full, closetime
+FROM ".$xoopsDB->prefix("eguide").' e
+  LEFT JOIN '.$xoopsDB->prefix("eguide_opt").' o ON e.eid=o.eid
+  LEFT JOIN '.$xoopsDB->prefix("eguide_extent")." x ON e.eid=eidref
+WHERE ((expire>=edate AND expire>$now)
+       OR (expire<edate AND IF(exdate,exdate,edate)+expire>$now))
+  AND status=0 ORDER BY edate";
     }
     if(!isset($options[1])) $options[1]=10;
     $result = $xoopsDB->query($sql, $options[1], 0);
@@ -47,6 +72,9 @@ function b_event_top_show($options) {
 	$event['post'] = formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT);
 	$event['_post'] = formatTimestamp($myrow['cdate'], 'm');
 	$event['uid'] = $myrow['uid'];
+	if (isset($myrow['full'])) {
+	    $event['mark'] = eguide_marker($myrow['full']);
+	}
 	$block['events'][] = $event;
     }
     $mod = XoopsModule::getByDirname($dirname);

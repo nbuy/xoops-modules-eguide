@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.7 2006/06/06 04:39:44 nobu Exp $
+// $Id: editdate.php,v 1.8 2006/08/24 07:49:52 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -20,6 +20,7 @@ if (!$data) {
 include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = 'eguide_editdate.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+$edate = $data['edate'];
 $xoopsTpl->assign('event', edit_eventdata($data));
 
 $myts =& MyTextSanitizer::getInstance();

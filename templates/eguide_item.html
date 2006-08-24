@@ -30,7 +30,7 @@
 </div>
 <{if $event.disp_body}>
   <p class="evbody"><{$event.disp_body}></p>
-<{elseif $event.expire}>
+<{elseif $event.expire && $event.reservation}>
   <p><a href="event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>#form"><{$smarty.const._MD_RESERV_FORM}></a></p>
 <{/if}>
 <{if $event.link}>

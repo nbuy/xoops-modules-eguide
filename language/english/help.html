@@ -23,7 +23,7 @@ td,th { padding: 4px; background: #e8e8e8;}
 
   <hr>
 
-  <a name="summary"><h2>Summary</h2></a>
+  <a name="summary"></a><h2>Summary</h2>
 
   Event guide module will display event guidance
   and reservations for the event.
@@ -37,7 +37,7 @@ td,th { padding: 4px; background: #e8e8e8;}
   <li>New event notification to registered users</li>
 </ul>
 
-  <a name="roleplay"><h2>Using Steps</h2></a>
+  <a name="roleplay"></a><h2>Using Steps</h2>
 
   <ol>
     <li>Install this module</li>
@@ -59,7 +59,7 @@ td,th { padding: 4px; background: #e8e8e8;}
   </ol>
 
 
-  <a name="functions"><h2>Functions</h2></a>
+  <a name="functions"></a><h2>Functions</h2>
 
   <h3>Event Registration and Display</h3>
 
@@ -104,23 +104,23 @@ td,th { padding: 4px; background: #e8e8e8;}
       <li>Notify new event registered users</li>
     </ol>
 
-  <a name="config"><h2>Event Configuration</h2></a>
+  <a name="config"></a><h2>Event Configuration</h2>
 
   Event Guide module setup items as follow:
   
   <blockquote>
     <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
       <tr class="hd"><th>Item</th><th>value</th><th>description</th></tr>
-      <tr><th align="left">Permit event registration group</th><td>Group (<u>Regsiter Users</u>)</td><td>allow group to register new event</td></tr>
-      <tr><th align="left">Notification mail to admin when New Event registerd</th><td><u>Yes</u>/No</td><td></td></tr>
-      <tr><th align="left">Need to approve New Event</th><td>Yes/<u>No</u></td><td></td></tr>
-      <tr><th align="left">Notification of new event to requested user</th><td><u>Yes</u>/No</td><td></td></tr>
-      <tr><th align="left">Display additional items in list</th><td>field counts (<u>3</u>)</td><td></td></tr>
-      <tr><th align="left">Display events in top page</th><td>Event counts (<u>10</u>)</td><td></td></tr>
+      <tr class="even"><th align="left">Group of Event Post</th><td>Group (<u>Regsiter Users</u>)</td><td>Set a group the owner permited to administration for own evnet.</td></tr>
+      <tr class="odd"><th align="left">Notify mail to Admin</th><td><u>Yes</u>/No</td><td>Notification mail to admin when New Event registerd</td></tr>
+      <tr class="even"><th align="left">Do you need to approve New Event</th><td>Yes/<u>No</u></td><td>Need to approve New Event by site administrator</td></tr>
+      <tr class="odd"><th align="left">User requested notification of new event</th><td><u>Yes</u>/No</td><td>YES - Enable notification mail, NO - disable.</td></tr>
+      <tr class="even"><th align="left">Display additional items in list</th><td>field counts (<u>3</u>)</td><td>Display items entry order additional form</td></tr>
+      <tr class="odd"><th align="left">Display events in top page</th><td>Event counts (<u>10</u>)</td><td>Number of listed events in top page</td></tr>
     </table>
   </blockquote>
 
-  <a name="form"><h2>Additional fields Format</h2></a>
+  <a name="form"></a><h2>Additional fields Format</h2>
   <strong>In Reservation</strong>
   Additonal items set to FORM when used order to make reservation.
   These additional items are setup with the following formats:
@@ -150,20 +150,24 @@ td,th { padding: 4px; background: #e8e8e8;}
   <form>
     <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
       <tr bgcolor="#d0d0d0"><th>setup</th><th>Displayed form</th></tr>
-      <tr><td>Name*</td><td>Name* <input name='samp1' /></td></tr>
-      <tr><td>Name*,size=5</td><td>Name* <input name='samp2' size=5 /></td></tr>
-      <tr><td>Name*,size=10,value,#comment text</td><td>Name* <input name='samp3' size='10' value='value'/> comment text</td></tr>
-      <tr><td>Selection,radio,Item1+,Item2,Item3</td><td>Selection <input type='radio' name='samp4' value='1' checked /> Item1 &nbsp; <input type='radio' name='samp4' value='2' /> Item2 &nbsp; <input type='radio' name='samp4' value='3' /> Item3 &nbsp; </td></tr>
-      <tr><td>Selection,checkbox,Item1+,Item2,Item3</td><td>Selection <input type='checkbox' name='samp5_1' checked /> Item1 &nbsp; <input type='checkbox' name='samp5_2' /> Item2 &nbsp; <input type='checkbox' name='samp5_3' /> Item3 &nbsp; </td></tr>
-      <tr><td>Selection,select,Item1,Item2,Item3</td><td>Selection <select name='samp6'><option>Item1</option><option>Item2</option><option>Item3</option></select></td></tr>
-      <tr><td>Label,hidden,value</td><td><em>(not display in form - present only input values)</em></td></tr>
-      <tr><td>#message text</td><td>message text</td></tr>
+      <tr class="even"><td>Name*</td><td>Name* <input name='samp1' /></td></tr>
+      <tr class="odd"><td>Name*,size=5</td><td>Name* <input name='samp2' size=5 /></td></tr>
+      <tr class="even"><td>Name*,size=10,value,#comment text</td><td>Name* <input name='samp3' size='10' value='value'/> comment text</td></tr>
+      <tr class="odd"><td>Selection,radio,Item1+,Item2,Item3</td><td>Selection <input type='radio' name='samp4' value='1' checked /> Item1 &nbsp; <input type='radio' name='samp4' value='2' /> Item2 &nbsp; <input type='radio' name='samp4' value='3' /> Item3 &nbsp; </td></tr>
+      <tr class="even"><td>Selection,checkbox,Item1+,Item2,Item3</td><td>Selection <input type='checkbox' name='samp5_1' checked /> Item1 &nbsp; <input type='checkbox' name='samp5_2' /> Item2 &nbsp; <input type='checkbox' name='samp5_3' /> Item3 &nbsp; </td></tr>
+      <tr class="odd"><td>Selection,select,Item1,Item2,Item3</td><td>Selection <select name='samp6'><option>Item1</option><option>Item2</option><option>Item3</option></select></td></tr>
+      <tr class="even"><td>Label,hidden,value</td><td><em>(not display in form - present only input values)</em></td></tr>
+      <tr class="odd"><td>#message text</td><td>message text</td></tr>
     </table>
   </form>
 
-  <a name="changes"><h2>Changes</h2></a>
+  <a name="changes"></a><h2>Changes</h2>
 
 <dl>
+  <dd>2006/08/24 add filling mark in block when show details</dd>
+  <dd>2006/08/24 new event block shows next event in multiple</dd>
+  <dd>2006/08/22 fix template: not display _MD_RESERV_FORM (as "Reservation Here") when reservation disable</dd>
+  <dd>2006/08/22 add language/german resources</dd>
   <dd>2006/08/17 eguide 2.1 released</dd>
   <dd>2006/08/16 add redirect url setting after reservation</dd>
   <dd>2006/08/16 revised escape in additional items and extent "prop" attribute (from Craig Taylor)</dd>
@@ -179,6 +183,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.25 2006/08/16 16:57:10 nobu Exp $
+$Id: help.html,v 1.26 2006/08/24 07:49:52 nobu Exp $
 </body>
 </html>
