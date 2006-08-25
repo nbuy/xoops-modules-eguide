@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.21 2006/08/25 02:47:30 nobu Exp $
+// $Id: receipt.php,v 1.22 2006/08/25 02:51:15 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -96,7 +96,7 @@ if ($nrec && $op=='csv') {
     $outs = array();
     if ($xoopsModuleConfig['export_field']) {
 	$temp = $item;
-	array_unshift($temp, _MD_RVID, _MD_ORDER_DATE,_MD_EMAIL, _MD_UNAME);
+	array_unshift($temp, _MD_ORDER_DATE, _MD_EMAIL, _MD_RVID, _MD_UNAME);
 	$exports = preg_split('/\\s*,\\s*/',$xoopsModuleConfig['export_field']);
 	foreach ($exports as $k) {
 	    if ($k == '*') {	// left all

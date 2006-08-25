@@ -1,6 +1,6 @@
 <?php
 // Export event reservations in Excel/XML format
-// $Id: export.php,v 1.3 2006/08/25 02:47:43 nobu Exp $
+// $Id: export.php,v 1.4 2006/08/25 02:51:31 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/template.php';
@@ -45,7 +45,7 @@ $items = explodeopts($optfield);
 $outs = array();
 if ($xoopsModuleConfig['export_field']) {
     $temp = $items;
-    array_unshift($temp, _MD_RVID, _MD_ORDER_DATE,_MD_EMAIL, _MD_UNAME);
+    array_unshift($temp, _MD_ORDER_DATE, _MD_EMAIL, _MD_RVID, _MD_UNAME);
     $exports = preg_split('/\\s*,\\s*/',$xoopsModuleConfig['export_field']);
     foreach ($exports as $k) {
 	if ($k == '*') {	// left all
