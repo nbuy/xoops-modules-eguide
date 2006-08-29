@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.34 2006/08/16 16:24:36 nobu Exp $
+// $Id: xoops_version.php,v 1.35 2006/08/29 11:37:46 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
 $modversion['version'] = "2.1";
@@ -77,6 +77,7 @@ $modversion['blocks'][2]=array('file' => "ev_top.php",
 			       'show_func' => 'b_event_top_show',
 			       'edit_func' => 'b_event_top_edit',
 			       'options' => '0|10|19|1',
+			       'can_clone' => true,
 			       'template' => 'eguide_block_top.html');
 // Menu
 $module_handler =& xoops_gethandler('module');

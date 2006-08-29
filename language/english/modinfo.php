@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.11 2006/06/06 05:17:21 nobu Exp $
+// $Id: modinfo.php,v 1.12 2006/08/29 11:37:47 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -68,7 +68,7 @@ define("_MI_EGUIDE_MARKER_DESC","The mark mean of how many entry in current. Sho
 define("_MI_EGUIDE_MARKER_DEF","0,[Close]\n50,[Empty]\n100,[Many]\n101,[Full]\n");
 define("_MI_EGUIDE_TIME_DEFS","Time Table Labels");
 define("_MI_EGUIDE_TIME_DEFS_DESC","Set starting time in Settings collection page. e.g.: 08:00,14:00,16:00");
-define("_MI_EGUIDE_EXPORT_LIST","Item List in export reservation");
+define("_MI_EGUIDE_EXPORT_LIST","Item List in export reservations");
 define("_MI_EGUIDE_EXPORT_LIST_DESC","Item `name' or `number' seperated comma(,). Astarisk(*) mean left items. e.g.: 3,4,0,2,*");
 // Templates
 define("_MI_EGUIDE_INDEX_TPL", "Event Guide Top page list");

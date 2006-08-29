@@ -77,7 +77,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     <ol>
       <li>New Event Registration - allow admin or setup group</li>
       <li>Reservations</li>
-        <ul>
+	<ul>
 	  <li>Approve reservation request</li>
 	  <li>Summary display</li>
 	    <ul>
@@ -111,12 +111,112 @@ td,th { padding: 4px; background: #e8e8e8;}
   <blockquote>
     <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
       <tr class="hd"><th>Item</th><th>value</th><th>description</th></tr>
-      <tr class="even"><th align="left">Group of Event Post</th><td>Group (<u>Regsiter Users</u>)</td><td>Set a group the owner permited to administration for own evnet.</td></tr>
-      <tr class="odd"><th align="left">Notify mail to Admin</th><td><u>Yes</u>/No</td><td>Notification mail to admin when New Event registerd</td></tr>
-      <tr class="even"><th align="left">Do you need to approve New Event</th><td>Yes/<u>No</u></td><td>Need to approve New Event by site administrator</td></tr>
-      <tr class="odd"><th align="left">User requested notification of new event</th><td><u>Yes</u>/No</td><td>YES - Enable notification mail, NO - disable.</td></tr>
-      <tr class="even"><th align="left">Display additional items in list</th><td>field counts (<u>3</u>)</td><td>Display items entry order additional form</td></tr>
-      <tr class="odd"><th align="left">Display events in top page</th><td>Event counts (<u>10</u>)</td><td>Number of listed events in top page</td></tr>
+      <tr class="even">
+	<th align="left">Group of Event Post</th>
+	<td>Group (<u>Regsiter Users</u>)</td>
+	<td>Set a group the owner permited to administration for own evnet.</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Notify mail to Admin</th>
+	<td><u>Yes</u>/No</td>
+	<td>Notification mail to admin when New Event registerd</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Admin Group for Notification</th>
+	<td><u>Yes</u>/No</td>
+	<td>The group is received admin notification mail</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Do you need to approve New Event</th>
+	<td>Yes/<u>No</u></td>
+	<td>Need to approve New Event by site administrator</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Display additional items in list</th>
+	<td>field counts (<u>3</u>)</td>
+	<td>Display items entry order additional form</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Display list items in a page</th>
+	<td>line counts (<u>50</u>)</td>
+	<td>How many item lines in a page</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Display events in top page</th>
+	<td>Event counts (<u>10</u>)</td>
+	<td>Number of listed events in top page</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Show Multiple Entry</th>
+	<td><u>Yes</u>/No</td>
+	<td>When event has multiple entry, show each entris. YES - display each entries. NO - Only show recenet entry.</td>
+      </tr>
+      <tr class="even">
+	<th align="left">User requested notification of new event</th>
+	<td><u>Yes</u>/No</td>
+	<td>YES - Enable notification mail, NO - disable.</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Event entry need to LOGIN</th>
+	<td>Yes/<u>No</u></td>
+	<td>Only login user can be reservation event. (Not use email address)</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Has confirm page</th>
+	<td>Yes/<u>No</u></td>
+	<td>Display confirm page when reservation submit</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Label of persons</th>
+	<td>(none)</td>
+	<td>Extra field label in reservation form for how many persons</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Close Time Before (min)</th>
+	<td><u>60</u></td>
+	<td>Event entry close time before setting minits.</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Expire Time</th>
+	<td><u>1440</u> (was 1day, 24 hours)</td>
+	<td>Event expired on top page when after event start time in minites.</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Persons default value</th>
+	<td><u>10</u></td>
+	<td>Reservation persons in event post form</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Date Foramt</th>
+	<td><u>D, d M Y</u></td>
+	<td>Open Event Date(Time) display format. Using PHP date function format.</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Use Other moudle plugins</th>
+	<td>Yes/<u>No</u></td>
+	<td>Internal Control accept entry form other modules</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Current entry level mark</th>
+	<td>0,[Close]<br/>50,[Empty]<br/>100,[Many]<br/>101,[Full]<br/></td>
+	<td>The mark mean of how many entry in current. Show mark correspond parcentage. (xx,yy mean less than xx% showup yy. And '0,yy' mean out of date mark)</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Time Table Labels</th>
+	<td>(none)</td>
+	<td>Set starting time in Settings collection page. e.g.: 08:00,14:00,16:00</td>
+      </tr>
+      <tr class="odd">
+	<th align="left">Item List in export reservations</th>
+	<td><u>*</u></td>
+	<td>Item `name' or `number' seperated comma(,). Astarisk(*) mean left items. e.g.: 3,4,0,2,*</td>
+      </tr>
+      <tr class="even">
+	<th align="left">Allow Comments</th>
+	<td><u>Yes</u>/No</td>
+	<td>Allow Comments for event<p>Following sets standard comment function in XOOPS</p></td>
+      </tr>
+
     </table>
   </blockquote>
 
@@ -164,10 +264,11 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h2>Changes</h2>
 
 <dl>
+  <dd>2006/08/29 add category filter in blocks</dd>
   <dd>2006/08/24 add filling mark in block when show details</dd>
   <dd>2006/08/24 new event block shows next event in multiple</dd>
   <dd>2006/08/22 fix template: not display _MD_RESERV_FORM (as "Reservation Here") when reservation disable</dd>
-  <dd>2006/08/22 add language/german resources</dd>
+  <dd>2006/08/22 add language/german resources (</dd>
   <dd>2006/08/17 eguide 2.1 released</dd>
   <dd>2006/08/16 add redirect url setting after reservation</dd>
   <dd>2006/08/16 revised escape in additional items and extent "prop" attribute (from Craig Taylor)</dd>
@@ -183,6 +284,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.26 2006/08/24 07:49:52 nobu Exp $
+$Id: help.html,v 1.27 2006/08/29 11:37:47 nobu Exp $
 </body>
 </html>

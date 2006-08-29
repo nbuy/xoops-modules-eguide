@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.17 2006/08/24 07:49:52 nobu Exp $
+// $Id: ev_top.php,v 1.18 2006/08/29 11:37:46 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -28,8 +28,37 @@ function b_event_top_show($options) {
     $modurl = XOOPS_URL."/modules/$dirname";
 
     $now = time();
-    if ($options[3]) {
-	$sql = "SELECT eid, title, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." LEFT JOIN ".$xoopsDB->prefix("eguide_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) AND status=0 GROUP BY eid ORDER BY cdate DESC";
+    list($detail, $nitem, $nlen, $only, $cat) = $options;
+    $cond = "";
+    $ids = array();
+    if ($cat) {
+	$labs = array();
+	foreach (explode(',',$cat) as $val) {
+	    $nval = intval($val);
+	    if ($nval) {
+		$ids[] = $nval;
+	    } else {
+		$labs[] = $xoopsDB->quoteString($val);
+	    }
+	}
+	if ($ids) {
+	    $cond = "catid IN (".join(',',$ids).")";
+	}
+	if ($labs) {
+	    if ($cond) $cond .= " OR ";
+	    $cond .= "catname IN (".join(',',$labs).")";
+	}
+	if ($cond) {
+	    $res = $xoopsDB->query("SELECT catid,catname,catimg FROM ".$xoopsDB->prefix("eguide_category")." WHERE ".$cond);
+	    $ids = array();
+	    while (list($id,$name,$img) = $xoopsDB->fetchRow($res)) {
+		$ids[$id] = array('name'=>htmlspecialchars($name),'img'=>$img);
+	    }
+	    $cond = $ids?" AND topicid IN (".join(',',array_keys($ids)).")":"";
+	}
+    }
+    if ($only) {
+	$sql = "SELECT eid, title, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." LEFT JOIN ".$xoopsDB->prefix("eguide_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
     } else {
 	$sql = "SELECT e.eid, title, IF(exdate,exdate,edate) edate, cdate, uid,
 exid, IF(x.reserved,x.reserved,o.reserved)/persons*100 as full, closetime
@@ -37,29 +66,26 @@ FROM ".$xoopsDB->prefix("eguide").' e
   LEFT JOIN '.$xoopsDB->prefix("eguide_opt").' o ON e.eid=o.eid
   LEFT JOIN '.$xoopsDB->prefix("eguide_extent")." x ON e.eid=eidref
 WHERE ((expire>=edate AND expire>$now)
-       OR (expire<edate AND IF(exdate,exdate,edate)+expire>$now))
+       OR (expire<edate AND IF(exdate,exdate,edate)+expire>$now)) $cond
   AND status=0 ORDER BY edate";
     }
-    if(!isset($options[1])) $options[1]=10;
-    $result = $xoopsDB->query($sql, $options[1], 0);
+    $result = $xoopsDB->query($sql, $nitem, 0);
 
-    $block = array('lang_nodata'=>_BLOCK_EV_NONE,
-		   'lang_waiting'=>_BLOCK_EV_WAIT,
-		   'lang_more'=>_BLOCK_EV_MORE,
-		   'detail'=>$options[0],
+    $block = array('detail'=>$detail,
 		   'dirname'=>$dirname,
 		   'module_url'=>$modurl,
+		   'categories'=>$ids,
 		   'events'=>array());
     while ( $myrow = $xoopsDB->fetchArray($result) ) {
 	$event = array();
 	$title = $myts->makeTboxData4Show($myrow["title"]);
 	if ( XOOPS_USE_MULTIBYTES ) {
-	    if (function_exists('mb_strcut')&& strlen($title) >= $options[2]) {
-		$title = $myts->makeTboxData4Show(mb_strcut($myrow['title'],0,($options[2] -1), _CHARSET))."...";
+	    if (function_exists('mb_strcut')&& strlen($title) >= $nlen) {
+		$title = $myts->makeTboxData4Show(mb_strcut($myrow['title'],0, $nlen-1, _CHARSET))."...";
 	    }
 	} else {
-	    if (strlen($title) >= $options[2]) {
-		$title = $myts->makeTboxData4Show(substr($myrow['title'],0,($options[2] -1)))."...";
+	    if (strlen($title) >= $nlen) {
+		$title = $myts->makeTboxData4Show(substr($myrow['title'],0,$nlen-1))."...";
 	    }
 	}
 	$edate = empty($myrow['exdate'])?$myrow['edate']:$myrow['exdate'];
@@ -101,7 +127,9 @@ function b_event_top_edit($options) {
 	_BLOCK_EV_ITEMS."&nbsp;<input name='options[]' value='".$options[1].
 	"' /><br/>\n".
 	_BLOCK_EV_TRIM."&nbsp;<input name='options[]' value='".$options[2]."' />\n".
-	"<input type='hidden' name='options[]' value='".$options[3]."' />\n";
+	"<input type='hidden' name='options[]' value='".$options[3]."' /><br/>\n".
+	_BLOCK_EV_CATEGORY."&nbsp;<input name='options[]' value='".$options[4]."' />\n".
+	"<input type='hidden' name='options[]' value='".$options[4]."' />\n";
     
 }
 ?>
