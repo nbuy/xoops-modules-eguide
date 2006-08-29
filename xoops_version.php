@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.35 2006/08/29 11:37:46 nobu Exp $
+// $Id: xoops_version.php,v 1.36 2006/08/29 11:45:05 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "2.1";
+$modversion['version'] = "2.2";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
