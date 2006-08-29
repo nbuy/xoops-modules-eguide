@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.22 2006/08/25 02:51:15 nobu Exp $
+// $Id: receipt.php,v 1.23 2006/08/29 11:35:28 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -120,14 +120,11 @@ if ($nrec && $op=='csv') {
     }
     $out = join(',',$temp)."\n";
     // body
-    $member_handler =& xoops_gethandler('member');
     while ($a = $xoopsDB->fetchArray($result)) {
 	$row = explodeinfo($a['info'], $item);
 	$row[_MD_EMAIL] = $a['email'];
 	$row[_MD_ORDER_DATE] = formatTimestamp($a['rdate']);
-	$user = $member_handler->getUser($a['uid']);
-	$name = is_object($user)?$user->getVar('name'):'';
-	$row[_MD_UNAME] = is_object($user)?$user->getVar('uname').($name?" ($name)":""):$xoopsConfig['anonymous'];
+	$row[_MD_UNAME] = XoopsUser::getUnameFromId($a['uid']);
 	$row[_MD_RVID] = $a['rvid'];
 	$temp = array();
 	foreach ($outs as $k) {
