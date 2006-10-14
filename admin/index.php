@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.25 2006/06/04 07:04:03 nobu Exp $
+// $Id: index.php,v 1.26 2006/10/14 10:45:02 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -373,7 +373,7 @@ function summary_csv() {
     $out = '"'.join('","',array("ID","",_MD_EXTENT_DATE,_AM_TITLE,_AM_POSTER,_MD_RESERV_PERSONS,_AM_RESERVATION))."\"\n";
     while ($data=$xoopsDB->fetchArray($result)) {
 	$date = eventdate($data['exdate']);
-	$poster = XoopsUser::getUnameFromId($date['uid']);
+	$poster = XoopsUser::getUnameFromId($data['uid']);
 	$exid = $data['exid']?$data['exid']:'';
 	$out .= join(',',array($data['eid'],$exid,_q($date),
 			       _q($data['title']),_q($poster),
