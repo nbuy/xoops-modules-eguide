@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.1 2006/08/21 16:10:00 nobu Exp $
+// $Id: main.php,v 1.2 2006/10/14 10:53:33 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 define("_MD_RESERV_FORM","Jetzt Tickets reservieren...");
@@ -9,8 +9,8 @@ define('_MD_SDATE_FMT', 'd.m.Y');
 define("_MD_DATE_FMT", "d.m.Y");
 define('_MD_STIME_FMT', 'H:i');
 // Localization Transrate Weekly date name
-//global $ev_week;
-//$ev_week = array('Sun'=>'S', 'Mon'=>'M','Tue'=>'T', 'Wed'=>'W','Thu'=>'U','Fri'=>'F', 'Sat'=>'A');
+global $ev_week;
+$ev_week = array('Sun'=>'Son', 'Mon'=>'Mon','Tue'=>'Die', 'Wed'=>'Mit','Thu'=>'Don','Fri'=>'Fre', 'Sam'=>'A');
 define('_MD_UNAME','Benutzername');
 define("_MD_POSTED_FMT", "d.m.Y H:i");
 define("_MD_TIME_FMT", "d.m.Y H:i");
@@ -155,10 +155,12 @@ define('_MD_DBDELETED','Veranstaltung gelöscht');
 define('_MD_EVENT_DEL_DESC','diese Veranstaltung löschen');
 define('_MD_EVENT_DEL_ADMIN','Alle Daten löschen (auch bereits getätigte Reservierungen)');
 
-define('_MD_MONTHC','Monat %d');
-define('_MD_DAYC','Tag %d');
-define('_MD_YEARC','Jahr %d');
 define('_MD_TIMEC','Zeit');
+// Localization Transrate Month name
+global $ev_month;
+$ev_month = array(1=>"Jan", 2=>"Feb", 3=>"Mär", 4=>"Apr",
+		  5=>"Mai", 6=>"Jun", 6=>"Jul", 8=>"Aug",
+		  9=>"Sep", 10=>"Okt", 11=>"Nov", 12=>"Dez");
 
 define('_MD_RESERV_DEFAULT_ITEM',"Name*\nAdresse\nTelefonnummer\nAnzahl Tickets*,select,1,2,3,4,5,6");
 define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');

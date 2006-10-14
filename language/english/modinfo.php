@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.12 2006/08/29 11:37:47 nobu Exp $
+// $Id: modinfo.php,v 1.13 2006/10/14 10:53:33 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -65,7 +65,7 @@ define("_MI_EGUIDE_COMMENT","Allow Comments");
 define("_MI_EGUIDE_COMMENT_DESC","Allow commnets to event");
 define("_MI_EGUIDE_MARKER","Current entry level mark");
 define("_MI_EGUIDE_MARKER_DESC","The mark mean of how many entry in current. Show mark correspond parcentage. (xx,yy mean less than xx% showup yy. And '0,yy' mean out of date mark)");
-define("_MI_EGUIDE_MARKER_DEF","0,[Close]\n50,[Empty]\n100,[Many]\n101,[Full]\n");
+define("_MI_EGUIDE_MARKER_DEF","0,[Close]\n50,[Vacant]\n100,[Many]\n101,[Full]\n");
 define("_MI_EGUIDE_TIME_DEFS","Time Table Labels");
 define("_MI_EGUIDE_TIME_DEFS_DESC","Set starting time in Settings collection page. e.g.: 08:00,14:00,16:00");
 define("_MI_EGUIDE_EXPORT_LIST","Item List in export reservations");

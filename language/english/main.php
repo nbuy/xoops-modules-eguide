@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.13 2006/08/16 16:24:36 nobu Exp $
+// $Id: main.php,v 1.14 2006/10/14 10:53:33 nobu Exp $
 define("_MD_RESERV_FORM","Reservation Here");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
@@ -150,6 +150,11 @@ define('_MD_MONTHC','month %d');
 define('_MD_DAYC','day %d');
 define('_MD_YEARC','year %d');
 define('_MD_TIMEC','Time');
+// Localization Transrate Month name
+//global $ev_month;
+//$ev_month = array(1=>"Jan", 2=>"Feb", 3=>"Mar", 4=>"Apr",
+//                  5=>"May", 6=>"Jun", 6=>"Jul", 8=>"Aug",
+//                  9=>"Sep", 10=>"Oct", 11=>"Nov", 12=>"Dec");
 
 define('_MD_RESERV_DEFAULT_ITEM',"Name*,size=40\nAddress\n");
 define('_MD_RESERV_DEFAULT_MEMBER',"");
