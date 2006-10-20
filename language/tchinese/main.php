@@ -1,13 +1,13 @@
 <?php
-// $Id: main.php,v 1.1 2006/10/14 10:53:34 nobu Exp $
+// $Id: main.php,v 1.2 2006/10/20 10:26:45 nobu Exp $
 define('_MD_RESERV_FORM', '立即報名');
 define('_MD_RESERVATION', '報名表');
 define('_MD_NAME', '/^Name\*?$/');
 define('_MD_SDATE_FMT', 'D, j M Y');
 define('_MD_STIME_FMT', 'H:i');
 // Localization Transrate Weekly date name
-//global $ev_week;
-//$ev_week = array('Sun'=>'S', 'Mon'=>'M','Tue'=>'T', 'Wed'=>'W','Thu'=>'U','Fri'=>'F', 'Sat'=>'A');
+global $ev_week;
+$ev_week = array('Sun'=>'星期日', 'Mon'=>'星期一','Tue'=>'星期二', 'Wed'=>'星期三','Thu'=>'星期四','Fri'=>'星期五', 'Sat'=>'星期六');
 define('_MD_POSTED_FMT', 'j M Y H:i');
 define('_MD_TIME_FMT', 'j M Y H:i');
 define('_MD_READMORE', '詳細...');
