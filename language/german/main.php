@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.2 2006/10/14 10:53:33 nobu Exp $
+// $Id: main.php,v 1.3 2006/10/24 13:55:24 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 define("_MD_RESERV_FORM","Jetzt Tickets reservieren...");
@@ -159,7 +159,7 @@ define('_MD_TIMEC','Zeit');
 // Localization Transrate Month name
 global $ev_month;
 $ev_month = array(1=>"Jan", 2=>"Feb", 3=>"Mär", 4=>"Apr",
-		  5=>"Mai", 6=>"Jun", 6=>"Jul", 8=>"Aug",
+		  5=>"Mai", 6=>"Jun", 7=>"Jul", 8=>"Aug",
 		  9=>"Sep", 10=>"Okt", 11=>"Nov", 12=>"Dez");
 
 define('_MD_RESERV_DEFAULT_ITEM',"Name*\nAdresse\nTelefonnummer\nAnzahl Tickets*,select,1,2,3,4,5,6");
