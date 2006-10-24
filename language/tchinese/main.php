@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.2 2006/10/20 10:26:45 nobu Exp $
+// $Id: main.php,v 1.3 2006/10/24 08:22:02 nobu Exp $
 define('_MD_RESERV_FORM', '立即報名');
 define('_MD_RESERVATION', '報名表');
 define('_MD_NAME', '/^Name\*?$/');
@@ -150,7 +150,7 @@ define('_MD_TIMEC', '時間');
 // Localization Transrate Month name
 global $ev_month;
 $ev_month = array(1=>"一月", 2=>"二月", 3=>"三月", 4=>"四月",
-		  5=>"五月", 6=>"六月", 6=>"七月", 8=>"八月",
+		  5=>"五月", 6=>"六月", 7=>"七月", 8=>"八月",
 		  9=>"九月", 10=>"十月", 11=>"十一月", 12=>"十二月");
 
 define('_MD_RESERV_DEFAULT_ITEM', '姓名*,size=40\n連絡地址\n');
