@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.14 2006/08/16 16:24:36 nobu Exp $
+// $Id: functions.php,v 1.15 2006/11/02 10:23:40 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -199,7 +199,7 @@ function eventform($data) {
 		   $prop = $args[1]; 
 		   break; 
 		default:
-		    $an = preg_replace('/\+$/', "", $aname);
+		    $an = preg_replace('/\+$/', "", $args[0]);
 		    if ($v) {
 			$ck = ($an == $v)?" checked":"";
 		    } else {
@@ -208,7 +208,7 @@ function eventform($data) {
 		    if ($type=='radio') {
 			$sub++;
 			if (isset($args[1])) {
-			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>".$args[1]." &nbsp; ";
+			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>".$args[1]." ";
 			} else {
 			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>$an &nbsp; ";
 			}
@@ -224,7 +224,7 @@ function eventform($data) {
 			    $ck = ($an==$v)?' checked':'';
 			}
 			if (isset($args[1])) {
-			    $opts .= "<input type='$type' name='$iname' value='$an'$ck $prop/>".$args[1]." &nbsp; ";
+			    $opts .= "<input type='$type' name='$iname' value='$an'$ck $prop/>".$args[1]." ";
 			} else {
 			    $opts .= "<input type='$type' name='$iname' value='$an'$ck $prop/>$an &nbsp; ";
 			}
