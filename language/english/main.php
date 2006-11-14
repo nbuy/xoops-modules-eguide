@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.14 2006/10/14 10:53:33 nobu Exp $
+// $Id: main.php,v 1.15 2006/11/14 13:33:51 nobu Exp $
 define("_MD_RESERV_FORM","Reservation Here");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
@@ -146,9 +146,6 @@ define('_MD_DBDELETED','Event Deleted');
 define('_MD_EVENT_DEL_DESC','Delete this event');
 define('_MD_EVENT_DEL_ADMIN','Delete all data including reservations.');
 
-define('_MD_MONTHC','month %d');
-define('_MD_DAYC','day %d');
-define('_MD_YEARC','year %d');
 define('_MD_TIMEC','Time');
 // Localization Transrate Month name
 //global $ev_month;
