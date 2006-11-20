@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.15 2006/11/02 10:23:40 nobu Exp $
+// $Id: functions.php,v 1.16 2006/11/20 06:15:39 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -201,9 +201,9 @@ function eventform($data) {
 		default:
 		    $an = preg_replace('/\+$/', "", $args[0]);
 		    if ($v) {
-			$ck = ($an == $v)?" checked":"";
+			$ck = ($an == $v)?" checked='checked'":"";
 		    } else {
-			$ck = ($an != $aname)?" checked":"";
+			$ck = ($an != $args[0])?" checked='checked'":"";
 		    }
 		    if ($type=='radio') {
 			$sub++;
