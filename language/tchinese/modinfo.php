@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.1 2006/10/14 10:53:34 nobu Exp $
+// $Id: modinfo.php,v 1.2 2006/11/30 14:14:09 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -9,10 +9,10 @@ define('_MI_EGUIDE_NAME', '活動快訊');
 define('_MI_EGUIDE_DESC', '公佈活動快訊以及活動報名');
 
 // Names of blocks for this module (Not all module has blocks)
-define('_MI_EGUIDE_MYLIST', '我已參加的活動清單');
-define('_MI_EGUIDE_SUBMIT', '新增活動訊息');
-define('_MI_EGUIDE_COLLECT', '修改活動內容');
-define('_MI_EGUIDE_REG', '登錄活動訊息通知');
+define('_MI_EGUIDE_MYLIST', '．我已參加的活動清單');
+define('_MI_EGUIDE_SUBMIT', '．新增活動訊息');
+define('_MI_EGUIDE_COLLECT', '．活動內容管理');
+define('_MI_EGUIDE_REG', '．登錄電子郵件通知');
 define('_MI_EGUIDE_HEADLINE', '活動快訊');
 define('_MI_EGUIDE_HEADLINE_DESC', '未來活動');
 define('_MI_EGUIDE_HEADLINE2', '新活動');
@@ -48,15 +48,15 @@ define('_MI_EGUIDE_MEMBER', '要檢視這個頁面的資料請先登入');
 define('_MI_EGUIDE_MEMBER_DESC', '只有註冊/登入的使用者可以進行活動預約（或是在不使用郵件的前提下）');
 define('_MI_EGUIDE_ORDERCONF', '是否要確認頁面？');
 define('_MI_EGUIDE_ORDERCONF_DESC', '當報名時，顯示報名確認頁');
-define('_MI_EGUIDE_CLOSEBEFORE', '在幾分鐘前關閉');
+define('_MI_EGUIDE_CLOSEBEFORE', '預設報名活動在幾分鐘前關閉');
 define('_MI_EGUIDE_CLOSEBEFORE_DESC', '活動的資訊在截止前幾分鐘關閉');
-define('_MI_EGUIDE_LAB_PERSONS', '人數欄位');
-define('_MI_EGUIDE_LAB_PERSONS_DESC', '報名表單的額外標籤，用來詢問參與人數');
+define('_MI_EGUIDE_LAB_PERSONS', '團體報名人數欄位');
+define('_MI_EGUIDE_LAB_PERSONS_DESC', '在製作報名表單，用來詢問團體報名人數有多少，程式會自動幫您扣除團體報名的人數，單位：人。例如：團體報名(人)');
 define('_MI_EGUIDE_DATE_FORMAT', '日期格式');
 define('_MI_EGUIDE_DATE_FORMAT_DESC', '活動開始時間顯示格式，使用 PHP date 函式。');
 define('_MI_EGUIDE_DATE_FORMAT_DEF', 'Y-m-d');
-define('_MI_EGUIDE_EXPIRE_AFTER', '過期時間');
-define('_MI_EGUIDE_EXPIRE_AFTER_DESC', '首頁的活動在開始幾分鐘後視為過期。');
+define('_MI_EGUIDE_EXPIRE_AFTER', '預設活動時間');
+define('_MI_EGUIDE_EXPIRE_AFTER_DESC', '這個活動有多少時間，當時間超過後，該活動將視為過期。單位：分鐘');
 define('_MI_EGUIDE_PERSONS', '預設名額');
 define('_MI_EGUIDE_PERSONS_DESC', '預設活動名額');
 define('_MI_EGUIDE_PLUGINS', '使用其他模組外掛');
@@ -65,7 +65,7 @@ define('_MI_EGUIDE_COMMENT', '允許評論');
 define('_MI_EGUIDE_COMMENT_DESC', '允許活動的評論');
 define('_MI_EGUIDE_MARKER', '活動狀態標示');
 define('_MI_EGUIDE_MARKER_DESC', '這個標示會根據目前報名人數顯示，可以使用百分比標示。（xx,yy 表示人數少於 xx% 時顯示 yy ，而 \'0,yy\' 表示過期）');
-define('_MI_EGUIDE_MARKER_DEF', '0,[關閉]\n50,[報名中]\n100,[反應熱烈]\n101,[額滿]\n');
+define('_MI_EGUIDE_MARKER_DEF', '0,[關閉中],50,[報名中],100,[反應熱烈],101,[已額滿]');
 define('_MI_EGUIDE_TIME_DEFS', '時間表');
 define('_MI_EGUIDE_TIME_DEFS_DESC', '在集合頁面設定開始時間，例如：08:00,14:00,16:00');
 define('_MI_EGUIDE_EXPORT_LIST', '匯出預約資料列表');

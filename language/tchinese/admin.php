@@ -1,12 +1,12 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.1 2006/10/14 10:53:34 nobu Exp $
+// $Id: admin.php,v 1.2 2006/11/30 14:14:09 nobu Exp $
 define('_AM_DBUPDATED', '資料已經更新！');
 define('_AM_TITLE', '活動項目');
 define('_AM_POSTER', '發表者');
 define('_AM_EDITARTICLE', '活動內容編輯');
 define('_AM_TIME_FMT', 'm-d H:i');
-define('_AM_POST_FMT', 'Y-m-d H:i');
+define('_AM_POST_FMT', 'Y/m/d H:i');
 define('_AM_POSTED', '登記日');
 define('_AM_YES', '是');
 define('_AM_NO', '否');

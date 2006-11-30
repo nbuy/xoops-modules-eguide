@@ -1,20 +1,20 @@
 <?php
-// $Id: main.php,v 1.3 2006/10/24 08:22:02 nobu Exp $
-define('_MD_RESERV_FORM', '立即報名');
+// $Id: main.php,v 1.4 2006/11/30 14:14:09 nobu Exp $
+define('_MD_RESERV_FORM', '立即報名 &gt;&gt;');
 define('_MD_RESERVATION', '報名表');
 define('_MD_NAME', '/^Name\*?$/');
-define('_MD_SDATE_FMT', 'D, j M Y');
+define('_MD_SDATE_FMT', 'Y-m-d');//2006-09-13
 define('_MD_STIME_FMT', 'H:i');
 // Localization Transrate Weekly date name
 global $ev_week;
 $ev_week = array('Sun'=>'星期日', 'Mon'=>'星期一','Tue'=>'星期二', 'Wed'=>'星期三','Thu'=>'星期四','Fri'=>'星期五', 'Sat'=>'星期六');
-define('_MD_POSTED_FMT', 'j M Y H:i');
-define('_MD_TIME_FMT', 'j M Y H:i');
+define('_MD_POSTED_FMT', 'Y-m-d H:i');//j M Y H:i >Y-m-d H:i
+define('_MD_TIME_FMT', 'Y-m-d H:i');//j M Y H:i >Y-m-d H:i
 define('_MD_READMORE', '詳細...');
 define('_MD_EMAIL', '電子郵件');
 define('_MD_UNAME', '使用者名稱');
-define('_MD_SUBJECT', '確認');
-define('_MD_NOTIFY_EVENT', '有新的活動訊息時請以電子郵件通知我');
+define('_MD_SUBJECT', '確認報名');
+define('_MD_NOTIFY_EVENT', '登錄電子郵件通知');
 define('_MD_NOTIFY_REQUEST', '有新的活動訊息時請以電子郵件通知我');
 define('_MD_REQUIRE_MARK', '<em>*</em>');
 define('_MD_LISTITEM_FMT', '[%s]');
@@ -25,7 +25,7 @@ define('_MD_ORDER_CONF', '請再次確認');
 
 define('_MD_EVENT_NONE', '並無公佈的活動訊息');
 define('_MD_BACK', '返回');
-define('_MD_RESERVED', '本活動受理報名');
+define('_MD_RESERVED', '本活動受理報名中...');
 define('_MD_RESERV_NUM', '名額 %d 人');
 define('_MD_RESERV_REG', '已報名 %d 人');
 define('_PRINT', '列印');
@@ -43,7 +43,7 @@ define('_MD_REGISTERED', '已經登記完成');
 define('_MD_RESERV_ACCEPT', '您的報名表已經送出，我們將盡快與您聯繫！');
 define('_MD_RESERV_STOP', '很抱歉！這項活動報名已經終止。');
 define('_MD_RESERV_CONF', '您的報名資訊');
-define('_MD_RESERV_ADMIN', '受理報名');
+define('_MD_RESERV_ADMIN', '參加者一覽表');
 define('_MD_RESERV_REGISTER', '會員直接報名');
 
 define('_MD_RESERV_ACTIVE', '報名已受理');
@@ -57,26 +57,26 @@ define('_MD_RESERV_CANCEL', '取消此報名。');
 define('_MD_RESERV_CANCELED', '活動報名已取消');
 define('_MD_RESERV_NOCANCEL', '在活動結束後無法取消預約');
 define('_MD_RESERV_NOTIFY', '%snn報名者郵件： %sn申請活動內容： %sn %sn');
-define('_MD_RESERV_FULL', '由於報名人數已滿所以受理終止');
-define('_MD_RESERV_TOMATCH', ' %d 也符合 （剩下 %d ）');
+define('_MD_RESERV_FULL', '報名人數已滿，所以受理終止');
+define('_MD_RESERV_TOMATCH', ' %d個名額 (%d個名額)');
 define('_MD_RESERV_CLOSE', '報名活動已截止');
 define('_MD_RESERV_NEEDLOGIN', '您需要<a href="'.XOOPS_URL.'/user.php">登入</a>,才可以報名');
 define('_MD_RESERV_PLUGIN_FAIL', '缺少預約時需要的條件');
 define('_MD_CANCEL_FAIL', '取消處裡失敗');
-define('_MD_NODATA', '無此資料');
+define('_MD_NODATA', '無資料');
 define('_MD_NOEVENT', '無法找到該活動的內容紀錄');
 define('_MD_SHOW_PREV', '上個活動');
 define('_MD_SHOW_NEXT', '下個活動');
 
-define('_MD_POSTERC', '人');
+define('_MD_POSTERC', '聯絡人');
 define('_MD_POSTDATE', '登記日期');
-define('_MD_STARTTIME', '開始報名時間');
+define('_MD_STARTTIME', '活動幾點開始');
 define('_MD_CLOSEDATE', '截止報名時間');
-define('_MD_CLOSEBEFORE', '多久時間截止');
-define('_MD_CLOSEBEFORE_DESC', '何時開始報名（例如: 3天, 2小時, 50分鐘）');
-define('_MD_TIME_UNIT', '天數,小時,分鐘');
+define('_MD_CLOSEBEFORE', '距離活動多久時間停止報名');
+define('_MD_CLOSEBEFORE_DESC', '(即活動多久後開始,如: 1小時、2小時或50分鐘）');
+define('_MD_TIME_UNIT', '天,小時,分鐘');
 define('_MD_TIME_REG', 'd(ay)?s?,h(our)?,min');
-define('_MD_CALENDER', '前往行事曆');
+define('_MD_CALENDER', '前往行事例');
 define('_MD_CAL', '行事曆');
 define('_MD_CAL_MONDAY_FIRST', true);
 define('_MD_REFER', '人氣：%d');
@@ -88,7 +88,7 @@ define('_MD_NEED_UPGRADE', '需要模組更新');
 define('_MD_RESERV_EDIT', '編輯報名內容');
 define('_MD_OPERATION', '設定');
 define('_MD_STATUS', '狀態');
-define('_MD_RESERV_RETURN', '回到報名名單');
+define('_MD_RESERV_RETURN', '回報名名單');
 define('_MD_RESERV_REC', '報名記錄');
 define('_MD_RVID', '報名ID編號');
 define('_MD_ORDER_COUNT', '統計');
@@ -96,13 +96,13 @@ define('_MD_ORDER_DATE', '日期');
 define('_MD_PRINT_DATE', '列表日期');
 define('_MD_SAVECHANGE', '儲存修改');
 define('_MD_RESERV_DEL', '刪除報名');
-define('_MD_DETAIL', '一覽...');
+define('_MD_DETAIL', '參加者一覽表');
 define('_MD_RESERV_MSG_H', '傳送訊息給報名者');
 define('_MD_ACTIVATE', '審核');
 define('_MD_REFUSE', '拒絕');
 define('_MD_CSV_OUT', '匯出CSV格式');
 define('_MD_EXPORT_OUT', '匯出Excel格式');
-define('_MD_EXPORT_CHARSET', 'big5');
+define('_MD_EXPORT_CHARSET', 'UTF-8');
 define('_MD_INFO_MAIL', '活動通知');
 define('_MD_SUMMARY', '總結');
 define('_MD_SUM_ITEM', '總結項目');
@@ -112,41 +112,41 @@ define('_MD_SUM', '總和');
 define('_MD_EDITARTICLE', '活動內容編輯');
 define('_MD_NEWSUB', '刊登新活動');
 define('_MD_TITLE', '項目名');
-define('_MD_EVENT_DATE', '活動開始日');
-define('_MD_EVENT_EXPIRE', '活動到期日');
+define('_MD_EVENT_DATE', '活動日期');
+define('_MD_EVENT_EXPIRE', '活動時間(輸入數字即可，換算單位：分鐘，或使用右側下拉選單)');
 define('_MD_EVENT_EXTENT', '重覆開放');
 define('_MD_EVENT_CATEGORY', '分類');
 define('_MD_EDIT_EXTENT', '編輯開放日期');
 define('_MD_EXTENT_REPEAT', '重覆');
 define('_MD_EXTENT_DATE', '報名開始受理日期');
 define('_MD_ADD_EXTENT', '增加開放日期');
-define('_MD_ADD_EXTENT_DESC', '額外開於時間，格式："年-月-日 小時:分鐘" (多個選項請隔行輸入)');
+define('_MD_ADD_EXTENT_DESC', '活動再開放時間，格式："2100-11-06 09:00" (多個選項請隔行輸入)');
 define('_MD_INTROTEXT', '大綱');
 define('_MD_EXTEXT', '詳細介紹');
 define('_MD_EVENT_STYLE', '編輯形式');
 define('_MD_RESERV_SETTING', '審核方式');
-define('_MD_RESERV_DESC', '審核受理報名');
+define('_MD_RESERV_DESC', '開啓報名表');
 define('_MD_RESERV_STOPFULL', '報名人數滿時，是否停止報名');
 define('_MD_RESERV_AUTO', '自動受理報名 (沒有審核)');
 define('_MD_RESERV_NOTIFYPOSTER', '當有人報名時，用電子郵件通知');
 define('_MD_RESERV_PERSONS', '活動名額');
 define('_MD_RESERV_UNIT', '');
-define('_MD_RESERV_ITEM', '<br>追加項目：您可以追加欄位，非常好用');
+define('_MD_RESERV_ITEM', '<br>追加項目：');
 define('_MD_RESERV_ITEM_DESC', '<a href="language/tchinese/help.html#form" target="help">編輯欄位方法</a>');
-define('_MD_RESERV_LABEL_DESC', '如果是多人預約，請使用項目名稱 "%s"。');
+define('_MD_RESERV_LABEL_DESC', '如果是團體報名，要讓報名者填入人數，請使用這個欄位表示"%s"。');
 define('_MD_RESERV_REDIRECT', '報名完成後，指定某一個網站連結');
-define('_MD_RESERV_REDIRECT_DESC', '幾秒後開啟連結.輸入數字，例如: "4;http:');
+define('_MD_RESERV_REDIRECT_DESC', '幾秒後開啟連結.請輸入數字，範例： "4;http://...  "');
 define('_MD_APPROVE', '審核顯示');
 define('_MD_PREVIEW', '預覽');
 define('_MD_SAVE', '儲存');
 define('_MD_UPDATE', '更新');
 define('_MD_DBUPDATED', '資料庫更新');
-define('_MD_DBDELETED', '刪除事件');
+define('_MD_DBDELETED', '已刪除活動');
 
-define('_MD_EVENT_DEL_DESC', '刪除這個事件');
-define('_MD_EVENT_DEL_ADMIN', '刪除所有資料，包含報名資料');
+define('_MD_EVENT_DEL_DESC', '注意：刪除這個活動');
+define('_MD_EVENT_DEL_ADMIN', '將刪除所有資料與報名者資料');
 
-define('_MD_TIMEC', '時間');
+define('_MD_TIMEC', '幾時開始');
 // Localization Transrate Month name
 global $ev_month;
 $ev_month = array(1=>"一月", 2=>"二月", 3=>"三月", 4=>"四月",
@@ -172,8 +172,9 @@ define('_MD_INFO_MAILNG', '傳送失敗');
 define('_MD_FROM_NAME', '活動通知');
 
 global $expire_set,$edit_style,$ev_stats,$ev_extents;
-$expire_set = array(""=>"-- 使用文字 --", "+0"=>"今天", "+3600"=>"一個鐘頭",
-		    "+86400"=>"明天", "+172800"=>"兩天",
+$expire_set = array(""=>"-- 使用文字 --", "+3600"=>"一個鐘頭",
+		    "+10800"=>"三個鐘頭", "+21600"=>"半天",
+		    "+0"=>"當天", "+172800"=>"兩天",
 		    "+259200"=>"三天","+604800"=>"一星期");
 
 $edit_style=array(0=>"只使用 XOOPS 標籤",
