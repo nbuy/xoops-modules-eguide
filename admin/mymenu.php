@@ -2,7 +2,7 @@
 
 if( ! defined( 'XOOPS_ROOT_PATH' ) ) exit ;
 
-if( ! defined( 'XOOPS_ORETEKI' ) ) {
+if( ! defined( 'XOOPS_ORETEKI' ) && ! defined( 'XOOPS_CUBE_LEGACY' )) {
 	// Skip for ORETEKI XOOPS
 
 	if( ! isset( $module ) || ! is_object( $module ) ) $module = $xoopsModule ;

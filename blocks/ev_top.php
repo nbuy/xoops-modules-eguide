@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.18 2006/08/29 11:37:46 nobu Exp $
+// $Id: ev_top.php,v 1.19 2006/11/30 14:14:52 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -14,7 +14,8 @@ if (!function_exists("eguide_marker")) {
 	    $marker = preg_split('/,|[\r\n]+/',$config['maker_set']);
 	}
 	$tmp = $marker;
-	while(list($k,$v) = array_splice($tmp, 0, 2)) {
+	while($tmp) {
+	    list($k,$v) = array_splice($tmp, 0, 2);
 	    if ($full<$k) return $v;
 	}
 	return '';

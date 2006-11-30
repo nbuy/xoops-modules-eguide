@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.23 2006/08/29 11:35:28 nobu Exp $
+// $Id: receipt.php,v 1.24 2006/11/30 14:14:52 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -22,12 +22,12 @@ if ($rvid) {
     $data = $xoopsDB->fetchArray($result);
     $eid = $data['eid'];
     $exid = $data['exid'];
-    $status = intval($_POST['status']);
-    $email = $xoopsDB->quoteString(post_filter($_POST['email']));
-    $info = post_filter($_POST['info']);
     $back = 'receipt.php?eid='.$eid.($exid?'&sub='.$exid:'');
     $backanc = "<a href='$back'>"._MD_RESERV_RETURN."</a>";
     if ($op=='save') {
+	$status = intval($_POST['status']);
+	$email = $xoopsDB->quoteString(post_filter($_POST['email']));
+	$info = post_filter($_POST['info']);
 	$vals = explodeinfo($data['info'], $data['optfield']);
 	$num = ($data['status']!=_RVSTAT_REFUSED)?
 	     (isset($vals[$nlab])?$vals[$nlab]:1):0;
@@ -46,9 +46,9 @@ if ($rvid) {
 $result = $xoopsDB->query("SELECT * FROM ".OPTBL." WHERE eid=$eid");
 $opts = $xoopsDB->fetchArray($result);
 
-$result = $xoopsDB->query("SELECT IF(exdate,exdate,edate) edate, title, uid, summary, cdate, counter FROM ".EGTBL.
-			  ' e LEFT JOIN '.EXTBL.
-			  " x ON eid=eidref AND exid=$exid WHERE eid=$eid");
+$result = $xoopsDB->query("SELECT IF(exdate,exdate,edate) edate, title, uid,
+summary, cdate, counter, style FROM ".EGTBL.' e LEFT JOIN '.EXTBL. " x
+ON eid=eidref AND exid=$exid WHERE eid=$eid");
 $head = $xoopsDB->fetchArray($result);
 $edate = $head['edate'];
 if ($exid) {
@@ -292,7 +292,7 @@ default:
     $xoopsTpl->assign(array('order_count'=>$nrec,
 			    'reserv_num'=>sprintf(_MD_RESERV_REG,$nrsv),
 			    'print_date'=>formatTimestamp(time(), _MD_POSTED_FMT),
-			    'labels'=>array_merge($mo?_MD_UNAME:_MD_EMAIL,
+			    'labels'=>array_merge(array($mo?_MD_UNAME:_MD_EMAIL),
 						  array_slice($item, 0, $max)),
 			    'reserv_msg'=>$mailmsg,
 			    'operations'=>

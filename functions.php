@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.16 2006/11/20 06:15:39 nobu Exp $
+// $Id: functions.php,v 1.17 2006/11/30 14:14:52 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -57,8 +57,10 @@ function edit_eventdata(&$data) {
     $pat[] = '{X_DATE}';
     $str[] = $data['ldate'] =
 	empty($data['exdate'])?$data['edate']:$data['exdate'];
-    $data['closedate']=$data['ldate']-$data['closetime'];
-    $data['dispclose'] = formatTimestamp($data['closedate'], _MD_TIME_FMT);
+    if (isset($data['closetime'])) {
+	$data['closedate']=$data['ldate']-$data['closetime'];
+	$data['dispclose'] = formatTimestamp($data['closedate'], _MD_TIME_FMT);
+    }
     $data['date'] = eventdate($data['ldate']);
     $pat[] = '{X_TIME}';
     $str[] = $data['time'] = formatTimestamp($data['ldate'], _MD_STIME_FMT);
@@ -75,12 +77,10 @@ function edit_eventdata(&$data) {
     $data['disp_summary'] = str_replace($pat,$str,xss_filter($myts->displayTarea($data['summary'],$html,0,1,1,$br)));
     $data['disp_body'] = str_replace($pat,$str,xss_filter($myts->displayTarea($data['body'],$html,0,1,1,$br)));
     $data['title'] = $myts->htmlSpecialChars($data['title']);
+    // fill of seat
     if (!empty($data['persons'])) {
 	$data['reserv_num']=sprintf(_MD_RESERV_NUM, $data['persons']);
 	$data['reserv_reg']=sprintf(_MD_RESERV_REG, $data['reserved']);
-    }
-    // fill of seat
-    if ($data['persons']) {
 	
 	$marker = preg_split('/,|[\r\n]+/',$xoopsModuleConfig['maker_set']);
 	$fill=$data['fill']=intval($data['reserved']/$data['persons']*100);

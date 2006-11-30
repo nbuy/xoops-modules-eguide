@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.39 2006/10/24 13:55:24 nobu Exp $
+// $Id: xoops_version.php,v 1.40 2006/11/30 14:14:52 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "2.23";
+$modversion['version'] = "2.24";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -34,6 +34,8 @@ $modversion['adminindex'] = "admin/index.php";
 $modversion['adminmenu'] = "admin/menu.php";
 
 // Templates
+$modversion['templates'][]=array('file' => 'eguide_item.html',
+				 'description' => _MI_EGUIDE_EVENT_ITEM_TPL);
 $modversion['templates'][]=array('file' => 'eguide_index.html',
 				 'description' => _MI_EGUIDE_INDEX_TPL);
 $modversion['templates'][]=array('file' => 'eguide_event.html',
@@ -48,8 +50,6 @@ $modversion['templates'][]=array('file' => 'eguide_receipt_print.html',
 				 'description' => _MI_EGUIDE_RECEIPT_PRINT_TPL);
 $modversion['templates'][]=array('file' => 'eguide_event_print.html',
 				 'description' => _MI_EGUIDE_EVENT_PRINT_TPL);
-$modversion['templates'][]=array('file' => 'eguide_item.html',
-				 'description' => _MI_EGUIDE_EVENT_ITEM_TPL);
 $modversion['templates'][]=array('file' => 'eguide_confirm.html',
 				 'description' => _MI_EGUIDE_EVENT_CONF_TPL);
 $modversion['templates'][]=array('file' => 'eguide_mylist.html',
@@ -68,7 +68,7 @@ $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'description' => _MI_EGUIDE_HEADLINE_DESC,
 			       'show_func' => 'b_event_top_show',
 			       'edit_func' => 'b_event_top_edit',
-			       'options' => '0|10|19|0',
+			       'options' => '0|10|19|0|',
 			       'template' => 'eguide_block_top.html');
 
 $modversion['blocks'][2]=array('file' => "ev_top.php",
@@ -76,7 +76,7 @@ $modversion['blocks'][2]=array('file' => "ev_top.php",
 			       'description' => _MI_EGUIDE_HEADLINE2_DESC,
 			       'show_func' => 'b_event_top_show',
 			       'edit_func' => 'b_event_top_edit',
-			       'options' => '0|10|19|1',
+			       'options' => '0|10|19|1|',
 			       'can_clone' => true,
 			       'template' => 'eguide_block_top.html');
 // Menu
@@ -101,7 +101,7 @@ if (is_object($module)&&$module->getVar('isactive')) {
 }
 // register notify
 if ($configs) {
-    if ($configs['user_notify']) {
+    if (!empty($configs['user_notify'])) {
 	$modversion['sub'][] =
 	    array('name' => _MI_EGUIDE_REG, 'url' => 'reserv.php?op=register');
     }

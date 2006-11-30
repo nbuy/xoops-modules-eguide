@@ -1,6 +1,6 @@
 <?php
 // Reservation Entry by Poster
-// $Id: entry.php,v 1.3 2006/06/04 07:04:02 nobu Exp $
+// $Id: entry.php,v 1.4 2006/11/30 14:14:52 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -88,7 +88,7 @@ if ($data['closedate'] < $now) {
     } else {
 	if (empty($_POST['email'])) $_POST['email'] = '';
 	$form = eventform($data);
-	$form['lang_email'] = preg_replace('/\\*$/', _MD_EMAIL);
+	$form['lang_email'] = preg_replace('/\\*$/', '', _MD_EMAIL);
 	$xoopsTpl->assign('form', $form);
     }
 }

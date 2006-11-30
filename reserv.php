@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.28 2006/08/16 16:24:36 nobu Exp $
+// $Id: reserv.php,v 1.29 2006/11/30 14:14:52 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -82,9 +82,11 @@ case 'delete':
 	    }
 	    if ($xoopsModuleConfig['use_plugins']) {
 		include_once 'plugins.php';
-		foreach ($hooked_function['cancel'] as $func) {
-		    if (!$func($eid, $exid, $data['ruid'], $data['uid'])) {
-			echo "Cancel failed";
+		if (isset($hooked_function['cancel'])) {
+		    foreach ($hooked_function['cancel'] as $func) {
+			if (!$func($eid, $exid, $data['ruid'], $data['uid'])) {
+			    echo "Cancel failed";
+			}
 		    }
 		}
 	    }
@@ -355,7 +357,7 @@ case 'cancel':
 	    echo "</div>\n";
 	} else {
 	    $eid = $data['eid'];
-	    $key = intval($_GET['key']);
+	    $key = isset($_GET['key'])?intval($_GET['key']):'';
 	    edit_eventdata($data);
 	    $xoopsOption['template_main'] = 'eguide_confirm.html';
 	    $xoopsTpl->assign('event', $data);
