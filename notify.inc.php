@@ -51,11 +51,13 @@ function user_notify($eid) {
     }
     $data = $xoopsDB->fetchArray($result);
     $title = $data['title'];
+    $edate = $data['edate'];
+    $expire = $data['expire'];
 
     // using XOOPS2 notification system
 	    
     $tags = array('EVENT_TITLE'=> $title,
-		  'EVENT_DATE' => formatTimestamp($data['edate'], _MD_TIME_FMT),
+		  'EVENT_DATE' => formatTimestamp($edate, _MD_TIME_FMT),
 		  'EVENT_NOTE' => '',
 		  'EVENT_URL'  => EGUIDE_URL."/event.php?eid=$eid");
     $notification_handler =& xoops_gethandler('notification');
@@ -64,7 +66,7 @@ function user_notify($eid) {
 
 
     if (!$xoopsModuleConfig['user_notify'] ||
-	$data['expire']<time() ||
+	($expire>$edate?$expire<time():($edate+$expire)<time()) ||
 	$data['status']!=STAT_NORMAL) return (false);
 
     $result = $xoopsDB->query("SELECT rvid, email, confirm FROM $rsv WHERE eid=0");
