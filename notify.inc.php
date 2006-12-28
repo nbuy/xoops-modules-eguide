@@ -56,6 +56,10 @@ function user_notify($eid) {
 
     // using XOOPS2 notification system
 	    
+    if (!$xoopsModuleConfig['user_notify'] ||
+	($expire>$edate?$expire<time():($edate+$expire)<time()) ||
+	$data['status']!=STAT_NORMAL) return (false);
+
     $tags = array('EVENT_TITLE'=> $title,
 		  'EVENT_DATE' => formatTimestamp($edate, _MD_TIME_FMT),
 		  'EVENT_NOTE' => '',
@@ -63,11 +67,6 @@ function user_notify($eid) {
     $notification_handler =& xoops_gethandler('notification');
     $notification_handler->triggerEvent('global', 0, 'new', $tags);
     $notification_handler->triggerEvent('category', $data['topicid'], 'new', $tags);
-
-
-    if (!$xoopsModuleConfig['user_notify'] ||
-	($expire>$edate?$expire<time():($edate+$expire)<time()) ||
-	$data['status']!=STAT_NORMAL) return (false);
 
     $result = $xoopsDB->query("SELECT rvid, email, confirm FROM $rsv WHERE eid=0");
     while ($data = $xoopsDB->fetchArray($result)) {
