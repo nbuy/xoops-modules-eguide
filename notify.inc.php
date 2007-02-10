@@ -1,5 +1,5 @@
 <?php
-// $Id: notify.inc.php,v 1.13 2007/02/10 02:53:04 nobu Exp $
+// $Id: notify.inc.php,v 1.14 2007/02/10 03:36:18 nobu Exp $
 function event_notify($op, $data) {
     global $xoopsModuleConfig, $xoopsUser, $xoopsConfig;
     if (!$xoopsModuleConfig['notify']) return;
@@ -36,7 +36,7 @@ function event_notify($op, $data) {
 	$uids[] = $uid;
     }
     foreach ($users as $user) {
-	if (in_array($user->getVar('uid'), $uids)) {
+	if (!in_array($user->getVar('uid'), $uids)) {
 	    $xoopsMailer->setToUsers($user);
 	}
     }
