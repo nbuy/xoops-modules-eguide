@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.22 2007/02/10 02:53:04 nobu Exp $
+// $Id: admin.php,v 1.23 2007/02/10 03:59:52 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -149,7 +149,7 @@ if ($op=='save' || $op=='date') {
     $fields = array('title'=>_MD_TITLE, 'edate'=>_MD_EVENT_DATE, 
 		    'expire'=>_MD_EVENT_EXPIRE, 'summary'=>_MD_INTROTEXT,
 		    'body'=>_MD_EXTEXT, 'style'=>_MD_EVENT_STYLE,
-		    'status'=>_MD_STATUS, 'topicid'=>_MD_EVENT_CATEGORY);
+		    'status'=>$ev_stats[STAT_NORMAL], 'topicid'=>_MD_EVENT_CATEGORY);
     if ($eid) {
 	$cond = $adm?"":" AND uid=$uid"; // condition update by poster
 	$result = $xoopsDB->query('SELECT * FROM '.EGTBL." WHERE eid=$eid");
@@ -233,7 +233,7 @@ if ($op=='save' || $op=='date') {
 	}
 	$xoopsDB->query("INSERT INTO ".OPTBL."($flist) VALUES($buf)");
     }
-    if ($updated) {
+    if ($updated && $data['status']==STAT_NORMAL) {
 	$dirname = basename(dirname(__FILE__));
 	$tags = array(
 	    'uid'=>$data['uid'],
