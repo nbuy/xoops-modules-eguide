@@ -1,6 +1,6 @@
 <?php
 // Event collection setting by Poster
-// $Id: collect.php,v 1.3 2007/02/10 02:53:04 nobu Exp $
+// $Id: collect.php,v 1.4 2007/02/10 02:58:27 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -19,7 +19,6 @@ if (isset($_POST['persons'])) {
 	    $res = $xoopsDB->query("SELECT exdate,expersons FROM ".EXTBL." WHERE $cond AND exid=$exid AND eidref=$eid");
 	    if ($xoopsDB->getRowsNum($res)==1) {
 		list($date, $persons) = $xoopsDB->fetchRow($res);
-		echo "<div>$date, $persons</div>";
 		$res = $xoopsDB->query("UPDATE ".EXTBL." SET expersons=$v WHERE exid=$exid AND eidref=$eid");
 		if ($res) {
 		    if (empty($persons)) $persons = _MD_UPDATE_DEFAULT;
