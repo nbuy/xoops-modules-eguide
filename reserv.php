@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.29 2006/11/30 14:14:52 nobu Exp $
+// $Id: reserv.php,v 1.30 2007/02/10 02:50:51 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -130,8 +130,10 @@ case 'delete':
 		    $xoopsMailer->setToUsers($poster);
 		}
 		$member_handler =& xoops_gethandler('member');
-		$notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
-		$xoopsMailer->setToGroups($notify_group);
+		if ($xoopsModuleConfig['notify']) {
+		    $notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
+		    $xoopsMailer->setToGroups($notify_group);
+		}
 		$xoopsMailer->send();
 	    }
 	}
