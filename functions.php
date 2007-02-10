@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.17 2006/11/30 14:14:52 nobu Exp $
+// $Id: functions.php,v 1.18 2007/02/10 02:53:04 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -331,7 +331,7 @@ function eventdate($time) {
     return $str;
 }
 
-function get_category() {
+function get_eguide_category() {
     global $xoopsDB;
     $result = $xoopsDB->query("SELECT catid, catname FROM ".CATBL." ORDER BY catid");
     $list = array();
@@ -352,7 +352,7 @@ closetime, reservation, uid, status, style, counter, catid, catname, catimg,
 exid, exdate, strict, autoaccept, notify, redirect";
     $result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
 ' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.
-" x ON e.eid=eidref WHERE e.eid=$eid $stc".($exid?' AND exid='.$exid:''));
+" x ON e.eid=eidref AND exid=$exid WHERE e.eid=$eid $stc");
     return $xoopsDB->fetchArray($result);
 }
 
@@ -414,6 +414,10 @@ function order_notify($data, $email, $value) {
     $xoopsMailer->setFromEmail($poster->getVar('email'));
     $xoopsMailer->setFromName(_MD_FROM_NAME);
     return $xoopsMailer->send();
+}
+
+function disp_value($val) {
+    return (empty($val) || $val=='null')?_MD_UPDATE_DEFAULT:$val;
 }
 
 if(!function_exists("file_get_contents")) {

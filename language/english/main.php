@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.15 2006/11/14 13:33:51 nobu Exp $
+// $Id: main.php,v 1.16 2007/02/10 02:53:04 nobu Exp $
 define("_MD_RESERV_FORM","Reservation Here");
 define("_MD_RESERVATION","Make a Reservation");
 define("_MD_NAME","/^Name\\*?\$/");
@@ -170,6 +170,8 @@ define("_MD_INFO_DEFAULT","-messages-\n\n\nReserved Event\n    {EVENT_URL}\n");
 define("_MD_INFO_MAILOK","Mail sent");
 define("_MD_INFO_MAILNG","Failed to send mail");
 define("_MD_FROM_NAME","Event Guide");
+define("_MD_UPDATE_SUBJECT","Event Updated");
+define("_MD_UPDATE_DEFAULT","Default");
 
 global $expire_set,$edit_style,$ev_stats,$ev_extents;
 $expire_set = array(""=>"-- Use text --", "+0"=>"Same Day", "+3600"=>"an hour",

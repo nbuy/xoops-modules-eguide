@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.8 2006/08/24 07:49:52 nobu Exp $
+// $Id: editdate.php,v 1.9 2007/02/10 02:53:04 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -34,6 +34,7 @@ if (isset($_POST['adds'])) {
     $exps = $_POST['exps'];
     $adds = preg_split('/[\n\r]+/', trim($_POST['adds']));
     $chg = 0;
+    $updated = "";
     foreach ($extents as $data) {
 	$id = $data['exid'];
 	if (isset($dels[$id])) {
@@ -42,6 +43,8 @@ if (isset($_POST['adds'])) {
 	    } else {
 		$xoopsDB->query('DELETE FROM '.RVTBL." WHERE eid=$eid AND exid=$id");
 		$xoopsDB->query('DELETE FROM '.EXTBL." WHERE exid=$id");
+		$updated .= sprintf("(id:%s) %s [%s]\n", "$eid-$exid", _DELETE,
+				    formatTimestamp($data['exdate'], _MD_POSTED_FMT));
 		$chg++;
 	    }
 	} elseif (isset($mods[$id])) {
@@ -64,9 +67,22 @@ if (isset($_POST['adds'])) {
 		$mm = formatTimestamp($exdate, 'i');
 	    }
 	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy), $xoopsUser->getVar("timezone_offset"));
-	    if ($tm >= $edate && $tm > $now) {
+	    
+	    if (($tm >= $edate) && ($tm > $now)) {
 		$post = formatTimestamp($tm, 'Y-m-d H:i');
 		$xoopsDB->query("UPDATE ".EXTBL." SET exdate=$tm, expersons=$n WHERE eidref=$eid AND exid=$id");
+		$date = formatTimestamp($data['exdate'], _MD_POSTED_FMT);
+		if ($data['exdate']!=$tm) {
+		    $date .= " -> ".formatTimestamp($tm, _MD_POSTED_FMT);
+		}
+		if (disp_value($data['expersons'])!=disp_value($n)) {
+		    $exp = " "._MD_RESERV_PERSONS." ".
+			disp_value($data['expersons'])." -> ".disp_value($n);
+		} else {
+		    $exp = '';
+		}
+		$updated .= sprintf("(id:%s) %s [%s]%s\n", "$eid-$id",
+				    _MD_EXTENT_DATE, $date, $exp);
 		$chg++;
 	    } else {
 		$errors[] = "$v - "._MD_DATE_ERR;
@@ -99,6 +115,10 @@ if (isset($_POST['adds'])) {
 	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy), $xoopsUser->getVar("timezone_offset"));
 	    if ($tm >= $edate && $tm > $now) {
 		$xoopsDB->query('INSERT INTO '.EXTBL."(eidref,exdate)VALUES($eid,$tm)");
+		$exid = $xoopsDB->getInsertID();
+		$updated .= sprintf("(id:%s) %s [new %s]\n", "$eid-$exid",
+				    _MD_EXTENT_DATE,
+				    formatTimestamp($tm, _MD_POSTED_FMT));
 		$chg++;
 	    } else {
 		$errors[] = "$v - "._MD_DATE_ERR;
@@ -108,6 +128,19 @@ if (isset($_POST['adds'])) {
     if ($chg) {
 	$extents = get_extents($eid, true);
 	$xoopsDB->query('UPDATE '.EGTBL." SET ldate=0 WHERE eid=$eid");
+	$res = $xoopsDB->query('SELECT * FROM '.EGTBL." WHERE eid=$eid");
+	$data = $xoopsDB->fetchArray($res);
+	if ($data['status']==STAT_NORMAL) {
+	    $tags = array(
+		'uid'=>$data['uid'],
+		'URL_EVENTS' => $data['title']."\n".XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname')."/event.php?eid=".$eid,
+		'UPDATED' => $updated,
+		'DO_UNAME' => $xoopsUser->getVar('uname'));
+	    include "notify.inc.php";
+	    event_notify('update', $tags);
+	}
+	redirect_header('editdate.php?eid='.$eid, 1, _MD_DBUPDATED);
+	exit;
     }
     $_POST['adds'] = '';
 }

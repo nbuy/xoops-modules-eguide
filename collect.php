@@ -1,22 +1,67 @@
 <?php
 // Event collection setting by Poster
-// $Id: collect.php,v 1.2 2006/06/06 05:17:21 nobu Exp $
+// $Id: collect.php,v 1.3 2007/02/10 02:53:04 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
 include 'perm.php';
 
 if (isset($_POST['persons'])) {
+    $updated = "";
+    $ids = array();
     foreach ($_POST['persons'] as $k => $v) {
 	if ($v=='') $v = 'null';
 	else $v = intval($v);
 	if (preg_match('/^(\\d+)-(\\d+)$/', $k, $d)) {
 	    $eid = intval($d[1]);
 	    $exid = intval($d[2]);
-	    $xoopsDB->query("UPDATE ".EXTBL." SET expersons=$v WHERE exid=$exid AND eidref=$eid");
+	    $cond = ($v=='null')?"expersons IS NOT NULL":"(expersons IS NULL OR expersons<>$v)";
+	    $res = $xoopsDB->query("SELECT exdate,expersons FROM ".EXTBL." WHERE $cond AND exid=$exid AND eidref=$eid");
+	    if ($xoopsDB->getRowsNum($res)==1) {
+		list($date, $persons) = $xoopsDB->fetchRow($res);
+		echo "<div>$date, $persons</div>";
+		$res = $xoopsDB->query("UPDATE ".EXTBL." SET expersons=$v WHERE exid=$exid AND eidref=$eid");
+		if ($res) {
+		    if (empty($persons)) $persons = _MD_UPDATE_DEFAULT;
+		    $updated .= sprintf("(id:%s) %s [%s] %s -> %s\n", $k,
+					_MD_RESERV_PERSONS,
+					formatTimestamp($date, _MD_POSTED_FMT),
+					$persons, disp_value($v));
+		    $ids[$eid] = true;
+		}
+	    }
 	} else {
 	    $eid = intval($k);
-	    $xoopsDB->query("UPDATE ".OPTBL." SET persons=$v WHERE eid=$eid");
+	    $res = $xoopsDB->query("SELECT edate,persons FROM ".OPTBL." WHERE persons<>$v AND eid=$eid");
+	    if ($xoopsDB->getRowsNum($res)==1) {
+		list($date, $persons) = $xoopsDB->fetchRow($res);
+		$res = $xoopsDB->query("UPDATE ".OPTBL." SET persons=$v WHERE eid=$eid");
+		if ($res) {
+		    $updated .= sprintf("(id:%s) %s [%s] %s -> %s\n", $k,
+					_MD_RESERV_PERSONS,
+					formatTimestamp($date, _MD_POSTED_FMT),
+					disp_value($persons), $v);
+		    $ids[$eid] = true;
+		}
+	    }
+	}
+    }
+    if ($updated) {
+	include "notify.inc.php";
+	$res = $xoopsDB->query("SELECT eid,title,uid FROM ".EGTBL." WHERE eid IN (".join(',', array_keys($ids)).") AND status=".STAT_NORMAL);
+	$urls = "";
+	$dirname = basename(dirname(__FILE__));
+	if ($xoopsDB->getRowsNum($res)) {
+	    while ($data = $xoopsDB->fetchArray($res)) {
+		if ($urls) $urls .= "\n\n";
+		$urls .= $data['title']."\n".XOOPS_URL."/modules/$dirname/event.php?eid=".$data['eid'];
+	    }
+	    $tags = array(
+		'uid'=>$data['uid'],
+		'URL_EVENTS' => $urls,
+		'UPDATED' => $updated,
+		'DO_UNAME' => $xoopsUser->getVar('uname'));
+	    event_notify('update', $tags);
 	}
     }
     $url = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:EGUIDE_URL.'/collect.php';
@@ -40,7 +85,7 @@ if ($xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
 }
 if (isset($_GET['eid'])) $cond .= ' AND e.eid='.intval($_GET['eid']);
 
-$result = $xoopsDB->query($x='SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.
+$result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.
 OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.
 EXTBL." x ON e.eid=eidref WHERE $cond ORDER BY edate");
 

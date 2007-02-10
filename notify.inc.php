@@ -1,43 +1,53 @@
 <?php
+// $Id: notify.inc.php,v 1.13 2007/02/10 02:53:04 nobu Exp $
 function event_notify($op, $data) {
     global $xoopsModuleConfig, $xoopsUser, $xoopsConfig;
+    if (!$xoopsModuleConfig['notify']) return;
+
+    $xoopsMailer =& getMailer();
+    $xoopsMailer->useMail();
+
     switch ($op) {
     case "new":
-	$to = $xoopsConfig['adminmail'];
+	$tpl = 'notify_admin_new.tpl';
 	// notify suppress will be confused?
-	if ($xoopsModuleConfig['notify'] /* && $xoopsUser->email()!=$to */) {
-	    $xoopsMailer =& getMailer();
-	    $xoopsMailer->useMail();
-	    $title = $data['title'];
-	    $edate = eventdate($data['edate']);
-	    $xoopsMailer->setSubject(_MD_NEWSUB." - $edate $title");
-	    $note = ($data['status'] == STAT_POST)?_MD_APPROVE_REQ:"";
-	    $tags = array('EVENT_TITLE'=> $title,
-			  'EVENT_DATE' => $edate,
-			  'EVENT_NOTE' => $note,
-			  'EVENT_URL'  => EGUIDE_URL."/event.php?eid=".$data['eid']);
-	    $xoopsMailer->assign($tags);
-	    $tpl = 'notify_admin_new.tpl';
-	    $xoopsMailer->setTemplateDir(template_dir($tpl));
-	    $xoopsMailer->setTemplate($tpl);
-	    $member_handler =& xoops_gethandler('member');
-	    $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
-	    $uid = $xoopsUser->getVar('uid');
-	    foreach ($users as $user) {
-		if ($user->getVar('uid') != $uid) {
-		    $xoopsMailer->setToUsers($user);
-		}
-	    }
-	    $xoopsMailer->setFromEmail($to);
-	    $xoopsMailer->setFromName(_MD_FROM_NAME);
-	    $xoopsMailer->send();
-	}
+	$title = $data['title'];
+	$edate = eventdate($data['edate']);
+	$xoopsMailer->setSubject(_MD_NEWSUB." - {EVENT_DATE} {EVENT_TITLE}");
+	$note = ($data['status'] == STAT_POST)?_MD_APPROVE_REQ:"";
+	$tags = array('EVENT_TITLE'=> $title,
+		      'EVENT_DATE' => $edate,
+		      'EVENT_NOTE' => $note,
+		      'EVENT_URL'  => EGUIDE_URL."/event.php?eid=".$data['eid']);
 	break;
     case "update":
+	$tpl = 'notify_admin_change.tpl';
+	$tags =& $data;
+	$xoopsMailer->setSubject(_MD_UPDATE_SUBJECT);
 	break;
     }
-    
+    $member_handler =& xoops_gethandler('member');
+    $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
+    $uids = array($xoopsUser->getVar('uid'));
+    $uid = $data['uid'];
+    if (!in_array($uid, $uids)) { // update by not poster?
+	$user = $member_handler->getUser($uid);
+	$xoopsMailer->setToUsers($user);
+	$uids[] = $uid;
+    }
+    foreach ($users as $user) {
+	if (in_array($user->getVar('uid'), $uids)) {
+	    $xoopsMailer->setToUsers($user);
+	}
+    }
+    $xoopsMailer->setTemplateDir(template_dir($tpl));
+    $xoopsMailer->setTemplate($tpl);
+    $xoopsMailer->assign($tags);
+    $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
+    $xoopsMailer->setFromName(_MD_FROM_NAME);
+    return $xoopsMailer->send();
 }
+
 function user_notify($eid) {
     global $xoopsUser, $xoopsDB, $xoopsConfig, $xoopsModuleConfig;
 

@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.21 2006/08/16 16:24:36 nobu Exp $
+// $Id: admin.php,v 1.22 2007/02/10 02:53:04 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -145,24 +145,33 @@ $now = time();
 
 if ($op=='save' || $op=='date') {
     // database field names
-    $fields = array('title', 'edate', 'ldate', 'expire', 'summary',
-		    'body', 'style', 'status', 'topicid');
+    $updated = "";
+    $fields = array('title'=>_MD_TITLE, 'edate'=>_MD_EVENT_DATE, 
+		    'expire'=>_MD_EVENT_EXPIRE, 'summary'=>_MD_INTROTEXT,
+		    'body'=>_MD_EXTEXT, 'style'=>_MD_EVENT_STYLE,
+		    'status'=>_MD_STATUS, 'topicid'=>_MD_EVENT_CATEGORY);
     if ($eid) {
 	$cond = $adm?"":" AND uid=$uid"; // condition update by poster
-	$result = $xoopsDB->query('SELECT status,edate FROM '.EGTBL." WHERE eid=$eid");
-	list($prev,$pdate) = $xoopsDB->fetchRow($result);
+	$result = $xoopsDB->query('SELECT * FROM '.EGTBL." WHERE eid=$eid");
+	$pdata = $xoopsDB->fetchArray($result);
 	$buf = "mdate=$now";
-	foreach ($fields as $name) {
-	    $buf .= ", $name=".$xoopsDB->quoteString($data[$name]);
+	foreach ($fields as $name=>$label) {
+	    if ($pdata[$name] != $data[$name]) {
+		$buf .= ", $name=".$xoopsDB->quoteString($data[$name]);
+		if ($name=='edate') {
+		    $label .= " ".formatTimestamp($pdata[$name], _MD_POSTED_FMT)." -> ".formatTimestamp($data[$name], _MD_POSTED_FMT);
+		}
+		$updated .= "  ".$label."\n";
+	    }
 	}
 	$xoopsDB->query('UPDATE '.EGTBL.' SET '.$buf." WHERE eid=$eid $cond");
-	$delta = $edate - $pdate;
+	$delta = $edate - $pdata['edate'];
 	if ($delta) {
 	    $xoopsDB->query('UPDATE '.EXTBL." SET exdate=exdate+'$delta' WHERE eidref=$eid AND exdate>$now");
 	    $xoopsDB->query('DELETE '.EXTBL." WHERE eidref=$eid AND exdate>$expire");
 	}
     } else {
-	$prev = STAT_POST;
+	$pdata = array('status'=>STAT_POST);
 	$flist = "uid, cdate, mdate";
 	$buf = "$uid, $now, $now";
 	foreach ($fields as $name) {
@@ -182,15 +191,38 @@ if ($op=='save' || $op=='date') {
 	echo "<div class='error'>Internal Error: eguide/admin.php</div>\n";
 	exit();
     }
-    if ($prev!=$data['status']) user_notify($eid);
-    $result = $xoopsDB->query("SELECT eid FROM ".OPTBL." WHERE eid=$eid");
+    if ($pdata['status']!=$data['status']) user_notify($eid);
+    $result = $xoopsDB->query("SELECT * FROM ".OPTBL." WHERE eid=$eid");
     
-    $ofields = array('reservation', 'strict', 'autoaccept', 'notify',
-		     'persons', 'optfield', 'closetime', 'redirect');
+    $ofields = array('reservation'=>_MD_RESERV_DESC,
+		     'strict'=>_MD_RESERV_STOPFULL,
+		     'autoaccept'=>_MD_RESERV_AUTO,
+		     'notify'=>_MD_RESERV_NOTIFYPOSTER,
+		     'persons'=>_MD_RESERV_PERSONS,
+		     'optfield'=>_MD_RESERV_ITEM,
+		     'closetime'=>_MD_CLOSEDATE,
+		     'redirect'=>_MD_RESERV_REDIRECT);
     if ($xoopsDB->getRowsNum($result)) {
+	$pdata = $xoopsDB->fetchArray($result);
 	$buf = "";
-	foreach ($ofields as $name) {
-	    $buf .= (empty($buf)?'':', ').$name.'='.$xoopsDB->quoteString($data[$name]);
+	foreach ($ofields as $name=>$label) {
+	    if ($pdata[$name]!=$data[$name]) {
+		$buf .= (empty($buf)?'':', ').$name.'='.$xoopsDB->quoteString($data[$name]);
+		switch ($name) {
+		case 'persons':
+		    $label .= ' '.$pdata[$name].' -> '.$data[$name];
+		    break;
+		case 'closetime':
+		    $label .= ' '.time_to_str($pdata[$name]).' -> '.time_to_str($data[$name]);
+		case 'reservation':
+		case 'strict':
+		case 'autoaccept':
+		case 'notify':
+		    $label .= ' '.($data[$name]?_YES:_NO);
+		    break;
+		}
+		$updated = "  ".$label."\n";
+	    }
 	}
 	$xoopsDB->query('UPDATE '.OPTBL." SET $buf WHERE eid=$eid");
     } else {
@@ -200,6 +232,15 @@ if ($op=='save' || $op=='date') {
 	    $buf .= ', '.$xoopsDB->quoteString($data[$name]);
 	}
 	$xoopsDB->query("INSERT INTO ".OPTBL."($flist) VALUES($buf)");
+    }
+    if ($updated) {
+	$dirname = basename(dirname(__FILE__));
+	$tags = array(
+	    'uid'=>$data['uid'],
+	    'URL_EVENTS' => $data['title']."\n".XOOPS_URL."/modules/$dirname/event.php?eid=".$eid,
+	    'UPDATED' => $updated,
+	    'DO_UNAME' => $xoopsUser->getVar('uname'));
+	event_notify('update', $tags);
     }
     if ($op == 'date') {
 	header('Location: '.EGUIDE_URL.'/editdate.php?eid='.$eid);
@@ -255,7 +296,7 @@ if ($eid && $op=='delete') {
     $input_expire = "<input name='expire_text' size='8' value='$str' onchange='document.evform.expire.selectedIndex=0' /> ".
 	select_list('expire', $expire_set, $expire);
 
-    $cats = get_category();
+    $cats = get_eguide_category();
     if (count($cats) > 1) {
 	$input_category = select_list('topicid', $cats, $data['topicid']);
     } else {
@@ -263,7 +304,7 @@ if ($eid && $op=='delete') {
     }
 
     if ($op == 'preview') {
-	$views = array('edate', 'cdate', 'ldate', 'title', 'summary', 'body',
+	$views = array('edate', 'cdate', 'title', 'summary', 'body',
 		       'persons', 'reserved', 'closetime',
 		       'style', 'uid', 'counter', 'catid', 'catimg', 'catname');
 	$event = array();

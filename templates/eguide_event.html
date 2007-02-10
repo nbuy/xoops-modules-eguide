@@ -40,18 +40,20 @@
 <{/if}>
 <p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" <{$form.submit_opts}>/></p>
 </form>
-<script type='text/javascript'>
+<script type="text/javascript">
 <!--//
 function checkItem(obj) {
   if (obj.value == "" && obj.selectedIndex == null) return true;
-  if (obj.selectedIndex != null && obj.options[obj.selectedIndex].text=="") return true;
+  if (obj.selectedIndex != null && obj.options[obj.selectedIndex].value=="") return true;
   return false;
 }
 function xoopsFormValidate_order() {
     myform = window.document.order;
+    obj = null;
 <{foreach from=$form.check key=name item=msg}>
-if ( checkItem(myform.<{$name}>) ) { window.alert("<{$msg}>"); myform.<{$name}>.focus(); return false; }
+if ( checkItem(myform.<{$name}>) ) { msg = msg+"<{$msg}>\n"; if(obj==null)obj=myform.<{$name}>; }
 <{/foreach}>
+if (msg != "") { window.alert(msg); obj.focus(); return false; }
 return true;
 }
 //--></script>

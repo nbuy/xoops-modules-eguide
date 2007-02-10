@@ -1,6 +1,6 @@
 <?php
 # show language help.html
-# $Id: help.php,v 1.1 2006/05/24 04:48:58 nobu Exp $
+# $Id: help.php,v 1.2 2007/02/10 02:53:04 nobu Exp $
 
 include '../../../include/cp_header.php';
 
@@ -73,3 +73,4 @@ function display_lang_file($file, $link='') {
     echo preg_replace($pat, $rep, $b);
 }
 
+?>
