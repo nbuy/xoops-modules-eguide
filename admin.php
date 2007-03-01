@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.23 2007/02/10 03:59:52 nobu Exp $
+// $Id: admin.php,v 1.24 2007/03/01 20:13:45 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -174,12 +174,13 @@ if ($op=='save' || $op=='date') {
 	$pdata = array('status'=>STAT_POST);
 	$flist = "uid, cdate, mdate";
 	$buf = "$uid, $now, $now";
-	foreach ($fields as $name) {
+	foreach (array_keys($fields) as $name) {
 	    $flist .= ", $name";
 	    $buf .= ', '.$xoopsDB->quoteString($data[$name]);
 	}
 	$xoopsDB->query('INSERT INTO '.EGTBL."($flist) VALUES($buf)");
 	$data['eid'] = $eid = $xoopsDB->getInsertId();
+	$data['uid'] = $uid;
 	if (!empty($sets)) {
 	    foreach ($sets as $v) {
 		if ($v) $xoopsDB->query('INSERT INTO '.EXTBL."(eidref, exdate) VALUES($eid, $v)");
@@ -226,9 +227,10 @@ if ($op=='save' || $op=='date') {
 	}
 	$xoopsDB->query('UPDATE '.OPTBL." SET $buf WHERE eid=$eid");
     } else {
-	$flist = 'eid, '.join(', ', $ofields);
+	$keys = array_keys($ofields);
+	$flist = 'eid, '.join(', ', $keys);
 	$buf = $eid;
-	foreach ($ofields as $name) {
+	foreach ($keys as $name) {
 	    $buf .= ', '.$xoopsDB->quoteString($data[$name]);
 	}
 	$xoopsDB->query("INSERT INTO ".OPTBL."($flist) VALUES($buf)");
