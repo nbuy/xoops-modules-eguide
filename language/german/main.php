@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.4 2007/02/10 02:53:04 nobu Exp $
+// $Id: main.php,v 1.5 2007/03/03 11:12:14 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 define("_MD_RESERV_FORM","Jetzt Tickets reservieren...");
@@ -196,7 +196,7 @@ define("_MD_INFO_DEFAULT","-bitte hier den Text eingeben-\n\n\nReservierte Veran
 define("_MD_INFO_MAILOK","Email gesendet");
 define("_MD_INFO_MAILNG","Email konnte nicht gesendet werden");
 define("_MD_FROM_NAME","Veranstaltungskalender");
-define("_MD_UPDATE_SUBJECT","Event Updated");
+define("_MD_UPDATE_SUBJECT","Event Aktualisiert");
 define("_MD_UPDATE_DEFAULT","Default");
 
 global $expire_set,$edit_style,$ev_stats,$ev_extents;

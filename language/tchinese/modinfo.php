@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.2 2006/11/30 14:14:09 nobu Exp $
+// $Id: modinfo.php,v 1.3 2007/03/03 11:12:14 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -30,6 +30,7 @@ define('_MI_EGUIDE_POSTGROUP', '可以新增活動的群組');
 define('_MI_EGUIDE_POSTGROUP_DESC', '選擇一個群組，可以管理自己新增的活動');
 define('_MI_EGUIDE_NOTIFYADMIN', '提醒管理者');
 define('_MI_EGUIDE_NOTIFYADMIN_DESC', '有新的資訊時會以電子郵件通知活動管理者');
+define("_MI_EGUIDE_NOTIFY_ALWAYS","全件通知");
 define('_MI_EGUIDE_NOTIFYGROUP', '提醒管理群');
 define('_MI_EGUIDE_NOTIFYGROUP_DESC', '這個群組將會收到管理者提醒電子郵件');
 define('_MI_EGUIDE_NEEDPOSTAUTH', '您需要審核新的活動嗎?');

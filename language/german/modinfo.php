@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.1 2006/08/21 16:10:00 nobu Exp $
+// $Id: modinfo.php,v 1.2 2007/03/03 11:12:14 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -33,6 +33,7 @@ define("_MI_EGUIDE_POSTGROUP","Gruppen");
 define("_MI_EGUIDE_POSTGROUP_DESC","Wer darf eigene Veranstaltungen bearbeiten.");
 define("_MI_EGUIDE_NOTIFYADMIN","Benachrichtigung an den Admin");
 define("_MI_EGUIDE_NOTIFYADMIN_DESC","Sollen Benachrichtigungen versendet werden");
+define("_MI_EGUIDE_NOTIFY_ALWAYS","Immer");
 define("_MI_EGUIDE_NOTIFYGROUP","Gruppe der Benachrichtigung");
 define("_MI_EGUIDE_NOTIFYGROUP_DESC","Diese Gruppe ist Empfänger der Benachrichtigungen");
 define("_MI_EGUIDE_NEEDPOSTAUTH","Bestätigen lassen");

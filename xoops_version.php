@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.41 2007/02/10 02:53:04 nobu Exp $
+// $Id: xoops_version.php,v 1.42 2007/03/03 11:12:14 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
 $modversion['version'] = "2.25";
@@ -140,8 +140,9 @@ $modversion['config'][]=array('name' => 'group',
 $modversion['config'][]=array('name' => 'notify',
 			      'title' => '_MI_EGUIDE_NOTIFYADMIN',
 			      'description' => '_MI_EGUIDE_NOTIFYADMIN_DESC',
-			      'formtype' => 'yesno',
+			      'formtype' => 'select',
 			      'valuetype' => 'int',
+			      'options'=>array(_NO=>0,_YES=>1,_MI_EGUIDE_NOTIFY_ALWAYS=>2),
 			      'default' => 1);
 $modversion['config'][]=array('name' => 'notify_group',
 			      'title' => '_MI_EGUIDE_NOTIFYGROUP',

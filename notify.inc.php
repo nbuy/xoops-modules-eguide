@@ -1,8 +1,9 @@
 <?php
-// $Id: notify.inc.php,v 1.14 2007/02/10 03:36:18 nobu Exp $
+// $Id: notify.inc.php,v 1.15 2007/03/03 11:12:14 nobu Exp $
 function event_notify($op, $data) {
     global $xoopsModuleConfig, $xoopsUser, $xoopsConfig;
-    if (!$xoopsModuleConfig['notify']) return;
+    $notify = $xoopsModuleConfig['notify'];
+    if (!$notify) return;
 
     $xoopsMailer =& getMailer();
     $xoopsMailer->useMail();
@@ -28,7 +29,8 @@ function event_notify($op, $data) {
     }
     $member_handler =& xoops_gethandler('member');
     $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
-    $uids = array($xoopsUser->getVar('uid'));
+    $uids = array();
+    if ($notify==1) $uids[] = $xoopsUser->getVar('uid'); // suppress self
     $uid = $data['uid'];
     if (!in_array($uid, $uids)) { // update by not poster?
 	$user = $member_handler->getUser($uid);

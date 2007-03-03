@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.13 2006/10/14 10:53:33 nobu Exp $
+// $Id: modinfo.php,v 1.14 2007/03/03 11:12:14 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -30,6 +30,7 @@ define("_MI_EGUIDE_POSTGROUP","Group of Event Post");
 define("_MI_EGUIDE_POSTGROUP_DESC","Set a group the owner permited to administration for own evnet.");
 define("_MI_EGUIDE_NOTIFYADMIN","Notify mail to Admin");
 define("_MI_EGUIDE_NOTIFYADMIN_DESC","Notification mail to admin when New Event registerd");
+define("_MI_EGUIDE_NOTIFY_ALWAYS","Always");
 define("_MI_EGUIDE_NOTIFYGROUP","Admin Group for Notification");
 define("_MI_EGUIDE_NOTIFYGROUP_DESC","The group is received admin notification mail");
 define("_MI_EGUIDE_NEEDPOSTAUTH","Do you need to approve New Event");

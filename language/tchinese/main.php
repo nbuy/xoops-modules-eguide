@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.5 2007/02/10 02:53:04 nobu Exp $
+// $Id: main.php,v 1.6 2007/03/03 11:12:14 nobu Exp $
 define('_MD_RESERV_FORM', '立即報名 &gt;&gt;');
 define('_MD_RESERVATION', '報名表');
 define('_MD_NAME', '/^Name\*?$/');
@@ -170,8 +170,8 @@ define('_MD_INFO_DEFAULT', '-訊息內容-\n\n\n預約活動\n {EVENT_URL}\n');
 define('_MD_INFO_MAILOK', '已成功寄出');
 define('_MD_INFO_MAILNG', '傳送失敗');
 define('_MD_FROM_NAME', '活動通知');
-define("_MD_UPDATE_SUBJECT","活動更新");
-define("_MD_UPDATE_DEFAULT","Default");
+define("_MD_UPDATE_SUBJECT","事件更新");
+define("_MD_UPDATE_DEFAULT","預設");
 
 global $expire_set,$edit_style,$ev_stats,$ev_extents;
 $expire_set = array(""=>"-- 使用文字 --", "+3600"=>"一個鐘頭",
