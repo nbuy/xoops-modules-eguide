@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.24 2006/11/30 14:14:52 nobu Exp $
+// $Id: receipt.php,v 1.25 2007/05/15 17:32:55 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -47,7 +47,7 @@ $result = $xoopsDB->query("SELECT * FROM ".OPTBL." WHERE eid=$eid");
 $opts = $xoopsDB->fetchArray($result);
 
 $result = $xoopsDB->query("SELECT IF(exdate,exdate,edate) edate, title, uid,
-summary, cdate, counter, style FROM ".EGTBL.' e LEFT JOIN '.EXTBL. " x
+summary, cdate, counter, style, topicid FROM ".EGTBL.' e LEFT JOIN '.EXTBL. " x
 ON eid=eidref AND exid=$exid WHERE eid=$eid");
 $head = $xoopsDB->fetchArray($result);
 $edate = $head['edate'];
@@ -156,6 +156,11 @@ if (count($extents)>1) {
 }
 $xoopsTpl->assign(array('title'=>$title,
 			'eid'=>$eid, 'exid'=>$exid));
+$paths = array();
+$paths[$title] = "event.php?eid=$eid".($exid?"&sub=$exid":"");
+$paths[_MD_RESERV_ADMIN] = "receipt.php?eid=$eid".($exid?"&sub=$exid":"");
+set_eguide_breadcrumbs($head['topicid'], $paths);
+
 $evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
 switch ($op) {
 case 'active':

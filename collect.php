@@ -1,6 +1,6 @@
 <?php
 // Event collection setting by Poster
-// $Id: collect.php,v 1.4 2007/02/10 02:58:27 nobu Exp $
+// $Id: collect.php,v 1.5 2007/05/15 17:32:55 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -68,11 +68,11 @@ if (isset($_POST['persons'])) {
     exit;
 }
 
-$fields = "e.eid, cdate, title, closetime, summary,
+$fields = "e.eid, cdate, title, closetime, summary, topicid,
 IF(expersons IS NULL,persons, expersons) persons, expersons,
 IF(exdate,exdate,edate) edate, 
 IF(x.reserved,x.reserved,o.reserved) reserved,
-uid, status, style, counter, catid, catname, catimg, exid, exdate";
+uid, status, style, counter, exid, exdate";
 $now = time();
 $cond = 'status<>'.STAT_DELETED.' AND reservation';
 $cond .= " AND IF(exdate,exdate,edate)>$now";
@@ -85,8 +85,8 @@ if ($xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
 if (isset($_GET['eid'])) $cond .= ' AND e.eid='.intval($_GET['eid']);
 
 $result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.
-OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.
-EXTBL." x ON e.eid=eidref WHERE $cond ORDER BY edate");
+OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref
+  WHERE $cond ORDER BY edate");
 
 include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = 'eguide_collect.html';
@@ -131,6 +131,13 @@ $xoopsTpl->assign('peid', $peid);
 $xoopsTpl->assign('timeline', $timeline);
 $xoopsTpl->assign('dateline', $dateline);
 $xoopsTpl->assign('cells', $cells);
+
+$paths = array();
+if (!empty($event[$eid]['title'])) {
+    $paths[$event[$eid]['title']] = "event.php?eid=$eid";
+}
+$paths[_MD_RESERV_PERSONS._EDIT] = "collect.php".($eid?"?eid=$eid":"");
+set_eguide_breadcrumbs($event[$eid]['catid'], $paths);
 
 include XOOPS_ROOT_PATH.'/footer.php';
 ?>

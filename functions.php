@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.18 2007/02/10 02:53:04 nobu Exp $
+// $Id: functions.php,v 1.19 2007/05/15 17:32:55 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -91,6 +91,13 @@ function edit_eventdata(&$data) {
 		break;
 	    }
 	}
+    }
+    $catlist = get_eguide_category();
+    $cid = $data['topicid'];
+    if (isset($catlist[$cid])) {
+	$data['catid'] = $cid;
+	$data['catname'] = $catlist[$cid]['name'];
+	$data['catimg'] = $catlist[$cid]['image'];
     }
     return $data;
 }
@@ -332,13 +339,31 @@ function eventdate($time) {
 }
 
 function get_eguide_category() {
-    global $xoopsDB;
-    $result = $xoopsDB->query("SELECT catid, catname FROM ".CATBL." ORDER BY catid");
+    global $xoopsDB, $eguide_category;
+    if (!empty($eguide_category)) return $eguide_category;
+    $result = $xoopsDB->query("SELECT catid, catname AS name, catimg AS image FROM ".CATBL." ORDER BY catid");
     $list = array();
-    while (list($id, $name)=$xoopsDB->fetchRow($result)) {
-	$list[$id] = $name;
+    while ($data=$xoopsDB->fetchArray($result)) {
+	$id = $data['catid'];
+	$data['name'] = htmlspecialchars($data['name']);
+	$list[$id] = $data;
     }
+    $eguide_category = $list;
     return $list;
+}
+
+function set_eguide_breadcrumbs($catid=0, $paths=array()) {
+    global $xoopsModule, $xoopsTpl;
+    $modurl = XOOPS_URL."/modules/".$xoopsModule->getVar('dirname').'/';
+    $breadcrumbs = array(array('name'=>$xoopsModule->getVar('name'), 'url'=>$modurl));
+    $catlist = get_eguide_category($catid);
+    if ($catid && !empty($catlist[$catid]['name'])) {
+	$breadcrumbs[] = array('name'=>$catlist[$catid]['name'],'url'=>$modurl."index.php?cat=$catid");
+    }
+    foreach ($paths as $lab=>$path) {
+	$breadcrumbs[] = array('name'=>htmlspecialchars($lab), 'url' => "$modurl$path");
+    }
+    $xoopsTpl->assign('xoops_breadcrumbs', $breadcrumbs);
 }
 
 // fetch event data set
@@ -348,11 +373,11 @@ function fetch_event($eid, $exid, $admin=false) {
     $fields = "e.eid, cdate, title, summary, body, optfield,
 IF(expersons IS NULL, persons, expersons) persons,
 IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
-closetime, reservation, uid, status, style, counter, catid, catname, catimg, 
+closetime, reservation, uid, status, style, counter, topicid, 
 exid, exdate, strict, autoaccept, notify, redirect";
     $result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
-' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.EXTBL.
-" x ON e.eid=eidref AND exid=$exid WHERE e.eid=$eid $stc");
+' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref AND exid=$exid
+  WHERE e.eid=$eid $stc");
     return $xoopsDB->fetchArray($result);
 }
 

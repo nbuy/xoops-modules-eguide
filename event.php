@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.21 2006/08/16 16:24:36 nobu Exp $
+// $Id: event.php,v 1.22 2007/05/15 17:32:55 nobu Exp $
 
 include 'header.php';
 
@@ -70,12 +70,12 @@ include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = 'eguide_event.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 edit_eventdata($data);
+$title = $data['date']." ".$data['title'];
+set_eguide_breadcrumbs($data['topicid'], array($title=>'event.php?eid='.$eid.($exid?"&sub=$exid":"")));
 $xoopsTpl->assign('event', $data);
 if (isset($pidate)) $xoopsTpl->assign('caldate', $pidate);
 // page title
-$xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".
-		  $data['date'].": ".$data['title']);
-if ($data['closedate'] < $now) {
+$xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".$title);if ($data['closedate'] < $now) {
     if ($data['reservation']) $xoopsTpl->assign('message', _MD_RESERV_CLOSE);
 } elseif ($data['reservation']) {
     $reserved = false;

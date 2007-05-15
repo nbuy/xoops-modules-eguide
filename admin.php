@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.24 2007/03/01 20:13:45 nobu Exp $
+// $Id: admin.php,v 1.25 2007/05/15 17:32:55 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -358,6 +358,21 @@ if ($eid && $op=='delete') {
 			    ));
 }
 
+$paths = array();
+if ($eid) {
+    $cid = $data['topicid'];
+    $paths[$data['title']] = "event.php?eid=$eid";
+    if ($op == 'delete') {
+	$paths[_DELETE] = "admin.php?op=delete&eid=$eid";
+    } else {
+	$paths[_EDIT] = "admin.php?eid=$eid";
+    }
+} else {
+    $cid = 0;
+    $paths[_MD_NEWSUB] = 'admin.php';
+}
+set_eguide_breadcrumbs($cid, $paths);
+
 include(XOOPS_ROOT_PATH."/footer.php");
 
 // make to unix time from separate fields.
@@ -397,6 +412,7 @@ function select_value($fmt, $name, $from, $to, $def=0, $step=1) {
 function select_list($name, $options, $def=1) {
     $buf = "<select name='$name'>\n";
     foreach ($options as $i => $v) {
+	if (is_array($v)) $v = $v['name'];
 	$buf .= "<option value='$i'".($i==$def?" selected":"").">$v</option>\n";
     }
     $buf .= "</select>\n";

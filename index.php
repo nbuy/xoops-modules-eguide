@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.16 2006/08/16 16:24:36 nobu Exp $
+// $Id: index.php,v 1.17 2007/05/15 17:32:55 nobu Exp $
 
 include 'header.php';
 
@@ -36,16 +36,17 @@ if (empty($prev)) {
     $ext = $xoopsModuleConfig['show_extents']?'':'AND 0';
 }
 
-$opt = isset($_GET['cat'])?' AND topicid='.intval($_GET['cat']):'';
+$catid = isset($_GET['cat'])?intval($_GET['cat']):0;
+$opt = $catid?' AND topicid='.$catid:'';
 
 $fields = "e.eid, cdate, title, summary, closetime,
 IF(expersons IS NULL,persons, expersons) persons,
 IF(exdate,exdate,edate) edate, 
 IF(x.reserved,x.reserved,o.reserved) reserved,
-reservation, uid, status, style, counter, catid, catname, catimg, exid, exdate";
+reservation, uid, status, style, counter, topicid, exid, exdate";
 $result = $xoopsDB->query('SELECT '.$fields.' FROM '.EGTBL.' e LEFT JOIN '.
-OPTBL.' o ON e.eid=o.eid LEFT JOIN '.CATBL.' ON topicid=catid LEFT JOIN '.
-EXTBL." x ON e.eid=eidref $ext WHERE $cond$opt ORDER BY edate $ord", $max, $start);
+OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref $ext
+  WHERE $cond$opt ORDER BY edate $ord", $max, $start);
 
 $events = array();
 $isadmin = false;
@@ -54,11 +55,18 @@ if (is_object($xoopsUser)) {
     $isadmin = $xoopsUser->isAdmin($xoopsModule->getVar('mid'));
     $uid = $xoopsUser->getVar('uid');
 }
+$catlist = get_eguide_category();
 while ($event = $xoopsDB->fetchArray($result)) {
     $event['isadmin'] = ($isadmin || $event['uid']==$uid);
     $event['link'] = true;
     $event['expire'] = ($event['edate']-$event['closetime']) > $now;
     $more = 'event.php?eid='.$event['eid'];
+    $cid = $event['topicid'];
+    if (isset($catlist[$cid])) {
+	$event['catid'] = $cid;
+	$event['catname'] = $catlist[$cid]['name'];
+	$event['catimg'] = $catlist[$cid]['image'];
+    }
     if (!empty($event['exid'])) {
 	$event['extent']=true;	// also show editdate link
 	$more .= '&sub='.$event['exid'];
@@ -103,7 +111,9 @@ if (empty($prev)) {
     }
 }
 
-if ($opt) $opt = "&cat=".intval($_GET['cat']);
+set_eguide_breadcrumbs($catid);
+
+$opt = $catid?"&cat=".$catid:'';
 
 if ($p) $xoopsTpl->assign('page_prev', $prev.$opt);
 if ($q) $xoopsTpl->assign('page_next', $page.$opt);
