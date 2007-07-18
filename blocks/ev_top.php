@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.19 2006/11/30 14:14:52 nobu Exp $
+// $Id: ev_top.php,v 1.20 2007/07/18 04:53:43 nobu Exp $
 
 include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
@@ -20,7 +20,7 @@ if (!function_exists("eguide_marker")) {
 	}
 	return '';
     }
- }
+}
 
 function b_event_top_show($options) {
     global $xoopsDB, $xoopsUser;

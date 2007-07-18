@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.19 2007/05/15 17:32:55 nobu Exp $
+// $Id: functions.php,v 1.20 2007/07/18 04:53:43 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -15,34 +15,30 @@ function explodeopts($opts) {
     return $myitem;
 }
 
-function explodeinfo($info, $item) {
-    if (!is_array($item)) $item = explodeopts($item);
-    $ln = explode("\n", preg_replace('/\r/','',$info));
-    $n = 0;
-    $result = array();
-    while ($a = array_shift($ln)) {
-	$lab = $item[$n];
-	if (preg_match("/^".str_replace("/", '\/', quotemeta($lab)).": (.*)$/", $a, $m)) {
-	    $v = isset($m[1])?$m[1]:"";
-	    if ($m[1] == "\\") {
-		$v = "";
-		$x = "/^".(isset($item[$n+1])?quotemeta($item[$n+1]):"\n").": /";
-		while (($a=array_shift($ln))&&!preg_match($x, $a)) {
-		    $v .= "$a\n";
-		}
-		array_unshift($ln, $a);
-	    }
-	    $result[$lab] = "$v";
-	} else {
-	    global $xoopsConfig;
-	    if (isset($xoopsConfig['debug']) && $xoopsConfig['debug']) {
-		echo "<span class='error'>".$item[$n].",$a</span>";
-	    }
-	    break;
+function serialize_text($array) {
+    $text = '';
+    foreach ($array as $name => $val) {
+	if (is_array($val)) $val = join(', ', $val);
+	if (preg_match('/\n/', $val)) {
+	    $val = preg_replace('/\n\r?/', "\n\t", $val);
 	}
-	$n++;
+	$text .= "$name: $val\n";
     }
-    return $result;
+    return $text;
+}
+
+function unserialize_text($text) {
+    $array = array();
+    foreach (preg_split("/\r?\n/", $text) as $ln) {
+	if (preg_match('/^\s/', $ln)) {
+	    $val .= "\n".substr($ln, 1);
+	} elseif (preg_match('/^([^:]*):\s?(.*)$/', $ln, $d)) {
+	    $name = $d[1];
+	    $array[$name] = $d[2];
+	    $val =& $array[$name];
+	}
+    }
+    return $array;
 }
 
 function xss_filter($text) {
@@ -371,7 +367,7 @@ function fetch_event($eid, $exid, $admin=false) {
     global $xoopsDB;
     $stc=$admin?"":"AND status=".STAT_NORMAL;
     $fields = "e.eid, cdate, title, summary, body, optfield,
-IF(expersons IS NULL, persons, expersons) persons,
+IF(expersons IS NULL, persons, expersons) persons, edate opendate,
 IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
 closetime, reservation, uid, status, style, counter, topicid, 
 exid, exdate, strict, autoaccept, notify, redirect";

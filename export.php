@@ -1,6 +1,6 @@
 <?php
 // Export event reservations in Excel/XML format
-// $Id: export.php,v 1.4 2006/08/25 02:51:31 nobu Exp $
+// $Id: export.php,v 1.5 2007/07/18 04:53:43 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/template.php';
@@ -86,7 +86,7 @@ while ($data = $xoopsDB->fetchArray($result)) {
     $rows = array();
     $member_handler =& xoops_gethandler('member');
     while ($rvdata = $xoopsDB->fetchArray($res)) {
-	$row = explodeinfo($rvdata['info'], $items);
+	$row = unserialize_text($rvdata['info']);
 	$user = $member_handler->getUser($rvdata['uid']);
 	$name = is_object($user)?$user->getVar('name'):'';
 	$row[_MD_ORDER_DATE] = formatTimestamp($rvdata['rdate'], 'Y-m-d H:i:s');

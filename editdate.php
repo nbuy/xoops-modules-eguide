@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.10 2007/05/15 17:32:55 nobu Exp $
+// $Id: editdate.php,v 1.11 2007/07/18 04:53:43 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -74,7 +74,7 @@ if (isset($_POST['adds'])) {
 	    }
 	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy), $xoopsUser->getVar("timezone_offset"));
 	    
-	    if (($tm >= $edate) && ($tm > $now)) {
+	    if (($tm >= $data['opendate']) && ($tm > $now)) {
 		$post = formatTimestamp($tm, 'Y-m-d H:i');
 		$xoopsDB->query("UPDATE ".EXTBL." SET exdate=$tm, expersons=$n WHERE eidref=$eid AND exid=$id");
 		$date = formatTimestamp($data['exdate'], _MD_POSTED_FMT);

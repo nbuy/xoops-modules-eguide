@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.25 2007/05/15 17:32:55 nobu Exp $
+// $Id: receipt.php,v 1.26 2007/07/18 04:53:43 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -28,13 +28,13 @@ if ($rvid) {
 	$status = intval($_POST['status']);
 	$email = $xoopsDB->quoteString(post_filter($_POST['email']));
 	$info = post_filter($_POST['info']);
-	$vals = explodeinfo($data['info'], $data['optfield']);
+	$vals = unserialize_text($data['info']);
 	$num = ($data['status']!=_RVSTAT_REFUSED)?
 	     (isset($vals[$nlab])?$vals[$nlab]:1):0;
 	$xoopsDB->query("UPDATE ".RVTBL." SET email=$email, status=$status,".
 			'info='.$xoopsDB->quoteString($info).
 			" WHERE rvid=$rvid");
-	$vals = explodeinfo($info, $data['optfield']);
+	$vals = unserialize_text($info);
 	$nnum = ($status!=_RVSTAT_REFUSED)?
 	     (isset($vals[$nlab])?$vals[$nlab]:1):0;
 	update_reserv($eid, $exid, $nnum-$num);
@@ -121,7 +121,7 @@ if ($nrec && $op=='csv') {
     $out = join(',',$temp)."\n";
     // body
     while ($a = $xoopsDB->fetchArray($result)) {
-	$row = explodeinfo($a['info'], $item);
+	$row = unserialize_text($a['info']);
 	$row[_MD_EMAIL] = $a['email'];
 	$row[_MD_ORDER_DATE] = formatTimestamp($a['rdate']);
 	$row[_MD_UNAME] = XoopsUser::getUnameFromId($a['uid']);
@@ -204,7 +204,7 @@ case 'active':
 	    } else {
 		$ret = _MD_RESERV_REFUSE;
 		if ($isnum) {
-		    $vals = explodeinfo($data['info'], $optfield);
+		    $vals = unserialize_text($data['info']);
 		    $num = intval($vals[$nlab]);
 		    if ($num<1) $num=1;
 		    $cnt -= $num;
@@ -270,7 +270,7 @@ case 'one':
 		  _MD_ORDER_DATE => formatTimestamp($data['rdate'], _MD_TIME_FMT));
     if (!$mo) $values[_MD_EMAIL] = $myts->makeTareaData4Edit($data['email']);
     $values[_MD_STATUS] = $rv_stats[$data['status']];
-    foreach (explodeinfo($data['info'], $data['optfield']) as $lab => $v) {
+    foreach (unserialize_text($data['info']) as $lab => $v) {
 	if (empty($v)) $v = '';
 	$values[$lab] = $myts->displayTarea($v);
     }
@@ -315,7 +315,7 @@ default:
 	$order['stat']=$rv_stats[$order['status']];
 	$add=array();
 	$ok = $order['status']==_RVSTAT_RESERVED;
-	foreach (explodeinfo($order['info'], $item) as $lab => $v) {
+	foreach (unserialize_text($order['info']) as $lab => $v) {
 	    if ($ok) {
 		if (isset($nitem[$lab])) {
 		    if ($nitem[$lab]!="") {

@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.22 2007/05/15 17:32:55 nobu Exp $
+// $Id: event.php,v 1.23 2007/07/18 04:53:43 nobu Exp $
 
 include 'header.php';
 
@@ -139,7 +139,7 @@ function make_lists($data) {
 	    $result = $xoopsDB->query('SELECT * FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND status="._RVSTAT_RESERVED.' ORDER BY rdate');
 	    $nc = 0;
 	    while($rdata = $xoopsDB->fetchArray($result)) {
-		$a = explodeinfo($rdata['info'], $item);
+		$a = unserialize_text($rdata['info']);
 		if (!empty($rdata['uid'])) {
 		    $uid = $rdata['uid'];
 		    $uinfo = " (<a href='".XOOPS_URL."/userinfo.php?uid=$uid'>".XoopsUser::getUnameFromId($uid)."</a>)";

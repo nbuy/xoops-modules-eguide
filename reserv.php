@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.30 2007/02/10 02:50:51 nobu Exp $
+// $Id: reserv.php,v 1.31 2007/07/18 04:53:43 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -48,7 +48,7 @@ case 'delete':
 	}
     }
     if ($result) {
-	$vals = explodeinfo($data['info'], $data['optfield']);
+	$vals = unserialize_text($data['info']);
 	$num = 1;
 	if (isset($vals[$nlab])) {
 	    $num = intval($vals[$nlab]);
