@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.1 2006/08/21 16:10:00 nobu Exp $
+// $Id: admin.php,v 1.2 2007/07/31 06:09:38 nobu Exp $
 // German language files by El Cario www.el-cario.de
 define("_AM_DBUPDATED","Datenbank aktualisiert");
 define("_AM_TITLE","Titel");
@@ -31,4 +31,9 @@ define("_AM_RESERVATION","Reservierte Plätze");
 define("_AM_EVENT_DAY","Datum der Veranstaltung");
 define("_AM_RECEIPT","Veranstaltungsliste");
 define("_AM_COUNT","Anzahl");
+
+// for altsys
+define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
+define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
+define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
 ?>

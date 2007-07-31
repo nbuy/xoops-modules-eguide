@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.26 2006/10/14 10:45:02 nobu Exp $
+// $Id: index.php,v 1.27 2007/07/31 06:09:38 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -12,6 +12,24 @@ $eid = param('eid');
 
 function css_tags() { return array("even","odd"); }
 if ($op == 'summary_csv') summary_csv();
+
+if( ! empty( $_GET['lib'] ) ) {
+    global $mydirpath;
+    $mydirpath = dirname(dirname(__FILE__));
+    $mydirname = basename($mydirpath);
+    // common libs (eg. altsys)
+    $lib = preg_replace( '/[^a-zA-Z0-9_-]/' , '' , $_GET['lib'] ) ;
+    $page = preg_replace( '/[^a-zA-Z0-9_-]/' , '' , @$_GET['page'] ) ;
+    
+    if( file_exists( XOOPS_TRUST_PATH.'/libs/'.$lib.'/'.$page.'.php' ) ) {
+	include XOOPS_TRUST_PATH.'/libs/'.$lib.'/'.$page.'.php' ;
+	} else if( file_exists( XOOPS_TRUST_PATH.'/libs/'.$lib.'/index.php' ) ) {
+	include XOOPS_TRUST_PATH.'/libs/'.$lib.'/index.php' ;
+    } else {
+	die( 'wrong request' ) ;
+    }
+    exit;
+}
 
 xoops_cp_header();
 

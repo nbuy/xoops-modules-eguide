@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.2 2006/11/30 14:14:09 nobu Exp $
+// $Id: admin.php,v 1.3 2007/07/31 06:09:38 nobu Exp $
 define('_AM_DBUPDATED', '資料已經更新！');
 define('_AM_TITLE', '活動項目');
 define('_AM_POSTER', '發表者');
@@ -30,4 +30,9 @@ define('_AM_RESERVATION', '預約');
 define('_AM_EVENT_DAY', '日期');
 define('_AM_RECEIPT', '報名一覽');
 define('_AM_COUNT', '件數');
+
+// for altsys
+define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
+define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
+define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
 ?>
