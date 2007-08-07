@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.31 2007/07/18 04:53:43 nobu Exp $
+// $Id: reserv.php,v 1.32 2007/08/07 09:32:10 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -188,14 +188,7 @@ case 'order':
     $data = fetch_event($eid, $exid);
     $vals = get_opt_values($data['optfield'], $errs, false, false);
     check_prev_order($data, $vals, $errs);
-    $value = "";
-    foreach ($vals as $name => $val) {
-	if (preg_match('/\n/', $val)) {
-	    $value .= "$name: \\\n$val\n";
-	} else {
-	    $value .= "$name: $val\n";
-	}
-    }
+    $value = serialize_text($vals);
     if (!$xoopsModuleConfig['member_only']) {
 	$email = param('email', '');
     } else {
