@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.20 2007/07/18 04:53:43 nobu Exp $
+// $Id: functions.php,v 1.21 2007/08/07 09:31:20 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -89,11 +89,13 @@ function edit_eventdata(&$data) {
 	}
     }
     $catlist = get_eguide_category();
-    $cid = $data['topicid'];
-    if (isset($catlist[$cid])) {
-	$data['catid'] = $cid;
-	$data['catname'] = $catlist[$cid]['name'];
-	$data['catimg'] = $catlist[$cid]['image'];
+    if (isset($data['topicid'])) {
+	$cid = $data['topicid'];
+	if (isset($catlist[$cid])) {
+	    $data['catid'] = $cid;
+	    $data['catname'] = $catlist[$cid]['name'];
+	    $data['catimg'] = $catlist[$cid]['image'];
+	}
     }
     return $data;
 }
@@ -410,6 +412,7 @@ function order_notify($data, $email, $value) {
 			 $xoopsUser->getVar('name'));
 	$xoopsMailer->setToUsers($xoopsUser);
     } else {
+	if (!empty($email)) $xoopsMailer->setToEmails($email);
 	$uinfo = "";
     }
     if ($email) $uinfo .= sprintf("%s: %s\n", _MD_EMAIL, $email);
@@ -422,7 +425,14 @@ function order_notify($data, $email, $value) {
     $title = eventdate($data['edate'])." ".$data['title'];
     $xoopsMailer->assign("TITLE", $title);
     $xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
-    if (!empty($email)) $xoopsMailer->setToEmails($email);
+    $xoopsMailer->setSubject(_MD_SUBJECT.' - '.$title);
+    $xoopsMailer->setFromEmail($poster->getVar('email'));
+    $xoopsMailer->setFromName(_MD_FROM_NAME);
+    $ret = $xoopsMailer->send(); // send to order person
+    if (!$ret) return $ret;
+
+    $xoopsMailer->toUsers = array(); // XXX: private access?
+    $xoopsMailer->toEmails = array();
     if ($data['notify']) {
 	if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
 	    $xoopsMailer->setToUsers($poster);
@@ -431,10 +441,8 @@ function order_notify($data, $email, $value) {
 	$notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
 	$xoopsMailer->setToGroups($notify_group);
     }
-    $xoopsMailer->setSubject(_MD_SUBJECT.' - '.$title);
-    $xoopsMailer->setFromEmail($poster->getVar('email'));
-    $xoopsMailer->setFromName(_MD_FROM_NAME);
-    return $xoopsMailer->send();
+    $xoopsMailer->send();
+    return $ret;
 }
 
 function disp_value($val) {
