@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.6 2007/03/03 11:12:14 nobu Exp $
+// $Id: main.php,v 1.7 2007/12/31 06:42:22 nobu Exp $
 define('_MD_RESERV_FORM', '立即報名 &gt;&gt;');
 define('_MD_RESERVATION', '報名表');
 define('_MD_NAME', '/^Name\*?$/');
@@ -135,7 +135,7 @@ define('_MD_RESERV_ITEM', '<br>追加項目：');
 define('_MD_RESERV_ITEM_DESC', '<a href="language/tchinese/help.html#form" target="help">編輯欄位方法</a>');
 define('_MD_RESERV_LABEL_DESC', '如果是團體報名，要讓報名者填入人數，請使用這個欄位表示"%s"。');
 define('_MD_RESERV_REDIRECT', '報名完成後，指定某一個網站連結');
-define('_MD_RESERV_REDIRECT_DESC', '幾秒後開啟連結.請輸入數字，範例： "4;http://...  "');
+define('_MD_RESERV_REDIRECT_DESC', '幾秒後開啟連結.請輸入數字，範例： "4;http://...  "。変数: {X_EID}, {X_SUB}, {X_RVID}');
 define('_MD_APPROVE', '審核顯示');
 define('_MD_PREVIEW', '預覽');
 define('_MD_SAVE', '儲存');

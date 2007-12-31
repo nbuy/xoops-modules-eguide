@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.3 2007/03/03 11:12:14 nobu Exp $
+// $Id: modinfo.php,v 1.4 2007/12/31 06:42:22 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -100,4 +100,11 @@ define('_MI_EGUIDE_NEWPOST_NOTIFY', '新增一個活動');
 define('_MI_EGUIDE_NEWPOST_NOTIFY_CAP', '當新的活動增加時提醒我');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY', '在分類裏新增一個活動');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', '在分類裏新增一個活動時提醒我');
+
+// for altsys
+if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
+    define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
+    define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
+    define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
+}
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.2 2007/03/03 11:12:14 nobu Exp $
+// $Id: modinfo.php,v 1.3 2007/12/31 06:42:22 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -20,7 +20,6 @@ define("_MI_EGUIDE_HEADLINE_DESC","Nächste Veranstaltungen");
 define("_MI_EGUIDE_HEADLINE2","Neue Veranstaltungen");
 define("_MI_EGUIDE_HEADLINE2_DESC","neu eingetragene Veranstaltungen");
 
-define("_MI_EGUIDE_CONFIG","Modul Administration");
 define("_MI_EGUIDE_EVENTS","Veranstaltungen bearbeiten");
 define("_MI_EGUIDE_NOTIFIES","Benachrichtigen bei neuen Veranstaltungen");
 define("_MI_EGUIDE_CATEGORY","Kategorien");
@@ -103,4 +102,11 @@ define('_MI_EGUIDE_NEWPOST_NOTIFY', 'Neue Veranstaltung eingetragen');
 define('_MI_EGUIDE_NEWPOST_NOTIFY_CAP', 'Benachrichtigen, wenn neue Veranstaltung eingetragen');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY', 'Neue Veranstaltung in dieser Kategorie eingetragen');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', 'Benachrichtigen, wenn neue Veranstaltung in dieser Kategorie eingetragen wird');
+
+// for altsys
+if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
+    define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
+    define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
+    define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
+}
 ?>

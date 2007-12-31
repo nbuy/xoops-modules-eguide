@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.8 2007/07/31 06:09:38 nobu Exp $
+// $Id: admin.php,v 1.9 2007/12/31 06:42:22 nobu Exp $
 define("_AM_DBUPDATED","Database Updated");
 define("_AM_TITLE","Title");
 define("_AM_POSTER","Poster");
@@ -30,9 +30,4 @@ define("_AM_RESERVATION","Reservation");
 define("_AM_EVENT_DAY","Event Date");
 define("_AM_RECEIPT","Entry List");
 define("_AM_COUNT","Count");
-
-// for altsys
-define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
-define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
-define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
 ?>

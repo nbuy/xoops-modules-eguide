@@ -1,12 +1,11 @@
 <?php
-// $Id: main.php,v 1.5 2007/03/03 11:12:14 nobu Exp $
+// $Id: main.php,v 1.6 2007/12/31 06:42:22 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 define("_MD_RESERV_FORM","Jetzt Tickets reservieren...");
 define("_MD_RESERVATION","Jetzt Tickets reservieren");
 define("_MD_NAME","/^Name\\*?\$/");
 define('_MD_SDATE_FMT', 'd.m.Y');
-define("_MD_DATE_FMT", "d.m.Y");
 define('_MD_STIME_FMT', 'H:i');
 // Localization Transrate Weekly date name
 global $ev_week;
@@ -19,7 +18,9 @@ define("_MD_EMAIL","Email Addresse");
 define("_MD_SUBJECT","Bestätigung");
 define("_MD_NOTIFY_EVENT",  "Benachrichtigung über neue Veranstaltungen erhalten");
 define("_MD_NOTIFY_REQUEST", "Benachrichtigen Sie mich, wenn weitere Veranstaltungen stattfinden");
-define("_MD_ORDER_NOTE1","* = Pflichtfelder müssen ausgefüllt sein");
+define('_MD_REQUIRE_MARK','*');
+define('_MD_LISTITEM_FMT', '[%s]');
+define("_MD_ORDER_NOTE1",_MD_REQUIRE_MARK." = Pflichtfelder müssen ausgefüllt sein");
 define("_MD_ORDER_NOTE2","'[ ]' Felder werden auf öffentlicher Bestellseite für jeden angezeigt");
 define("_MD_ORDER_SEND","Reservierung");
 define('_MD_ORDER_CONF','Bestätigen');
@@ -40,13 +41,13 @@ define("_MD_DUP_REGISTER","Sie werden bereits über kommende Veranstaltungen info
 define("_MD_REGISTERED","Benachrichtigung per E-Mail aktiviert");
 define('_MD_DATE_ERR','Dieses Datum ist ungültig');
 define('_MD_DATEDELETE_ERR','Datum nicht verändern, es liegen Reservierungen vor!');
-define('_MD_REQUIRE_MARK','*');
 
 
 define("_MD_RESERV_ACCEPT","Bestätigungsmail versendet");
 define("_MD_RESERV_STOP","Onlinereservierungen derzeit für diese Veranstaltungen nicht möglich");
 define("_MD_RESERV_CONF","Bestellinformationen");
 define("_MD_RESERV_ADMIN","Reservierungsliste");
+define("_MD_RESERV_REGISTER","Register reservation");
 
 define("_AM_MAILGOOD","Erfolg: %s");
 define("_AM_SENDMAILNG","Fortschritt: %s");
@@ -114,6 +115,7 @@ define("_MD_RESERV_MSG_H","Sende Nachricht für die Reservierung");
 define("_MD_ACTIVATE","Reservierungsbestätigung");
 define("_MD_REFUSE","Reservierung wurde nicht akzeptiert");
 define("_MD_CSV_OUT","Als CSV exportieren");
+define("_MD_EXPORT_OUT","Als Excel exportieren");
 define("_MD_INFO_MAIL","Sende Email");
 define("_MD_SUMMARY","Zusammenfassung");
 define("_MD_SUM_ITEM","Feld");
@@ -129,6 +131,7 @@ define("_MD_EVENT_EXPIRE","Enddatum anzeigen");
 define('_MD_EVENT_EXTENT','Wiederholung der Veranstaltung');
 define('_MD_EVENT_CATEGORY','Kategorie');
 define('_MD_EDIT_EXTENT','Startdatum bearbeiten');
+define('_MD_EXTENT_REPEAT','Repeats');
 define('_MD_EXTENT_DATE','Startdatum');
 define('_MD_ADD_EXTENT','Startdatum hinzufügen');
 define('_MD_ADD_EXTENT_DESC','Zusätzliches Startdatum mit Zeit "JJJJ-MM-TT HH:MM" Format hinzufügen (Mehrfacheintrag in neue Zeile)');
@@ -144,7 +147,9 @@ define('_MD_RESERV_PERSONS','Max. Anzahl der Plätze');
 define('_MD_RESERV_UNIT','');
 define('_MD_RESERV_ITEM','zusätzliche Felder');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">Zur Hilfe (englisch)</a>');
-
+define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
+define('_MD_RESERV_REDIRECT','Redirect After Reservation URL');
+define('_MD_RESERV_REDIRECT_DESC','Set a number waiting seconds (e.g.: "4;http://..."). variables: {X_EID}, {X_SUB}, {X_RVID}');
 define('_MD_APPROVE','Anerkannte anzeigen');
 define('_MD_PREVIEW','Vorschau');
 define('_MD_SAVE','speichern');
@@ -163,7 +168,6 @@ $ev_month = array(1=>"Jan", 2=>"Feb", 3=>"Mär", 4=>"Apr",
 		  9=>"Sep", 10=>"Okt", 11=>"Nov", 12=>"Dez");
 
 define('_MD_RESERV_DEFAULT_ITEM',"Name*\nAdresse\nTelefonnummer\nAnzahl Tickets*,select,1,2,3,4,5,6");
-define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
 define('_MD_RESERV_DEFAULT_MEMBER',"");
 
 // notification message
