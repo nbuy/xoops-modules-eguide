@@ -267,10 +267,45 @@ td,th { padding: 4px; background: #e8e8e8;}
       <tr class="even"><td>#message text</td><td>message text</td></tr>
     </table>
   </form>
+  <h3>Releated reservation forms</h3>
+  <dl>
+    <dt>Mulitiple persons reservation</dt>
+    <dd>
+      You want handle multiple persons reservation on a evnet,
+      you need settings as following:
+      <ul>
+	<li>Number of persons input field in "Additional items" (example: "<tt>Persons,select,1,2,3,4,5</tt>")</li>
+	<li>Module Preferences "Label of persons" setting the fields label. (set in exmaple "<tt>Persons</tt>")</li>
+      </ul>
+    </dd>
+    <dt>Redirect After Reservation URL</dt>
+    <dd>
+      This is use when custom page display after reservation. That URL include following variables:
+      <tt>{X_EID}</tt> (event id), <tt>{X_SUB}</tt> (event extra id), <tt>{X_RVID}</tt> (reservation id).
+      This variables use handle to get event information.
+      You can use for post processing reservations.
+    </dd>
+  </dl>
 
   <a name="changes"></a><h2>Changes</h2>
 
 <dl>
+  <dt>2007/12/31 eguide 2.31 released</dt>
+  <dd>
+    <ul>
+      <li>text field quote(') handle bug fixed</li>
+      <li>add const type</li>
+      <li>variables handle in redirect URL</li>
+      <li>multiple category selecting in index.php (e.g. cat=1,2,3)</li>
+      <li>fix JavaScript mistake (thx souhalt)</li>
+      <li>fix rendering mistake when occurrence errors (thx souhalt)</li>
+      <li>Ignore mail sending status except reservation user</li>
+      <li>Using altsys module when exists</li>
+      <li>Internal Reservation data format changes (refactoring)</li>
+      <li>Fix extra date editing failer when after start time (thx Jens)</li>
+      <li>add breadcrumbs (xoops_breadcrumbs) smarty variable setting</li>
+    </ul>
+  </dd>
   <dt>2007/03/03 eguide 2.3 released</dt>
   <dd>
     <ul>
@@ -333,6 +368,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.35 2007/12/31 06:42:22 nobu Exp $
+$Id: help.html,v 1.36 2007/12/31 07:16:57 nobu Exp $
 </body>
 </html>
