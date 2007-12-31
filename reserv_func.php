@@ -1,6 +1,6 @@
 <?php
 // reservation functions
-// $Id: reserv_func.php,v 1.2 2006/08/16 16:24:36 nobu Exp $
+// $Id: reserv_func.php,v 1.3 2007/12/31 06:43:53 nobu Exp $
 
 function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
     $myts =& MyTextSanitizer::getInstance();
@@ -18,6 +18,7 @@ function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
 	    $ty = strtolower(array_shift($a));
 	    switch ($ty) {
 	    case 'hidden':
+	    case 'const':
 		if (!$hidden) {	// pseudo POST variable
 		    $_POST["opt$field"] = $result[$fname] = join(',', $a);
 		}
@@ -28,7 +29,7 @@ function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
 	    }
 	}
 	$input = "";
-	if ($type == 'hidden') continue;
+	if ($type == 'hidden' || $type == 'const') continue;
 	elseif ($type == 'checkbox') {
 	    $v = "";
 	    for ($i=1; $i<=count($a); $i++) {

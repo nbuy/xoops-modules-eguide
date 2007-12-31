@@ -1,9 +1,9 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.43 2007/03/03 14:01:38 nobu Exp $
+// $Id: xoops_version.php,v 1.44 2007/12/31 06:43:53 nobu Exp $
 
 $modversion['name'] = _MI_EGUIDE_NAME;
-$modversion['version'] = "2.3";
+$modversion['version'] = "2.31";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -86,9 +86,10 @@ $module =& $module_handler->getByDirname($modversion['dirname']);
 global $xoopsUser,$xoopsDB;
 $modversion['hasMain'] = 1;
 $configs = null;
-// category submenu
 if (is_object($module)&&$module->getVar('isactive')) {
     $config_handler =& xoops_gethandler('config');
+    $configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+    // category submenu
     $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix('eguide_category').' ORDER BY catid');
     if ($xoopsDB->getRowsNum($res)>1) {
 	while ($data = $xoopsDB->fetchArray($res)) {
@@ -97,7 +98,6 @@ if (is_object($module)&&$module->getVar('isactive')) {
 		      'url' => 'index.php?cat='.$data['catid']);
 	}
     }
-    $configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
 }
 // register notify
 if ($configs) {

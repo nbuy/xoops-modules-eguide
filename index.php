@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.17 2007/05/15 17:32:55 nobu Exp $
+// $Id: index.php,v 1.18 2007/12/31 06:43:53 nobu Exp $
 
 include 'header.php';
 
@@ -36,8 +36,8 @@ if (empty($prev)) {
     $ext = $xoopsModuleConfig['show_extents']?'':'AND 0';
 }
 
-$catid = isset($_GET['cat'])?intval($_GET['cat']):0;
-$opt = $catid?' AND topicid='.$catid:'';
+$catid = isset($_GET['cat'])&&preg_match('/^(\d+,)*\d+$/', $_GET['cat'])?$_GET['cat']:0;
+$opt = $catid?' AND topicid IN ('.$catid.')':'';
 
 $fields = "e.eid, cdate, title, summary, closetime,
 IF(expersons IS NULL,persons, expersons) persons,
@@ -111,7 +111,7 @@ if (empty($prev)) {
     }
 }
 
-set_eguide_breadcrumbs($catid);
+set_eguide_breadcrumbs(is_numeric($catid)?$catid:0);
 
 $opt = $catid?"&cat=".$catid:'';
 

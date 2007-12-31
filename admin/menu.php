@@ -1,5 +1,5 @@
 <?php
-// $Id: menu.php,v 1.6 2006/05/24 04:48:58 nobu Exp $
+// $Id: menu.php,v 1.7 2007/12/31 06:43:53 nobu Exp $
 
 $adminmenu[]=array('title' => _MI_EGUIDE_EVENTS,
 		    'link' => "admin/index.php?op=events");
@@ -14,5 +14,16 @@ $adminmenu[]=array('title' => _MI_EGUIDE_SUBMIT,
 $adminmenu[]=array('title' => _MI_EGUIDE_ABOUT,
 		   'link'  => "admin/help.php");
 $path = dirname(dirname(__FILE__)).'/options/menu.php';
+
 if (file_exists($path)) include $path;
+
+$adminmenu4altsys[]=
+    array('title' => _MD_A_MYMENU_MYTPLSADMIN,
+	  'link' => 'admin/index.php?mode=admin&lib=altsys&page=mytplsadmin');
+$adminmenu4altsys[]=
+    array('title' => _MD_A_MYMENU_MYBLOCKSADMIN,
+	  'link' => 'admin/index.php?mode=admin&lib=altsys&page=myblocksadmin');
+$adminmenu4altsys[]=
+    array('title' => _MD_A_MYMENU_MYPREFERENCES,
+	  'link' => 'admin/index.php?mode=admin&lib=altsys&page=mypreferences');
 ?>

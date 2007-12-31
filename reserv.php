@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.32 2007/08/07 09:32:10 nobu Exp $
+// $Id: reserv.php,v 1.33 2007/12/31 06:43:53 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -247,8 +247,13 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 		$sec = 3;
 		if (preg_match('/^(\d+);/', $url, $d)) {
 		    $sec = $d[1];
-		    $url = preg_replace('/^(\d+);/', '', $url);
+		    $url = preg_replace('/^(\d+);\s*/', '', $url);
 		}
+		if ($sec==0 && preg_match('/^[\w\d_-]+$/', $url)) {
+		    $url = EGUIDE_URL."/postproc.php?rvid=$rvid";
+		}
+		$url = str_replace(array('{X_EID}', '{X_SUB}', '{X_RVID}'),
+				   array($eid, $exid, $rvid), $url);
 		$xoopsTpl->assign('xoops_module_header', HEADER_CSS.sprintf('
 <meta http-equiv="Refresh" content="%u; url=%s" />', $sec, htmlspecialchars($url)));
 	    }
@@ -274,13 +279,13 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 		    echo "<div class='evnote'>"._MD_DUP_REGISTER."</div>\n";
 		}
 	    }
+	    echo "</div>\n";
 	} else {
 	    echo "<div class='error'>"._MD_SEND_ERR."</div>\n";
 	    // delete failer record.
 	    $xoopsDB->query('DELETE FROM '.RVTBL." WHERE rvid=$rvid");
 	    count_reserved($eid, $exid, $strict, $persons, -$num);
 	}
-	echo "</div>\n";
     }
     if (empty($errs)) break;
 
@@ -319,7 +324,7 @@ case 'confirm':
 	     ($exid?"<input type='hidden' name='sub' value='$exid'/>\n":"").
 	     "</form>");
     }
-    $xoopsTpl->assign('cancel', "<form action='event.php?eid=$eid".
+    $xoopsTpl->assign('cancel', "<form action='event.php?eid=$eid#form".
 		      ($exid?'&sub='.$exid:''). "' method='post'>".$emhide.
 		      join("\n", get_opt_values($opts, $errs, true)).
 		      "\n<input type='submit' value='"._MD_BACK."'/>\n".

@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.21 2007/08/07 09:31:20 nobu Exp $
+// $Id: functions.php,v 1.22 2007/12/31 06:43:53 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -15,30 +15,32 @@ function explodeopts($opts) {
     return $myitem;
 }
 
-function serialize_text($array) {
-    $text = '';
-    foreach ($array as $name => $val) {
-	if (is_array($val)) $val = join(', ', $val);
-	if (preg_match('/\n/', $val)) {
-	    $val = preg_replace('/\n\r?/', "\n\t", $val);
+if (!function_exists("serialize_text")) {
+    function serialize_text($array) {
+	$text = '';
+	foreach ($array as $name => $val) {
+	    if (is_array($val)) $val = join(', ', $val);
+	    if (preg_match('/\n/', $val)) {
+		$val = preg_replace('/\n\r?/', "\n\t", $val);
+	    }
+	    $text .= "$name: $val\n";
 	}
-	$text .= "$name: $val\n";
+	return $text;
     }
-    return $text;
-}
 
-function unserialize_text($text) {
-    $array = array();
-    foreach (preg_split("/\r?\n/", $text) as $ln) {
-	if (preg_match('/^\s/', $ln)) {
-	    $val .= "\n".substr($ln, 1);
-	} elseif (preg_match('/^([^:]*):\s?(.*)$/', $ln, $d)) {
-	    $name = $d[1];
-	    $array[$name] = $d[2];
-	    $val =& $array[$name];
+    function unserialize_text($text) {
+	$array = array();
+	foreach (preg_split("/\r?\n/", $text) as $ln) {
+	    if (preg_match('/^\s/', $ln)) {
+		$val .= "\n".substr($ln, 1);
+	    } elseif (preg_match('/^([^:]*):\s?(.*)$/', $ln, $d)) {
+		$name = $d[1];
+		$array[$name] = $d[2];
+		$val =& $array[$name];
+	    }
 	}
+	return $array;
     }
-    return $array;
 }
 
 function xss_filter($text) {
@@ -162,6 +164,7 @@ function eventform($data) {
 	    $aname = isset($opt[0])?strtolower($opt[0]):"";
 	    switch ($aname) {
 		case "hidden":
+		case "const":
 		case "text":
 		case "checkbox":
 		case "radio":
@@ -217,7 +220,7 @@ function eventform($data) {
 			} else {
 			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>$an &nbsp; ";
 			}
-		    } elseif (($type=='text' || $type=='textarea')) {
+		    } elseif (in_array($type, array('text','textarea','const'))) {
 			if (!isset($_POST[$fname])) {
 			    $v .= ($v==""?"":",").$op;
 			}
@@ -248,11 +251,13 @@ function eventform($data) {
 		$v = htmlspecialchars($xoopsUser->getVar('name'));
 	    }
 	    if ($type == "text") {
-		$opts .= "<input size='$size' name='$fname' value='$v' $prop/>";
+		$opts .= "<input size='$size' name='$fname' value=\"$v\" $prop/>";
 	    } elseif ($type == "textarea") {
 		$opts .= "<textarea name='$fname' rows='$rows' cols='$cols' wrap='virtual' $prop>$v</textarea>";
 	    } elseif ($type == "select") {
 		$opts = "<select name='$fname' $prop>\n$opts</select>";
+	    } elseif ($type == "const") {
+		$opts = $v;
 	    }
 	}
 	if ($require) $form['check'][$fname] = preg_replace('/\\*$/', '', $name).": ".strip_tags(_MD_ORDER_NOTE1);
@@ -379,17 +384,19 @@ exid, exdate, strict, autoaccept, notify, redirect";
     return $xoopsDB->fetchArray($result);
 }
 
-function template_dir($file='') {
-    global $xoopsConfig;
-    $lang = $xoopsConfig['language'];
-    $dir = dirname(__FILE__).'/language/%s/mail_template/%s';
-    $path = sprintf($dir,$lang, $file);
-    if (file_exists($path)) {
-	$path = sprintf($dir,$lang, '');
-    } else {
-	$path = sprintf($dir,'english', '');
+if (!function_exists("template_dir")) {
+    function template_dir($file='') {
+	global $xoopsConfig;
+	$lang = $xoopsConfig['language'];
+	$dir = dirname(__FILE__).'/language/%s/mail_template/%s';
+	$path = sprintf($dir,$lang, $file);
+	if (file_exists($path)) {
+	    $path = sprintf($dir,$lang, '');
+	} else {
+	    $path = sprintf($dir,'english', '');
+	}
+	return $path;
     }
-    return $path;
 }
 
 function order_notify($data, $email, $value) {
@@ -398,14 +405,13 @@ function order_notify($data, $email, $value) {
     $poster = new XoopsUser($data['uid']);
     $eid = $data['eid'];
     $exid = $data['exid'];
-    $url = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/event.php?eid='.$eid.($exid?"&sub=$exid":'');
+    $url = EGUIDE_URL.'/event.php?eid='.$eid.($exid?"&sub=$exid":'');
 
     $xoopsMailer =& getMailer();
     $xoopsMailer->useMail();
     $tplfile = $data['autoaccept']?"accept.tpl":"order.tpl";
     $xoopsMailer->setTemplateDir(template_dir($tplfile));
     $xoopsMailer->setTemplate($tplfile);
-    $xoopsMailer->assign("EVENT_URL", $url);
     if ($xoopsModuleConfig['member_only']) {
 	$uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
 			 $xoopsUser->getVar('uname'),
@@ -418,21 +424,28 @@ function order_notify($data, $email, $value) {
     if ($email) $uinfo .= sprintf("%s: %s\n", _MD_EMAIL, $email);
     $rvid = $data['rvid'];
     $conf = $data['confirm'];
-    $xoopsMailer->assign("RVID", $rvid);
-    $xoopsMailer->assign("CANCEL_KEY", $conf);
-    $xoopsMailer->assign("CANCEL_URL", EGUIDE_URL."/reserv.php?op=cancel&rvid=$rvid&key=$conf");
-    $xoopsMailer->assign("INFO", $uinfo.$value);
     $title = eventdate($data['edate'])." ".$data['title'];
-    $xoopsMailer->assign("TITLE", $title);
-    $xoopsMailer->assign("SUMMARY", strip_tags($data['summary']));
-    $xoopsMailer->setSubject(_MD_SUBJECT.' - '.$title);
+    $tags = array("EVENT_URL"=>$url, "RVID"=>$rvid, "CANCEL_KEY"=>$conf,
+		  "CANCEL_URL"=>EGUIDE_URL."/reserv.php?op=cancel&rvid=$rvid&key=$conf",
+		  "INFO"=>$uinfo.$value, "TITLE"=>$title,
+		  "SUMMARY"=>strip_tags($data['summary']));
+    $subj = _MD_SUBJECT.' - '.$title;
+		  
+    $xoopsMailer->assign($tags);
+    $xoopsMailer->setSubject($subj);
     $xoopsMailer->setFromEmail($poster->getVar('email'));
     $xoopsMailer->setFromName(_MD_FROM_NAME);
     $ret = $xoopsMailer->send(); // send to order person
     if (!$ret) return $ret;
 
-    $xoopsMailer->toUsers = array(); // XXX: private access?
-    $xoopsMailer->toEmails = array();
+    $xoopsMailer->reset();
+    $xoopsMailer->useMail();
+    $xoopsMailer->setTemplateDir(template_dir($tplfile));
+    $xoopsMailer->setTemplate($tplfile);
+    $xoopsMailer->assign($tags);
+    $xoopsMailer->setSubject($subj);
+    $xoopsMailer->setFromEmail($poster->getVar('email'));
+    $xoopsMailer->setFromName(_MD_FROM_NAME);
     if ($data['notify']) {
 	if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
 	    $xoopsMailer->setToUsers($poster);
@@ -440,8 +453,8 @@ function order_notify($data, $email, $value) {
 	$member_handler =& xoops_gethandler('member');
 	$notify_group = $member_handler->getGroup($xoopsModuleConfig['notify_group']);
 	$xoopsMailer->setToGroups($notify_group);
+	$xoopsMailer->send();
     }
-    $xoopsMailer->send();
     return $ret;
 }
 
