@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.15 2007/12/31 06:42:22 nobu Exp $
+// $Id: modinfo.php,v 1.16 2008/01/10 06:38:39 nobu Exp $
 // Module Info
 
 // The name of this module
@@ -65,7 +65,7 @@ define("_MI_EGUIDE_PLUGINS_DESC","Internal Control accept entry form other modul
 define("_MI_EGUIDE_COMMENT","Allow Comments");
 define("_MI_EGUIDE_COMMENT_DESC","Allow commnets to event");
 define("_MI_EGUIDE_MARKER","Current entry level mark");
-define("_MI_EGUIDE_MARKER_DESC","The mark mean of how many entry in current. Show mark correspond parcentage. (xx,yy mean less than xx% showup yy. And '0,yy' mean out of date mark)");
+define("_MI_EGUIDE_MARKER_DESC","The mark mean of how many entry in current. Show mark correspond percentage. (xx,yy mean less than xx% showup yy. And '0,yy' mean out of date mark)");
 define("_MI_EGUIDE_MARKER_DEF","0,[Close]\n50,[Vacant]\n100,[Many]\n101,[Full]\n");
 define("_MI_EGUIDE_TIME_DEFS","Time Table Labels");
 define("_MI_EGUIDE_TIME_DEFS_DESC","Set starting time in Settings collection page. e.g.: 08:00,14:00,16:00");
