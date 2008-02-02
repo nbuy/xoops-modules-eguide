@@ -1,11 +1,12 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.45 2008/02/02 11:12:02 nobu Exp $
+// $Id: xoops_version.php,v 1.46 2008/02/02 11:57:12 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include dirname(__FILE__)."/mydirname.php";
 
-$modversion['name'] = _MI_EGUIDE_NAME;
+$exname = ($myprefix=='eguide'?'':" ($mydirname)");
+$modversion['name'] = _MI_EGUIDE_NAME.$exname;
 $modversion['version'] = "2.32";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
@@ -18,7 +19,7 @@ $modversion['dirname'] = $mydirname;
 
 // Sql file
 // All tables should not have any prefix!
-$modversion['sqlfile']['mysql'] = ($myprefix=='eguide'?"sql/mysql.sql":"sql/mysql_{$mypostfix}.sql");
+$modversion['sqlfile']['mysql'] = ($myprefix=='eguide'?"sql/mysql.sql":"sql/mysql_{$myprefix}.sql");
 
 // Tables created by sql file (without prefix!)
 $modversion['tables'][0] = $myprefix;
@@ -66,7 +67,7 @@ $modversion['templates'][]=array('file' => $myprefix.'_excel.xml',
 				 'description' => _MI_EGUIDE_EXCEL_TPL);
 // Blocks
 $modversion['blocks'][1]=array('file' => "ev_top.php",
-			       'name' => _MI_EGUIDE_HEADLINE,
+			       'name' => _MI_EGUIDE_HEADLINE.$exname,
 			       'description' => _MI_EGUIDE_HEADLINE_DESC,
 			       'show_func' => "b_${myprefix}_top_show",
 			       'edit_func' => 'b_event_top_edit',
@@ -74,13 +75,13 @@ $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'template' => $myprefix.'_block_top.html');
 
 $modversion['blocks'][2]=array('file' => "ev_top.php",
-			       'name' => _MI_EGUIDE_HEADLINE2,
+			       'name' => _MI_EGUIDE_HEADLINE2.$exname,
 			       'description' => _MI_EGUIDE_HEADLINE2_DESC,
 			       'show_func' => "b_${myprefix}_top_show",
 			       'edit_func' => 'b_event_top_edit',
 			       'options' => '0|10|19|1|',
 			       'can_clone' => true,
-			       'template' => $myprefix.'_block_top.html');
+			       'template' => $myprefix.'_block_post.html');
 // Menu
 $module_handler =& xoops_gethandler('module');
 $module =& $module_handler->getByDirname($modversion['dirname']);
@@ -265,7 +266,7 @@ $modversion['config'][]=array('name' => 'use_comment',
 
 $modversion['hasNotification'] = 1;
 $modversion['notification']['lookup_file'] = 'include/notification.inc.php';
-$modversion['notification']['lookup_func'] = 'eguide_notify_iteminfo';
+$modversion['notification']['lookup_func'] = $myprefix.'_notify_iteminfo';
 
 $modversion['notification']['category'][1] =
     array('name' => 'global',

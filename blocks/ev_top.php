@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.21 2008/02/02 11:12:02 nobu Exp $
+// $Id: ev_top.php,v 1.22 2008/02/02 11:57:12 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -15,9 +15,8 @@ if (function_exists("b_event_top_show_base")) return;
 if (!function_exists("eguide_marker")) {
     include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
 
-    function eguide_marker($full) {
+    function eguide_marker($full, $dirname) {
 	global $marker;
-	$dirname = basename(dirname(dirname(__FILE__)));
 	if (empty($marker)) {
 	    $module_handler =& xoops_gethandler('module');
 	    $module =& $module_handler->getByDirname($dirname);
@@ -110,7 +109,7 @@ WHERE ((expire>=edate AND expire>$now)
 	$event['_post'] = formatTimestamp($myrow['cdate'], 'm');
 	$event['uid'] = $myrow['uid'];
 	if (isset($myrow['full'])) {
-	    $event['mark'] = eguide_marker($myrow['full']);
+	    $event['mark'] = eguide_marker($myrow['full'], $dirname);
 	}
 	$block['events'][] = $event;
     }

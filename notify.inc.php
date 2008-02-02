@@ -1,5 +1,5 @@
 <?php
-// $Id: notify.inc.php,v 1.15 2007/03/03 11:12:14 nobu Exp $
+// $Id: notify.inc.php,v 1.16 2008/02/02 11:57:12 nobu Exp $
 function event_notify($op, $data) {
     global $xoopsModuleConfig, $xoopsUser, $xoopsConfig;
     $notify = $xoopsModuleConfig['notify'];
@@ -53,10 +53,7 @@ function event_notify($op, $data) {
 function user_notify($eid) {
     global $xoopsUser, $xoopsDB, $xoopsConfig, $xoopsModuleConfig;
 
-    $tbl = $xoopsDB->prefix("eguide");
-    $rsv = $xoopsDB->prefix("eguide_reserv");
-
-    $result = $xoopsDB->query("SELECT title,edate,expire,status,topicid FROM $tbl WHERE eid=$eid");
+    $result = $xoopsDB->query("SELECT title,edate,expire,status,topicid FROM ".EGTBL." WHERE eid=$eid");
     if (!$result || $xoopsDB->getRowsNum($result)==0) {
 	echo "<div class='error'>Not found Event(eid='$eid')</div>\n";
 	return;
@@ -80,7 +77,7 @@ function user_notify($eid) {
     $notification_handler->triggerEvent('global', 0, 'new', $tags);
     $notification_handler->triggerEvent('category', $data['topicid'], 'new', $tags);
 
-    $result = $xoopsDB->query("SELECT rvid, email, confirm FROM $rsv WHERE eid=0");
+    $result = $xoopsDB->query("SELECT rvid, email, confirm FROM ".RVTBL." WHERE eid=0");
     while ($data = $xoopsDB->fetchArray($result)) {
 	$xoopsMailer =& getMailer();
 	$xoopsMailer->useMail();
