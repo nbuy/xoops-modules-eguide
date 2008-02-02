@@ -32,7 +32,7 @@
    <Protection/>
   </Style>
   <Style ss:ID="s21">
-   <NumberFormat ss:Format="yyyy/m/d\ h:mm;@"/>
+   <NumberFormat ss:Format="yyyy-m-d\ h:mm;@"/>
   </Style>
   <Style ss:ID="s22">
    <Borders/>
@@ -54,7 +54,7 @@
      ss:Color="#000000"/>
    </Borders>
    <Font x:CharSet="128" x:Family="Modern" ss:Size="11"/>
-   <NumberFormat ss:Format="yyyy/m/d\ h:mm;@"/>
+   <NumberFormat ss:Format="yyyy-m-d\ h:mm;@"/>
   </Style>
   <Style ss:ID="s26">
    <Borders>
@@ -274,7 +274,7 @@
      ss:Color="#000000"/>
    </Borders>
    <Font x:CharSet="128" x:Family="Modern" ss:Size="11"/>
-   <NumberFormat ss:Format="yyyy/m/d\ h:mm;@"/>
+   <NumberFormat ss:Format="yyyy-m-d\ h:mm;@"/>
   </Style>
   <Style ss:ID="s46">
    <Alignment ss:Horizontal="Left"/>
@@ -288,7 +288,7 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
      ss:Color="#000000"/>
    </Borders>
-   <NumberFormat ss:Format="yyyy&quot;-&quot;m&quot;-&quot;d&quot;-&quot;\(aaa\);@"/>
+   <NumberFormat ss:Format="yyyy&quot;-&quot;mm&quot;-&quot;dd&quot; &quot;\(aaa\);@"/>
   </Style>
  </Styles>
 <{foreach from=$sheets key=sname item=sheet}>
