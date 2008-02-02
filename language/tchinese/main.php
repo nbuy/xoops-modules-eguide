@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.7 2007/12/31 06:42:22 nobu Exp $
+// $Id: main.php,v 1.8 2008/02/02 05:54:11 nobu Exp $
 define('_MD_RESERV_FORM', '立即報名 &gt;&gt;');
 define('_MD_RESERVATION', '報名表');
 define('_MD_NAME', '/^Name\*?$/');
@@ -92,7 +92,6 @@ define('_MD_RESERV_RETURN', '回報名名單');
 define('_MD_RESERV_REC', '報名記錄');
 define('_MD_RVID', '報名ID編號');
 define('_MD_ORDER_COUNT', '統計');
-define('_MD_ORDER_DATE', '日期');
 define('_MD_PRINT_DATE', '列表日期');
 define('_MD_SAVECHANGE', '儲存修改');
 define('_MD_RESERV_DEL', '刪除報名');
@@ -100,7 +99,6 @@ define('_MD_DETAIL', '參加者一覽表');
 define('_MD_RESERV_MSG_H', '傳送訊息給報名者');
 define('_MD_ACTIVATE', '審核');
 define('_MD_REFUSE', '拒絕');
-define('_MD_CSV_OUT', '匯出CSV格式');
 define('_MD_EXPORT_OUT', '匯出Excel格式');
 define('_MD_EXPORT_CHARSET', 'UTF-8');
 define('_MD_INFO_MAIL', '活動通知');
@@ -118,7 +116,6 @@ define('_MD_EVENT_EXTENT', '重覆開放');
 define('_MD_EVENT_CATEGORY', '分類');
 define('_MD_EDIT_EXTENT', '編輯開放日期');
 define('_MD_EXTENT_REPEAT', '重覆');
-define('_MD_EXTENT_DATE', '報名開始受理日期');
 define('_MD_ADD_EXTENT', '增加開放日期');
 define('_MD_ADD_EXTENT_DESC', '活動再開放時間，格式："2100-11-06 09:00" (多個選項請隔行輸入)');
 define('_MD_INTROTEXT', '大綱');
@@ -129,7 +126,6 @@ define('_MD_RESERV_DESC', '開啓報名表');
 define('_MD_RESERV_STOPFULL', '報名人數滿時，是否停止報名');
 define('_MD_RESERV_AUTO', '自動受理報名 (沒有審核)');
 define('_MD_RESERV_NOTIFYPOSTER', '當有人報名時，用電子郵件通知');
-define('_MD_RESERV_PERSONS', '活動名額');
 define('_MD_RESERV_UNIT', '');
 define('_MD_RESERV_ITEM', '<br>追加項目：');
 define('_MD_RESERV_ITEM_DESC', '<a href="language/tchinese/help.html#form" target="help">編輯欄位方法</a>');
@@ -161,9 +157,6 @@ define('_MD_APPROVE_REQ', '請確認這個活動並審核它');
 //%%%%%%	File Name sendinfo.php 	%%%%%
 define('_MD_INFO_TITLE', '通知活動報名人員');
 define('_MD_INFO_CONDITION', '郵寄到');
-define('_MD_INFO_REQUEST', '提醒活動通知註冊會員');
-define('_MD_INFO_SEARCH', '搜尋');
-define('_MD_INFO_COUNT', '報名人員，共%d人');
 define('_MD_INFO_NODATA', '沒有資料');
 define('_MD_INFO_SELF', '寄一份備份給自己(管理人%s)');
 define('_MD_INFO_DEFAULT', '-訊息內容-\n\n\n預約活動\n {EVENT_URL}\n');
@@ -173,26 +166,7 @@ define('_MD_FROM_NAME', '活動通知');
 define("_MD_UPDATE_SUBJECT","事件更新");
 define("_MD_UPDATE_DEFAULT","預設");
 
-global $expire_set,$edit_style,$ev_stats,$ev_extents;
-$expire_set = array(""=>"-- 使用文字 --", "+3600"=>"一個鐘頭",
-		    "+10800"=>"三個鐘頭", "+21600"=>"半天",
-		    "+0"=>"當天", "+172800"=>"兩天",
-		    "+259200"=>"三天","+604800"=>"一星期");
-
-$edit_style=array(0=>"只使用 XOOPS 標籤",
-		  1=>"分行使用 &lt;br&gt; 標籤",
-		  2=>"停用 HTML 標籤");
-
-$ev_stats=array(0=>"顯示",
-		1=>"等待",
-		4=>"刪除");
-
-$rv_stats=array(0=>"等待",
-		1=>"保留",
-		2=>"拒絕");
-
-$ev_extents=array('none'=>'一次',
-		  'daily'=>'每天', 'weekly'=>'每週', 'monthly'=>'每月');
+include_once dirname(__FILE__)."/common.php";
 
 //%%%%%%	File Name print.php 	%%%%%
 

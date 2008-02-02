@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.6 2007/12/31 06:42:22 nobu Exp $
+// $Id: main.php,v 1.7 2008/02/02 05:54:11 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 define("_MD_RESERV_FORM","Jetzt Tickets reservieren...");
@@ -96,7 +96,6 @@ define("_MD_RESERV_RETURN","Zurück zur Liste");
 define("_MD_RESERV_REC","Eingetragene Reservierungen");
 define("_MD_RVID","Buchungsnummer");
 define("_MD_ORDER_COUNT","Anzahl");
-define("_MD_ORDER_DATE","Bestelldatum");
 define("_MD_PRINT_DATE","Ausdruck am");
 define("_MD_SAVECHANGE","Änderungen speichern");
 define("_MD_RESERV_DEL","Reservierung löschen");
@@ -114,7 +113,6 @@ Falls Sie die Bestellung stornieren möchten klicken Sie bitte hier:
 define("_MD_RESERV_MSG_H","Sende Nachricht für die Reservierung");
 define("_MD_ACTIVATE","Reservierungsbestätigung");
 define("_MD_REFUSE","Reservierung wurde nicht akzeptiert");
-define("_MD_CSV_OUT","Als CSV exportieren");
 define("_MD_EXPORT_OUT","Als Excel exportieren");
 define("_MD_INFO_MAIL","Sende Email");
 define("_MD_SUMMARY","Zusammenfassung");
@@ -132,7 +130,6 @@ define('_MD_EVENT_EXTENT','Wiederholung der Veranstaltung');
 define('_MD_EVENT_CATEGORY','Kategorie');
 define('_MD_EDIT_EXTENT','Startdatum bearbeiten');
 define('_MD_EXTENT_REPEAT','Repeats');
-define('_MD_EXTENT_DATE','Startdatum');
 define('_MD_ADD_EXTENT','Startdatum hinzufügen');
 define('_MD_ADD_EXTENT_DESC','Zusätzliches Startdatum mit Zeit "JJJJ-MM-TT HH:MM" Format hinzufügen (Mehrfacheintrag in neue Zeile)');
 define("_MD_INTROTEXT","Einleitung");
@@ -143,7 +140,6 @@ define("_MD_RESERV_DESC","Reservierungen erlauben");
 define('_MD_RESERV_STOPFULL','Reservierungen stoppen wenn Plätze ausgebucht');
 define("_MD_RESERV_AUTO","Automatisches Erlauben von Reservierungen (keine Bestätigung mehr nötig)");
 define('_MD_RESERV_NOTIFYPOSTER','Bei Reservierung per mail benachrichtigen');
-define('_MD_RESERV_PERSONS','Max. Anzahl der Plätze');
 define('_MD_RESERV_UNIT','');
 define('_MD_RESERV_ITEM','zusätzliche Felder');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">Zur Hilfe (englisch)</a>');
@@ -191,9 +187,6 @@ Wenn sie zukünftig nicht mehr benachrichtigt werden wollen, folgen sie bitte die
 //%%%%%%	File Name sendinfo.php 	%%%%%
 define("_MD_INFO_TITLE","Inhalt der ausgehenden E-Mail");
 define("_MD_INFO_CONDITION","Gesendet an");
-define("_MD_INFO_REQUEST","registrierte Benutzer Benachrichtigen");
-define("_MD_INFO_SEARCH","Suchen");
-define("_MD_INFO_COUNT","Anzahl %d");
 define("_MD_INFO_NODATA","Keine Einträge");
 define("_MD_INFO_SELF","An eigene Email-Adresse senden (%s)");
 define("_MD_INFO_DEFAULT","-bitte hier den Text eingeben-\n\n\nReservierte Veranstaltung\n    {EVENT_URL}\n");
@@ -203,26 +196,7 @@ define("_MD_FROM_NAME","Veranstaltungskalender");
 define("_MD_UPDATE_SUBJECT","Event Aktualisiert");
 define("_MD_UPDATE_DEFAULT","Default");
 
-global $expire_set,$edit_style,$ev_stats,$ev_extents;
-$expire_set = array("+0"=>"gleicher Tag", "+86400"=>"Folgetag", "+172800"=>"2 Tage",
-		    "+259200"=>"3 Tage","+604800"=>"1 Woche",
-		    "+2592000"=>"1 Monat", "+7948800"=>"3 Monat",
-		    "+15768000"=>"6 Monate");
-
-$edit_style=array(0=>"New BB-Code",
-		  1=>"Neue Zeile erzeugt Zeilenumbruch",
-		  2=>"HTML deaktivieren");
-
-$ev_stats=array(0=>"aktiv",
-		1=>"wartend",
-		4=>"gelöscht");
-
-$rv_stats=array(0=>"wartend",
-		1=>"reserviert",
-		2=>"abgelehnt");
-
-$ev_extents=array('none'=>'einmalig',
-		  'daily'=>'täglich', 'weekly'=>'wöchentlich', 'monthly'=>'monatlich');
+include_once dirname(__FILE__)."/common.php";
 
 //%%%%%%	File Name print.php 	%%%%%
 

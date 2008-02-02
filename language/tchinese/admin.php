@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.4 2007/12/31 06:42:22 nobu Exp $
+// $Id: admin.php,v 1.5 2008/02/02 05:54:11 nobu Exp $
 define('_AM_DBUPDATED', '資料已經更新！');
 define('_AM_TITLE', '活動項目');
 define('_AM_POSTER', '發表者');
@@ -30,4 +30,8 @@ define('_AM_RESERVATION', '預約');
 define('_AM_EVENT_DAY', '日期');
 define('_AM_RECEIPT', '報名一覽');
 define('_AM_COUNT', '件數');
+
+define('_AM_INFO_SEARCH', '搜尋');
+
+include_once dirname(__FILE__)."/common.php";
 ?>
