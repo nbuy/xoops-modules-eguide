@@ -1,9 +1,10 @@
 <?php
-// $Id: modinfo.php,v 1.3 2007/12/31 06:42:22 nobu Exp $
+// $Id: modinfo.php,v 1.4 2008/02/02 11:12:02 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
-//define("_MI_EGUIDE_DESC","Veranstaltungskalender mit Reservierungsmöglichkeit");
+if (defined('_MI_EGUIDE_NAME')) return;
+
 // The name of this module
 define("_MI_EGUIDE_NAME","Veranstaltungskalender");
 

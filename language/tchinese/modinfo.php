@@ -1,6 +1,8 @@
 <?php
-// $Id: modinfo.php,v 1.4 2007/12/31 06:42:22 nobu Exp $
+// $Id: modinfo.php,v 1.5 2008/02/02 11:12:03 nobu Exp $
 // Module Info
+
+if (defined('_MI_EGUIDE_NAME')) return;
 
 // The name of this module
 define('_MI_EGUIDE_NAME', '活動快訊');

@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.27 2007/07/31 06:09:38 nobu Exp $
+// $Id: index.php,v 1.28 2008/02/02 11:12:02 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -32,7 +32,6 @@ if( ! empty( $_GET['lib'] ) ) {
 }
 
 xoops_cp_header();
-
 include 'mymenu.php';
 
 $myts =& MyTextSanitizer::getInstance();
@@ -108,7 +107,7 @@ case 'notifies':
     $n = 0;
     $nc = $xoopsDB->getRowsNum($result);
     echo "<form action='$self' method='get'>\n".
-	_MD_INFO_SEARCH." <input name='q' />".
+	_AM_INFO_SEARCH." <input name='q' />".
 	" <input type='hidden' name='op' value='notifies' />\n".
 	" <input type='submit' value='"._SUBMIT."' />\n".
 	"</form>\n";

@@ -1,6 +1,8 @@
 <?php
-// $Id: modinfo.php,v 1.1 2008/01/10 06:42:07 nobu Exp $
+// $Id: modinfo.php,v 1.2 2008/02/02 11:12:02 nobu Exp $
 // Module Info
+
+if (defined('_MI_EGUIDE_NAME')) return;
 
 // The name of this module
 define("_MI_EGUIDE_NAME","Eventos");

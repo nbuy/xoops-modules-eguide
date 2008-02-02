@@ -1,14 +1,26 @@
 <?php
-// $Id: ev_top.php,v 1.20 2007/07/18 04:53:43 nobu Exp $
+// $Id: ev_top.php,v 1.21 2008/02/02 11:12:02 nobu Exp $
 
-include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
+include dirname(dirname(__FILE__))."/mydirname.php";
+
+eval( '
+function b_'.$myprefix.'_top_show( $options )
+{
+	return b_event_show_base( "'.$mydirname.'" , "'.$myprefix.'" ,$options ) ;
+}
+' ) ;
+
+if (function_exists("b_event_top_show_base")) return;
 
 if (!function_exists("eguide_marker")) {
+    include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
+
     function eguide_marker($full) {
 	global $marker;
+	$dirname = basename(dirname(dirname(__FILE__)));
 	if (empty($marker)) {
 	    $module_handler =& xoops_gethandler('module');
-	    $module =& $module_handler->getByDirname('eguide');
+	    $module =& $module_handler->getByDirname($dirname);
 	    $config_handler =& xoops_gethandler('config');
 	    $config =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
 	    $marker = preg_split('/,|[\r\n]+/',$config['maker_set']);
@@ -22,12 +34,10 @@ if (!function_exists("eguide_marker")) {
     }
 }
 
-function b_event_top_show($options) {
+function b_event_top_show_base($prefix, $options) {
     global $xoopsDB, $xoopsUser;
     $myts =& MyTextSanitizer::getInstance();
-    $dirname = basename(dirname(dirname(__FILE__)));
-    $modurl = XOOPS_URL."/modules/$dirname";
-
+	
     $now = time();
     list($detail, $nitem, $nlen, $only, $cat) = $options;
     $cond = "";
@@ -50,7 +60,7 @@ function b_event_top_show($options) {
 	    $cond .= "catname IN (".join(',',$labs).")";
 	}
 	if ($cond) {
-	    $res = $xoopsDB->query("SELECT catid,catname,catimg FROM ".$xoopsDB->prefix("eguide_category")." WHERE ".$cond);
+	    $res = $xoopsDB->query("SELECT catid,catname,catimg FROM ".$xoopsDB->prefix($prefix."_category")." WHERE ".$cond);
 	    $ids = array();
 	    while (list($id,$name,$img) = $xoopsDB->fetchRow($res)) {
 		$ids[$id] = array('name'=>htmlspecialchars($name),'img'=>$img);
@@ -59,13 +69,13 @@ function b_event_top_show($options) {
 	}
     }
     if ($only) {
-	$sql = "SELECT eid, title, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix("eguide")." LEFT JOIN ".$xoopsDB->prefix("eguide_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
+	$sql = "SELECT eid, title, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix($prefix)." LEFT JOIN ".$xoopsDB->prefix($prefix."_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
     } else {
 	$sql = "SELECT e.eid, title, IF(exdate,exdate,edate) edate, cdate, uid,
 exid, IF(x.reserved,x.reserved,o.reserved)/persons*100 as full, closetime
-FROM ".$xoopsDB->prefix("eguide").' e
-  LEFT JOIN '.$xoopsDB->prefix("eguide_opt").' o ON e.eid=o.eid
-  LEFT JOIN '.$xoopsDB->prefix("eguide_extent")." x ON e.eid=eidref
+FROM ".$xoopsDB->prefix($prefix).' e
+  LEFT JOIN '.$xoopsDB->prefix($prefix."_opt").' o ON e.eid=o.eid
+  LEFT JOIN '.$xoopsDB->prefix($prefix."_extent")." x ON e.eid=eidref
 WHERE ((expire>=edate AND expire>$now)
        OR (expire<edate AND IF(exdate,exdate,edate)+expire>$now)) $cond
   AND status=0 ORDER BY edate";
@@ -106,7 +116,7 @@ WHERE ((expire>=edate AND expire>$now)
     }
     $mod = XoopsModule::getByDirname($dirname);
     if ($xoopsUser && $xoopsUser->isAdmin($mod->mid())) {
-	$result = $xoopsDB->query("SELECT count(eid) FROM ".$xoopsDB->prefix("eguide")." WHERE status=1");
+	$result = $xoopsDB->query("SELECT count(eid) FROM ".$xoopsDB->prefix($prefix)." WHERE status=1");
 	if ($xoopsDB->getRowsNum($result)) {
 	    list($block['waiting']) = $xoopsDB->fetchRow($result);
 	}

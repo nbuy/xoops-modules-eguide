@@ -1,9 +1,22 @@
 <?php
+# search interface for eguide
+# $Id: search.inc.php,v 1.7 2008/02/02 11:12:02 nobu Exp $
 
-function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc=true){
+include dirname(dirname(__FILE__))."/mydirname.php";
+
+eval( '
+function '.$myprefix.'_search( $keywords , $andor , $limit , $offset , $userid )
+{
+	return eguide_search_base( "'.$myprefix.'" , $keywords , $andor , $limit , $offset , $userid ) ;
+}
+
+' ) ;
+
+if (file_exists('eguide_search_base')) return;
+
+function eguide_search_base($myprefix, $queryarray, $andor, $limit, $offset, $userid){
 	global $xoopsDB;
-	$opt = $desc?", summary":"";
-	$sql = "SELECT eid,uid,title,edate,cdate$opt FROM ".$xoopsDB->prefix("eguide")." WHERE status=0";
+	$sql = "SELECT eid,uid,title,edate,cdate, summary FROM ".$xoopsDB->prefix($myprefix)." WHERE status=0";
 	//$sql .= " AND expire>".time();
 	if ( $userid != 0 ) {
 		$sql .= " AND uid=".$userid." ";
@@ -29,7 +42,7 @@ function eguide_search($queryarray, $andor, $limit, $offset, $userid, $desc=true
 		    $myrow['title'];
 		$ret[$i]['time'] = $myrow['cdate'];
 		$ret[$i]['uid'] = $myrow['uid'];
-		if ($desc) $ret[$i]['description'] = $myrow['summary'];
+		$ret[$i]['description'] = $myrow['summary'];
 		$i++;
 	}
 	return $ret;

@@ -1,6 +1,8 @@
 <?php
-// $Id: main.php,v 1.7 2008/02/02 05:54:11 nobu Exp $
+// $Id: main.php,v 1.8 2008/02/02 11:12:02 nobu Exp $
 // German language files by El Cario www.el-cario.de
+
+if (defined('_MD_RESERV_FORM')) return;
 
 define("_MD_RESERV_FORM","Jetzt Tickets reservieren...");
 define("_MD_RESERVATION","Jetzt Tickets reservieren");

@@ -9,14 +9,16 @@ define("STAT_POST",1);
 //define("STAT_EXPIRED",3);
 define("STAT_DELETED",4);
 
-define('EGTBL', $xoopsDB->prefix("eguide"));
-define('CATBL', $xoopsDB->prefix("eguide_category"));
-define('OPTBL', $xoopsDB->prefix("eguide_opt"));
-define('EXTBL', $xoopsDB->prefix("eguide_extent"));
-define('RVTBL', $xoopsDB->prefix("eguide_reserv"));
+$mydirname = basename(dirname(__FILE__));
+
+define('EGTBL', $xoopsDB->prefix($mydirname));
+define('CATBL', $xoopsDB->prefix($mydirname."_category"));
+define('OPTBL', $xoopsDB->prefix($mydirname."_opt"));
+define('EXTBL', $xoopsDB->prefix($mydirname."_extent"));
+define('RVTBL', $xoopsDB->prefix($mydirname."_reserv"));
 
 define('HEADER_CSS', '<link rel="stylesheet" type="text/css" media="all" href="style.css" />');
-$mydirname = basename(dirname(__FILE__));
+
 define('PICAL', 'piCal');	// piCal dirname
 define('EGUIDE_URL', XOOPS_URL.'/modules/'.$mydirname);
 define('EGUIDE_PATH', XOOPS_ROOT_PATH.'/modules/'.$mydirname);

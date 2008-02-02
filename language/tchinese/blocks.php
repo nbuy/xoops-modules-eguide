@@ -1,4 +1,8 @@
 <?php
+// $Id: blocks.php,v 1.3 2008/02/02 11:12:02 nobu Exp $
+
+if (defined("_BLOCK_DATE_FMT")) return;
+
 // Blocks
 define('_BLOCK_DATE_FMT', 'm/d');
 define('_BLOCK_EV_POST', '發佈日期');

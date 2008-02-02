@@ -1,6 +1,6 @@
 <?php
 // Reservation Entry by Poster
-// $Id: entry.php,v 1.4 2006/11/30 14:14:52 nobu Exp $
+// $Id: entry.php,v 1.5 2008/02/02 11:12:02 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster

@@ -1,5 +1,8 @@
 <?php
-// $Id: main.php,v 1.8 2008/02/02 05:54:11 nobu Exp $
+// $Id: main.php,v 1.9 2008/02/02 11:12:02 nobu Exp $
+
+if (defined('_MD_RESERV_FORM')) return;
+
 define('_MD_RESERV_FORM', '立即報名 &gt;&gt;');
 define('_MD_RESERVATION', '報名表');
 define('_MD_NAME', '/^Name\*?$/');

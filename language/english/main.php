@@ -1,5 +1,7 @@
 <?php
-// $Id: main.php,v 1.18 2008/02/02 05:54:11 nobu Exp $
+// $Id: main.php,v 1.19 2008/02/02 11:12:02 nobu Exp $
+
+if (defined('_MD_RESERV_FORM')) return;
 
 define("_MD_RESERV_FORM","Reservation Here");
 define("_MD_RESERVATION","Make a Reservation");

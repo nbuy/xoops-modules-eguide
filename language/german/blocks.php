@@ -1,5 +1,8 @@
 <?php
+// $Id: blocks.php,v 1.3 2008/02/02 11:12:02 nobu Exp $
 // German language files by El Cario www.el-cario.de
+
+if (defined("_BLOCK_DATE_FMT")) return;
 
 // Blocks
 define("_BLOCK_DATE_FMT", "m.d.Y");

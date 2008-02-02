@@ -1,6 +1,8 @@
 <?php
-// $Id: main.php,v 1.2 2008/02/02 05:54:11 nobu Exp $
+// $Id: main.php,v 1.3 2008/02/02 11:12:02 nobu Exp $
 // Spanish language files by Gerardo
+
+if (defined('_MD_RESERV_FORM')) return;
 
 define("_MD_RESERV_FORM","Confirmar Asistencia");
 define("_MD_RESERVATION","Confirmar Asistencia");
