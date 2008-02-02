@@ -26,7 +26,7 @@
   <Style ss:ID="Default" ss:Name="Normal">
    <Alignment ss:Vertical="Center"/>
    <Borders/>
-   <Font ss:FontName="£Í£Ó £Ð¥´¥·¥Ã¥¯" x:CharSet="128" x:Family="Modern" ss:Size="11"/>
+   <Font x:CharSet="128" x:Family="Modern" ss:Size="11"/>
    <Interior/>
    <NumberFormat/>
    <Protection/>
@@ -36,7 +36,7 @@
   </Style>
   <Style ss:ID="s22">
    <Borders/>
-   <Font ss:FontName="£Í£Ó £Ð¥´¥·¥Ã¥¯" x:CharSet="128" x:Family="Modern" ss:Size="11"
+   <Font x:CharSet="128" x:Family="Modern" ss:Size="11"
     ss:Bold="1"/>
   </Style>
   <Style ss:ID="s24">
@@ -53,7 +53,7 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="2"
      ss:Color="#000000"/>
    </Borders>
-   <Font ss:FontName="£Í£Ó £Ð¥´¥·¥Ã¥¯" x:CharSet="128" x:Family="Modern" ss:Size="11"/>
+   <Font x:CharSet="128" x:Family="Modern" ss:Size="11"/>
    <NumberFormat ss:Format="yyyy/m/d\ h:mm;@"/>
   </Style>
   <Style ss:ID="s26">
@@ -67,7 +67,7 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="2"
      ss:Color="#000000"/>
    </Borders>
-   <Font ss:FontName="£Í£Ó £Ð¥´¥·¥Ã¥¯" x:CharSet="128" x:Family="Modern" ss:Size="11"/>
+   <Font x:CharSet="128" x:Family="Modern" ss:Size="11"/>
   </Style>
   <Style ss:ID="s27">
    <Borders>
@@ -80,7 +80,7 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="2"
      ss:Color="#000000"/>
    </Borders>
-   <Font ss:FontName="£Í£Ó £Ð¥´¥·¥Ã¥¯" x:CharSet="128" x:Family="Modern" ss:Size="11"/>
+   <Font x:CharSet="128" x:Family="Modern" ss:Size="11"/>
   </Style>
   <Style ss:ID="s29">
    <Borders>
@@ -273,7 +273,7 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="2"
      ss:Color="#000000"/>
    </Borders>
-   <Font ss:FontName="£Í£Ó £Ð¥´¥·¥Ã¥¯" x:CharSet="128" x:Family="Modern" ss:Size="11"/>
+   <Font x:CharSet="128" x:Family="Modern" ss:Size="11"/>
    <NumberFormat ss:Format="yyyy/m/d\ h:mm;@"/>
   </Style>
   <Style ss:ID="s46">
@@ -288,7 +288,7 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
      ss:Color="#000000"/>
    </Borders>
-   <NumberFormat ss:Format="yyyy&quot;Ç¯&quot;m&quot;·î&quot;d&quot;Æü&quot;\(aaa\);@"/>
+   <NumberFormat ss:Format="yyyy&quot;-&quot;m&quot;-&quot;d&quot;-&quot;\(aaa\);@"/>
   </Style>
  </Styles>
 <{foreach from=$sheets key=sname item=sheet}>
@@ -335,7 +335,7 @@
   <{foreach from=$rows key=nrec item=row name=line}>
    <{if $smarty.foreach.line.first}>
    <Row ss:AutoFitHeight="0" ss:Height="25.5">
-    <Cell ss:MergeDown="<{$max_rows-1}>" ss:StyleID="s45"><Data ss:Type="String"><{$stime}>¡Á</Data></Cell>
+    <Cell ss:MergeDown="<{$max_rows-1}>" ss:StyleID="s45"><Data ss:Type="String"><{$stime}></Data></Cell>
     <{foreach from=$row key=nn item=col name=colum}>
       <{if $smarty.foreach.colum.iteration<$max_cols}>
 	<Cell ss:StyleID="s29"><Data <{if $smarty.foreach.colum.first && !$smarty.foreach.colum.first}>ss:Index="2" <{/if}>ss:Type="<{$col.type}>"><{$col.value}></Data></Cell>
