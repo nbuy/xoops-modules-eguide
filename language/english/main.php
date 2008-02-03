@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.19 2008/02/02 11:12:02 nobu Exp $
+// $Id: main.php,v 1.20 2008/02/03 04:15:46 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -79,7 +79,7 @@ define('_MD_CLOSEBEFORE','Close time before');
 define('_MD_CLOSEBEFORE_DESC','before from start (e.g.: 3days, 2hour, 50min)');
 define('_MD_TIME_UNIT','days,hour,min');
 define('_MD_TIME_REG','d(ay)?s?,h(our)?,min');
-define('_MD_CALENDER','Go Calender');
+define('_MD_CALENDAR','Go Calendar');
 define('_MD_CAL','Calender');
 define('_MD_CAL_MONDAY_FIRST', true);
 define("_MD_REFER","%d hits");

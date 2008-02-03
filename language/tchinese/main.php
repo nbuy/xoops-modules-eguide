@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.9 2008/02/02 11:12:02 nobu Exp $
+// $Id: main.php,v 1.10 2008/02/03 04:15:46 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -79,7 +79,7 @@ define('_MD_CLOSEBEFORE', '距離活動多久時間停止報名');
 define('_MD_CLOSEBEFORE_DESC', '(即活動多久後開始,如: 1小時、2小時或50分鐘）');
 define('_MD_TIME_UNIT', '天,小時,分鐘');
 define('_MD_TIME_REG', 'd(ay)?s?,h(our)?,min');
-define('_MD_CALENDER', '前往行事例');
+define('_MD_CALENDAR', '前往行事例');
 define('_MD_CAL', '行事曆');
 define('_MD_CAL_MONDAY_FIRST', true);
 define('_MD_REFER', '人氣：%d');
