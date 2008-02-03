@@ -1,8 +1,9 @@
 <?php
 # show language help.html
-# $Id: help.php,v 1.2 2007/02/10 02:53:04 nobu Exp $
+# $Id: help.php,v 1.3 2008/02/03 16:30:39 nobu Exp $
 
 include '../../../include/cp_header.php';
+include dirname(dirname(__FILE__)).'/mydirname.php';
 
 // for compat older PHP 4.x
 if(!function_exists("file_get_contents")) {
