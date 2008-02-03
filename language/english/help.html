@@ -285,12 +285,70 @@ td,th { padding: 4px; background: #e8e8e8;}
     </dd>
   </dl>
 
+  <a name="multidate"></a><h2>Handling for multiple open event</h2>
+
+  <p>Event Guide handle the content of same event, open two or more times.
+    This settings to "Repeat Open" in event registration form.
+  </p>
+
+  <p>You want more detail settings, you send "Preview" one time.
+    There is expand and edit more detail items.
+  </p>
+
+  <p>In addition, the event is registered once to do detailed
+    specification and it sets it on "Edit Open Date" page.
+  </p>
+
+  <h3>Note to multiple open event editing</h3>
+
+  <ul>
+    <li>When edit mutiple open event,  careful to change the master event date.
+      The open date keeps interval each other.</li>
+    <li>Wen time is omitted by the date specification,
+      specified same time of the starting date.</li>
+  </ul>
+
+  <a name="update"></a><h2>Module Update</h2>
+  
+  <ul>
+    <li>When Event Guide module update, You need Module update in Module Manager in admin page.</li>
+    <li>Reservation Data format convertion</li>
+    <div class="note">In eguide 2.31 later internal data format changing.
+      If you need read out past reservation data,
+      there is data format convertion program <a href="../../admin/conv230.php">admin/conv230.php</a>. That page to show convertion button if there is need
+      convert data.
+    </div>
+  </ul>
+
+  <a name="duplication"></a><h2>Module duplicate</h2>
+
+  <p>eguide 2.4 later module is duplicatable (sorry not yet D3).
+    There is command line utility proguram for duplicate module.
+    "eguide/duplicate.php" is duplicate eguide module how many you want.
+    (This command support only Unix-like system)
+  </p>
+  <p>Example use this:</p>
+  <pre>
+    $ <u>cd modules/eguide</u>
+    $ <u>php duplicate.php event ticket class</u>
+    Duplicate: event
+    Duplicate: ticket
+    Duplicate: class
+  </pre>
+
   <a name="changes"></a><h2>Changes</h2>
 
 <dl>
-  <dt>2008/xx/xx eguide 2.32 released</dt>
+  <dt>2008/02/04 eguide 2.4 released</dt>
   <dd>
     <ul>
+      <li>Categories enhancement (two level, sort order, importer)</li>
+      <li>Fix JavaScript check failer</li>
+      <li>Enable confirm page default setting</li>
+      <li>Add duplicatable function</li>
+      <li>Fix excel template (remove hard code kanji)</li>
+      <li>Using newer altsys (0.5later) function</li>
+      <li>Arrangement of language resource (Separation main/common)</li>
       <li>add resource language/spanish (thx Gerardo)</li>
     </ul>
   </dd>
@@ -372,6 +430,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.38 2008/02/02 05:54:11 nobu Exp $
+$Id: help.html,v 1.39 2008/02/03 15:28:51 nobu Exp $
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 // reservation functions
-// $Id: reserv_func.php,v 1.3 2007/12/31 06:43:53 nobu Exp $
+// $Id: reserv_func.php,v 1.4 2008/02/03 15:28:51 nobu Exp $
 
 function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
     $myts =& MyTextSanitizer::getInstance();
@@ -14,13 +14,14 @@ function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
 	$name = preg_replace('/^!\s*/', '', array_shift($a));
 	$fname = preg_replace('/[\*\#]$/', "", $name);
 	$type = "text";
+	$iname = "opt$field";
 	if (isset($a[0])) {
 	    $ty = strtolower(array_shift($a));
 	    switch ($ty) {
 	    case 'hidden':
 	    case 'const':
 		if (!$hidden) {	// pseudo POST variable
-		    $_POST["opt$field"] = $result[$fname] = join(',', $a);
+		    $_POST[$iname] = $result[$fname] = join(',', $a);
 		}
 	    case "checkbox":
 	    case 'textarea':
@@ -32,14 +33,12 @@ function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
 	if ($type == 'hidden' || $type == 'const') continue;
 	elseif ($type == 'checkbox') {
 	    $v = "";
-	    for ($i=1; $i<=count($a); $i++) {
-		$n = "opt${field}_$i";
-		if (isset($_POST[$n])) {
-		    $vv = $myts->stripSlashesGPC($_POST[$n]);
-		    $v .= (($v=="")?"":",").$vv;
+	    if (!empty($_POST[$iname])) {
+		foreach ($_POST[$iname] as $vv) {
+		    $v .= ($v==""?"":",").$myts->stripSlashesGPC($vv);
 		    if ($hidden) {
-			$input .= "<input type='hidden' name='$n' value='".
-			    $myts->makeTboxData4Edit($vv)."'/>";
+			$iname .= '[]';
+			$input .= "<input type='hidden' name='$iname' id='$iname' value='".$myts->makeTboxData4Edit($vv)."'/>";
 		    }
 		}
 	    }

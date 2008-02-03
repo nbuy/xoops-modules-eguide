@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.22 2007/12/31 06:43:53 nobu Exp $
+// $Id: functions.php,v 1.23 2008/02/03 15:28:51 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -225,24 +225,15 @@ function eventform($data) {
 			    $v .= ($v==""?"":",").$op;
 			}
 		    } elseif ($type=='checkbox') {
-			$sub++;
-			$iname = $fname.'_'.$sub;
-			if (isset($_POST[$iname])) {
-			    $v = $myts->stripSlashesGPC($_POST[$iname]);
-			    $ck = ($an==$v)?' checked':'';
+			if (isset($_POST[$fname])) {
+			    $ck = in_array($an, $_POST[$fname])?' checked':'';
 			}
-			if (isset($args[1])) {
-			    $opts .= "<input type='$type' name='$iname' value='$an'$ck $prop/>".$args[1]." ";
-			} else {
-			    $opts .= "<input type='$type' name='$iname' value='$an'$ck $prop/>$an &nbsp; ";
-			}
+			$lab = empty($args[1])?"$an &nbsp; ":$args[1]." ";
+			$opts .= "<input type='$type' name='${fname}[]' id='${fname}[]' value='$an'$ck $prop/>".$lab;
 		    } elseif ($type=='select') {
 			if ($ck != "") $ck = " selected";
-			if (isset($args[1])) {
-			    $opts .= "<option value='$an'$ck>".$args[1]."</option>\n";
-			} else {
-			    $opts .= "<option$ck>$an</option>\n";
-			}
+			$lab = empty($args[1])?$an:$args[1];
+			$opts .= "<option value='$an'$ck>$lab</option>\n";
 		    }
 		}
 	    }
@@ -260,10 +251,12 @@ function eventform($data) {
 		$opts = $v;
 	    }
 	}
-	if ($require) $form['check'][$fname] = preg_replace('/\\*$/', '', $name).": ".strip_tags(_MD_ORDER_NOTE1);
+	if ($require) {
+	    if ($type == 'checkbox') $fname .= '[]';
+	    $form['check'][$fname] = preg_replace('/\\*$/', '', $name).": ".strip_tags(_MD_ORDER_NOTE1);
+	}
 	$name = preg_replace('/\\*$/', _MD_REQUIRE_MARK, $name);
 	if ($attr=='evop') $name = sprintf(_MD_LISTITEM_FMT, $name);
-	if ($attr=='') $attr = (count($items)%2)?'even':'odd';
 	$items[] = array('attr'=>$attr, 'label'=>$name,
 			 'value'=>$opts, 'comment'=>$comment);
     }
@@ -341,30 +334,49 @@ function eventdate($time) {
     return $str;
 }
 
-function get_eguide_category() {
-    global $xoopsDB, $eguide_category;
-    if (!empty($eguide_category)) return $eguide_category;
-    $result = $xoopsDB->query("SELECT catid, catname AS name, catimg AS image FROM ".CATBL." ORDER BY catid");
+function get_eguide_category($all=true, $indent='') {
+    global $xoopsDB;
+    static $catall, $cattop;
+    if ($all) {
+	if (isset($catall)) return $catall;
+	$result = $xoopsDB->query("SELECT c.catid, c.catname AS name, c.catimg AS image,if (p.weight, p.weight, c.weight) ord1, if(p.weight IS NULL, -1, c.weight) ord2,c.catpri FROM ".CATBL." c LEFT JOIN ".CATBL." p ON c.catpri=p.catid ORDER BY ord1,ord2,catid");
+    } else {
+	if (isset($cattop)) return $cattop;
+	$result = $xoopsDB->query("SELECT catid, catname AS name, catimg AS image, catpri FROM ".CATBL." WHERE catpri=0 ORDER BY weight,catid");
+    }
     $list = array();
     while ($data=$xoopsDB->fetchArray($result)) {
 	$id = $data['catid'];
-	$data['name'] = htmlspecialchars($data['name']);
-	$list[$id] = $data;
+	$name = htmlspecialchars($data['name']);
+	if (!empty($data['catpri'])) $name = $indent.$name;
+	$list[$id] = array('catid'=>$id, 'name'=>$name,
+			   'image'=>$data['image'], 'catpri'=>$data['catpri']);
     }
-    $eguide_category = $list;
+    if ($all) $catall = $list;
+    else $cattop = $list;
     return $list;
 }
 
 function set_eguide_breadcrumbs($catid=0, $paths=array()) {
     global $xoopsModule, $xoopsTpl;
-    $modurl = XOOPS_URL."/modules/".$xoopsModule->getVar('dirname').'/';
+    $modurl = EGUIDE_URL.'/';
     $breadcrumbs = array(array('name'=>$xoopsModule->getVar('name'), 'url'=>$modurl));
     $catlist = get_eguide_category($catid);
     if ($catid && !empty($catlist[$catid]['name'])) {
-	$breadcrumbs[] = array('name'=>$catlist[$catid]['name'],'url'=>$modurl."index.php?cat=$catid");
+	$pri = $catlist[$catid]['catpri'];
+	if ($pri) {
+	    $breadcrumbs[] = array('name'=>$catlist[$pri]['name'],'url'=>$modurl."index.php?cat=$pri");
+	}
+	if (basename($_SERVER['SCRIPT_NAME'])!='index.php') {
+	    $url = $modurl."index.php?cat=$catid";
+	} else {
+	    $url = '';
+	}
+	$breadcrumbs[] = array('name'=>$catlist[$catid]['name'],'url'=>$url);
     }
     foreach ($paths as $lab=>$path) {
-	$breadcrumbs[] = array('name'=>htmlspecialchars($lab), 'url' => "$modurl$path");
+	$breadcrumbs[] = array('name'=>htmlspecialchars($lab),
+			       'url' => empty($path)?'':"$modurl$path");
     }
     $xoopsTpl->assign('xoops_breadcrumbs', $breadcrumbs);
 }

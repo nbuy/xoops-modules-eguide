@@ -1,4 +1,9 @@
 <?php
+# import from GIJOE's pico
+# $Id: module_icon.php,v 1.2 2008/02/03 15:28:51 nobu Exp $
+
+define('ICON_ASIS',  'module_icon.png');
+define('ICON_IMAGE', 'images/eguide_slogo2.png');
 
 $mydirpath = dirname(__FILE__);
 $mydirname = basename($mydirpath);
@@ -13,10 +18,10 @@ header("Content-type: image/png");
 
 if( file_exists( $mydirpath.'/module_icon.png' ) ) {
 	$use_custom_icon = true ;
-	$icon_fullpath = $mydirpath.'/module_icon.png' ;
+	$icon_fullpath = $mydirpath.'/'.ICON_TEMPLATE;
 } else {
 	$use_custom_icon = false ;
-	$icon_fullpath = dirname(__FILE__).'/eguide_slogo2.png' ;
+	$icon_fullpath = $mydirpath.'/'.ICON_IMAGE;
 }
 
 if( ! $use_custom_icon && function_exists( 'imagecreatefrompng' ) && function_exists( 'imagecolorallocate' ) && function_exists( 'imagestring' ) && function_exists( 'imagepng' ) ) {

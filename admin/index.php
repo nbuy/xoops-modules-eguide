@@ -1,11 +1,10 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.28 2008/02/02 11:12:02 nobu Exp $
+// $Id: index.php,v 1.29 2008/02/03 15:28:51 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
-
-$self = $_SERVER["SCRIPT_NAME"];
+include_once XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 
 $op = param('op', 'events');
 $eid = param('eid');
@@ -14,7 +13,7 @@ function css_tags() { return array("even","odd"); }
 if ($op == 'summary_csv') summary_csv();
 
 if( ! empty( $_GET['lib'] ) ) {
-    global $mydirpath;
+    global $mydirpath, $mydirname;
     $mydirpath = dirname(dirname(__FILE__));
     $mydirname = basename($mydirpath);
     // common libs (eg. altsys)
@@ -28,6 +27,63 @@ if( ! empty( $_GET['lib'] ) ) {
     } else {
 	die( 'wrong request' ) ;
     }
+    exit;
+}
+
+switch ($op) {
+case 'catsave':
+    $catid=intval($_POST['catid']);
+    $vals = array();
+    foreach (array('catname', 'catdesc', 'catpri', 'weight') as $k) {
+	$vals[$k] = $xoopsDB->quoteString(param($k,''));
+    }
+    if ($catid) {
+	foreach ($vals  as $k=>$v) {
+	    $vals[$k] = "$k=$v";
+	}
+	$xoopsDB->query("UPDATE ".CATBL." SET ".join(',', $vals)." WHERE catid=$catid");
+    } else {
+	$xoopsDB->query("INSERT INTO ".CATBL."(".join(',', array_keys($vals)).") VALUES (".join(',', $vals).")");
+    }
+    redirect_header("?op=category",1,_AM_DBUPDATED);
+    exit;
+
+case 'save':
+    $status = param('status');
+    $uid = param('uid');
+    $result = $xoopsDB->query("UPDATE ".EGTBL." SET uid=$uid, status=$status WHERE eid=$eid");
+    redirect_header("?op=events",1,_AM_DBUPDATED);
+    exit;
+case 'delnotify':
+    $dels = array();
+    foreach ($_POST['rm'] as $v) {
+	$dels[] = intval($v);
+    }
+    $result = $xoopsDB->queryF($sql = "DELETE FROM ".RVTBL." WHERE eid=0 AND rvid IN (".join(',', $dels).")");
+    redirect_header("?op=notifies",1,_AM_DBUPDATED);
+    exit;
+
+case 'catdel':
+    $dels = $_POST['dels'];
+    foreach (array_keys($dels) as $i) {
+	$dels[$i] = intval($i);
+    }
+    $res = $xoopsDB->query("DELETE FROM ".CATBL." WHERE catid IN (".join(",",$dels).")");
+    redirect_header("?op=category",1,_AM_DBUPDATED);
+    exit;
+
+case 'impsave':
+    $mid = param('mid');
+    $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix('newblocks')." WHERE mid=$mid AND func_num=1");
+    if (!$res || $xoopsDB->getRowsNum($res)!=1) {
+	redirect_header('?op=category', 3, _NOPERM);
+	exit;
+    }
+    $block = $xoopsDB->fetchArray($res);
+    $prefix = preg_replace('/_block_top\.html$/', '', $block['template']);
+    $xoopsDB->query('DELETE FROM '.CATBL);
+    $xoopsDB->query('INSERT INTO '.CATBL.' (SELECT * FROM '.$xoopsDB->prefix($prefix.'_category').')');
+    redirect_header("?op=category", 1, _AM_DBUPDATED);
     exit;
 }
 
@@ -48,7 +104,7 @@ case 'events':
     $result = $xoopsDB->query('SELECT o.*,edate,title,uid,status FROM '.EGTBL.
 			      ' e LEFT JOIN '.OPTBL." o ON e.eid=o.eid ORDER BY e.eid DESC",$max,$start);
     $n = 0;
-    echo "<form action='$self' method='post'>\n";
+    echo "<form method='post'>\n";
     if ($count>$max) echo "<div>".$nav->renderNav()."</div>";
     echo "<table cellspacing='1' border='0' class='outer'>\n";
     echo "<tr><th>"._AM_RESERVATION."</th><th>".
@@ -79,7 +135,7 @@ case 'events':
 	}
 	    
 	$edit = "<a href='../admin.php?eid=$eid'>"._EDIT."</a>".
-	    " <a href='$self?op=edit&eid=$eid'>"._AM_EDIT."</a>".
+	    " <a href='?op=edit&eid=$eid'>"._AM_EDIT."</a>".
 	    " <a href='../admin.php?op=delete&eid=$eid'>"._DELETE."</a>";
 	echo "<tr class='$bg'><td align='center'>$mk</td><td>$date</td><td>$title</td>";
 	echo "<td>$u</td><td>$sn</td><td>$edit</td></tr>\n";
@@ -91,7 +147,7 @@ case 'events':
     $result = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." WHERE eid=0");
     if ($result) {
 	list($n) = $xoopsDB->fetchRow($result);
-	echo "<p><a href='$self?op=notifies'>"._MD_INFO_REQUEST."</a> ".sprintf(_MD_INFO_COUNT, $n)."</p>\n";
+	echo "<p><a href='?op=notifies'>"._MD_INFO_REQUEST."</a> ".sprintf(_MD_INFO_COUNT, $n)."</p>\n";
     }
     CloseTable();
     break;
@@ -106,14 +162,14 @@ case 'notifies':
     $result = $xoopsDB->query("SELECT * FROM ".RVTBL." WHERE $cond ORDER BY rdate");
     $n = 0;
     $nc = $xoopsDB->getRowsNum($result);
-    echo "<form action='$self' method='get'>\n".
+    echo "<form method='get'>\n".
 	_AM_INFO_SEARCH." <input name='q' />".
 	" <input type='hidden' name='op' value='notifies' />\n".
 	" <input type='submit' value='"._SUBMIT."' />\n".
 	"</form>\n";
     echo sprintf(_MD_INFO_COUNT, $nc);
     if ($nc) {
-	echo "<form action='$self' method='post'>\n".
+	echo "<form method='post'>\n".
 	    "<input type='hidden' name='op' value='delnotify' />\n".
 	    "<table cellspacing='1' border='0' class='outer'>\n".
 	    "<tr><th></th><th>"._MD_ORDER_DATE."</th>".
@@ -129,7 +185,7 @@ case 'notifies':
 	    } else {
 		$uinfo = "";
 	    }
-	    echo "<tr class='$bg'><td><input type='checkbox' name='rm$n' value='$rvid' /></td>".
+	    echo "<tr class='$bg'><td align='center'><input type='checkbox' name='rm[]' value='$rvid' /></td>".
 		"<td>$date</td><td>$email $uinfo</td></tr>\n";
 	}
 	echo "</table><br /><input type='submit' value='".
@@ -141,17 +197,6 @@ case 'notifies':
     CloseTable();
     break;
 
-case 'delnotify':
-    foreach ($_POST as $i => $v) {
-	if (preg_match('/^rm\d+$/', $i, $d)) {
-	    if (empty($cond)) $cond = "rvid=$v";
-	    else $cond .= " OR rvid=$v";
-	}
-    }
-    $result = $xoopsDB->queryF($sql = "DELETE FROM ".RVTBL." WHERE eid=0 AND ($cond)");
-    redirect_header("$self?op=notifies",1,_AM_DBUPDATED);
-    exit;
-
 case 'edit':
     $result = $xoopsDB->query("SELECT eid,edate,cdate,title,uid,status FROM ".EGTBL." WHERE eid=$eid");
     $data = $xoopsDB->fetchArray($result);
@@ -162,7 +207,7 @@ case 'edit':
     $post = formatTimestamp($data['cdate'], _AM_POST_FMT);
 
     echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
-    echo "<form action='$self' method='post'>\n";
+    echo "<form method='post'>\n";
     echo "<table border='0' cellspacing='1' class='outer'>\n";
     echo "<tr><td class='head'>"._AM_EVENT_DAY."</td><td class='even'>$date</td></tr>\n";
     echo "<tr><td class='head'>"._AM_TITLE."</td><td class='odd'>$title</td></tr>\n";
@@ -196,46 +241,19 @@ case 'edit':
     CloseTable();
     break;
 
-case 'save':
-    $status = param('status');
-    $uid = param('uid');
-    $result = $xoopsDB->query("UPDATE ".EGTBL." SET uid=$uid, status=$status WHERE eid=$eid");
-    redirect_header("$self?op=events",1,_AM_DBUPDATED);
-    exit;
-
 case 'category':
     echo "<h4>"._AM_CATEGORY."</h4>\n";
-    showCategories();
-    echo "<h4>"._AM_CATEGORY_NEW."</h4>\n";
-    editCategory(0);
-    break;
-
-case 'catedit':
-    echo "<h4>"._AM_CATEGORY."</h4>\n";
-    editCategory(intval($_GET['cat']));
-    break;
-
-case 'catsave':
-    $catid=intval($_POST['catid']);
-    $catname=$xoopsDB->quoteString(param('catname',''));
-    $catdesc=$xoopsDB->quoteString(param('catdesc',''));
-    $catimg=$xoopsDB->quoteString(param('catimg',''));
-    if ($catid) {
-	$xoopsDB->query("UPDATE ".CATBL." SET catname=$catname, catimg=$catimg, catdesc=$catdesc WHERE catid=$catid");
+    if (isset($_GET['catid'])) {
+	edit_category(intval($_GET['catid']));
     } else {
-	$xoopsDB->query("INSERT INTO ".CATBL."(catname, catimg, catdesc) VALUES($catname,$catimg,$catdesc)");
+	show_categories();
     }
-    redirect_header("$self?op=category",1,_AM_DBUPDATED);
-    exit;
+    break;
 
-case 'catdel':
-    $dels = $_POST['dels'];
-    foreach (array_keys($dels) as $i) {
-	$dels[$i] = intval($i);
-    }
-    $res = $xoopsDB->query("DELETE FROM ".CATBL." WHERE catid IN (".join(",",$dels).")");
-    redirect_header("$self?op=category",1,_AM_DBUPDATED);
-    exit;
+case 'catimp':
+    echo "<h4>"._AM_CATEGORY."</h4>\n";
+    import_category();
+    break;
 
 case 'resvCtrl':
     $rv = isset($_POST['rv'])?$_POST['rv']:array();
@@ -256,7 +274,7 @@ case 'resvCtrl':
     if ($off != "") {
 	$result = $xoopsDB->query("UPDATE ".OPTBL." SET reservation=0 WHERE $off");
     }
-    redirect_header("$self?op=events",1,_AM_DBUPDATED);
+    redirect_header("?op=events",1,_AM_DBUPDATED);
     exit;
 
 case 'summary':
@@ -290,7 +308,7 @@ case 'summary':
 	if ($exid) $param .= '&sub='.$exid;
 	$date = eventdate($data['exdate']);
 	$title = "<a href='$show?$param'>".$myts->makeTboxData4Show($data['title'])."</a>";
-	$uname = uid_to_ancker($data['uid']);
+	$uname = xoops_getLinkedUnameFromId($data['uid']);
 	$reserved = $data['reserved'];
 	if ($reserved) $reserved = "<a href='$receipt?$param'>$reserved</a>";
 	echo "<tr class='$bg'><td>$id<td>$date</td><td>$title</td>".
@@ -303,80 +321,119 @@ case 'summary':
 
 xoops_cp_footer();
 
-function showCategories() {
+function show_categories() {
     global $xoopsDB;
     $myts =& MyTextSanitizer::getInstance();
-    $res = $xoopsDB->query('SELECT c.*,count(topicid) count FROM '.CATBL.' c LEFT JOIN '.EGTBL.' ON catid=topicid GROUP BY catid ORDER BY catid');
+    $res = $xoopsDB->query('SELECT c.*,count(topicid) count, if (p.weight, p.weight, c.weight) ord1, if(p.weight IS NULL, -1, c.weight) ord2 FROM '.CATBL.' c LEFT JOIN '.CATBL.' p ON c.catpri=p.catid LEFT JOIN '.EGTBL.' ON c.catid=topicid GROUP BY c.catid ORDER BY ord1,ord2,c.catid');
 
+    // display entries
+    $showlist = array('catname'=>_AM_CAT_NAME, 'weight'=>_AM_WEIGHT,
+		      'catimg' =>_AM_CAT_IMG,  'catdesc'=>_AM_CAT_DESC, 
+		      'count'  =>_AM_COUNT,    'op'=>_AM_OPERATION);
+
+    echo "<table class='evnavi'><tr><td>".
+	_AM_COUNT.' '.$xoopsDB->getRowsNum($res).
+	"</td><td algin=''><a href='index.php?op=category&catid=0'>".
+	_AM_CATEGORY_NEW.
+	"</a></td><td algin=''><a href='index.php?op=catimp'>".
+	_AM_CATEGORY_IMPORT."</a></td></tr></table>\n";
     echo "<form action='index.php?op=catdel' method='post'>\n";
     echo "<table border='0' cellspacing='1' class='outer'>\n";
-    echo '<tr><th></th><th>'._AM_CAT_NAME.'</th><th>'._AM_CAT_IMG.'</th><th>'._AM_CAT_DESC.'</th><th>'._AM_COUNT.'</th><th>'._AM_OPERATION.'</th></tr>';
+    echo '<tr><th></th></th><th>'.join('</th><th>', $showlist)."</td></tr>\n";
     $ndel = $n = 0;
     while ($data = $xoopsDB->fetchArray($res)) {
-	$img = $data['catimg'];
 	$name =  $myts->htmlSpecialChars($data['catname']);
+	$haschild = $data['count'];
+	if ($data['catpri']) {
+	    $data['catname'] = " -- ".$name;
+	} else {
+	    if ($haschild==0) {
+		$sub = $xoopsDB->query("SELECT count(catid) FROM ".CATBL." WHERE catpri=".$data['catid']);
+		list($haschild) = $xoopsDB->fetchRow($sub);
+	    }
+	}
 	$id = $data['catid'];
 	$desc =  $myts->htmlSpecialChars($data['catdesc']);
-	$count = $data['count'];
+	$img = $data['catimg'];
 	if (preg_match('/^\//', $img)) $img = XOOPS_URL.$img;
 	elseif (!empty($img) && !preg_match('/^https?:/', $img)) {
-	    $img = EGUIDE_URL;
+	    $img = EGUIDE_URL."/$img";
 	} else {
 	    $img = "";
 	}
-	if (!empty($img)) $img = "<img src='$img' alt='$name'/>";
-	$edit="<a href='index.php?op=catedit&cat=$id'>"._EDIT."</a>";
-	if ($count) {
+	if (!empty($img)) $img = "<img src='$img' alt='$name' width='32' />";
+	$data['catimg'] = $img;
+	$data['op'] = "<a href='index.php?op=category&catid=$id'>"._EDIT."</a>";
+	if ($haschild) {
 	    $del="-";
 	} else {
 	    $del="<input type='checkbox' name='dels[$id] value='$id'/>";
 	    $ndel++;
 	}
-	echo '<tr class="'.(($n++%2)?'even':'odd').
-	    "\"><td align='center'>$del</td>".
-	    "<td>$name</td><td>$img</td><td>$desc</td><td>$count</td>".
-	    "<td>$edit</td></tr>";
+	echo '<tr class="'.($n++%2?'even':'odd')."\"><td align='center'>$del</td>";
+	foreach (array_keys($showlist) as $key) {
+	    echo "<td>".$data[$key]."</td>";
+	}
+	echo "</tr>\n";
     }
     echo "</table>\n";
     if ($ndel) echo "<p><input type='submit' value='"._DELETE."'/></p>";
     echo "</form>\n";
-
-    echo "<hr/>\n";
 }
 
-function editCategory($cat) {
+function edit_category($catid) {
     global $xoopsDB;
 
     $myts =& MyTextSanitizer::getInstance();
-    $res = $xoopsDB->query('SELECT * FROM '.CATBL." WHERE catid=$cat");
-    $data = $xoopsDB->fetchArray($res);
-    if (empty($data)) {
-	$img = '';
-	$name =  '';
-	$id = 0;
-	$desc =  '';
+    if ($catid) {
+	$res = $xoopsDB->query('SELECT * FROM '.CATBL." WHERE catid=$catid");
+	$data = $xoopsDB->fetchArray($res);
     } else {
-	$img = $data['catimg'];
-	$name =  $myts->htmlSpecialChars($data['catname']);
-	$id = $data['catid'];
-	$desc =  $myts->htmlSpecialChars($data['catdesc']);
+	$data = array('catid'=>0, 'catname'=>'', 'catimg'=>'','catdesc'=>'',
+		      'catpri'=>0, 'weight'=>0);
     }
-    echo "<form action='index.php?op=catsave' method='post'>\n";
-    echo "<table border='0' class='outer' cellspacing='1'>\n";
-    echo "<tr><td class='head'>"._AM_CAT_NAME."</td><td class='even'><input name='catname' value='$name' size='30'/></td></tr>\n";
-    echo "<tr><td class='head'>"._AM_CAT_IMG."</td><td class='odd'><input name='catimg' value='$img' size='50'/></td></tr>\n";
-    echo "<tr><td class='head'>"._AM_CAT_DESC."</td><td class='even'><textarea name='catdesc'>$desc</textarea></td></tr>\n";
-    echo "</table>\n";
-    echo "<input type='hidden' name='catid' value='$id'/>\n";
-    echo "<p><input type='submit' value='"._GO."'/>\n";
-    echo "</form>\n";
+    $form = new XoopsThemeForm($catid?_AM_CATEGORY_EDIT:_AM_CATEGORY_NEW, 'myform', 'index.php');
+    $form->addElement(new XoopsFormHidden('catid', $catid));
+    $form->addElement(new XoopsFormHidden('op', 'catsave'));
+    $form->addElement(new XoopsFormText(_AM_CAT_NAME, 'catname', 40, 40, $data['catname']), true);
+    $form->addElement(new XoopsFormText(_AM_CAT_IMG, 'catimg', 60, 255, $data['catimg']));
+    $form->addElement(new XoopsFormDhtmlTextArea(_AM_CAT_DESC, 'catdesc', $data['catdesc']));
+    $catpri = new XoopsFormSelect(_AM_CAT_PRIMARY, 'catpri', $data['catpri']);
+    $catpri->addOption(0, _NONE);
+    foreach (get_eguide_category(false) as $cat) {
+	if ($catid != $cat['catid']) {
+	    $catpri->addOption($cat['catid'], $cat['name']);
+	}
+    }
+    $form->addElement($catpri);
+    $form->addElement(new XoopsFormText(_AM_WEIGHT, 'weight', 4, 4, $data['weight']));
+    $form->addElement(new XoopsFormButton('' , 'catsave', _SUBMIT, 'submit'));
+    $form->display();
 }
-function uid_to_ancker($uid) {
-    if ($uid) {
-	$path = XOOPS_URL.'/userinfo.php?uid=';
-	return "<a href='$path$uid'>".XoopsUser::getUnameFromId($uid).'</a>';
+
+function import_category() {
+    global $xoopsDB, $xoopsModule;
+    $mid = $xoopsModule->getVar('mid');
+    $res = $xoopsDB->query('SELECT m.mid,m.name,template FROM '.$xoopsDB->prefix('newblocks')." n, ".$xoopsDB->prefix('modules')." m WHERE edit_func='b_event_top_edit' AND func_num=1 AND n.mid<>$mid AND n.mid=m.mid ORDER BY m.weight");
+    $mods = array();
+    while (list($mid, $name, $temp)=$xoopsDB->fetchRow($res)) {
+	$mods[] = array('mid'=>$mid,
+			'name'=>htmlspecialchars($name),
+			'prefix'=>preg_replace('/_block_top\.html$/', '', $temp));
     }
-    return "-";
+    $selmod = new XoopsFormSelect(_AM_CAT_IMPORTFROM, 'mid');
+    $selmod->addOption(0, _NONE);
+    foreach ($mods as $i => $mod) {
+	$res = $xoopsDB->query('SELECT count(catid) FROM '.$xoopsDB->prefix($mod['prefix'].'_category'));
+	list($n) = $xoopsDB->fetchRow($res);
+	$selmod->addOption($mod['mid'], $mod['name']." ("._AM_COUNT."$n)");
+    }
+    $form = new XoopsThemeForm(_AM_CATEGORY_IMPORT, 'myform', 'index.php');
+    $form->addElement(new XoopsFormHidden('op', 'impsave'));
+    $form->addElement($selmod);
+    $selmod->setDescription(_AM_CAT_IMPORTDESC);
+    $form->addElement(new XoopsFormButton('' , 'impsave', _SUBMIT, 'submit'));
+    $form->display();
 }
 
 function summary_csv() {

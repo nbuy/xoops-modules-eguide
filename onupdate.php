@@ -1,9 +1,9 @@
 <?php
 # eguide module onUpdate proceeding.
-# $Id: onupdate.php,v 1.2 2006/08/16 16:57:10 nobu Exp $
+# $Id: onupdate.php,v 1.3 2008/02/03 15:28:51 nobu Exp $
 
 global $xoopsDB;
-include dirname(__FILE__)."/const.php";
+include_once dirname(__FILE__)."/const.php";
 
 $config = XOOPS_ROOT_PATH.'/modules/eguide/cache/config.php';
 
@@ -30,9 +30,11 @@ if (file_exists($config)) {
 
 $xoopsDB->query('UPDATE '.EGTBL.' SET ldate=edate WHERE ldate=0');
 
-// addional field in 2.0b
+// add field in 2.0b
 add_field(RVTBL, 'exid', "INT DEFAULT 0 NOT NULL", 'eid');
 add_field(OPTBL, 'closetime', "INT DEFAULT 0 NOT NULL", 'reserved');
+// add field in 2.0b2 added
+add_field(EXTBL, 'expersons', 'INTEGER', 'exdate');
 
 // eguide_cat table add in 2.0
 $xoopsDB->query('SELECT * FROM '.CATBL, 1);
@@ -42,6 +44,8 @@ if ($xoopsDB->errno()) { // check exists
   catname  varchar(40) NOT NULL,
   catimg   varchar(255),
   catdesc  text,
+  catpri   integer NOT NULL default '0',
+  weight   integer NOT NULL default '0',
   PRIMARY KEY  (catid)
 )");
     $xoopsDB->query("INSERT INTO ".CATBL." VALUES(1, '')");
@@ -58,22 +62,35 @@ if ($xoopsDB->errno()) { // check exists
   reserved int(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (exid)
 )");
+    report_message(" Add new table: <b>$table</b>");
 }
 
-// after 2.0b2 added
-add_field(EXTBL, 'expersons', 'INTEGER', 'exdate');
-// after 2.1 added
+// add field in 2.1
 add_field(OPTBL, 'redirect', "varchar(128) NOT NULL default ''", 'optfield');
+// add field in 2.4
+add_field(CATBL, 'catpri', "INT DEFAULT 0 NOT NULL", 'catdesc');
+add_field(CATBL, 'weight', "INT DEFAULT 0 NOT NULL", 'catpri');
+
+function report_message($msg) {
+    global $msgs;		// module manager's variable
+    static $first = true;
+    if ($first) {
+	$msgs[] = "Update Database...";
+	$first = false;
+    }
+    $msgs[] = "&nbsp;&nbsp; $msg";
+}
 
 function add_field($table, $field, $type, $after) {
-    global $xoopsDB;
+    global $xoopsDB, $myprefix;
     $res = $xoopsDB->query("SELECT $field FROM $table", 1);
     if (empty($res) && $xoopsDB->errno()) { // check exists
 	if ($after) $after = "AFTER $after";
 	$res = $xoopsDB->query("ALTER TABLE $table ADD $field $type $after");
     } else return false;
+    report_message(" Add new field: <b>$table.$field</b>");
     if (!$res) {
-	echo "<div class='errorMsg'>".$xoopsDB->errno()."</div>\n";
+	echo "<span style='color: red; font: bold;'>".$xoopsDB->error()."</span>\n";
     }
     return $res;
 }

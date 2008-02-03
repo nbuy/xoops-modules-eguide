@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.18 2007/12/31 06:43:53 nobu Exp $
+// $Id: index.php,v 1.19 2008/02/03 15:28:51 nobu Exp $
 
 include 'header.php';
 
@@ -36,8 +36,21 @@ if (empty($prev)) {
     $ext = $xoopsModuleConfig['show_extents']?'':'AND 0';
 }
 
+$catlist = get_eguide_category();
 $catid = isset($_GET['cat'])&&preg_match('/^(\d+,)*\d+$/', $_GET['cat'])?$_GET['cat']:0;
-$opt = $catid?' AND topicid IN ('.$catid.')':'';
+if (isset($catlist[$catid])) {
+    $vals = array($catid);
+    if ($catlist[$catid]['catpri']==0) { // also children categories
+	foreach ($catlist as $data) {
+	    if ($data['catpri']==$catid) {
+		$vals[] = $data['catid'];
+	    }
+	}
+    }
+    $opt = ' AND topicid IN ('.join(',', $vals).')';
+} else {
+    $opt = $catid?' AND topicid IN ('.$catid.')':'';
+}
 
 $fields = "e.eid, cdate, title, summary, closetime,
 IF(expersons IS NULL,persons, expersons) persons,
@@ -55,7 +68,6 @@ if (is_object($xoopsUser)) {
     $isadmin = $xoopsUser->isAdmin($xoopsModule->getVar('mid'));
     $uid = $xoopsUser->getVar('uid');
 }
-$catlist = get_eguide_category();
 while ($event = $xoopsDB->fetchArray($result)) {
     $event['isadmin'] = ($isadmin || $event['uid']==$uid);
     $event['link'] = true;

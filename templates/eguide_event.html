@@ -24,14 +24,14 @@
 <table class="outer" align="center" cellspacing="1" border="0">
 <tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
 <{if !$form.member_only}>
-<tr class="evms"><th><{$smarty.const._MD_EMAIL}>*</th><td><input size="40" name="email" value="<{$form.email}>"/>
+<tr class="evms"><td class="head"><{$smarty.const._MD_EMAIL}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input size="40" name="email" value="<{$form.email}>"/>
 <{if $form.user_notify}>
 <br/><input type="checkbox" name="notify" /><{$smarty.const._MD_NOTIFY_REQUEST}>
 <{/if}>
 </td></tr>
 <{/if}>
 <{foreach from=$form.items item=fm}>
-<tr class="<{$fm.attr}>"><th><{$fm.label}></th><td><{$fm.value}><{$fm.comment}></td></tr>
+<tr class="<{$fm.attr}> <{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}><{$fm.comment}></td></tr>
 <{/foreach}>
 </table>
 <input type="hidden" name="eid" value="<{$form.eid}>" />
@@ -43,8 +43,14 @@
 <script type="text/javascript">
 <!--//
 function checkItem(obj) {
-  if (obj.value == "" && obj.selectedIndex == null) return true;
-  if (obj.selectedIndex != null && obj.options[obj.selectedIndex].value=="") return true;
+  if (typeof(obj.selectedIndex)=="number" && obj.value != "") return false;
+  if (obj.value == "") return true;
+  if (typeof(obj.length)=="number") {
+     for (i=0; i<obj.length; i++) {
+        if (obj[i].checked) return false;
+     }
+     return true;
+  }
   return false;
 }
 function xoopsFormValidate_order() {
@@ -52,9 +58,13 @@ function xoopsFormValidate_order() {
     obj = null;
     var msg = "";
 <{foreach from=$form.check key=name item=msg}>
-if ( checkItem(myform.<{$name}>) ) { msg = msg+"<{$msg}>\n"; if(obj==null)obj=myform.<{$name}>; }
+if ( checkItem(myform["<{$name}>"]) ) { msg = msg+"<{$msg}>\n"; if(obj==null)obj=myform["<{$name}>"]; }
 <{/foreach}>
-if (msg != "") { window.alert(msg); obj.focus(); return false; }
+if (msg != "") { 
+  window.alert(msg); 
+  if (typeof(obj.length)!="number") obj.focus();
+  return false; 
+}
 return true;
 }
 //--></script>
@@ -70,7 +80,7 @@ return true;
 <table width="100%" cellspacing="1" cellpadding="4" class="outer">
 <tr class="head"><th></th><{foreach from=$labels item=lab}><th><{$lab}></th><{/foreach}></tr>
 <{foreach from=$list item=order key=nc}>
-<tr class="<{cycle values="even, odd"}>">
+<tr class="<{cycle values="even,odd"}>">
   <td align="right"><{$nc}></td>
 <{foreach from=$order item=value}>
   <td><{$value}></td><{/foreach}>

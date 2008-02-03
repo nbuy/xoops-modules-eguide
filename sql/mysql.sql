@@ -1,5 +1,5 @@
 # Event Guide Module for XOOPS
-# $Id: mysql.sql,v 1.5 2006/08/16 16:24:37 nobu Exp $
+# $Id: mysql.sql,v 1.6 2008/02/03 15:28:52 nobu Exp $
 
 #
 # Table structure for table `eguide`
@@ -32,12 +32,14 @@ CREATE TABLE eguide_category (
   catname  varchar(40) NOT NULL,
   catimg   varchar(255),
   catdesc  text,
+  catpri   integer NOT NULL default '0',
+  weight   integer NOT NULL default '0',
   PRIMARY KEY  (catid)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
 
-INSERT INTO eguide_category(catid,catname) VALUES(1, ''); 
+INSERT INTO eguide_category(catid,catname,catdesc) VALUES(1, '', 'Default category (you can edit this)'); 
 # -- Default Category (Noname)
 
 #

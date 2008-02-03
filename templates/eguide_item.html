@@ -44,12 +44,12 @@
 <{/if}>
     <a href="admin.php?op=delete&amp;eid=<{$event.eid}>"><{$smarty.const._DELETE}></a> ] <{/if}>
 <{if $caldate}>
-    <a href="<{$xoops_url}>/modules/piCal/index.php?caldate=<{$caldate}>"><{$smarty.const._MD_CALENDER}></a>
+    <a href="<{$xoops_url}>/modules/piCal/index.php?caldate=<{$caldate}>"><img src="images/calendar.png" alt="<{$smarty.const._MD_CALENDAR}>" /></a>
 <{/if}>
 <{if $event.detail}>
     <a href="<{$event.detail}>"><{$smarty.const._MD_READMORE}></a>
 <{else}>
-    <a href="event.php?op=print&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><img src="<{$xoops_url}>/modules/news/images/print.gif" alt="<{$smarty.const._PRINT}>" border="0" /></a>
+    <a href="event.php?op=print&amp;eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><img src="images/printer.png" alt="<{$smarty.const._PRINT}>" border="0" /></a>
 <{/if}>
   </div>
 <{/if}>

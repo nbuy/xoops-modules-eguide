@@ -13,7 +13,7 @@ if (count($argv)<1) {
 
 # for duplicatable (not D3, old style)
 $mydirpath = dirname(__FILE__);
-$myprefix = $mydirname = basename($mydirname);
+$myprefix = $mydirname = basename($mydirpath);
 
 chdir($mydirpath);
 

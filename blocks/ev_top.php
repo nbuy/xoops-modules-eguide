@@ -1,16 +1,14 @@
 <?php
-// $Id: ev_top.php,v 1.22 2008/02/02 11:57:12 nobu Exp $
+// $Id: ev_top.php,v 1.23 2008/02/03 15:28:51 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
 eval( '
 function b_'.$myprefix.'_top_show( $options )
 {
-	return b_event_show_base( "'.$mydirname.'" , "'.$myprefix.'" ,$options ) ;
+	return b_event_top_show_base( "'.$mydirname.'" , "'.$myprefix.'" ,$options ) ;
 }
 ' ) ;
-
-if (function_exists("b_event_top_show_base")) return;
 
 if (!function_exists("eguide_marker")) {
     include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
@@ -33,7 +31,9 @@ if (!function_exists("eguide_marker")) {
     }
 }
 
-function b_event_top_show_base($prefix, $options) {
+if (function_exists("b_event_top_show_base")) return;
+
+function b_event_top_show_base($dirname, $prefix, $options) {
     global $xoopsDB, $xoopsUser;
     $myts =& MyTextSanitizer::getInstance();
 	
@@ -83,7 +83,7 @@ WHERE ((expire>=edate AND expire>$now)
 
     $block = array('detail'=>$detail,
 		   'dirname'=>$dirname,
-		   'module_url'=>$modurl,
+		   'module_url'=>XOOPS_URL."/modules/$dirname",
 		   'categories'=>$ids,
 		   'events'=>array());
     while ( $myrow = $xoopsDB->fetchArray($result) ) {
@@ -113,8 +113,10 @@ WHERE ((expire>=edate AND expire>$now)
 	}
 	$block['events'][] = $event;
     }
-    $mod = XoopsModule::getByDirname($dirname);
-    if ($xoopsUser && $xoopsUser->isAdmin($mod->mid())) {
+
+    $module_handler =& xoops_gethandler('module');
+    $module =& $module_handler->getByDirname($dirname);
+    if ($xoopsUser && $xoopsUser->isAdmin($module->getVar('mid'))) {
 	$result = $xoopsDB->query("SELECT count(eid) FROM ".$xoopsDB->prefix($prefix)." WHERE status=1");
 	if ($xoopsDB->getRowsNum($result)) {
 	    list($block['waiting']) = $xoopsDB->fetchRow($result);

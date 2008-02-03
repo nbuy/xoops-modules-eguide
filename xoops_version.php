@@ -1,20 +1,23 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.46 2008/02/02 11:57:12 nobu Exp $
+// $Id: xoops_version.php,v 1.47 2008/02/03 15:28:51 nobu Exp $
 
 # for duplicatable (not D3, old style)
-include dirname(__FILE__)."/mydirname.php";
+include (dirname(__FILE__)."/mydirname.php");
 
-$exname = ($myprefix=='eguide'?'':" ($mydirname)");
+$exname = ($myprefix=='eguide'?'':"|$mydirname");
+$myicon = "images/{$myprefix}_slogo2.png";
+if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
+
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = "2.32";
+$modversion['version'] = "2.38";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
 $modversion['help'] = "help.html";
 $modversion['license'] = "GPL see LICENSE";
 $modversion['official'] = 0;
-$modversion['image'] = (file_exists("$mydirpath/{$myprefix}_slogo2.png")?$myprefix."_slogo2.png":"module_icon.php");
+$modversion['image'] = $myicon;
 $modversion['dirname'] = $mydirname;
 
 // Sql file
@@ -74,7 +77,7 @@ $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'options' => '0|10|19|0|',
 			       'template' => $myprefix.'_block_top.html');
 
-$modversion['blocks'][2]=array('file' => "ev_top.php",
+$modversion['blocks'][] =array('file' => "ev_top.php",
 			       'name' => _MI_EGUIDE_HEADLINE2.$exname,
 			       'description' => _MI_EGUIDE_HEADLINE2_DESC,
 			       'show_func' => "b_${myprefix}_top_show",
@@ -82,6 +85,13 @@ $modversion['blocks'][2]=array('file' => "ev_top.php",
 			       'options' => '0|10|19|1|',
 			       'can_clone' => true,
 			       'template' => $myprefix.'_block_post.html');
+$modversion['blocks'][] =array('file' => "ev_cat.php",
+			       'name' => _MI_EGUIDE_CATBLOCK.$exname,
+			       'description' => _MI_EGUIDE_CATBLOCK_DESC,
+			       'show_func' => "b_${myprefix}_select_show",
+			       'edit_func' => 'b_event_select_edit',
+			       'options' => '',
+			       'template' => $myprefix.'_block_category.html');
 // Menu
 $module_handler =& xoops_gethandler('module');
 $module =& $module_handler->getByDirname($modversion['dirname']);
@@ -93,7 +103,7 @@ if (is_object($module)&&$module->getVar('isactive')) {
     $config_handler =& xoops_gethandler('config');
     $configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
     // category submenu
-    $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix($myprefix.'_category').' ORDER BY catid');
+    $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix($myprefix.'_category').' WHERE catpri=0 ORDER BY weight,catid');
     if ($xoopsDB->getRowsNum($res)>1) {
 	while ($data = $xoopsDB->fetchArray($res)) {
 	    $modversion['sub'][] =
@@ -200,7 +210,7 @@ $modversion['config'][]=array('name' => 'has_confirm',
 			      'description' => '_MI_EGUIDE_ORDERCONF_DESC',
 			      'formtype' => 'yesno',
 			      'valuetype' => 'int',
-			      'default' => 0);
+			      'default' => 1);
 $modversion['config'][]=array('name' => 'label_persons',
 			      'title' => '_MI_EGUIDE_LAB_PERSONS',
 			      'description' => '_MI_EGUIDE_LAB_PERSONS_DESC',

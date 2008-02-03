@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.10 2008/02/02 05:54:11 nobu Exp $
+// $Id: admin.php,v 1.11 2008/02/03 15:28:51 nobu Exp $
 define("_AM_DBUPDATED","Database Updated");
 define("_AM_TITLE","Title");
 define("_AM_POSTER","Poster");
@@ -8,8 +8,6 @@ define("_AM_EDITARTICLE","Edit an Event");
 define("_AM_TIME_FMT","m-d H:i");
 define("_AM_POST_FMT","Y-m-d H:i");
 define("_AM_POSTED","Posted on");
-define("_AM_YES","Yes");
-define("_AM_NO","No");
 define("_AM_OPERATION","Operation");
 define("_AM_EDIT","Status");
 define("_AM_DISP_STATUS","Status");
@@ -17,9 +15,15 @@ define("_AM_ADD","Add");
 define("_AM_UPDATE","Update");
 define("_AM_CATEGORY","Categories");
 define("_AM_CATEGORY_NEW","New Category");
+define("_AM_CATEGORY_EDIT","Edit Category");
+define("_AM_CATEGORY_IMPORT","Import Categories");
+define("_AM_CAT_IMPORTFROM","Import from");
+define("_AM_CAT_IMPORTDESC","Categories import will be erase the current settings");
 define("_AM_CAT_NAME","Category Name");
 define("_AM_CAT_IMG","Image");
 define("_AM_CAT_DESC","Description");
+define("_AM_CAT_PRIMARY","Primary");
+define("_AM_WEIGHT","Weight");
 
 define("_AM_SUMMARY", "Reservation Summary");
 

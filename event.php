@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.23 2007/07/18 04:53:43 nobu Exp $
+// $Id: event.php,v 1.24 2008/02/03 15:28:51 nobu Exp $
 
 include 'header.php';
 
@@ -71,7 +71,7 @@ $xoopsOption['template_main'] = 'eguide_event.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 edit_eventdata($data);
 $title = $data['date']." ".$data['title'];
-set_eguide_breadcrumbs($data['topicid'], array($title=>'event.php?eid='.$eid.($exid?"&sub=$exid":"")));
+set_eguide_breadcrumbs($data['topicid'], array($title=>''));
 $xoopsTpl->assign('event', $data);
 if (isset($pidate)) $xoopsTpl->assign('caldate', $pidate);
 // page title

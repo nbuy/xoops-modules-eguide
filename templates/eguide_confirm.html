@@ -11,7 +11,7 @@
 <{if $values}>
 <table cellspacing="1" cellpadding="2" border="0" class="outer">
 <{foreach key=lab item=val from=$values}>
-   <tr class="<{cycle values="even, odd"}>"><th><{$lab}></th><td><{$val}></td></tr>
+   <tr class="<{cycle values="even, odd"}>"><td class="head"><{$lab}></td><td><{$val}></td></tr>
 <{/foreach}>
 </table>
 <{/if}>

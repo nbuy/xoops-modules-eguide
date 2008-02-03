@@ -15,10 +15,10 @@
 <form action="entry.php" method="post">
 <table class="outer" align="center" cellspacing="1" border="0">
 <tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
-<tr class="evms"><th><{$smarty.const._MD_EMAIL}></th><td><input size="40" name="email" value="<{$form.email}>"/>
+<tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}></td><td><input size="40" name="email" value="<{$form.email}>"/>
 </td></tr>
 <{foreach from=$form.items item=fm}>
-<tr class="<{$fm.attr}>"><th><{$fm.label}></th><td><{$fm.value}><{$fm.comment}></td></tr>
+<tr class="<{$fm.attr}> <{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}><{$fm.comment}></td></tr>
 <{/foreach}>
 </table>
 <input type="hidden" name="eid" value="<{$form.eid}>" />
