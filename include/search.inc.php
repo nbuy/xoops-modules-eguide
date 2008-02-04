@@ -1,6 +1,6 @@
 <?php
 # search interface for eguide
-# $Id: search.inc.php,v 1.7 2008/02/02 11:12:02 nobu Exp $
+# $Id: search.inc.php,v 1.8 2008/02/04 12:37:37 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -12,7 +12,7 @@ function '.$myprefix.'_search( $keywords , $andor , $limit , $offset , $userid )
 
 ' ) ;
 
-if (file_exists('eguide_search_base')) return;
+if (!function_exists('eguide_search_base')) {
 
 function eguide_search_base($myprefix, $queryarray, $andor, $limit, $offset, $userid){
 	global $xoopsDB;
@@ -46,5 +46,7 @@ function eguide_search_base($myprefix, $queryarray, $andor, $limit, $offset, $us
 		$i++;
 	}
 	return $ret;
+}
+
 }
 ?>
