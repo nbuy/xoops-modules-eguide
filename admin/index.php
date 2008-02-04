@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.30 2008/02/04 09:48:01 nobu Exp $
+// $Id: index.php,v 1.31 2008/02/04 10:21:44 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -88,8 +88,7 @@ case 'impsave':
     }
     $res = $xoopsDB->query('SELECT * FROM '.$xoopsDB->prefix($prefix.'_category'));
     while ($data = $xoopsDB->fetchArray($res)) {
-	$res = $xoopsDB->query('INSERT INTO '.CATBL.' VALUES ('.join(',', array_map('dbquote',$data)).')');
-	if (!$res) die('DB ERROR');
+	if (!$xoopsDB->query('INSERT INTO '.CATBL.' VALUES ('.join(',', array_map('dbquote',$data)).')')) die('DB ERROR');
     }
     redirect_header("?op=category", 1, _AM_DBUPDATED);
     exit;
