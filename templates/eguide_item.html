@@ -35,7 +35,7 @@
 <{/if}>
 <{if $event.link}>
   <div class="evlink"><{if $event.isadmin}>[
-<{if $event.reservation}>
+<{if $event.reservation || $event.reserved}>
     <a href="receipt.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>"><{$smarty.const._MD_RESERV_ADMIN}></a> |
 <{/if}>
     <a href="admin.php?eid=<{$event.eid}>"><{$smarty.const._EDIT}></a> |

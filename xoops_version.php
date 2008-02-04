@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.47 2008/02/03 15:28:51 nobu Exp $
+// $Id: xoops_version.php,v 1.48 2008/02/04 12:59:15 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
@@ -10,7 +10,7 @@ $myicon = "images/{$myprefix}_slogo2.png";
 if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
 
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = "2.38";
+$modversion['version'] = "2.39";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -91,6 +91,7 @@ $modversion['blocks'][] =array('file' => "ev_cat.php",
 			       'show_func' => "b_${myprefix}_select_show",
 			       'edit_func' => 'b_event_select_edit',
 			       'options' => '',
+			       'can_clone' => true,
 			       'template' => $myprefix.'_block_category.html');
 // Menu
 $module_handler =& xoops_gethandler('module');

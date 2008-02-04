@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.19 2008/02/03 15:28:51 nobu Exp $
+// $Id: index.php,v 1.20 2008/02/04 12:59:15 nobu Exp $
 
 include 'header.php';
 
@@ -93,6 +93,15 @@ $xoopsOption['template_main'] = 'eguide_index.html';
 
 $xoopsTpl->assign('events', $events);
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+if (count($catlist)>1) {
+    foreach ($catlist as $id => $cat) {
+	if ($cat['catpri']) $catlist[$id]['name'] = '-- '.$cat['name'];
+    }
+    $xoopsTpl->assign('categories',
+		      array('options'=>$catlist,
+			    'action'=>'index.php',
+			    'dirname'=>basename(dirname(__FILE__))));
+}
 
 if (empty($prev)) {
     if ($page < 2) {

@@ -1,6 +1,6 @@
 <form action="<{$block.action}>" id="<{$block.dirname}>_catsel" style="text-align: center;">
 <select name="cat" onChange="submit();">
-  <option value="">-----<{$option.name}></option>
+  <option value="">-----</option>
 <{foreach from=$block.options item=option}>
   <option value="<{$option.catid}>"<{if $option.catid==$smarty.get.cat}> selected="selected"<{/if}>><{$option.name}></option>
 <{/foreach}>

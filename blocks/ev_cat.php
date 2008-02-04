@@ -1,6 +1,6 @@
 <?php
 # Event category select block 
-# $Id: ev_cat.php,v 1.2 2008/02/03 16:40:23 nobu Exp $
+# $Id: ev_cat.php,v 1.3 2008/02/04 12:59:15 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -11,7 +11,7 @@ function b_'.$myprefix.'_select_show( $options )
 }
 ' ) ;
 
-if (function_exists("b_event_select_show_base")) return;
+if (!function_exists("b_event_select_base")) {
 
 function b_event_select_base($dirname, $prefix, $options) {
     global $xoopsDB, $xoopsUser;
@@ -34,5 +34,7 @@ function b_event_select_base($dirname, $prefix, $options) {
 
 function b_event_select_edit($options) {
     return _BLOCK_EV_CATEGORY."&nbsp;<input name='options[]' value='".$options[0]."' />\n";
+}
+
 }
 ?>

@@ -1,5 +1,5 @@
 # Event Guide Module for XOOPS
-# $Id: mysql.sql,v 1.6 2008/02/03 15:28:52 nobu Exp $
+# $Id: mysql.sql,v 1.7 2008/02/04 12:59:16 nobu Exp $
 
 #
 # Table structure for table `eguide`
@@ -30,7 +30,7 @@ CREATE TABLE eguide (
 CREATE TABLE eguide_category (
   catid    integer NOT NULL auto_increment,
   catname  varchar(40) NOT NULL,
-  catimg   varchar(255),
+  catimg   varchar(255) NOT NULL default '',
   catdesc  text,
   catpri   integer NOT NULL default '0',
   weight   integer NOT NULL default '0',

@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.23 2008/02/03 15:28:51 nobu Exp $
+// $Id: ev_top.php,v 1.24 2008/02/04 12:59:15 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -31,7 +31,7 @@ if (!function_exists("eguide_marker")) {
     }
 }
 
-if (function_exists("b_event_top_show_base")) return;
+if (!function_exists("b_event_top_show_base")) {
 
 function b_event_top_show_base($dirname, $prefix, $options) {
     global $xoopsDB, $xoopsUser;
@@ -143,5 +143,7 @@ function b_event_top_edit($options) {
 	_BLOCK_EV_CATEGORY."&nbsp;<input name='options[]' value='".$options[4]."' />\n".
 	"<input type='hidden' name='options[]' value='".$options[4]."' />\n";
     
+}
+
 }
 ?>
