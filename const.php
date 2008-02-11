@@ -1,5 +1,5 @@
 <?php
-# $Id: const.php,v 1.8 2008/02/03 15:28:51 nobu Exp $
+# $Id: const.php,v 1.9 2008/02/11 02:55:02 nobu Exp $
 
 define("_RVSTAT_ORDER",0);
 define("_RVSTAT_RESERVED",1);
@@ -11,7 +11,7 @@ define("STAT_DELETED",4);
 
 include_once(dirname(__FILE__).'/mydirname.php');
 
-global $myprefix, $mydirname;
+global $myprefix, $egdirname;
 define('EGTBL', $xoopsDB->prefix($myprefix));
 define('CATBL', $xoopsDB->prefix($myprefix."_category"));
 define('OPTBL', $xoopsDB->prefix($myprefix."_opt"));
@@ -21,6 +21,6 @@ define('RVTBL', $xoopsDB->prefix($myprefix."_reserv"));
 define('HEADER_CSS', '<link rel="stylesheet" type="text/css" media="all" href="style.css" />');
 
 define('PICAL', 'piCal');	// piCal dirname
-define('EGUIDE_URL', XOOPS_URL.'/modules/'.$mydirname);
-define('EGUIDE_PATH', XOOPS_ROOT_PATH.'/modules/'.$mydirname);
+define('EGUIDE_URL', XOOPS_URL.'/modules/'.$egdirname);
+define('EGUIDE_PATH', XOOPS_ROOT_PATH.'/modules/'.$egdirname);
 ?>

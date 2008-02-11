@@ -1,16 +1,16 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.49 2008/02/04 17:28:01 nobu Exp $
+// $Id: xoops_version.php,v 1.50 2008/02/11 02:55:02 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
 
-$exname = ($myprefix=='eguide'?'':"|$mydirname");
+$exname = ($myprefix=='eguide'?'':"|$egdirname");
 $myicon = "images/{$myprefix}_slogo2.png";
 if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
 
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = "2.4";
+$modversion['version'] = "2.41";
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -18,7 +18,7 @@ $modversion['help'] = "help.html";
 $modversion['license'] = "GPL see LICENSE";
 $modversion['official'] = 0;
 $modversion['image'] = $myicon;
-$modversion['dirname'] = $mydirname;
+$modversion['dirname'] = $egdirname;
 
 // Sql file
 // All tables should not have any prefix!
