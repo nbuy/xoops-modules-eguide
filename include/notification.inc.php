@@ -1,5 +1,5 @@
 <?php
-// $Id: notification.inc.php,v 1.3 2008/02/03 15:28:51 nobu Exp $
+// $Id: notification.inc.php,v 1.4 2008/02/11 05:02:42 nobu Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -30,7 +30,7 @@ include dirname(dirname(__FILE__))."/mydirname.php";
 eval( '
 function '.$myprefix.'_notify_iteminfo( $category, $item_id )
 {
-	return eguide_notify_iteminfo_base( "'.$mydirname.'" , "'.$myprefix.'" , $category, $item_id ) ;
+	return eguide_notify_iteminfo_base( "'.$egdirname.'" , "'.$myprefix.'" , $category, $item_id ) ;
 }
 ' ) ;
 

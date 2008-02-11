@@ -1,12 +1,12 @@
 <?php
-// $Id: ev_top.php,v 1.24 2008/02/04 12:59:15 nobu Exp $
+// $Id: ev_top.php,v 1.25 2008/02/11 05:02:42 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
 eval( '
 function b_'.$myprefix.'_top_show( $options )
 {
-	return b_event_top_show_base( "'.$mydirname.'" , "'.$myprefix.'" ,$options ) ;
+	return b_event_top_show_base( "'.$egdirname.'" , "'.$myprefix.'" ,$options ) ;
 }
 ' ) ;
 
