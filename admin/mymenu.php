@@ -18,7 +18,7 @@ $langmanpath = XOOPS_TRUST_PATH.'/libs/altsys/class/D3LanguageManager.class.php'
 if( ! file_exists( $langmanpath ) ) return; // no altsys just ignore
 require_once( $langmanpath ) ;
 $langman =& D3LanguageManager::getInstance() ;
-$langman->read( 'modinfo.php' , $egdirname , $mytrustdirname ) ;
+$langman->read( 'modinfo.php' , $mydirname , $mytrustdirname ) ;
 
 include dirname(__FILE__).'/menu.php' ;
 
@@ -51,7 +51,7 @@ if( empty( $adminmenu_hilighted ) ) {
 // link conversion from relative to absolute
 foreach( array_keys( $adminmenu ) as $i ) {
 	if( stristr( $adminmenu[$i]['link'] , XOOPS_URL ) === false ) {
-		$adminmenu[$i]['link'] = XOOPS_URL."/modules/$egdirname/" . $adminmenu[$i]['link'] ;
+		$adminmenu[$i]['link'] = XOOPS_URL."/modules/$mydirname/" . $adminmenu[$i]['link'] ;
 	}
 }
 
