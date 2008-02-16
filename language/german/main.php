@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.9 2008/02/03 04:15:46 nobu Exp $
+// $Id: main.php,v 1.10 2008/02/16 12:50:35 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -144,6 +144,11 @@ define("_MD_RESERV_AUTO","Automatisches Erlauben von Reservierungen (keine Bestä
 define('_MD_RESERV_NOTIFYPOSTER','Bei Reservierung per mail benachrichtigen');
 define('_MD_RESERV_UNIT','');
 define('_MD_RESERV_ITEM','zusätzliche Felder');
+define('_MD_RESERV_LAB','Item Namen');
+define('_MD_RESERV_LABREQ','Bitte geben Sie Name item');
+define('_MD_RESERV_REQ','Erforderlich');
+define('_MD_RESERV_ADD','Hinzufügen');
+define('_MD_RESERV_OPTREQ','Need Option Argument');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">Zur Hilfe (englisch)</a>');
 define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
 define('_MD_RESERV_REDIRECT','Redirect After Reservation URL');

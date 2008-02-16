@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.10 2008/02/03 04:15:46 nobu Exp $
+// $Id: main.php,v 1.11 2008/02/16 12:50:35 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -131,6 +131,11 @@ define('_MD_RESERV_AUTO', '自動受理報名 (沒有審核)');
 define('_MD_RESERV_NOTIFYPOSTER', '當有人報名時，用電子郵件通知');
 define('_MD_RESERV_UNIT', '');
 define('_MD_RESERV_ITEM', '<br>追加項目：');
+define('_MD_RESERV_LAB','項目名');
+define('_MD_RESERV_LABREQ','請輸入項目的名稱');
+define('_MD_RESERV_REQ','所需');
+define('_MD_RESERV_ADD','補充');
+define('_MD_RESERV_OPTREQ','需要選項的說法');
 define('_MD_RESERV_ITEM_DESC', '<a href="language/tchinese/help.html#form" target="help">編輯欄位方法</a>');
 define('_MD_RESERV_LABEL_DESC', '如果是團體報名，要讓報名者填入人數，請使用這個欄位表示"%s"。');
 define('_MD_RESERV_REDIRECT', '報名完成後，指定某一個網站連結');

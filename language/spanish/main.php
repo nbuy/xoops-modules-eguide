@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.4 2008/02/03 04:15:46 nobu Exp $
+// $Id: main.php,v 1.5 2008/02/16 12:50:35 nobu Exp $
 // Spanish language files by Gerardo
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -132,6 +132,11 @@ define("_MD_RESERV_AUTO","Automatically accept reservations (No need approve)");
 define('_MD_RESERV_NOTIFYPOSTER','Reservation notify by mail');
 define('_MD_RESERV_UNIT','');
 define('_MD_RESERV_ITEM','Additional Items');
+define('_MD_RESERV_LAB','Item name');
+define('_MD_RESERV_LABREQ','Please input item name');
+define('_MD_RESERV_REQ','Required');
+define('_MD_RESERV_ADD','Add');
+define('_MD_RESERV_OPTREQ','Need option argument');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">About Additional Items format</a>');
 define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
 define('_MD_RESERV_REDIRECT','Redirect After Reservation URL');
