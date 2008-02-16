@@ -1,6 +1,6 @@
 <?php
 // reservation functions
-// $Id: reserv_func.php,v 1.4 2008/02/03 15:28:51 nobu Exp $
+// $Id: reserv_func.php,v 1.5 2008/02/16 11:39:14 nobu Exp $
 
 function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
     $myts =& MyTextSanitizer::getInstance();
@@ -37,8 +37,7 @@ function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
 		foreach ($_POST[$iname] as $vv) {
 		    $v .= ($v==""?"":",").$myts->stripSlashesGPC($vv);
 		    if ($hidden) {
-			$iname .= '[]';
-			$input .= "<input type='hidden' name='$iname' id='$iname' value='".$myts->makeTboxData4Edit($vv)."'/>";
+			$input .= "<input type='hidden' name='{$iname}[]' id='{$iname}[]' value='".$myts->makeTboxData4Edit($vv)."'/>";
 		    }
 		}
 	    }

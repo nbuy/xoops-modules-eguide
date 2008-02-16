@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.31 2008/02/04 10:21:44 nobu Exp $
+// $Id: index.php,v 1.32 2008/02/16 11:39:14 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -12,10 +12,10 @@ $eid = param('eid');
 function css_tags() { return array("even","odd"); }
 if ($op == 'summary_csv') summary_csv();
 
+global $mydirpath, $mydirname;
+$mydirpath = dirname(dirname(__FILE__));
+$mydirname = basename($mydirpath);
 if( ! empty( $_GET['lib'] ) ) {
-    global $mydirpath, $mydirname;
-    $mydirpath = dirname(dirname(__FILE__));
-    $mydirname = basename($mydirpath);
     // common libs (eg. altsys)
     $lib = preg_replace( '/[^a-zA-Z0-9_-]/' , '' , $_GET['lib'] ) ;
     $page = preg_replace( '/[^a-zA-Z0-9_-]/' , '' , @$_GET['page'] ) ;

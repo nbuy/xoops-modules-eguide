@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.24 2008/02/03 15:28:51 nobu Exp $
+// $Id: event.php,v 1.25 2008/02/16 11:39:14 nobu Exp $
 
 include 'header.php';
 
@@ -27,7 +27,7 @@ if (empty($data)) {
     redirect_header('index.php', 3, _NOPERM);
     exit;
 }
-$_GET['cat']=$data['catid'];	// for notification
+$_GET['cat']=$data['topicid'];	// for notification
 $now=time();
 
 $data['exid']=$exid;

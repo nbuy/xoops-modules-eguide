@@ -24,3 +24,5 @@
 .entform { background-color: #eeeeff; }
 h2 { color: #800000; }
 h3 { color: #002040; margin-bottom: 0px;}
+#itemhelper, #itemhelper input, #itemhelper button,
+#itemhelper select { font-size: 90%; }

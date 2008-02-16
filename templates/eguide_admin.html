@@ -146,7 +146,23 @@ Calendar._TT["WK"] = "";
 <div><b><{$smarty.const._MD_RESERV_PERSONS}></b> <input type="text" name="persons" value="<{$persons}>" size="3" /> <{$smarty.const._MD_RESERV_UNIT}></div>
 <h3><{$smarty.const._MD_RESERV_ITEM}></h3>
 <textarea name="optfield" wrap="virtual" cols="60" rows="5"><{$optfield}></textarea>
-<div class="evinfo"><{$smarty.const._MD_RESERV_ITEM_DESC}> <{$label_desc}></div>
+<div id="itemhelper" style="display:none;">
+  <{$smarty.const._MD_RESERV_LAB}> <input name="xelab" size="10">
+  <input type="checkbox" name="xereq" title="<{$smarty.const._MD_RESERV_REQ}>">
+  <select name="xetype">
+    <option value="text">text</option>
+    <option value="checkbox">checkbox</option>
+    <option value="radio">radio</option>
+    <option value="textarea">textarea</option>
+    <option value="select">select</option>
+    <option value="hidden">hidden</option>
+    <option value="const">const</option>
+  </select>
+  <input name="xeopt" size="30" />
+  <button onClick="return addFieldItem();"><{$smarty.const._MD_RESERV_ADD}></button>
+</div>
+<div class="evinfo">
+  <{$smarty.const._MD_RESERV_ITEM_DESC}> <{$label_desc}></div>
 <h3><{$smarty.const._MD_RESERV_REDIRECT}></h3>
 <input type="text" name="redirect" value="<{$redirect}>" size="60" />
 <div class="evinfo"><{$smarty.const._MD_RESERV_REDIRECT_DESC}></div>
@@ -161,6 +177,34 @@ Calendar._TT["WK"] = "";
 </form>
 <script type='text/javascript'>
 <!--//
+
+// display only JavaScript enable
+xoopsGetElementById('itemhelper').style.display = "block";
+
+function addFieldItem() {
+    var myform = window.document.evform;
+    var item=myform.xelab.value;
+    if (item == "") {
+	alert("<{$smarty.const._MD_RESERV_LABREQ}>");
+	myform.xelab.focus();
+	return false;
+    }
+    if (myform.xereq.checked) item += '*';
+    var ty = myform.xetype.value;
+    var ov = myform.xeopt.value;
+    item += ','+ty;
+    if (ty != 'text' && ty != 'textarea' && ov == "") {
+	alert(ty+": <{$smarty.const._MD_RESERV_OPTREQ}>");
+	myform.xeopt.focus();
+	return false;
+    }
+    if (ov != "") item += ','+ov;
+    if (!myform.optfield.value.match(/[\n\r]$/)) item = "\n"+item;
+    myform.optfield.value += item;
+    myform.xelab.value = ""; // clear old value
+    myform.xeopt.value = "";
+    return false; // always return false
+}
 function xoopsFormValidate_evform() {
     myform = window.document.evform;
 <{foreach from=$check key=name item=msg}>
