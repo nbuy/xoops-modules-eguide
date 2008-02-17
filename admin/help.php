@@ -1,9 +1,11 @@
 <?php
 # show language help.html
-# $Id: help.php,v 1.3 2008/02/03 16:30:39 nobu Exp $
+# $Id: help.php,v 1.4 2008/02/17 05:22:59 nobu Exp $
 
 include '../../../include/cp_header.php';
-include dirname(dirname(__FILE__)).'/mydirname.php';
+global $mydirpath, $mydirname;
+$mydirpath = dirname(dirname(__FILE__));
+$mydirname = basename($mydirpath);
 
 // for compat older PHP 4.x
 if(!function_exists("file_get_contents")) {
