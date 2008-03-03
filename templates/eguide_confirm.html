@@ -8,10 +8,23 @@
 <{/foreach}>
 </div>
 <{/if}>
-<{if $values}>
+<{if $items}>
 <table cellspacing="1" cellpadding="2" border="0" class="outer">
-<{foreach key=lab item=val from=$values}>
-   <tr class="<{cycle values="even, odd"}>"><td class="head"><{$lab}></td><td><{$val}></td></tr>
+<{foreach key=lab item=fm from=$items name=item}>
+  <{if preg_match("/^-/", $items[$smarty.foreach.item.iteration].label)}>
+    <{if empty($form_continue)}>
+      <tr class="<{cycle values="even, odd"}>"><td class="head"><{$fm.label}></td><td>
+      <{assign var=form_continue value=1}>
+    <{/if}>
+    <{$fm.value}>
+  <{else}>
+    <{if !empty($form_continue)}>
+       <{$fm.value}></td></tr>
+      <{assign var=form_continue value=0}>
+    <{else}>
+      <tr class="<{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}></td></tr>
+    <{/if}>
+  <{/if}>
 <{/foreach}>
 </table>
 <{/if}>
