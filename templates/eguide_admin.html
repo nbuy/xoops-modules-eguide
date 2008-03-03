@@ -199,8 +199,9 @@ function addFieldItem() {
 	return false;
     }
     if (ov != "") item += ','+ov;
-    if (!myform.optfield.value.match(/[\n\r]$/)) item = "\n"+item;
-    myform.optfield.value += item;
+    opts = myform.optfield;
+    if (opts.value!="" && !opts.value.match(/[\n\r]$/)) item = "\n"+item;
+    opts.value += item;
     myform.xelab.value = ""; // clear old value
     myform.xeopt.value = "";
     return false; // always return false
