@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.32 2008/02/16 11:39:14 nobu Exp $
+// $Id: index.php,v 1.33 2008/07/05 06:14:30 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -199,7 +199,7 @@ case 'notifies':
 	    _DELETE."' />\n</form>\n<p><a href='../reserv.php?op=register'>".
 	    _MI_EGUIDE_REG."</a></p>";
     } else {
-	echo "<div class='evnote'>"._MD_INFO_NODATA."</div>";
+	echo "<div class='evnote'>"._AM_NODATA."</div>";
     }
     CloseTable();
     break;

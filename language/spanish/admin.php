@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.3 2008/02/03 15:28:52 nobu Exp $
+// $Id: admin.php,v 1.4 2008/07/05 06:14:06 nobu Exp $
 define("_AM_DBUPDATED","Base de datos actualizada");
 define("_AM_TITLE","Título");
 define("_AM_POSTER","Autor");
@@ -34,6 +34,7 @@ define("_AM_RESERVATION","Reservación");
 define("_AM_EVENT_DAY","Fecha del Evento");
 define("_AM_RECEIPT","Listado");
 define("_AM_COUNT","Contador");
+define("_AM_NODATA","No hay participantes");
 
 define("_AM_INFO_SEARCH","Buscar");
 
