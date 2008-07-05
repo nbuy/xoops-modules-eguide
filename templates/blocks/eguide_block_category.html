@@ -1,3 +1,4 @@
+<{if $block.options}>
 <form action="<{$block.action}>" id="<{$block.dirname}>_catsel" style="text-align: center;">
 <select name="cat" onChange="submit();">
   <option value="">-----</option>
@@ -6,3 +7,4 @@
 <{/foreach}>
 </select>
 </form>
+<{/if}>
