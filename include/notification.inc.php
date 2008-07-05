@@ -1,5 +1,5 @@
 <?php
-// $Id: notification.inc.php,v 1.4 2008/02/11 05:02:42 nobu Exp $
+// $Id: notification.inc.php,v 1.5 2008/07/05 06:22:07 nobu Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -35,7 +35,9 @@ function '.$myprefix.'_notify_iteminfo( $category, $item_id )
 ' ) ;
 
 
-if (function_exists('eguide_notify_iteminfo_base')) return;
+if (!function_exists('eguide_notify_iteminfo_base')) {
+
+include_once dirname(dirname(__FILE__)).'/const.php';
 
 function eguide_notify_iteminfo_base($dirname, $prefix, $category, $item_id)
 {
@@ -51,5 +53,7 @@ function eguide_notify_iteminfo_base($dirname, $prefix, $category, $item_id)
 	$item['url'] = XOOPS_URL."/modules/$dirname/event.php?eid=".$item_id;
     }
     return $item;
+}
+
 }
 ?>
