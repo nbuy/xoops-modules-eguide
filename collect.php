@@ -1,6 +1,6 @@
 <?php
 // Event collection setting by Poster
-// $Id: collect.php,v 1.5 2007/05/15 17:32:55 nobu Exp $
+// $Id: collect.php,v 1.6 2008/07/05 06:27:53 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -89,7 +89,7 @@ OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref
   WHERE $cond ORDER BY edate");
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = 'eguide_collect.html';
+$xoopsOption['template_main'] = $myprefix.'_collect.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 
 $num = $xoopsDB->getRowsNum($result);
@@ -133,11 +133,15 @@ $xoopsTpl->assign('dateline', $dateline);
 $xoopsTpl->assign('cells', $cells);
 
 $paths = array();
-if (!empty($event[$eid]['title'])) {
-    $paths[$event[$eid]['title']] = "event.php?eid=$eid";
+$catid = 0;
+if (!empty($eid)) {
+    if (!empty($event[$eid]['title'])) {
+	$paths[$event[$eid]['title']] = "event.php?eid=$eid";
+    }
+    $catid = $event[$eid]['catid'];
 }
-$paths[_MD_RESERV_PERSONS._EDIT] = "collect.php".($eid?"?eid=$eid":"");
-set_eguide_breadcrumbs($event[$eid]['catid'], $paths);
+$paths[_MD_RESERV_PERSONS._EDIT] = "";
+set_eguide_breadcrumbs($catid, $paths);
 
 include XOOPS_ROOT_PATH.'/footer.php';
 ?>

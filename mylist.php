@@ -1,6 +1,6 @@
 <?php
 // Event Guide - Personal reservation event list
-// $Id: mylist.php,v 1.3 2006/11/30 14:14:52 nobu Exp $
+// $Id: mylist.php,v 1.4 2008/07/05 06:27:53 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -11,7 +11,7 @@ if (!is_object($xoopsUser)) {
 $uid = $xoopsUser->getVar('uid');
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = 'eguide_mylist.html';
+$xoopsOption['template_main'] = $myprefix.'_mylist.html';
 
 $res = $xoopsDB->query('SELECT count(rvid) FROM '.RVTBL.' WHERE uid='.$uid);
 list($rvcount) = $xoopsDB->fetchRow($res);

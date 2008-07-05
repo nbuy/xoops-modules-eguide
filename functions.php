@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.23 2008/02/03 15:28:51 nobu Exp $
+// $Id: functions.php,v 1.24 2008/07/05 06:27:53 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -72,8 +72,8 @@ function edit_eventdata(&$data) {
     case 2: $html = 0;
     case 1: $br = 1;
     }
-    $data['disp_summary'] = str_replace($pat,$str,xss_filter($myts->displayTarea($data['summary'],$html,0,1,1,$br)));
-    $data['disp_body'] = str_replace($pat,$str,xss_filter($myts->displayTarea($data['body'],$html,0,1,1,$br)));
+    $data['disp_summary'] = empty($data['summary'])?'':str_replace($pat,$str,xss_filter($myts->displayTarea($data['summary'],$html,0,1,1,$br)));
+    $data['disp_body'] = empty($data['body'])?'':str_replace($pat,$str,xss_filter($myts->displayTarea($data['body'],$html,0,1,1,$br)));
     $data['title'] = $myts->htmlSpecialChars($data['title']);
     // fill of seat
     if (!empty($data['persons'])) {

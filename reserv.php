@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.33 2007/12/31 06:43:53 nobu Exp $
+// $Id: reserv.php,v 1.34 2008/07/05 06:27:53 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -290,7 +290,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
     if (empty($errs)) break;
 
 case 'confirm':
-    $xoopsOption['template_main'] = 'eguide_confirm.html';
+    $xoopsOption['template_main'] = $myprefix.'_confirm.html';
 
     $data = fetch_event($eid, $exid);
     $opts = $data['optfield'];
@@ -312,7 +312,11 @@ case 'confirm':
     $xoopsTpl->assign('event', edit_eventdata($data));
 
     $xoopsTpl->assign('errors', $errs);
-    $xoopsTpl->assign('values', $vals);
+    $items = array();
+    foreach ($vals as $k=>$v) {
+	$items[] = array('label'=>$k, 'value'=>$v);
+    }
+    $xoopsTpl->assign('items', $items);
     $form = "";
     if (!$errs) {
 	$n = 0;
@@ -359,7 +363,7 @@ case 'cancel':
 	    $eid = $data['eid'];
 	    $key = isset($_GET['key'])?intval($_GET['key']):'';
 	    edit_eventdata($data);
-	    $xoopsOption['template_main'] = 'eguide_confirm.html';
+	    $xoopsOption['template_main'] = $myprefix.'_confirm.html';
 	    $xoopsTpl->assign('event', $data);
 	    if (isset($_GET['back'])) {
 		$back =  $myts->stripSlashesGPC($_GET['back']);

@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module for XOOPS
-// $Id: index.php,v 1.20 2008/02/04 12:59:15 nobu Exp $
+// $Id: index.php,v 1.21 2008/07/05 06:27:53 nobu Exp $
 
 include 'header.php';
 
@@ -89,7 +89,7 @@ while ($event = $xoopsDB->fetchArray($result)) {
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = 'eguide_index.html';
+$xoopsOption['template_main'] = $myprefix.'_index.html';
 
 $xoopsTpl->assign('events', $events);
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
