@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.35 2008/07/20 07:03:06 nobu Exp $
+// $Id: reserv.php,v 1.36 2008/07/20 12:45:31 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -290,7 +290,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
     if (empty($errs)) break;
 
 case 'confirm':
-    $xoopsOption['template_main'] = $myprefix.'_confirm.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_confirm.html';
 
     $data = fetch_event($eid, $exid);
     $opts = $data['optfield'];
@@ -363,7 +363,7 @@ case 'cancel':
 	    $eid = $data['eid'];
 	    $key = isset($_GET['key'])?intval($_GET['key']):'';
 	    edit_eventdata($data);
-	    $xoopsOption['template_main'] = $myprefix.'_confirm.html';
+	    $xoopsOption['template_main'] = EGPREFIX.'_confirm.html';
 	    $xoopsTpl->assign('event', $data);
 	    if (isset($_GET['back'])) {
 		$back =  $myts->stripSlashesGPC($_GET['back']);

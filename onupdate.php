@@ -1,6 +1,6 @@
 <?php
 # eguide module onUpdate proceeding.
-# $Id: onupdate.php,v 1.3 2008/02/03 15:28:51 nobu Exp $
+# $Id: onupdate.php,v 1.4 2008/07/20 12:45:31 nobu Exp $
 
 global $xoopsDB;
 include_once dirname(__FILE__)."/const.php";
@@ -82,7 +82,7 @@ function report_message($msg) {
 }
 
 function add_field($table, $field, $type, $after) {
-    global $xoopsDB, $myprefix;
+    global $xoopsDB;
     $res = $xoopsDB->query("SELECT $field FROM $table", 1);
     if (empty($res) && $xoopsDB->errno()) { // check exists
 	if ($after) $after = "AFTER $after";

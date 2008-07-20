@@ -1,6 +1,6 @@
 <?php
 // Reservation Entry by Poster
-// $Id: entry.php,v 1.7 2008/07/20 07:03:06 nobu Exp $
+// $Id: entry.php,v 1.8 2008/07/20 12:45:31 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -66,7 +66,7 @@ $data['exid']=$exid;
 $data['isadmin'] = true;
 $data['link'] = true;
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = $myprefix.'_entry.html';
+$xoopsOption['template_main'] = EGPREFIX.'_entry.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 edit_eventdata($data);
 $xoopsTpl->assign('event', $data);

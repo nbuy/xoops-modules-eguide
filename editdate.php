@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.12 2008/07/05 06:27:53 nobu Exp $
+// $Id: editdate.php,v 1.13 2008/07/20 12:45:31 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -18,7 +18,7 @@ if (!$data) {
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = $myprefix.'_editdate.html';
+$xoopsOption['template_main'] = EGPREFIX.'_editdate.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
 $edate = $data['edate'];
 $xoopsTpl->assign('event', edit_eventdata($data));

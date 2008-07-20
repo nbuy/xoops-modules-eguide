@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.27 2008/07/20 07:03:06 nobu Exp $
+// $Id: admin.php,v 1.28 2008/07/20 12:45:31 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -26,7 +26,7 @@ $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
 $targs = array('title', 'summary', 'body', 'optfield', 'before', 'redirect');
 
 $myts =& MyTextSanitizer::getInstance();
-$xoopsOption['template_main'] = $myprefix.'_admin.html';
+$xoopsOption['template_main'] = EGPREFIX.'_admin.html';
 
 if ($op=='new') {
     // default value in post form
@@ -282,7 +282,7 @@ foreach ($check as $k=>$v) {
 $xoopsTpl->assign('check', $check);
 
 if ($eid && $op=='delete') {
-    $xoopsOption['template_main'] = $myprefix.'_event.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_event.html';
     edit_eventdata($data);
     unset($data['eid']);	// disable control link
     $xoopsTpl->assign('event', $data);
