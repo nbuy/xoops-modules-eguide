@@ -1,6 +1,6 @@
 <?php
 // Reservation Entry by Poster
-// $Id: entry.php,v 1.6 2008/07/05 06:27:53 nobu Exp $
+// $Id: entry.php,v 1.7 2008/07/20 07:03:06 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -34,7 +34,7 @@ if (isset($_POST['eid'])) {
 	$strict = $data['strict'];
 	$persons = $data['persons'];
 	$num = 1;
-	$nlab = $xoopsModuleConfig['label_persons'];
+	$nlab = eguide_form_options('label_persons');
 	if ($nlab && isset($vals[$nlab])) {
 	    $num =  intval($vals[$nlab]);
 	    if ($num<1) $num = 1;

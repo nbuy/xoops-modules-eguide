@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.6 2008/02/03 15:28:52 nobu Exp $
+// $Id: modinfo.php,v 1.7 2008/07/20 07:03:06 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -55,8 +55,8 @@ define('_MI_EGUIDE_ORDERCONF', '是否要確認頁面？');
 define('_MI_EGUIDE_ORDERCONF_DESC', '當報名時，顯示報名確認頁');
 define('_MI_EGUIDE_CLOSEBEFORE', '預設報名活動在幾分鐘前關閉');
 define('_MI_EGUIDE_CLOSEBEFORE_DESC', '活動的資訊在截止前幾分鐘關閉');
-define('_MI_EGUIDE_LAB_PERSONS', '團體報名人數欄位');
-define('_MI_EGUIDE_LAB_PERSONS_DESC', '在製作報名表單，用來詢問團體報名人數有多少，程式會自動幫您扣除團體報名的人數，單位：人。例如：團體報名(人)');
+define('_MI_EGUIDE_LAB_PERSONS', '增列項目的選項');
+define('_MI_EGUIDE_LAB_PERSONS_DESC', '增列項目，可選設置，就像一個領域的標籤有多少人，單位：人。例如：label_persons=團體報名(人)');
 define('_MI_EGUIDE_DATE_FORMAT', '日期格式');
 define('_MI_EGUIDE_DATE_FORMAT_DESC', '活動開始時間顯示格式，使用 PHP date 函式。');
 define('_MI_EGUIDE_DATE_FORMAT_DEF', 'Y-m-d');

@@ -1,6 +1,6 @@
 <?php
 // reservation functions
-// $Id: reserv_func.php,v 1.5 2008/02/16 11:39:14 nobu Exp $
+// $Id: reserv_func.php,v 1.6 2008/07/20 07:03:06 nobu Exp $
 
 function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
     $myts =& MyTextSanitizer::getInstance();
@@ -110,7 +110,7 @@ function check_prev_order($data, $vals, &$errs, $force=false) {
     }
     // checking is there any seat?
     $num = 1;			// how many orders?
-    $nlab = $xoopsModuleConfig['label_persons'];
+    $nlab = eguide_form_options('label_persons');
     if ($nlab && isset($vals[$nlab])) {
 	$num =  intval($vals[$nlab]);
 	if ($num<1) $num = 1;

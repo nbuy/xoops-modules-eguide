@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.51 2008/02/16 11:39:14 nobu Exp $
+// $Id: xoops_version.php,v 1.52 2008/07/20 07:03:06 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
@@ -10,7 +10,7 @@ $myicon = "images/{$myprefix}_slogo2.png";
 if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
 
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = "2.42";
+$modversion['version'] = 2.5;
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -212,10 +212,12 @@ $modversion['config'][]=array('name' => 'has_confirm',
 			      'formtype' => 'yesno',
 			      'valuetype' => 'int',
 			      'default' => 1);
+
+# label_persons - eguide 2.5 re-define multiple variable setting accept.
 $modversion['config'][]=array('name' => 'label_persons',
 			      'title' => '_MI_EGUIDE_LAB_PERSONS',
 			      'description' => '_MI_EGUIDE_LAB_PERSONS_DESC',
-			      'formtype' => 'text',
+			      'formtype' => 'textarea',
 			      'valuetype' => 'text',
 			      'default' => '');
 $modversion['config'][]=array('name' => 'close_before',

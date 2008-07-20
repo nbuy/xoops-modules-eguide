@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.26 2008/07/05 06:27:53 nobu Exp $
+// $Id: admin.php,v 1.27 2008/07/20 07:03:06 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -344,7 +344,7 @@ if ($eid && $op=='delete') {
     }
     $summary = isset($data['summary'])?$data['summary']:'';
     $textarea = new myFormDhtmlTextArea('', 'summary', $summary, 10, 60);
-    $nlab = $xoopsModuleConfig['label_persons'];
+    $nlab = eguide_form_options('label_persons');
     if ($nlab) $nlab = sprintf(_MD_RESERV_LABEL_DESC, $nlab);
     $xoopsTpl->assign(array('input_edate'=>datefield('edate',$data['edate']),
 			    'input_expire'=>$input_expire,

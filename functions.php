@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.24 2008/07/05 06:27:53 nobu Exp $
+// $Id: functions.php,v 1.25 2008/07/20 07:03:06 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -174,9 +174,9 @@ function eventform($data) {
 		    array_shift($opt);
 	    }
 	    if ($type=='hidden') continue;
-	    $size = 60;
-	    $cols = 40;
-	    $rows = 5;
+	    $size = eguide_form_options('size', 60);
+	    $cols = eguide_form_options('cols', 40);
+	    $rows = eguide_form_options('rows', 5);
 	    $opts = "";
 	    $comment = "";
 	    $fname = "opt$field";
@@ -421,8 +421,19 @@ function order_notify($data, $email, $value) {
 
     $xoopsMailer =& getMailer();
     $xoopsMailer->useMail();
-    $tplfile = $data['autoaccept']?"accept.tpl":"order.tpl";
-    $xoopsMailer->setTemplateDir(template_dir($tplfile));
+
+    $tplname = $data['autoaccept']?"accept%s.tpl":"order%s.tpl";
+    $extra = eguide_form_options('reply_extention');
+    $tplfile = sprintf($tplname, ''); // default template name
+    $tmpdir = template_dir($tplfile);
+    if ($extra) {
+	$vals=unserialize_text($value);
+	if (isset($vals[$extra])) {
+	    $extpl = sprintf($tplname, $vals[$extra]);
+	    if (file_exists("$tmpdir$extpl")) $tplfile = $extpl;
+	}
+    }
+    $xoopsMailer->setTemplateDir($tmpdir);
     $xoopsMailer->setTemplate($tplfile);
     if ($xoopsModuleConfig['member_only']) {
 	$uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
@@ -485,5 +496,25 @@ if(!function_exists("file_get_contents")) {
 	}
 	return $contents;
     }
+}
+
+function eguide_form_options($name='', $def=false) {
+    static $options;
+    if (!isset($options)) {
+	$options = array();
+	$re = '/^\s*([a-z\d_]+)\s*=(.+)$/';
+	$opts = $GLOBALS['xoopsModuleConfig']['label_persons'];
+	if (preg_match('/^[^\n]*$/', $opts) && !preg_match($re, $opts)) {
+	    $options['label_persons']=trim($opts);
+	} else {
+	    foreach (explode("\n", $opts) as $ln) {
+		if (preg_match('/\s*#/', $ln)) continue;
+		if (preg_match($re, $ln, $d)) {
+		    $options[$d[1]]=trim($d[2]);
+		}
+	    }
+	}
+    }
+    return $name?(empty($options[$name])?$def:$options[$name]):$options;
 }
 ?>

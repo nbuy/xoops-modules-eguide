@@ -1,13 +1,13 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.34 2008/07/05 06:27:53 nobu Exp $
+// $Id: reserv.php,v 1.35 2008/07/20 07:03:06 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
 $rvid = param('rvid');
 $key = param('key');
 $now=time();
-$nlab = $xoopsModuleConfig['label_persons'];
+$nlab = eguide_form_options('label_persons');
 $myts =& MyTextSanitizer::getInstance();
 
 if ($xoopsModuleConfig['member_only'] && !is_object($xoopsUser)) {

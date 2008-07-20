@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.5 2008/02/03 15:28:52 nobu Exp $
+// $Id: modinfo.php,v 1.6 2008/07/20 07:03:06 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -56,8 +56,8 @@ define("_MI_EGUIDE_ORDERCONF","Bestätigungsseite");
 define("_MI_EGUIDE_ORDERCONF_DESC","Bestätigungsseite nach Reservierung anzeigen");
 define("_MI_EGUIDE_CLOSEBEFORE","Schlusszeit (min)");
 define("_MI_EGUIDE_CLOSEBEFORE_DESC","Zeit vor Beginn der Veranstaltung, in der keine Reservierungen mehr angenommen werden");
-define("_MI_EGUIDE_LAB_PERSONS","Name des zusätlichen Feldes");
-define("_MI_EGUIDE_LAB_PERSONS_DESC","Wie heißt das Feld im Bestellformular. (z.B. Anzahl Tickets)");
+define("_MI_EGUIDE_LAB_PERSONS","Zusätzliche Optionen Posten");
+define("_MI_EGUIDE_LAB_PERSONS_DESC","Zusätzliche Posten zusätzliche optionale Einstellungen, wie ein Feldbezeichnung für wie viele Personen. (z.B. 'label_persons=Anzahl Tickets')");
 define("_MI_EGUIDE_DATE_FORMAT","Datumsformat");
 define("_MI_EGUIDE_DATE_FORMAT_DESC","Eröffnungstermin Datum(Zeit) Anzeigeformat. Using PHP date function format.");
 define("_MI_EGUIDE_DATE_FORMAT_DEF","D, d M Y");

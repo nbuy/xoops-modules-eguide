@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.18 2008/02/03 15:28:51 nobu Exp $
+// $Id: modinfo.php,v 1.19 2008/07/20 07:03:06 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -55,8 +55,8 @@ define("_MI_EGUIDE_ORDERCONF","Has confirm page");
 define("_MI_EGUIDE_ORDERCONF_DESC","Display confirm page when reservation submit");
 define("_MI_EGUIDE_CLOSEBEFORE","Close Time Before (min)");
 define("_MI_EGUIDE_CLOSEBEFORE_DESC","Event entry close time before setting minits.");
-define("_MI_EGUIDE_LAB_PERSONS","Label of persons");
-define("_MI_EGUIDE_LAB_PERSONS_DESC","Extra field label in reservation form for how many persons");
+define("_MI_EGUIDE_LAB_PERSONS","Additional item options");
+define("_MI_EGUIDE_LAB_PERSONS_DESC","Additional item optional settings, like a field label for how many persons. Example: 'label_persons=Persons'. See about eguide page more details.");
 define("_MI_EGUIDE_DATE_FORMAT","Date Foramt");
 define("_MI_EGUIDE_DATE_FORMAT_DESC","Open Event Date(Time) display format. Using PHP date function format.");
 define("_MI_EGUIDE_DATE_FORMAT_DEF","D, d M Y");

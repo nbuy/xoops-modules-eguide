@@ -7,10 +7,12 @@
 td,th { padding: 4px; background: #e8e8e8;}
 .head th  { padding: 4px; background: #d0d0d0; }
 .bnf { color: #008000; }
-.note { font-size: 80%; color: #800000; padding: 0.5em;}
 </style>
 </head>
 <body>
+<style>
+.note { font-size: 90%; color: #800000; padding: 0.5em;}
+</style>
   <h1>Event Guide module</h1>
   <ul>
   <li><a href="#summary">Summary</a></li>
@@ -171,9 +173,19 @@ td,th { padding: 4px; background: #e8e8e8;}
 	<td>Display confirm page when reservation submit</td>
       </tr>
       <tr class="odd">
-	<th align="left">Label of persons</th>
+	<th align="left">Additional item options</th>
 	<td>(none)</td>
-	<td>Extra field label in reservation form for how many persons.</td>
+	<td>Additional item optional settings.
+	  <ul>
+	    <li>label_persons=label (label for multiple person reservation)</li>
+	    <li>reply_extention=label (label for reply mail template extention)</li>
+	    <dt>size=60 (text input default size)</dt>
+	    <li>cols=40 (textarea default columns)</li>
+	    <li>rows=5 (textarea default rows)</li>
+	  </ul>
+	  See "<a href="#form_options">Additional item options</a>" more details.
+	  
+	</td>
       </tr>
       <tr class="even">
 	<th align="left">Close Time Before (min)</th>
@@ -223,6 +235,35 @@ td,th { padding: 4px; background: #e8e8e8;}
 
     </table>
   </blockquote>
+
+  <a name="form_options"></a><h3>Additional item options</h3>
+  <dl>
+    <dt>label_persons (label for multiple person reservation)</dt>
+    <dd>This option setting for a reservation accept multiple persons.
+      Set item name(label) to input how many.
+      <p class="note">For example setting as
+	"<tt>label_persons=Persons</tt>". In additional item like as
+	"Persons,select,1,2,3,4" that make to recommand numeric choice field.
+      </p>
+      Only value setting in this config, Assume set for this "label_persons=" option.
+      This is compatible before eguide 2.5.
+    </dd>
+    <dt>reply_extention (label for reply mail template extention)</dt>
+    <dd>
+      This option using for switch reply mail tamplate.
+      
+
+      <div class="note">This option setting item name(label) for template file name extention.
+	<p>For example, setting in preferences "<tt>reply_extention=OrderForm</tt>", In Additional Items include like "OrderForm,hidden,A" field. This event reservation switch reply mail template file.</p>
+	<p>In this case(the value as "A") using template file name assume <tt>language/&lt;lang&gt;/mail_template/{accept|order}<b>A</b>.tpl</tt> and using it.</p>
+	<p>Additional value for file name, that is store value in reservation. In international using, recommand the value make alpha-numeric only. Because sometime there is encoding problem.<br/>If there is no mail template in additional name, using default mail template.</p>
+      </div>
+    </dd>
+    <dt>size (text input default size)</dt>
+    <dd>Default value as size=60</dd>
+    <dt>cols, rows (textarea default columns/rows)</dt>
+    <dd>Default value as cols=40, rows=5</dd>
+  </dl>
 
   <a name="form"></a><h2>Additional fields Format</h2>
   <strong>In Reservation</strong>
@@ -339,6 +380,17 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h2>Changes</h2>
 
 <dl>
+  <dt>2008/07/20 eguide 2.5 released</dt>
+  <dd>
+    <ul>
+      <li>Add item options "reply_extention" as switch reply mail template</li>
+      <li>Apply "Additional item options" in defaults</li>
+      <li>Change preferences "Label of persons" to "Additional item options"</li>
+      <li>Not display category select button if there is no categires</li>
+      <li>Add no data language resources for admin page</li>
+      <li>Fix using template set mistake.</li>
+    </ul>
+  </dd>
   <dt>2008/02/16 eguide 2.42 released</dt>
   <dd>
     <ul>
@@ -444,6 +496,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.43 2008/02/16 11:39:14 nobu Exp $
+$Id: help.html,v 1.44 2008/07/20 07:03:06 nobu Exp $
 </body>
 </html>

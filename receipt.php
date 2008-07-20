@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.27 2008/07/05 06:27:53 nobu Exp $
+// $Id: receipt.php,v 1.28 2008/07/20 07:03:06 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -10,7 +10,7 @@ $rvid=param('rvid');
 $eid= param('eid');
 $exid= param('sub');
 $myts =& MyTextSanitizer::getInstance();
-$nlab = $xoopsModuleConfig['label_persons'];
+$nlab = eguide_form_options('label_persons');
 
 if ($rvid) {
     if ($op=='view') $op = 'one';
@@ -291,6 +291,8 @@ default:
     $rep[] = $title;
     $pat[] ='{EVENT_URL}';
     $rep[] = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":'');
+    $pat[] ='{REQ_UNAME}';
+    $rep[] = $xoopsUser->getVar('uname');
     $template = file_get_contents(template_dir('confirm.tpl')."/confirm.tpl");
     $mailmsg = htmlspecialchars(str_replace($pat, $rep, $template));
     $max = $xoopsModuleConfig['max_item'];
