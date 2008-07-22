@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.25 2008/07/20 07:03:06 nobu Exp $
+// $Id: functions.php,v 1.26 2008/07/22 15:09:44 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -423,7 +423,7 @@ function order_notify($data, $email, $value) {
     $xoopsMailer->useMail();
 
     $tplname = $data['autoaccept']?"accept%s.tpl":"order%s.tpl";
-    $extra = eguide_form_options('reply_extention');
+    $extra = eguide_form_options('reply_extension');
     $tplfile = sprintf($tplname, ''); // default template name
     $tmpdir = template_dir($tplfile);
     if ($extra) {

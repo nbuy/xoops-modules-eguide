@@ -178,7 +178,7 @@ td,th { padding: 4px; background: #e8e8e8;}
 	<td>Additional item optional settings.
 	  <ul>
 	    <li>label_persons=label (label for multiple person reservation)</li>
-	    <li>reply_extention=label (label for reply mail template extention)</li>
+	    <li>reply_extension=label (label for reply mail template extension)</li>
 	    <dt>size=60 (text input default size)</dt>
 	    <li>cols=40 (textarea default columns)</li>
 	    <li>rows=5 (textarea default rows)</li>
@@ -248,13 +248,13 @@ td,th { padding: 4px; background: #e8e8e8;}
       Only value setting in this config, Assume set for this "label_persons=" option.
       This is compatible before eguide 2.5.
     </dd>
-    <dt>reply_extention (label for reply mail template extention)</dt>
+    <dt>reply_extension (label for reply mail template extension)</dt>
     <dd>
       This option using for switch reply mail tamplate.
       
 
-      <div class="note">This option setting item name(label) for template file name extention.
-	<p>For example, setting in preferences "<tt>reply_extention=OrderForm</tt>", In Additional Items include like "OrderForm,hidden,A" field. This event reservation switch reply mail template file.</p>
+      <div class="note">This option setting item name(label) for template file name extension.
+	<p>For example, setting in preferences "<tt>reply_extension=OrderForm</tt>", In Additional Items include like "OrderForm,hidden,A" field. This event reservation switch reply mail template file.</p>
 	<p>In this case(the value as "A") using template file name assume <tt>language/&lt;lang&gt;/mail_template/{accept|order}<b>A</b>.tpl</tt> and using it.</p>
 	<p>Additional value for file name, that is store value in reservation. In international using, recommand the value make alpha-numeric only. Because sometime there is encoding problem.<br/>If there is no mail template in additional name, using default mail template.</p>
       </div>
@@ -380,10 +380,10 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h2>Changes</h2>
 
 <dl>
-  <dt>2008/07/20 eguide 2.5 released</dt>
+  <dt>2008/07/22 eguide 2.5 released</dt>
   <dd>
     <ul>
-      <li>Add item options "reply_extention" as switch reply mail template</li>
+      <li>Add item options "reply_extension" as switch reply mail template</li>
       <li>Apply "Additional item options" in defaults</li>
       <li>Change preferences "Label of persons" to "Additional item options"</li>
       <li>Not display category select button if there is no categires</li>
@@ -496,6 +496,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.44 2008/07/20 07:03:06 nobu Exp $
+$Id: help.html,v 1.45 2008/07/22 15:09:44 nobu Exp $
 </body>
 </html>
