@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.33 2008/07/05 06:14:30 nobu Exp $
+// $Id: index.php,v 1.34 2008/08/20 01:53:55 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -34,7 +34,7 @@ switch ($op) {
 case 'catsave':
     $catid=intval($_POST['catid']);
     $vals = array();
-    foreach (array('catname', 'catdesc', 'catpri', 'weight') as $k) {
+    foreach (array('catname', 'catdesc', 'catpri', 'weight', 'catimg') as $k) {
 	$vals[$k] = $xoopsDB->quoteString(param($k,''));
     }
     if ($catid) {
@@ -92,6 +92,28 @@ case 'impsave':
     }
     redirect_header("?op=category", 1, _AM_DBUPDATED);
     exit;
+case 'resvCtrl':
+    $rv = isset($_POST['rv'])?$_POST['rv']:array();
+    $ck = isset($_POST['ck'])?$_POST['ck']:array();
+    $off = $on = "";
+    foreach (array_keys($rv) as $k) {
+	if (isset($ck[$k])) {
+	    if ($on!="") $on .= " OR ";
+	    $on .= "eid=".intval($k);
+	} else {
+	    if ($off!="") $off .= " OR ";
+	    $off .= "eid=".intval($k);
+	}
+    }
+    if ($on != "") {
+	$result = $xoopsDB->query("UPDATE ".OPTBL." SET reservation=1 WHERE $on");
+    }
+    if ($off != "") {
+	$result = $xoopsDB->query("UPDATE ".OPTBL." SET reservation=0 WHERE $off");
+    }
+    redirect_header("?op=events",1,_AM_DBUPDATED);
+    exit;
+
 }
 
 xoops_cp_header();
@@ -261,28 +283,6 @@ case 'catimp':
     echo "<h4>"._AM_CATEGORY."</h4>\n";
     import_category();
     break;
-
-case 'resvCtrl':
-    $rv = isset($_POST['rv'])?$_POST['rv']:array();
-    $ck = isset($_POST['ck'])?$_POST['ck']:array();
-    $off = $on = "";
-    foreach (array_keys($rv) as $k) {
-	if (isset($ck[$k])) {
-	    if ($on!="") $on .= " OR ";
-	    $on .= "eid=".intval($k);
-	} else {
-	    if ($off!="") $off .= " OR ";
-	    $off .= "eid=".intval($k);
-	}
-    }
-    if ($on != "") {
-	$result = $xoopsDB->query("UPDATE ".OPTBL." SET reservation=1 WHERE $on");
-    }
-    if ($off != "") {
-	$result = $xoopsDB->query("UPDATE ".OPTBL." SET reservation=0 WHERE $off");
-    }
-    redirect_header("?op=events",1,_AM_DBUPDATED);
-    exit;
 
 case 'summary':
     echo "<h4>"._AM_SUMMARY."</h4>\n";

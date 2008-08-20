@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.52 2008/07/20 07:03:06 nobu Exp $
+// $Id: xoops_version.php,v 1.53 2008/08/20 01:53:55 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
@@ -10,7 +10,7 @@ $myicon = "images/{$myprefix}_slogo2.png";
 if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
 
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = 2.5;
+$modversion['version'] = 2.51;
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";

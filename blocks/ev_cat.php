@@ -1,6 +1,6 @@
 <?php
 # Event category select block 
-# $Id: ev_cat.php,v 1.4 2008/02/11 05:02:42 nobu Exp $
+# $Id: ev_cat.php,v 1.5 2008/08/20 01:53:55 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -18,14 +18,15 @@ function b_event_select_base($dirname, $prefix, $options) {
     $cat = $xoopsDB->prefix($prefix.'_category');
     $cats = $options[0];
     $opt = preg_match('/^(\d+,)*\d+$/', $cats)?" WHERE p.catid IN ($cats)":"";
-    $result = $xoopsDB->query("SELECT c.catid, c.catname AS name, c.catimg AS image,if (p.weight, p.weight, c.weight) ord1, if(p.weight IS NULL, -1, c.weight) ord2,c.catpri FROM $cat c LEFT JOIN $cat p ON c.catpri=p.catid $opt ORDER BY ord1,ord2,catid");
+    $result = $xoopsDB->query("SELECT c.catid, c.catname AS name, c.catimg AS image,if (p.weight, p.weight, c.weight) ord1, if(p.weight IS NULL, -1, c.weight) ord2,c.catpri, c.catdesc FROM $cat c LEFT JOIN $cat p ON c.catpri=p.catid $opt ORDER BY ord1,ord2,catid");
     $list = array();
     $catid = isset($_GET['cat'])?intval($_GET['cat']):0;
     while ($data=$xoopsDB->fetchArray($result)) {
 	$id = $data['catid'];
 	$name = htmlspecialchars($data['name']);
 	if (!empty($data['catpri']) && empty($cats)) $name = '-- '.$name;
-	$list[] = array('name'=>$name, 'catid'=>$id, 'image'=>$data['image']);
+	$data['name'] = $name;
+	$list[] = $data;
     }
     return array('options'=>$list,
 		 'dirname'=>$dirname,

@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.26 2008/07/22 15:09:44 nobu Exp $
+// $Id: functions.php,v 1.27 2008/08/20 01:53:55 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -97,6 +97,7 @@ function edit_eventdata(&$data) {
 	    $data['catid'] = $cid;
 	    $data['catname'] = $catlist[$cid]['name'];
 	    $data['catimg'] = $catlist[$cid]['image'];
+	    $data['catgory'] = $catlist[$cid];
 	}
     }
     return $data;
@@ -339,18 +340,18 @@ function get_eguide_category($all=true, $indent='') {
     static $catall, $cattop;
     if ($all) {
 	if (isset($catall)) return $catall;
-	$result = $xoopsDB->query("SELECT c.catid, c.catname AS name, c.catimg AS image,if (p.weight, p.weight, c.weight) ord1, if(p.weight IS NULL, -1, c.weight) ord2,c.catpri FROM ".CATBL." c LEFT JOIN ".CATBL." p ON c.catpri=p.catid ORDER BY ord1,ord2,catid");
+	$result = $xoopsDB->query("SELECT c.catid, c.catname AS name, c.catimg AS image,if (p.weight, p.weight, c.weight) ord1, if(p.weight IS NULL, -1, c.weight) ord2,c.catpri, c.catdesc FROM ".CATBL." c LEFT JOIN ".CATBL." p ON c.catpri=p.catid ORDER BY ord1,ord2,catid");
     } else {
 	if (isset($cattop)) return $cattop;
-	$result = $xoopsDB->query("SELECT catid, catname AS name, catimg AS image, catpri FROM ".CATBL." WHERE catpri=0 ORDER BY weight,catid");
+	$result = $xoopsDB->query("SELECT catid, catname AS name, catimg AS image, catpri, catdesc FROM ".CATBL." WHERE catpri=0 ORDER BY weight,catid");
     }
     $list = array();
     while ($data=$xoopsDB->fetchArray($result)) {
 	$id = $data['catid'];
 	$name = htmlspecialchars($data['name']);
 	if (!empty($data['catpri'])) $name = $indent.$name;
-	$list[$id] = array('catid'=>$id, 'name'=>$name,
-			   'image'=>$data['image'], 'catpri'=>$data['catpri']);
+	$data['name'] = $name;
+	$list[$id] = $data;
     }
     if ($all) $catall = $list;
     else $cattop = $list;
