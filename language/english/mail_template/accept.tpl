@@ -1,4 +1,6 @@
-Reservation - {TITLE}
+Confirm reservation
+  Title - {TITLE}
+  Confirmation No. {RVID}
 
 Your ordering reservation was accepted. Thank you.
 

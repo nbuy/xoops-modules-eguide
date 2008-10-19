@@ -1,4 +1,6 @@
-Reservierung bestätigt- {TITLE}
+Reservierung bestätigt
+  Titel - {TITLE}
+  Bestätigungsnummer {RVID}
 
 Ihre Reservierung wurde von einem Mitarbeiter bestätigt.
 
