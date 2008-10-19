@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.53 2008/08/20 01:53:55 nobu Exp $
+// $Id: xoops_version.php,v 1.54 2008/10/19 14:25:11 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
@@ -36,7 +36,7 @@ $modversion['onUpdate'] = "onupdate.php";
 
 // Admin things
 $modversion['hasAdmin'] = 1;
-$modversion['adminindex'] = "admin/index.php";
+$modversion['adminindex'] = "admin/help.php";
 $modversion['adminmenu'] = "admin/menu.php";
 
 // Templates

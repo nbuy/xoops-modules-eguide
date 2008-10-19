@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.28 2008/07/20 12:45:31 nobu Exp $
+// $Id: admin.php,v 1.29 2008/10/19 14:25:11 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -168,7 +168,6 @@ if ($op=='save' || $op=='date') {
 	$delta = $edate - $pdata['edate'];
 	if ($delta) {
 	    $xoopsDB->query('UPDATE '.EXTBL." SET exdate=exdate+'$delta' WHERE eidref=$eid AND exdate>$now");
-	    $xoopsDB->query('DELETE '.EXTBL." WHERE eidref=$eid AND exdate>$expire");
 	}
     } else {
 	$pdata = array('status'=>STAT_POST);

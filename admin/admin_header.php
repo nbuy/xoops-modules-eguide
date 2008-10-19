@@ -6,6 +6,8 @@ include "$modbase/const.php";
 include "$modbase/functions.php";
 
 $loc="$modbase/language/".$xoopsConfig['language'];
-if ( file_exists("$loc/modinfo.php") ) include_once("$loc/modinfo.php");
-else include_once("$modbase/language/english/modinfo.php");
+foreach (array("modinfo.php", "main.php") as $res) {
+    if ( file_exists("$loc/$res") ) include_once("$loc/$res");
+    else include_once("$modbase/language/english/$res");
+}
 ?>

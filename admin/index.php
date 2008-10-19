@@ -1,6 +1,6 @@
 <?php
 // Event Guide global administration
-// $Id: index.php,v 1.34 2008/08/20 01:53:55 nobu Exp $
+// $Id: index.php,v 1.35 2008/10/19 14:25:11 nobu Exp $
 
 include 'admin_header.php';
 include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
@@ -121,9 +121,12 @@ include 'mymenu.php';
 
 $myts =& MyTextSanitizer::getInstance();
 $tags = css_tags();
+
 switch ($op) {
 case 'events':
-    echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
+    echo "<h3>"._MI_EGUIDE_EVENTS."</h3>";
+    echo '<hr /><br />';
+    echo "<ul class=\"toptab\"><li class=\"add\"><a href=\"../admin.php\">"._MI_EGUIDE_SUBMIT."</a> </li></ul>\n";
     $result = $xoopsDB->query('SELECT count(eid) FROM '.EGTBL);
     list($count) = $xoopsDB->fetchRow($result);
     $max = $xoopsModuleConfig['max_list'];
@@ -135,7 +138,7 @@ case 'events':
     $n = 0;
     echo "<form method='post'>\n";
     if ($count>$max) echo "<div>".$nav->renderNav()."</div>";
-    echo "<table cellspacing='1' border='0' class='outer'>\n";
+    echo "<table class='outer'>\n";
     echo "<tr><th>"._AM_RESERVATION."</th><th>".
 	_AM_EVENT_DAY."</th><th>"._AM_TITLE."</th>";
     echo "<th>"._AM_POSTER."</th><th>"._AM_DISP_STATUS."</th>";
@@ -150,7 +153,7 @@ case 'events':
 	$s = $data['status'];
 	$sn = $ev_stats[$data['status']];
 	if ($s == STAT_DELETED) {
-	    $sn = "<a href='../admin.php?op=delete&eid=$eid'>$sn</a>";
+	    $sn = "<a href='../admin.php?op=delete&eid=$eid' class='deleted'>$sn</a>";
 	} elseif ($s == STAT_POST) {
 	    $sn = "<strong>$sn</strong>";
 	}
@@ -163,26 +166,27 @@ case 'events':
 	    $mk = "&nbsp;";
 	}
 	    
-	$edit = "<a href='../admin.php?eid=$eid'>"._EDIT."</a>".
-	    " <a href='?op=edit&eid=$eid'>"._AM_EDIT."</a>".
-	    " <a href='../admin.php?op=delete&eid=$eid'>"._DELETE."</a>";
+	$edit = "<a href='../admin.php?eid=$eid' class='edit'>"._EDIT."</a>".
+	    " <a href='?op=edit&eid=$eid' class='status'>"._AM_EDIT."</a>".
+	    " <a href='../admin.php?op=delete&eid=$eid' class='delete'>"._DELETE."</a>";
 	echo "<tr class='$bg'><td align='center'>$mk</td><td>$date</td><td>$title</td>";
-	echo "<td>$u</td><td>$sn</td><td>$edit</td></tr>\n";
+	echo "<td>$u</td><td>$sn</td><td class='operate'>$edit</td></tr>\n";
     }
-    echo "</table>\n";
+    echo "<tr><td colspan=\"6\" class=\"foot\">\n";
     echo "<input type='hidden' name='op' value='resvCtrl' />\n";
     echo "<input type='submit' value='"._AM_UPDATE."' />\n";
-    echo "</form>\n";
+    echo "</td></tr></table></form>\n";
     $result = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." WHERE eid=0");
     if ($result) {
 	list($n) = $xoopsDB->fetchRow($result);
-	echo "<p><a href='?op=notifies'>"._MD_INFO_REQUEST."</a> ".sprintf(_MD_INFO_COUNT, $n)."</p>\n";
+	echo "<ul class=\"toptab\"><li class=\"add\"><a href='?op=notifies'>"._MD_INFO_REQUEST."</a> ".sprintf(_MD_INFO_COUNT, $n)."</li></ul>\n";
     }
     CloseTable();
     break;
 
 case 'notifies':
-    echo "<h4>"._MD_INFO_REQUEST."</h4>";
+    echo "<h3>"._MD_INFO_REQUEST."</h3>";
+    echo '<hr /><br />';
     $cond = "eid=0";
     if (isset($_GET['q'])) {
 	$q = $_GET['q'];
@@ -196,11 +200,12 @@ case 'notifies':
 	" <input type='hidden' name='op' value='notifies' />\n".
 	" <input type='submit' value='"._SUBMIT."' />\n".
 	"</form>\n";
+    echo "<ul class=\"toptab\"><li class=\"add\"><a href='../reserv.php?op=register'>"._MI_EGUIDE_REG."</a></li></ul>\n";
     echo sprintf(_MD_INFO_COUNT, $nc);
     if ($nc) {
 	echo "<form method='post'>\n".
 	    "<input type='hidden' name='op' value='delnotify' />\n".
-	    "<table cellspacing='1' border='0' class='outer'>\n".
+	    "<table class='outer'>\n".
 	    "<tr><th></th><th>"._MD_ORDER_DATE."</th>".
 	    "<th>"._AM_EMAIL."</th></tr>\n";
 	while ($data = $xoopsDB->fetchArray($result)) {
@@ -217,11 +222,10 @@ case 'notifies':
 	    echo "<tr class='$bg'><td align='center'><input type='checkbox' name='rm[]' value='$rvid' /></td>".
 		"<td>$date</td><td>$email $uinfo</td></tr>\n";
 	}
-	echo "</table><br /><input type='submit' value='".
-	    _DELETE."' />\n</form>\n<p><a href='../reserv.php?op=register'>".
-	    _MI_EGUIDE_REG."</a></p>";
+	echo "<tr><td colspan=\"3\" class=\"foot\"><input type='submit' value='"._DELETE."' /> </td></tr>\n";
+	echo "</table>";
     } else {
-	echo "<div class='evnote'>"._AM_NODATA."</div>";
+	echo "<div class='error'>"._AM_NODATA."</div>";
     }
     CloseTable();
     break;
@@ -235,9 +239,11 @@ case 'edit':
     $poster = new XoopsUser($uid);
     $post = formatTimestamp($data['cdate'], _AM_POST_FMT);
 
-    echo "<h4>"._MI_EGUIDE_EVENTS."</h4>";
+    echo "<h3>"._MI_EGUIDE_EVENTS." &gt;&gt; "._AM_DISP_STATUS."</h3>";
+    echo "<hr /><br />";
     echo "<form method='post'>\n";
-    echo "<table border='0' cellspacing='1' class='outer'>\n";
+    echo "<table class='outer'>\n";
+    echo "<tr><th colspan=\"2\">"._AM_TITLE." : $title</th></tr>";
     echo "<tr><td class='head'>"._AM_EVENT_DAY."</td><td class='even'>$date</td></tr>\n";
     echo "<tr><td class='head'>"._AM_TITLE."</td><td class='odd'>$title</td></tr>\n";
     echo "<tr><td class='head'>"._AM_POSTER."</td><td class='even'>";
@@ -261,17 +267,19 @@ case 'edit':
     }
     echo "</select>\n";
     echo "</td></tr>\n";
-    echo "</table>\n";
-    echo "<p><input type='hidden' name='op' value='save' />";
+    echo "<tr><td colspan=\"2\" class=\"foot\"><input type='hidden' name='op' value='save' />";
     echo "<input type='hidden' name='eid' value='$eid' />";
     echo "<input type='submit' value='"._AM_UPDATE."' />";
-    echo "&nbsp;<input type='button' value='"._AM_CANCEL."' onclick='javascript:history.go(-1)' /></p>";
+    echo "&nbsp;<input type='button' value='"._AM_CANCEL."' onclick='javascript:history.go(-1)' />";
+    echo "</td></tr></table>\n";
     echo "</form>";
     CloseTable();
     break;
 
 case 'category':
-    echo "<h4>"._AM_CATEGORY."</h4>\n";
+    echo "<h3>"._AM_CATEGORY."</h3>\n";
+    echo "<hr /><br />";
+
     if (isset($_GET['catid'])) {
 	edit_category(intval($_GET['catid']));
     } else {
@@ -280,12 +288,16 @@ case 'category':
     break;
 
 case 'catimp':
-    echo "<h4>"._AM_CATEGORY."</h4>\n";
+    echo "<h3>"._AM_CATEGORY."</h3>\n";
+    echo "<hr /><br />";
+
     import_category();
     break;
 
 case 'summary':
-    echo "<h4>"._AM_SUMMARY."</h4>\n";
+    echo "<h3>"._AM_SUMMARY."</h3>\n";
+    echo "<hr /><br />";
+
     $now = time();
     $result = $xoopsDB->query('SELECT count(eid) FROM '.EGTBL.' LEFT JOIN '.EXTBL." ON eid=eidref");
     list($count) = $xoopsDB->fetchRow($result);
@@ -296,12 +308,12 @@ case 'summary':
     $receipt = XOOPS_URL.'/modules/'.$xoopsModule->getVar('dirname').'/receipt.php';
     $result = $xoopsDB->query('SELECT e.eid,if(x.exid,x.exid,0) exid, IF(exdate,exdate,edate) exdate,title,uid,status,persons,IF(x.reserved,x.reserved,o.reserved) reserved FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref ORDER BY exdate DESC,e.eid DESC", $max, $start);
 
-    echo "<table width='100%'>\n<tr><td>".sprintf(_MD_INFO_COUNT,$start+1).
-	"/$count</td><td align='center'>";
     if ($count>$max) echo $nav->renderNav();
-    echo "</td><td align='right'><a href='index.php?op=summary_csv'>"._MD_CSV_OUT."</a></td></tr>\n</table>\n";
+    echo "<ul class=\"toptab\"><li class=\"save\"><a href='index.php?op=summary_csv'>"._MD_CSV_OUT."</a></li></ul>\n";
 
-    echo "<table cellpadding='1' border='0' cellspacing='1' width='100%' class='outer'>";
+    echo "<p>".sprintf(_MD_INFO_COUNT,$start+1)."/$count</p>";
+
+    echo "<table class='outer'>";
     $n = 0;
     echo "<tr><th>ID</th><th>"._MD_EXTENT_DATE."</th><th>"._AM_TITLE."</th>".
 	"<th>"._AM_POSTER."</th><th>"._MD_RESERV_PERSONS."</th><th>"._AM_RESERVATION."</th></tr>\n";
@@ -338,15 +350,21 @@ function show_categories() {
 		      'catimg' =>_AM_CAT_IMG,  'catdesc'=>_AM_CAT_DESC, 
 		      'count'  =>_AM_COUNT,    'op'=>_AM_OPERATION);
 
-    echo "<table class='evnavi'><tr><td>".
-	_AM_COUNT.' '.$xoopsDB->getRowsNum($res).
-	"</td><td algin=''><a href='index.php?op=category&catid=0'>".
-	_AM_CATEGORY_NEW.
-	"</a></td><td algin=''><a href='index.php?op=catimp'>".
-	_AM_CATEGORY_IMPORT."</a></td></tr></table>\n";
+    echo "
+	<ul class=\"toptab\">
+	<li class=\"addDir\">
+	<a href='index.php?op=category&catid=0'>"._AM_CATEGORY_NEW."</a>
+	</li>
+	<li class=\"import\">
+	<a href='index.php?op=catimp'>"._AM_CATEGORY_IMPORT."</a>
+	</li>
+	</ul>\n";
+
+    echo "<p class='evnavi'>"._AM_COUNT.' '.$xoopsDB->getRowsNum($res)."</p>";
+
     echo "<form action='index.php?op=catdel' method='post'>\n";
-    echo "<table border='0' cellspacing='1' class='outer'>\n";
-    echo '<tr><th></th></th><th>'.join('</th><th>', $showlist)."</td></tr>\n";
+    echo "<table class=\"outer\">\n";
+    echo "<tr><th>"._DELETE."</th><th>".join('</th><th>', $showlist)."</th></tr>\n";
     $ndel = $n = 0;
     while ($data = $xoopsDB->fetchArray($res)) {
 	$name =  $myts->htmlSpecialChars($data['catname']);
@@ -383,9 +401,8 @@ function show_categories() {
 	}
 	echo "</tr>\n";
     }
-    echo "</table>\n";
-    if ($ndel) echo "<p><input type='submit' value='"._DELETE."'/></p>";
-    echo "</form>\n";
+    if ($ndel) echo "<tr><td colspan=\"7\" class=\"foot\"><input type='submit' value='"._DELETE."'/></td></tr>";
+    echo "</table></form>\n";
 }
 
 function edit_category($catid) {
@@ -447,7 +464,8 @@ function summary_csv() {
     global $xoopsDB;
     function _q($x) { return '"'.preg_replace('/"/', '""', $x).'"'; }
     $file = "eguide_summary_".formatTimestamp(time(),"Ymd").".csv";
-    header("Content-Type: text/plain; Charset="._MD_EXPORT_CHARSET);
+    $charset = eguide_form_options('export_charset', _MD_EXPORT_CHARSET);
+    header("Content-Type: text/plain; Charset=".$charset);
     header('Content-Disposition:attachment;filename="'.$file.'"');
 
     $result = $xoopsDB->query('SELECT e.eid,if(x.exid,x.exid,0) exid, IF(exdate,exdate,edate) exdate,title,uid,status,persons,IF(x.reserved,x.reserved,o.reserved) reserved FROM '.EGTBL.' e LEFT JOIN '.OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref ORDER BY exdate DESC,e.eid DESC");
@@ -460,11 +478,11 @@ function summary_csv() {
 			       _q($data['title']),_q($poster),
 			       $data['persons'],$data['reserved']))."\n";
     }
-    if (_MD_EXPORT_CHARSET != _CHARSET) {
+    if ($charset != _CHARSET) {
 	if (function_exists("mb_convert_encoding")) {
-	    $out = mb_convert_encoding($out, _MD_EXPORT_CHARSET, _CHARSET);
+	    $out = mb_convert_encoding($out, $charset, _CHARSET);
 	} elseif (function_exists("iconv")) {
-	    $out = iconv(_MD_EXPORT_CHARSET, _CHARSET, $out);
+	    $out = iconv($charset, _CHARSET, $out);
 	}
     }
     echo $out;

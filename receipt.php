@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.29 2008/07/20 12:45:31 nobu Exp $
+// $Id: receipt.php,v 1.30 2008/10/19 14:25:11 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -135,13 +135,14 @@ if ($nrec && $op=='csv') {
     }
 
     $file = "eguide_".formatTimestamp(time(),"Ymd").".csv";
-    header("Content-Type: text/plain; Charset="._MD_EXPORT_CHARSET);
+    $charset = eguide_form_options('export_charset', _MD_EXPORT_CHARSET);
+    header("Content-Type: text/plain; Charset=".$charset);
     header('Content-Disposition:attachment;filename="'.$file.'"');
-    if (_MD_EXPORT_CHARSET != _CHARSET) {
+    if ($charset != _CHARSET) {
 	if (function_exists("mb_convert_encoding")) {
-	    $out = mb_convert_encoding($out, _MD_EXPORT_CHARSET, _CHARSET);
+	    $out = mb_convert_encoding($out, $charset, _CHARSET);
 	} elseif (function_exists("iconv")) {
-	    $out = iconv(_MD_EXPORT_CHARSET, _CHARSET, $out);
+	    $out = iconv(_CHARSET, $charset, $out);
 	}
     }
     echo $out;

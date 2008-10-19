@@ -179,7 +179,8 @@ td,th { padding: 4px; background: #e8e8e8;}
 	  <ul>
 	    <li>label_persons=label (label for multiple person reservation)</li>
 	    <li>reply_extension=label (label for reply mail template extension)</li>
-	    <dt>size=60 (text input default size)</dt>
+	    <li>export_charset=UTF-8 (using CSV output coding system)</li>
+	    <li>size=60 (text input default size)</li>
 	    <li>cols=40 (textarea default columns)</li>
 	    <li>rows=5 (textarea default rows)</li>
 	  </ul>
@@ -259,6 +260,8 @@ td,th { padding: 4px; background: #e8e8e8;}
 	<p>Additional value for file name, that is store value in reservation. In international using, recommand the value make alpha-numeric only. Because sometime there is encoding problem.<br/>If there is no mail template in additional name, using default mail template.</p>
       </div>
     </dd>
+    <dt>export_charset (using CSV output coding system)</dt>
+    <dd>Default value as export_charset=UTF-8 (that is defined _MD_EXPORT_CHARSET resource)</dd>
     <dt>size (text input default size)</dt>
     <dd>Default value as size=60</dd>
     <dt>cols, rows (textarea default columns/rows)</dt>
@@ -380,6 +383,18 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h2>Changes</h2>
 
 <dl>
+  <dt>2008/10/19 eguide 2.51 released</dt>
+  <dd>
+    <ul>
+      <li>Add {RVID} tags in reply mail template (accept.tpl)</li>
+      <li>Add CSV output coding system options (export_charset)</li>
+      <li>follow altsys 0.6 template/blocks admin</li>
+      <li>Revised Admin Interface by Gigamaster</li>
+      <li>Fix category image field not stored (thx Gigamaster)</li>
+      <li>Fix event active editing not work in admin list (thx Gigamaster)</li>
+      <li>Assign category discription in smarty variable</li>
+    </ul>
+  </dd>
   <dt>2008/07/22 eguide 2.5 released</dt>
   <dd>
     <ul>
@@ -496,6 +511,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://mysite.ddo.jp/">http://mysite.ddo.jp/</a><br/>
-$Id: help.html,v 1.45 2008/07/22 15:09:44 nobu Exp $
+$Id: help.html,v 1.46 2008/10/19 14:25:11 nobu Exp $
 </body>
 </html>

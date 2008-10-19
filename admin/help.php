@@ -1,6 +1,6 @@
 <?php
 # show language help.html
-# $Id: help.php,v 1.4 2008/02/17 05:22:59 nobu Exp $
+# $Id: help.php,v 1.5 2008/10/19 14:25:11 nobu Exp $
 
 include '../../../include/cp_header.php';
 global $mydirpath, $mydirname;
@@ -22,6 +22,9 @@ if(!function_exists("file_get_contents")) {
 
 xoops_cp_header();
 include 'mymenu.php';
+if (function_exists('Legacy_function_stylesheet')) {
+    echo "<link href=\"".XOOPS_URL."/modules/legacyRender/admin/css.php?file=module.css&dirname=legacy\" media=\"all\" type=\"text/css\" rel=\"stylesheet\" />\n";
+}
 
 $myts =& MyTextSanitizer::getInstance();
 $file = isset($_GET['file'])?
@@ -73,7 +76,7 @@ function display_lang_file($file, $link='') {
 		 " href=\"$link\$1\"",
 		 " href=$1$murl/",
 	);
-    echo preg_replace($pat, $rep, $b);
+    echo '<div class="help">'.preg_replace($pat, $rep, $b).'</div>';
 }
 
 ?>
