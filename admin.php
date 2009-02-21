@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.29 2008/10/19 14:25:11 nobu Exp $
+// $Id: admin.php,v 1.30 2009/02/21 10:28:30 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -127,9 +127,9 @@ if ($eid) {			// already exists extents
 	}
 	break;
     case 'monthly':
-	list($y, $m, $d, $h, $i) = split(' ', formatTimestamp($edate, "Y m j G i"));
+	list($y, $m, $d, $h, $mi) = split(' ', formatTimestamp($edate, "Y m j G i"));
 	for ($n=0; $n<$repeat; $n++) {
-	    $i = userTimeToServerTime(mktime($h,$i, 0, $m+$n, $d, $y));
+	    $i = userTimeToServerTime(mktime($h,$mi, 0, $m+$n, $d, $y));
 	    $v = $init?true:isset($sets[$n]);
 	    $extent_sets[] =
 		array('exdate'=>$i, 'no'=>$n,
