@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.30 2008/10/19 14:25:11 nobu Exp $
+// $Id: receipt.php,v 1.31 2009/03/07 14:49:41 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -40,6 +40,9 @@ if ($rvid) {
 	update_reserv($eid, $exid, $nnum-$num);
 	redirect_header($back, 2, _MD_DBUPDATED);
 	exit;
+    } else {
+	$result = $xoopsDB->query("SELECT * FROM ".RVTBL." WHERE rvid=$rvid");
+	$rvdata = $xoopsDB->fetchArray($result);
     }
 }
 
@@ -267,17 +270,18 @@ case 'one':
     $xoopsTpl->assign('lang_title', _MD_RESERV_REC);
     $edit = "<a href='receipt.php?op=edit&rvid=$rvid'>"._EDIT."</a>";
     $del ="<a href='reserv.php?op=cancel&rvid=$rvid&back='>"._MD_RESERV_DEL."</a>";
-    $values=array(_MD_RVID => "$rvid &nbsp; [$edit] &nbsp; [$del]",
-		  _MD_ORDER_DATE => formatTimestamp($data['rdate'], _MD_TIME_FMT));
+    
     if (!$mo) $values[_MD_EMAIL] = $myts->makeTareaData4Edit($data['email']);
     $values[_MD_STATUS] = $rv_stats[$data['status']];
-    foreach (unserialize_text($data['info']) as $lab => $v) {
-	if (empty($v)) $v = '';
-	$values[$lab] = $myts->displayTarea($v);
+    $items = array();
+    $items[] = array('label'=>_MD_RVID, 'value' => "$rvid &nbsp; [$edit] &nbsp; [$del]");
+    $items[] = array('label'=>_MD_ORDER_DATE, 'value'=>formatTimestamp($data['rdate'], _MD_TIME_FMT));
+    foreach (unserialize_text($rvdata['info']) as $lab => $v) {
+	$items[] = array('label'=>$lab, 'value'=> $myts->displayTarea($v));
     }
     edit_eventdata($head);
     $xoopsTpl->assign('event', edit_eventdata($head));
-    $xoopsTpl->assign('values', $values);
+    $xoopsTpl->assign('items', $items);
     $xoopsTpl->assign('submit', $backanc);
     break;
 
