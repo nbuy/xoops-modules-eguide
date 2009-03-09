@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.37 2008/07/22 13:55:10 nobu Exp $
+// $Id: reserv.php,v 1.38 2009/03/09 04:59:19 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -206,8 +206,9 @@ case 'order':
 	}
 	if (!count_reserved($eid, $exid, $strict, $persons, $num)) {
 	    $a = '/^https?:'.preg_quote(preg_replace('/^https?:/','', XOOPS_URL), '/').'/';
-	    // note: 
-	    $errs[] = preg_match($a,$_SERVER['HTTP_REFERER'])?_MD_RESERV_FULL:_ERRORS;
+	    // NOTE: Reservation failer in race others,
+	    //     in other case not send referer. (counter by XSS)
+	    $errs[] = preg_match($a,$_SERVER['HTTP_REFERER'])?_MD_RESERV_FULL:'REFERER '._ERRORS;
 	}
 
 	// plugin reserved
