@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.31 2009/03/07 14:49:41 nobu Exp $
+// $Id: receipt.php,v 1.32 2009/03/09 05:19:11 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -271,10 +271,10 @@ case 'one':
     $edit = "<a href='receipt.php?op=edit&rvid=$rvid'>"._EDIT."</a>";
     $del ="<a href='reserv.php?op=cancel&rvid=$rvid&back='>"._MD_RESERV_DEL."</a>";
     
-    if (!$mo) $values[_MD_EMAIL] = $myts->makeTareaData4Edit($data['email']);
-    $values[_MD_STATUS] = $rv_stats[$data['status']];
     $items = array();
-    $items[] = array('label'=>_MD_RVID, 'value' => "$rvid &nbsp; [$edit] &nbsp; [$del]");
+    $items[] = array('label'=>_MD_RVID, 'value'=>"$rvid &nbsp; [$edit] &nbsp; [$del]");
+    if (!$mo) $items[] = array('label'=>_MD_EMAIL, 'value'=>$myts->displayTarea($data['email']));
+    $items[] = array('label'=>_MD_STATUS, 'value'=>$rv_stats[$data['status']]);
     $items[] = array('label'=>_MD_ORDER_DATE, 'value'=>formatTimestamp($data['rdate'], _MD_TIME_FMT));
     foreach (unserialize_text($rvdata['info']) as $lab => $v) {
 	$items[] = array('label'=>$lab, 'value'=> $myts->displayTarea($v));
