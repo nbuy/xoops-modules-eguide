@@ -1,6 +1,6 @@
 <?php
 # search interface for eguide
-# $Id: search.inc.php,v 1.8 2008/02/04 12:37:37 nobu Exp $
+# $Id: search.inc.php,v 1.9 2009/05/24 05:40:09 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -34,6 +34,14 @@ function eguide_search_base($myprefix, $queryarray, $andor, $limit, $offset, $us
 	$sql .= " ORDER BY edate DESC";
 	$result = $xoopsDB->query($sql,$limit,$offset);
 	$ret = array();
+
+	// XOOPS Search module
+	$showcontext = function_exists( 'search_make_context' ) && ( empty( $_GET['showcontext'] ) ? 0 : 1 );
+	if ($showcontext) {
+		include_once XOOPS_ROOT_PATH."/class/module.textsanitizer.php" ;
+		$myts =& MyTextSanitizer::getInstance();
+	}
+
 	$i = 0;
  	while($myrow = $xoopsDB->fetchArray($result)){
 	    //$ret[$i]['image'] = "images/forum.gif";
@@ -44,6 +52,13 @@ function eguide_search_base($myprefix, $queryarray, $andor, $limit, $offset, $us
 		$ret[$i]['uid'] = $myrow['uid'];
 		$ret[$i]['description'] = $myrow['summary'];
 		$i++;
+		// get context for module "search"
+		if( $showcontext ) {
+			$full_context = strip_tags( $myts->displayTarea( $myrow['summary'] , 1 , 1 , 1 , 1 , 1 ) ) ;
+
+			if( function_exists( 'easiestml' ) ) $full_context = easiestml( $full_context ) ;
+			$ret[$i]['context'] = search_make_context( $full_context , $queryarray ) ;
+		}
 	}
 	return $ret;
 }
