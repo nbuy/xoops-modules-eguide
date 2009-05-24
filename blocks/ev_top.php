@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.25 2008/02/11 05:02:42 nobu Exp $
+// $Id: ev_top.php,v 1.26 2009/05/24 05:44:45 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -68,9 +68,9 @@ function b_event_top_show_base($dirname, $prefix, $options) {
 	}
     }
     if ($only) {
-	$sql = "SELECT eid, title, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix($prefix)." LEFT JOIN ".$xoopsDB->prefix($prefix."_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
+	$sql = "SELECT eid, title, summary, style, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix($prefix)." LEFT JOIN ".$xoopsDB->prefix($prefix."_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
     } else {
-	$sql = "SELECT e.eid, title, IF(exdate,exdate,edate) edate, cdate, uid,
+	$sql = "SELECT e.eid, title, summary, style, IF(exdate,exdate,edate) edate, cdate, uid,
 exid, IF(x.reserved,x.reserved,o.reserved)/persons*100 as full, closetime
 FROM ".$xoopsDB->prefix($prefix).' e
   LEFT JOIN '.$xoopsDB->prefix($prefix."_opt").' o ON e.eid=o.eid
@@ -108,6 +108,11 @@ WHERE ((expire>=edate AND expire>$now)
 	$event['post'] = formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT);
 	$event['_post'] = formatTimestamp($myrow['cdate'], 'm');
 	$event['uid'] = $myrow['uid'];
+	switch ($myrow['style']) {
+	case 2: $html = 0;
+	case 1: $br = 1;
+	}
+	$event['description'] = $myts->displayTarea($myrow['summary'],$html,0,1,1,$br);
 	if (isset($myrow['full'])) {
 	    $event['mark'] = eguide_marker($myrow['full'], $dirname);
 	}
