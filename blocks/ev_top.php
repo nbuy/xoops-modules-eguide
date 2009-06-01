@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.26 2009/05/24 05:44:45 nobu Exp $
+// $Id: ev_top.php,v 1.27 2009/06/01 05:58:06 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -108,6 +108,7 @@ WHERE ((expire>=edate AND expire>$now)
 	$event['post'] = formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT);
 	$event['_post'] = formatTimestamp($myrow['cdate'], 'm');
 	$event['uid'] = $myrow['uid'];
+	$html = 1; $br=0;
 	switch ($myrow['style']) {
 	case 2: $html = 0;
 	case 1: $br = 1;
