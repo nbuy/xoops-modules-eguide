@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.38 2009/03/09 04:59:19 nobu Exp $
+// $Id: reserv.php,v 1.39 2009/07/12 05:48:38 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -329,8 +329,8 @@ case 'confirm':
 	     ($exid?"<input type='hidden' name='sub' value='$exid'/>\n":"").
 	     "</form>");
     }
-    $xoopsTpl->assign('cancel', "<form action='event.php?eid=$eid#form".
-		      ($exid?'&sub='.$exid:''). "' method='post'>".$emhide.
+    $xoopsTpl->assign('cancel', "<form action='event.php?eid=$eid".
+		      ($exid?'&sub='.$exid:''). "#form' method='post'>".$emhide.
 		      join("\n", get_opt_values($opts, $errs, true)).
 		      "\n<input type='submit' value='"._MD_BACK."'/>\n".
 		      "</form>\n");
