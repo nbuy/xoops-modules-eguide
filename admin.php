@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.30 2009/02/21 10:28:30 nobu Exp $
+// $Id: admin.php,v 1.31 2009/10/03 06:38:51 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -335,6 +335,7 @@ if ($eid && $op=='delete') {
 	$data['before']=time_to_str($data['closetime']);
     }
     edit_eventdata($data);
+    $data['optfield'] = htmlspecialchars($data['optfield']);
     $xoopsTpl->assign($data);
 
     class myFormDhtmlTextArea extends XoopsFormDhtmlTextArea
@@ -379,8 +380,13 @@ function getDateField($p) {
     global $xoopsUser;
     if (empty($_POST["${p}ymd"])) return 0;
     list($y, $m, $d) = split('-', $_POST["${p}ymd"]);
-    return userTimeToServerTime(mktime($_POST["${p}hour"],$_POST["${p}min"], 0,
-				       $m, $d, $y), $xoopsUser->getVar("timezone_offset"));
+    if (isset($_POST["${p}time"])) { // accept 'HH:mm' format
+	list($hour, $min) = split(':', $_POST["${p}time"]);
+    } else {
+	$hour = $_POST["${p}hour"];
+	$min = $_POST["${p}min"];
+    }
+    return userTimeToServerTime(mktime($hour, $min, 0, $m, $d, $y), $xoopsUser->getVar("timezone_offset"));
 }
 
 function datefield($prefix, $time) {
@@ -402,7 +408,7 @@ document.write('<input type=\"button\" value=\""._MD_CAL."\" onClick=\"showCalen
 function select_value($fmt, $name, $from, $to, $def=0, $step=1) {
     $buf = "<select name='$name' id='$name'>\n";
     for ($i = $from; $i<=$to; $i+=$step) {
-	$buf .= "<option value='$i'".($i==$def?" selected":"").">".sprintf($fmt, $i)."</option>\n";
+	$buf .= "<option value='$i'".($i==$def?" selected='selected'":"").">".sprintf($fmt, $i)."</option>\n";
     }
     $buf .= "</select>\n";
     return $buf;
@@ -412,7 +418,7 @@ function select_list($name, $options, $def=1) {
     $buf = "<select name='$name'>\n";
     foreach ($options as $i => $v) {
 	if (is_array($v)) $v = $v['name'];
-	$buf .= "<option value='$i'".($i==$def?" selected":"").">$v</option>\n";
+	$buf .= "<option value='$i'".($i==$def?" selected='selected'":"").">$v</option>\n";
     }
     $buf .= "</select>\n";
     return $buf;

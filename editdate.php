@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.13 2008/07/20 12:45:31 nobu Exp $
+// $Id: editdate.php,v 1.14 2009/10/03 06:38:51 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -12,25 +12,24 @@ if ($xoopsDB->getRowsNum($result)>0) {
     redirect_header(empty($_SERVER['HTTP_REFERER'])?'admin.php':$_SERVER['HTTP_REFERER'], 1, _NOPERM);
 }
 
-$data = fetch_event($eid, 0);
-if (!$data) {
+$event = fetch_event($eid, 0);
+if (!$event) {
     redirect_header('index.php', 2, _MD_NOEVENT);
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = EGPREFIX.'_editdate.html';
 $xoopsTpl->assign('xoops_module_header', HEADER_CSS);
-$edate = $data['edate'];
-$xoopsTpl->assign('event', edit_eventdata($data));
+$edate = $event['edate'];
+$xoopsTpl->assign('event', edit_eventdata($event));
 $paths = array();
-if (!empty($data['title'])) {
-    $paths[$data['title']] = "event.php?eid=$eid";
+if (!empty($event['title'])) {
+    $paths[$event['title']] = "event.php?eid=$eid";
 }
 $paths[_MD_EDIT_EXTENT] = "editdate.php?eid=$eid";
-set_eguide_breadcrumbs($data['catid'], $paths);
+set_eguide_breadcrumbs($event['catid'], $paths);
 
 $myts =& MyTextSanitizer::getInstance();
-
 $now = time();
 $extents = get_extents($eid, true);
 $errors = array();
@@ -74,7 +73,7 @@ if (isset($_POST['adds'])) {
 	    }
 	    $tm = userTimeToServerTime(mktime($hour,$min, 0, $mm, $dd, $yy), $xoopsUser->getVar("timezone_offset"));
 	    
-	    if (($tm >= $data['opendate']) && ($tm > $now)) {
+	    if (($tm >= $event['opendate']) && ($tm > $now)) {
 		$post = formatTimestamp($tm, 'Y-m-d H:i');
 		$xoopsDB->query("UPDATE ".EXTBL." SET exdate=$tm, expersons=$n WHERE eidref=$eid AND exid=$id");
 		$date = formatTimestamp($data['exdate'], _MD_POSTED_FMT);

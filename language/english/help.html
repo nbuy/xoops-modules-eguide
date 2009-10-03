@@ -13,7 +13,7 @@ td,th { padding: 4px; background: #e8e8e8;}
 <style>
 .note { font-size: 90%; color: #800000; padding: 0.5em;}
 </style>
-  <h1>Event Guide module</h1>
+  <h4>Event Guide module</h4>
   <ul>
   <li><a href="#summary">Summary</a></li>
   <li><a href="#roleplay">Using Steps</a></li>
@@ -25,7 +25,7 @@ td,th { padding: 4px; background: #e8e8e8;}
 
   <hr>
 
-  <a name="summary"></a><h2>Summary</h2>
+  <a name="summary"></a><h5>Summary</h5>
 
   Event guide module will display event guidance
   and reservations for the event.
@@ -39,7 +39,7 @@ td,th { padding: 4px; background: #e8e8e8;}
   <li>New event notification to registered users</li>
 </ul>
 
-  <a name="roleplay"></a><h2>Using Steps</h2>
+  <a name="roleplay"></a><h5>Using Steps</h5>
 
   <ol>
     <li>Install this module</li>
@@ -61,9 +61,9 @@ td,th { padding: 4px; background: #e8e8e8;}
   </ol>
 
 
-  <a name="functions"></a><h2>Functions</h2>
+  <a name="functions"></a><h5>Functions</h5>
 
-  <h3>Event Registration and Display</h3>
+  <h6>Event Registration and Display</h6>
 
     <ol>
       <li>Show Summary Listed</li>
@@ -74,7 +74,7 @@ td,th { padding: 4px; background: #e8e8e8;}
       </div>
     </ol>
 
-  <h3>Event Edit</h3>
+  <h6>Event Edit</h6>
 
     <ol>
       <li>New Event Registration - allow admin or setup group</li>
@@ -98,7 +98,7 @@ td,th { padding: 4px; background: #e8e8e8;}
 	</ul>
     </ol>
 
-  <h3>Admin functions</h3>
+  <h6>Admin functions</h6>
 
     <ol>
       <li><a href="#config">Event Configuration</a></li>
@@ -106,7 +106,7 @@ td,th { padding: 4px; background: #e8e8e8;}
       <li>Notify new event registered users</li>
     </ol>
 
-  <a name="config"></a><h2>Event Configuration</h2>
+  <a name="config"></a><h5>Event Configuration</h5>
 
   Event Guide module setup items as follow:
   
@@ -237,7 +237,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     </table>
   </blockquote>
 
-  <a name="form_options"></a><h3>Additional item options</h3>
+  <a name="form_options"></a><h6>Additional item options</h6>
   <dl>
     <dt>label_persons (label for multiple person reservation)</dt>
     <dd>This option setting for a reservation accept multiple persons.
@@ -268,7 +268,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     <dd>Default value as cols=40, rows=5</dd>
   </dl>
 
-  <a name="form"></a><h2>Additional fields Format</h2>
+  <a name="form"></a><h5>Additional fields Format</h5>
   <strong>In Reservation</strong>
   Additonal items set to FORM when used order to make reservation.
   These additional items are setup with the following formats:
@@ -293,7 +293,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     <li>Using "prop=string" argument, makes any attributes in input.</li>
   </ul>
 
-  <h3>examples:</h3>
+  <h6>examples:</h6>
 
   <form>
     <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
@@ -309,7 +309,7 @@ td,th { padding: 4px; background: #e8e8e8;}
       <tr class="even"><td>#message text</td><td>message text</td></tr>
     </table>
   </form>
-  <h3>Releated reservation forms</h3>
+  <h6>Releated reservation forms</h6>
   <dl>
     <dt>Mulitiple persons reservation</dt>
     <dd>
@@ -329,7 +329,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     </dd>
   </dl>
 
-  <a name="multidate"></a><h2>Handling for multiple open event</h2>
+  <a name="multidate"></a><h5>Handling for multiple open event</h5>
 
   <p>Event Guide handle the content of same event, open two or more times.
     This settings to "Repeat Open" in event registration form.
@@ -343,7 +343,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     specification and it sets it on "Edit Open Date" page.
   </p>
 
-  <h3>Note to multiple open event editing</h3>
+  <h6>Note to multiple open event editing</h6>
 
   <ul>
     <li>When edit mutiple open event,  careful to change the master event date.
@@ -352,7 +352,7 @@ td,th { padding: 4px; background: #e8e8e8;}
       specified same time of the starting date.</li>
   </ul>
 
-  <a name="update"></a><h2>Module Update</h2>
+  <a name="update"></a><h5>Module Update</h5>
   
   <ul>
     <li>When Event Guide module update, You need Module update in Module Manager in admin page.</li>
@@ -364,7 +364,7 @@ td,th { padding: 4px; background: #e8e8e8;}
     </div>
   </ul>
 
-  <a name="duplication"></a><h2>Module duplicate</h2>
+  <a name="duplication"></a><h5>Module duplicate</h5>
 
   <p>eguide 2.4 later module is duplicatable (sorry not yet D3).
     There is command line utility proguram for duplicate module.
@@ -380,9 +380,19 @@ td,th { padding: 4px; background: #e8e8e8;}
     Duplicate: class
   </pre>
 
-  <a name="changes"></a><h2>Changes</h2>
+  <a name="changes"></a><h5>Changes</h5>
 
 <dl>
+  <dt>2009/10/03 eguide 2.54 released</dt>
+  <dd>
+    <ul>
+      <li>event editing start time accept "HH:MM" format</li>
+      <li>reservation control plugins control by option variable</li>
+      <li>fix my reservation page ancker mistake</li>
+      <li>fix block descption edit style mistake</li>
+      <li>fix mutiple date editing template</li>
+    </ul>
+  </dd>
   <dt>2009/05/24 eguide 2.53 released</dt>
   <dd>
     <ul>
@@ -534,6 +544,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.49 2009/05/24 06:05:12 nobu Exp $
+$Id: help.html,v 1.50 2009/10/03 06:38:51 nobu Exp $
 </body>
 </html>

@@ -13,12 +13,9 @@ $mydirname = basename($mydirpath);
 if( file_exists( "$mydirpath/language/$language/modinfo.php" ) ) {
 	// user customized language file
 	include_once "$mydirpath/language/$language/modinfo.php" ;
-} else if( file_exists( "$mytrustdirpath/language/$language/modinfo.php" ) ) {
-	// default language file
-	include_once "$mytrustdirpath/language/$language/modinfo.php" ;
 } else {
 	// fallback english
-	include_once "$mytrustdirpath/language/english/modinfo.php" ;
+	include_once "$mydirpath/language/english/modinfo.php" ;
 }
 
 include dirname(__FILE__).'/menu.php' ;
