@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.27 2008/08/20 01:53:55 nobu Exp $
+// $Id: functions.php,v 1.28 2009/10/04 07:09:28 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -186,9 +186,12 @@ function eventform($data) {
 	    if (isset($_POST[$fname])) {
 		$v = $myts->stripSlashesGPC($_POST[$fname]);
 	    }
-	    foreach ($opt as $op) {
+	    while ($opt) {
+		$op = array_shift($opt);
 		if (preg_match("/^#/",$op)) {
-		    $comment .= preg_replace("/^#/","",$op);
+		    array_unshift($opt, preg_replace("/^#/","",$op));
+		    $comment .= join(',', $opt);
+		    $opt = array();
 		    continue;
 		}
 		$args = explode("=", $op, 2);

@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.39 2009/07/12 05:48:38 nobu Exp $
+// $Id: reserv.php,v 1.40 2009/10/04 07:09:28 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -337,10 +337,10 @@ case 'confirm':
     break;
 
 case 'cancel':
-    $result = $xoopsDB->query('SELECT eid,exid,uid,confirm FROM '.RVTBL.' WHERE rvid='.$rvid);
+    $result = $xoopsDB->query('SELECT eid,exid,uid,confirm,email FROM '.RVTBL.' WHERE rvid='.$rvid);
     if ($result) {
 	if ($xoopsDB->getRowsNum($result)) {
-	    list($eid, $exid, $ruid, $conf) = $xoopsDB->fetchRow($result);
+	    list($eid, $exid, $ruid, $conf, $email) = $xoopsDB->fetchRow($result);
 	} else $result = false;
     }
     if (!$result || $xoopsDB->getRowsNum($result)==0) {
@@ -354,6 +354,7 @@ case 'cancel':
 	}
 	$data['confirm'] = $conf;
 	$data['ruid'] = $ruid;
+	$data['email'] = $email;
     }
     if ($result) {
 	if (!$isadmin && $data['edate']-$data['closetime']<$now) {

@@ -1,5 +1,8 @@
-<{if $event}>
+<{if $event.eid}>
 <{include file="db:eguide_item.html"}>
+<{else}>
+  <h2><{$smarty.const._MD_NOTIFY_EVENT}></h2>
+  <div><{$smarty.const._MD_EMAIL}>: <{$event.email}></div>
 <{/if}>
 <{if $errors}>
 <div class="error">

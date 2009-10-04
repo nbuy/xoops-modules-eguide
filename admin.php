@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.31 2009/10/03 06:38:51 nobu Exp $
+// $Id: admin.php,v 1.32 2009/10/04 07:09:28 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -279,6 +279,7 @@ foreach ($check as $k=>$v) {
     $check[$k] = sprintf(_FORM_ENTER, $v);
 }
 $xoopsTpl->assign('check', $check);
+$xoopsTpl->assign('use_fckeditor', eguide_form_options('use_fckeditor', 0));
 
 if ($eid && $op=='delete') {
     $xoopsOption['template_main'] = EGPREFIX.'_event.html';

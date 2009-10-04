@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.19 2008/07/20 07:03:06 nobu Exp $
+// $Id: modinfo.php,v 1.20 2009/10/04 07:09:28 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -64,8 +64,8 @@ define("_MI_EGUIDE_EXPIRE_AFTER","Expire Time");
 define("_MI_EGUIDE_EXPIRE_AFTER_DESC","Event expired on top page when after event start time in minites.");
 define("_MI_EGUIDE_PERSONS","Persons default value");
 define("_MI_EGUIDE_PERSONS_DESC","Reservation persons in event post form");
-define("_MI_EGUIDE_PLUGINS","Use Other moudle plugins");
-define("_MI_EGUIDE_PLUGINS_DESC","Internal Control accept entry form other modules");
+define("_MI_EGUIDE_PLUGINS","Use reservation control plugins");
+define("_MI_EGUIDE_PLUGINS_DESC","Internal control accept entry form plugins");
 define("_MI_EGUIDE_COMMENT","Allow Comments");
 define("_MI_EGUIDE_COMMENT_DESC","Allow commnets to event");
 define("_MI_EGUIDE_MARKER","Current entry level mark");

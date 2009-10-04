@@ -24,7 +24,7 @@
 <table class="outer" align="center" cellspacing="1" border="0">
 <tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
 <{if !$form.member_only}>
-<tr class="evms <{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input size="40" name="email" value="<{$form.email}>"/>
+<tr class="evms <{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input size="40" name="email" id="email" value="<{$form.email}>"/>
 <{if $form.user_notify}>
 <br/><input type="checkbox" name="notify" /><{$smarty.const._MD_NOTIFY_REQUEST}>
 <{/if}>
@@ -43,7 +43,7 @@
       </td></tr>
       <{assign var=form_continue value=0}>
     <{else}>
-      <tr class="<{$fm.attr}> <{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}><span class="note"><{$fm.comment}></span></td></tr>
+      <tr class="<{$fm.attr}> <{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}><{if $fm.comment}><span class="note"><{$fm.comment}></span><{/if}></td></tr>
     <{/if}>
   <{/if}>
 <{/foreach}>
@@ -71,6 +71,9 @@ function xoopsFormValidate_order() {
     myform = window.document.order;
     obj = null;
     var msg = "";
+<{if !$form.member_only}>
+if ( checkItem(myform["email"]) ) { msg = msg+"<{$smarty.const._MD_EMAIL}>\n"; if(obj==null)obj=myform["email"]; }
+<{/if}>
 <{foreach from=$form.check key=name item=msg}>
 if ( checkItem(myform["<{$name}>"]) ) { msg = msg+"<{$msg}>\n"; if(obj==null)obj=myform["<{$name}>"]; }
 <{/foreach}>

@@ -266,6 +266,21 @@ td,th { padding: 4px; background: #e8e8e8;}
     <dd>Default value as size=60</dd>
     <dt>cols, rows (textarea default columns/rows)</dt>
     <dd>Default value as cols=40, rows=5</dd>
+
+    <dt>eguide_plugins (set active reservation plugins)</dt>
+    <dd>
+      Set reservation control plugins name list.
+      List name with comma(",") when multiple plugin use.
+      When this option set disable module name plugins activate.
+      You want module name plugin activate, include the name in this list.
+    </dd>
+
+    <dt>use_fckeditor (use FCKeditor edit event description)</dt>
+    <dd>
+      When this option setting, FCKeditor (HTML WYSWIG editor) using in event edit page.
+      You need install FCKeditor at XOOPS_URL/common/fckeditor/ folder.
+      When setting value to "Basic", you can use simple toolbar.
+    </dd>
   </dl>
 
   <a name="form"></a><h5>Additional fields Format</h5>
@@ -383,9 +398,12 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h5>Changes</h5>
 
 <dl>
-  <dt>2009/10/03 eguide 2.54 released</dt>
+  <dt>2009/10/04 eguide 2.54 released</dt>
   <dd>
     <ul>
+      <li>FCKeditor (use_fckeditor={Basic|Default}) option added</li>
+      <li>fix cancel page for new event mail notification</li>
+      <li>fix in additional item at printable comment with comma</li>
       <li>event editing start time accept "HH:MM" format</li>
       <li>reservation control plugins control by option variable</li>
       <li>fix my reservation page ancker mistake</li>
@@ -544,6 +562,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.50 2009/10/03 06:38:51 nobu Exp $
+$Id: help.html,v 1.51 2009/10/04 07:09:28 nobu Exp $
 </body>
 </html>
