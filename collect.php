@@ -1,6 +1,6 @@
 <?php
 // Event collection setting by Poster
-// $Id: collect.php,v 1.7 2008/07/20 12:45:31 nobu Exp $
+// $Id: collect.php,v 1.8 2009/10/04 10:26:22 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -122,6 +122,7 @@ while ($data = $xoopsDB->fetchArray($result)) {
 
 if (!empty($xoopsModuleConfig['time_defs'])) {
     foreach (explode(',', $xoopsModuleConfig['time_defs']) as $tm) {
+	if (strpos($tm, '=')) list($tm)=explode('=', $tm);
 	$timeline[$tm]=date(_MD_STIME_FMT, strtotime($tm));
     }
 }

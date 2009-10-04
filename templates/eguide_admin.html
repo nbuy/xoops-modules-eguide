@@ -110,8 +110,19 @@ Calendar._TT["WK"] = "";
 <{$input_category}></td><{/if}></tr>
 </table>
 <h3><{$smarty.const._MD_EVENT_DATE}></h3>
-<{$input_edate}>
-<br/>
+<p>
+<{$input_edate}> &nbsp;
+<{$smarty.const._MD_TIMEC}> 
+<{if $timetable}>
+  <select name="edatetime">
+    <{foreach item=timeopt from=$timetable}>
+      <option value="<{$timeopt.value}>"<{if $timeopt.value==$edatetime}> selected="selected"<{/if}>><{$timeopt.label}></option>
+    <{/foreach}>
+  </select>
+<{else}>
+  <{$input_edatetime}>
+<{/if}>
+</p>
 <fieldset>
 <p><b><{$smarty.const._MD_EVENT_EXPIRE}></b> <{$input_expire}></p>
 <p><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>"/> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></p>

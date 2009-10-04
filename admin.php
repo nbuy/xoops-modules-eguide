@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.32 2009/10/04 07:09:28 nobu Exp $
+// $Id: admin.php,v 1.33 2009/10/04 10:26:22 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -280,6 +280,19 @@ foreach ($check as $k=>$v) {
 }
 $xoopsTpl->assign('check', $check);
 $xoopsTpl->assign('use_fckeditor', eguide_form_options('use_fckeditor', 0));
+$timetable = array();
+$tstr = $xoopsModuleConfig['time_defs'];
+if ($tstr) {
+    foreach (explode(',',$tstr)  as $value) {
+	if (strpos($value, '=')) {
+	    list($value, $label)=explode('=', $value);
+	} else {
+	    $label=$value;
+	}
+	$timetable[] = array('label'=>$label, 'value'=>$value);
+    }
+}
+$xoopsTpl->assign('timetable', $timetable);
 
 if ($eid && $op=='delete') {
     $xoopsOption['template_main'] = EGPREFIX.'_event.html';
@@ -347,7 +360,10 @@ if ($eid && $op=='delete') {
     $textarea = new myFormDhtmlTextArea('', 'summary', $summary, 10, 60);
     $nlab = eguide_form_options('label_persons');
     if ($nlab) $nlab = sprintf(_MD_RESERV_LABEL_DESC, $nlab);
-    $xoopsTpl->assign(array('input_edate'=>datefield('edate',$data['edate']),
+    $edate = $data['edate'];
+    $xoopsTpl->assign(array('input_edate'=>datefield('edate',$edate),
+			    'input_edatetime'=>timefield('edate',$edate),
+			    'edatetime'=>formatTimestamp($edate, 'H:i'),
 			    'input_expire'=>$input_expire,
 			    'input_category'=>$input_category,
 			    'input_extent'=>$input_extent,
@@ -390,19 +406,21 @@ function getDateField($p) {
     return userTimeToServerTime(mktime($hour, $min, 0, $m, $d, $y), $xoopsUser->getVar("timezone_offset"));
 }
 
-function datefield($prefix, $time) {
-    list($h, $i) = split(' ', formatTimestamp($time, "G i"));
+function datefield($prefix, $time, $hastime=true) {
     $buf = "<input id='${prefix}ymd' name='${prefix}ymd' size='12' value='".formatTimestamp($time, "Y-m-d")."'/> ";
     $buf .= "<script language='javascript'><!-- 
 document.write('<input type=\"button\" value=\""._MD_CAL."\" onClick=\"showCalendar(\\'${prefix}ymd\\')\">');
 --></script>\n";
+    return $buf;
+}
 
-    $buf .= "&nbsp;"._MD_TIMEC." ";
-    $buf .= select_value("%02d", "${prefix}hour", 0, 23, $h);
+function timefield($prefix, $time) {
+    list($h, $i) = split(' ', formatTimestamp($time, "G i"));
+    $buf = select_value("%02d", "${prefix}hour", 0, 23, $h);
     $buf .= " : ";
 
     $buf .= select_value("%02d", "${prefix}min", 0, 59, $i, 5);
-    $buf .= " : 00<br />\n";
+    $buf .= " : 00\n";
     return $buf;
 }
 
