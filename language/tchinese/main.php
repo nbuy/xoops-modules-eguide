@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.12 2009/12/13 05:12:09 nobu Exp $
+// $Id: main.php,v 1.13 2009/12/13 15:47:24 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -184,5 +184,5 @@ define('_MD_THISCOMESFROM', '%s 可以取得更多活動訊息');
 
 //%%%%%%	File Name mylist.php 	%%%%%
 define('_MD_MYLIST', '我的活動清單');
-define('_MD_CANCEL', '取消');
+define('_MD_CANCEL', '取消 - {EVENT_DATE} {EVENT_TITLE}');
 ?>

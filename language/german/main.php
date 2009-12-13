@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.11 2009/12/13 05:12:08 nobu Exp $
+// $Id: main.php,v 1.12 2009/12/13 15:47:24 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -213,5 +213,5 @@ define("_MD_THISCOMESFROM","Weitere Informationen %s");
 
 //%%%%%%	File Name mylist.php 	%%%%%
 define('_MD_MYLIST','Meine Reservierungen');
-define('_MD_CANCEL','Stornieren');
+define('_MD_CANCEL','Stornieren - {EVENT_DATE} {EVENT_TITLE}');
 ?>
