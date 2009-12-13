@@ -281,6 +281,18 @@ td,th { padding: 4px; background: #e8e8e8;}
       You need install FCKeditor at XOOPS_URL/common/fckeditor/ folder.
       When setting value to "Basic", you can use simple toolbar.
     </dd>
+    <dt>bound_time (Bundary time as the last day)</dt>
+    <dd>
+      The event start before stting this, display the day before date and more 24 hours (or 12 hours).
+      Setting time format as "<tt>HH:MM</tt>".
+      <p>For example, setting "<tt>bound_time=03:00</tt>", a event start "2009-12-15 01:00" to be display "2009-12-14 25:00".</p>
+    </dd>
+    <dt>reply_subject (Reply mail subject)</dt>
+    <dt>form_name (Replay mail from name)</li>
+    <dd>
+      For reply mail by this module, override setting value.
+      Default using define in language resource.
+    </dd>
   </dl>
 
   <a name="form"></a><h5>Additional fields Format</h5>
@@ -398,6 +410,20 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h5>Changes</h5>
 
 <dl>
+  <dt>2009/12/13 eguide 2.55 released</dt>
+  <dd>
+    <ul>
+      <li>More "Additional item options"
+        <ul>
+	  <li>bound_time=01:00 -- Bound time as last day</li>
+	  <li>reply_subject=件名表記 -- Replay email subject</li>
+	  <li>form_name=名前 -- Reply from name</li>
+	</ul>
+      </li>
+      <li>Email subject redefine with email vars.</li>
+      <li>Reply email variable EVENT_DATE defined</li>
+    </ul>
+  </dd>
   <dt>2009/10/04 eguide 2.54 released</dt>
   <dd>
     <ul>
@@ -563,6 +589,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.53 2009/10/04 10:26:22 nobu Exp $
+$Id: help.html,v 1.54 2009/12/13 13:09:10 nobu Exp $
 </body>
 </html>

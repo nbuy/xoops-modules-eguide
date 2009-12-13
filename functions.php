@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.29 2009/12/13 05:12:08 nobu Exp $
+// $Id: functions.php,v 1.30 2009/12/13 13:09:10 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -336,7 +336,7 @@ function eventdate($time, $format="") {
     $bound = eguide_form_options('bound_time', 0);
     if ($bound) {
 	$etime = formatTimestamp($time, "H:i");
-	if ($etime < $bound) {
+	if ($etime <= $bound) {
 	    $ehour = intval(preg_replace('/:\d+$/', '', $etime));
 	    $pat = array("g", "G", "h", "H");
 	    $h12 = $ehour+12;
