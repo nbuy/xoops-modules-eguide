@@ -1,5 +1,5 @@
 <?php
-// $Id: notify.inc.php,v 1.17 2009/12/13 05:12:08 nobu Exp $
+// $Id: notify.inc.php,v 1.18 2009/12/13 15:53:38 nobu Exp $
 function event_notify($op, $data) {
     global $xoopsModuleConfig;
     $notify = $xoopsModuleConfig['notify'];
@@ -14,7 +14,7 @@ function event_notify($op, $data) {
 	// notify suppress will be confused?
 	$title = $data['title'];
 	$edate = eventdate($data['edate']);
-	$xoopsMailer->setSubject(_MD_NEWSUB." - {EVENT_DATE} {EVENT_TITLE}");
+	$xoopsMailer->setSubject(_MD_NEWSUB);
 	$note = ($data['status'] == STAT_POST)?_MD_APPROVE_REQ:"";
 	$tags = array('EVENT_TITLE'=> $title,
 		      'EVENT_DATE' => $edate,
@@ -81,7 +81,7 @@ function user_notify($eid) {
     while ($data = $xoopsDB->fetchArray($result)) {
 	$xoopsMailer =& getMailer();
 	$xoopsMailer->useMail();
-	$xoopsMailer->setSubject(_MD_NEWSUB." - $title");
+	$xoopsMailer->setSubject(_MD_NEWSUB);
 	$tpl = 'notify_user_new.tpl';
 	$xoopsMailer->setTemplateDir(template_dir($tpl));
 	$xoopsMailer->setTemplate($tpl);
