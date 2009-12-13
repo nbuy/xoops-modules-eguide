@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.8 2009/12/13 05:12:08 nobu Exp $
+// $Id: modinfo.php,v 1.9 2009/12/13 13:28:26 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -64,7 +64,7 @@ define("_MI_EGUIDE_DATE_FORMAT_DEF","D, d M Y");
 define("_MI_EGUIDE_EXPIRE_AFTER","Ablaufzeit");
 define("_MI_EGUIDE_EXPIRE_AFTER_DESC","Event gilt auf Startseite als abgelaufen, wenn Startzeit ist früher als in x Minuten");
 define("_MI_EGUIDE_PERSONS","Weitere Artikel Optionen");
-define("_MI_EGUIDE_PERSONS_DESC","Weitere Artikel optionsAdditional Artikel optionale Einstellungen, wie ein Feld Label für wie viele Personen. Beispiel: 'label_persons=Personen'. Siehe <a href=\"help.php#form_options\">etwa eGuide Seite</a> weitere Informationen zu erhalten.");
+define("_MI_EGUIDE_PERSONS_DESC","Weitere Artikel optionsAdditional Artikel optionale Einstellungen, wie ein Feld Label für wie viele Personen. Beispiel: 'label_persons=Personen'. Siehe <a href=\"../../eguide/admin/help.php#form_options\">etwa eGuide Seite</a> weitere Informationen zu erhalten.");
 define("_MI_EGUIDE_PLUGINS","Andere Module");
 define("_MI_EGUIDE_PLUGINS_DESC","Sollen andere Module auf eGuide zugreifen dürfen");
 define("_MI_EGUIDE_COMMENT","Kommentare erlauben");
