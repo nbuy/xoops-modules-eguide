@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.11 2006/06/04 07:04:02 nobu Exp $
+// $Id: sendinfo.php,v 1.12 2009/12/13 05:12:08 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -26,7 +26,7 @@ if ($op=="doit") {
     $xoopsMailer->setSubject($title);
     $xoopsMailer->setBody(param('body',''));
     $xoopsMailer->setFromEmail($xoopsUser->email());
-    $xoopsMailer->setFromName(_MD_FROM_NAME);
+    $xoopsMailer->setFromName(eguide_from_name());
     $xoopsMailer->assign("EVENT_URL", EGUIDE_URL."/event.php?eid=$eid");
     $req = param('request')?" OR eid=0":"";
     $status = param('status');

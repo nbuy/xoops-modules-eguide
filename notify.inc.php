@@ -1,7 +1,7 @@
 <?php
-// $Id: notify.inc.php,v 1.16 2008/02/02 11:57:12 nobu Exp $
+// $Id: notify.inc.php,v 1.17 2009/12/13 05:12:08 nobu Exp $
 function event_notify($op, $data) {
-    global $xoopsModuleConfig, $xoopsUser, $xoopsConfig;
+    global $xoopsModuleConfig;
     $notify = $xoopsModuleConfig['notify'];
     if (!$notify) return;
 
@@ -30,7 +30,7 @@ function event_notify($op, $data) {
     $member_handler =& xoops_gethandler('member');
     $users = $member_handler->getUsersByGroup($xoopsModuleConfig['notify_group'], true);
     $uids = array();
-    if ($notify==1) $uids[] = $xoopsUser->getVar('uid'); // suppress self
+    if ($notify==1) $uids[] = $GLOBALS['xoopsUser']->getVar('uid'); // suppress self
     $uid = $data['uid'];
     if (!in_array($uid, $uids)) { // update by not poster?
 	$user = $member_handler->getUser($uid);
@@ -45,13 +45,13 @@ function event_notify($op, $data) {
     $xoopsMailer->setTemplateDir(template_dir($tpl));
     $xoopsMailer->setTemplate($tpl);
     $xoopsMailer->assign($tags);
-    $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-    $xoopsMailer->setFromName(_MD_FROM_NAME);
+    $xoopsMailer->setFromEmail($GLOBALS['xoopsConfig']['adminmail']);
+    $xoopsMailer->setFromName(eguide_from_name());
     return $xoopsMailer->send();
 }
 
 function user_notify($eid) {
-    global $xoopsUser, $xoopsDB, $xoopsConfig, $xoopsModuleConfig;
+    global $xoopsDB, $xoopsConfig;
 
     $result = $xoopsDB->query("SELECT title,edate,expire,status,topicid FROM ".EGTBL." WHERE eid=$eid");
     if (!$result || $xoopsDB->getRowsNum($result)==0) {
@@ -65,7 +65,7 @@ function user_notify($eid) {
 
     // using XOOPS2 notification system
 	    
-    if (!$xoopsModuleConfig['user_notify'] ||
+    if (!$GLOBALS['xoopsModuleConfig']['user_notify'] ||
 	($expire>$edate?$expire<time():($edate+$expire)<time()) ||
 	$data['status']!=STAT_NORMAL) return (false);
 
@@ -86,7 +86,7 @@ function user_notify($eid) {
 	$xoopsMailer->setTemplateDir(template_dir($tpl));
 	$xoopsMailer->setTemplate($tpl);
 	$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-	$xoopsMailer->setFromName(_MD_FROM_NAME);
+	$xoopsMailer->setFromName(eguide_from_name());
 	$xoopsMailer->assign("SITENAME", $xoopsConfig['sitename']);
 	$xoopsMailer->assign("TITLE", $title);
 	$xoopsMailer->assign("EVENT_URL", EGUIDE_URL."/event.php?eid=$eid");

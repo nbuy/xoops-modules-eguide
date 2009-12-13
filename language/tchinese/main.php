@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.11 2008/02/16 12:50:35 nobu Exp $
+// $Id: main.php,v 1.12 2009/12/13 05:12:09 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -16,7 +16,7 @@ define('_MD_TIME_FMT', 'Y-m-d H:i');//j M Y H:i >Y-m-d H:i
 define('_MD_READMORE', '詳細...');
 define('_MD_EMAIL', '電子郵件');
 define('_MD_UNAME', '使用者名稱');
-define('_MD_SUBJECT', '確認報名');
+define('_MD_SUBJECT', '確認報名 - {EVENT_DATE} {EVENT_TITLE}');
 define('_MD_NOTIFY_EVENT', '登錄電子郵件通知');
 define('_MD_NOTIFY_REQUEST', '有新的活動訊息時請以電子郵件通知我');
 define('_MD_REQUIRE_MARK', '<em>*</em>');
@@ -111,7 +111,8 @@ define('_MD_SUM', '總和');
 
 //%%%%%%	File Name admin.php 	%%%%%
 define('_MD_EDITARTICLE', '活動內容編輯');
-define('_MD_NEWSUB', '刊登新活動');
+define('_MD_NEWTITLE', '刊登新活動');
+define('_MD_NEWSUB', '刊登新活動 - {EVENT_DATE} {EVENT_TITLE}');
 define('_MD_TITLE', '項目名');
 define('_MD_EVENT_DATE', '活動日期');
 define('_MD_EVENT_EXPIRE', '活動時間(輸入數字即可，換算單位：分鐘，或使用右側下拉選單)');
@@ -170,7 +171,6 @@ define('_MD_INFO_SELF', '寄一份備份給自己(管理人%s)');
 define('_MD_INFO_DEFAULT', '-訊息內容-\n\n\n預約活動\n {EVENT_URL}\n');
 define('_MD_INFO_MAILOK', '已成功寄出');
 define('_MD_INFO_MAILNG', '傳送失敗');
-define('_MD_FROM_NAME', '活動通知');
 define("_MD_UPDATE_SUBJECT","事件更新");
 define("_MD_UPDATE_DEFAULT","預設");
 

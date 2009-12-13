@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.5 2009/10/04 07:20:47 nobu Exp $
+// $Id: modinfo.php,v 1.6 2009/12/13 05:12:08 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -99,7 +99,7 @@ define('_MI_EGUIDE_CATEGORY_NOTIFY_DESC', 'Notification at category in Event Gui
 define('_MI_EGUIDE_CATEGORY_BOOKMARK', 'Evento actual');
 define('_MI_EGUIDE_CATEGORY_BOOKMARK_DESC', 'Notifcation at current event in Event Guide module');
 
-define('_MI_EGUIDE_NEWPOST_SUBJECT', 'Nuevo Evento - {EVENT_TITLE}');
+define('_MI_EGUIDE_NEWPOST_SUBJECT', 'Nuevo Evento - {EVENT_DATE} {EVENT_TITLE}');
 define('_MI_EGUIDE_NEWPOST_NOTIFY', 'New event post');
 define('_MI_EGUIDE_NEWPOST_NOTIFY_CAP', 'Notificarme cuando hayan nuevos Eventos');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY', 'New event post in category');

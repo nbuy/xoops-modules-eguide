@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.33 2009/10/04 10:26:22 nobu Exp $
+// $Id: admin.php,v 1.34 2009/12/13 05:12:08 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -30,7 +30,7 @@ $xoopsOption['template_main'] = EGPREFIX.'_admin.html';
 
 if ($op=='new') {
     // default value in post form
-    $data = array('lang_event_edit'=>_MD_NEWSUB,
+    $data = array('lang_event_edit'=>_MD_NEWTITLE,
 		  'reservation'	=> 1, // reservation: 0=disable, 1=enable
 		  'style'	=> 1, // edit text: 0=html, 1=CRLF, 2=plain
 		  'autoaccept'	=> 1, // order to: 0=confirm, 1=accepted
@@ -386,7 +386,7 @@ if ($eid) {
     }
 } else {
     $cid = 0;
-    $paths[_MD_NEWSUB] = 'admin.php';
+    $paths[_MD_NEWTITLE] = 'admin.php';
 }
 set_eguide_breadcrumbs($cid, $paths);
 

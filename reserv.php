@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.40 2009/10/04 07:09:28 nobu Exp $
+// $Id: reserv.php,v 1.41 2009/12/13 05:12:08 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -115,17 +115,21 @@ case 'delete':
 		    $xoopsMailer->assign("REQ_UNAME", '*anonymous*');
 		    $xoopsMailer->assign("REQ_NAME", $xoopsConfig['anonymous']);
 		}
-		$xoopsMailer->assign("TITLE", eventdate($data['edate'])." ".$data['title']);
-		$xoopsMailer->assign("EVENT_URL", $evurl);
-		$xoopsMailer->assign("INFO", $uinfo.$data['info']);
-		$xoopsMailer->assign("RVID", $rvid);
-		$xoopsMailer->setSubject(_MD_CANCEL.' - '.$title);
+		$tags = array("TITLE"=>"{EVENT_DATE} {EVENT_TITLE}",
+			      "EVENT_DATE"=>eventdate($data['edate']),
+			      "EVENT_TITLE" => $data['title'],
+			      "EVENT_URL"=>$evurl,
+			      "RVID"=>$rvid,
+			      "INFO"=>$uinfo.$data['info'],
+			      );
+		$xoopsMailer->assign($tags);
+		$xoopsMailer->setSubject(_MD_CANCEL);
 		$tpl = 'cancel.tpl';
 		$xoopsMailer->setTemplateDir(template_dir($tpl));
 		$xoopsMailer->setTemplate($tpl);
 		if ($email) $xoopsMailer->setToEmails($email);
 		$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
-		$xoopsMailer->setFromName(_MD_FROM_NAME);
+		$xoopsMailer->setFromName(eguide_from_name());
 		if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
 		    $xoopsMailer->setToUsers($poster);
 		}

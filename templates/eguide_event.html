@@ -71,9 +71,6 @@ function xoopsFormValidate_order() {
     myform = window.document.order;
     obj = null;
     var msg = "";
-<{if !$form.member_only}>
-if ( checkItem(myform["email"]) ) { msg = msg+"<{$smarty.const._MD_EMAIL}>\n"; if(obj==null)obj=myform["email"]; }
-<{/if}>
 <{foreach from=$form.check key=name item=msg}>
 if ( checkItem(myform["<{$name}>"]) ) { msg = msg+"<{$msg}>\n"; if(obj==null)obj=myform["<{$name}>"]; }
 <{/foreach}>

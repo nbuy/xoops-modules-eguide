@@ -152,15 +152,12 @@ Calendar._TT["WK"] = "";
 <script type="text/javascript" src="<{$xoops_url}>/common/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
 function fckeditor_exec(target, width, height, url) {
-	var area_width = width;
-	var area_height = height;
-	var xoops_url = url;
-	var oFCKeditor = new FCKeditor( target, area_width, area_height, ("<{$use_fckeditor}>"=="Basic")?"Basic":"Default" );
-	oFCKeditor.BasePath = xoops_url + "/common/fckeditor/";
+	var oFCKeditor = new FCKeditor(target, width, height, "<{$use_fckeditor}>");
+	oFCKeditor.BasePath = "<{$xoops_url}>/common/fckeditor/";
 	oFCKeditor.ReplaceTextarea();
 }
-fckeditor_exec("summary", "100%", "350", "<{$xoops_url}>");
-fckeditor_exec("body", "100%", "350", "<{$xoops_url}>")
+fckeditor_exec("summary", "100%", "350");
+fckeditor_exec("body", "100%", "350");
 </script>
 <input type="hidden" name="style" value="0" />
 <{else}>

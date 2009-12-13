@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.10 2008/02/16 12:50:35 nobu Exp $
+// $Id: main.php,v 1.11 2009/12/13 05:12:08 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -17,7 +17,7 @@ define("_MD_POSTED_FMT", "d.m.Y H:i");
 define("_MD_TIME_FMT", "d.m.Y H:i");
 define("_MD_READMORE","Lesen Sie Mehr...");
 define("_MD_EMAIL","Email Addresse");
-define("_MD_SUBJECT","Bestätigung");
+define("_MD_SUBJECT","Bestätigung - {EVENT_DATE} {EVENT_TITLE}");
 define("_MD_NOTIFY_EVENT",  "Benachrichtigung über neue Veranstaltungen erhalten");
 define("_MD_NOTIFY_REQUEST", "Benachrichtigen Sie mich, wenn weitere Veranstaltungen stattfinden");
 define('_MD_REQUIRE_MARK','*');
@@ -124,7 +124,8 @@ define('_MD_EXPORT_CHARSET', 'UTF-8');
 
 //%%%%%%	File Name admin.php 	%%%%%
 define("_MD_EDITARTICLE","Veranstaltung bearbeiten");
-define("_MD_NEWSUB","Neue Veranstaltung");
+define("_MD_NEWTITLE","Neue Veranstaltung");
+define("_MD_NEWSUB","Neue Veranstaltung - {EVENT_DATE} {EVENT_TITLE}");
 define("_MD_TITLE","Titel");
 define("_MD_EVENT_DATE","Datum");
 define("_MD_EVENT_EXPIRE","Enddatum anzeigen");
@@ -199,7 +200,6 @@ define("_MD_INFO_SELF","An eigene Email-Adresse senden (%s)");
 define("_MD_INFO_DEFAULT","-bitte hier den Text eingeben-\n\n\nReservierte Veranstaltung\n    {EVENT_URL}\n");
 define("_MD_INFO_MAILOK","Email gesendet");
 define("_MD_INFO_MAILNG","Email konnte nicht gesendet werden");
-define("_MD_FROM_NAME","Veranstaltungskalender");
 define("_MD_UPDATE_SUBJECT","Event Aktualisiert");
 define("_MD_UPDATE_DEFAULT","Default");
 

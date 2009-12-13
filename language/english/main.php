@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.21 2008/02/16 12:50:34 nobu Exp $
+// $Id: main.php,v 1.22 2009/12/13 05:12:08 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -16,7 +16,7 @@ define("_MD_TIME_FMT", "j M Y H:i");
 define("_MD_READMORE","More...");
 define("_MD_EMAIL","EMail Address");
 define('_MD_UNAME','Username');
-define("_MD_SUBJECT","Confirm");
+define("_MD_SUBJECT","Confirm - {EVENT_DATE} {EVENT_TITLE}");
 define("_MD_NOTIFY_EVENT",  "Notification of new events");
 define("_MD_NOTIFY_REQUEST","Notify me by mail when other new events are posted");
 define('_MD_REQUIRE_MARK', '<em>*</em>');
@@ -111,7 +111,8 @@ define("_MD_SUM","Sum");
 
 //%%%%%%	File Name admin.php 	%%%%%
 define("_MD_EDITARTICLE","Edit an Event");
-define("_MD_NEWSUB","New Event");
+define("_MD_NEWTITLE","New Event");
+define("_MD_NEWSUB","New Event - {EVENT_DATE} {EVENT_TITLE}");
 define("_MD_TITLE","Title");
 define("_MD_EVENT_DATE","Event Date Time");
 define("_MD_EVENT_EXPIRE","Finish Display");
@@ -170,7 +171,6 @@ define("_MD_INFO_SELF","send to self (%s)");
 define("_MD_INFO_DEFAULT","-messages-\n\n\nReserved Event\n    {EVENT_URL}\n");
 define("_MD_INFO_MAILOK","Mail sent");
 define("_MD_INFO_MAILNG","Failed to send mail");
-define("_MD_FROM_NAME","Event Guide");
 define("_MD_UPDATE_SUBJECT","Event Updated");
 define("_MD_UPDATE_DEFAULT","Default");
 

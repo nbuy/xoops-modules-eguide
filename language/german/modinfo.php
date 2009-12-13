@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.7 2009/10/04 07:20:47 nobu Exp $
+// $Id: modinfo.php,v 1.8 2009/12/13 05:12:08 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -100,7 +100,7 @@ define('_MI_EGUIDE_CATEGORY_NOTIFY_DESC', 'Benachrichtigung in dieser Kategorie'
 define('_MI_EGUIDE_CATEGORY_BOOKMARK', 'Aktuelle Veranstaltung');
 define('_MI_EGUIDE_CATEGORY_BOOKMARK_DESC', 'Benachrichtigung für diese Veranstaltung');
 
-define('_MI_EGUIDE_NEWPOST_SUBJECT', 'Neue Veranstaltung - {EVENT_TITLE}');
+define('_MI_EGUIDE_NEWPOST_SUBJECT', 'Neue Veranstaltung - {EVENT_DATE} {EVENT_TITLE}');
 define('_MI_EGUIDE_NEWPOST_NOTIFY', 'Neue Veranstaltung eingetragen');
 define('_MI_EGUIDE_NEWPOST_NOTIFY_CAP', 'Benachrichtigen, wenn neue Veranstaltung eingetragen');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY', 'Neue Veranstaltung in dieser Kategorie eingetragen');

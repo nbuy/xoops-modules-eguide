@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.7 2008/07/20 07:03:06 nobu Exp $
+// $Id: modinfo.php,v 1.8 2009/12/13 05:12:09 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -99,7 +99,7 @@ define('_MI_EGUIDE_CATEGORY_NOTIFY_DESC', '分類通知提醒');
 define('_MI_EGUIDE_CATEGORY_BOOKMARK', '目前活動');
 define('_MI_EGUIDE_CATEGORY_BOOKMARK_DESC', '目前活動提醒');
 
-define('_MI_EGUIDE_NEWPOST_SUBJECT', '新活動-{EVENT_TITLE}');
+define('_MI_EGUIDE_NEWPOST_SUBJECT', '新活動-{EVENT_DATE}{EVENT_TITLE}');
 define('_MI_EGUIDE_NEWPOST_NOTIFY', '新增一個活動');
 define('_MI_EGUIDE_NEWPOST_NOTIFY_CAP', '當新的活動增加時提醒我');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY', '在分類裏新增一個活動');

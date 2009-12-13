@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.28 2009/10/04 07:09:28 nobu Exp $
+// $Id: functions.php,v 1.29 2009/12/13 05:12:08 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -57,11 +57,11 @@ function edit_eventdata(&$data) {
 	empty($data['exdate'])?$data['edate']:$data['exdate'];
     if (isset($data['closetime'])) {
 	$data['closedate']=$data['ldate']-$data['closetime'];
-	$data['dispclose'] = formatTimestamp($data['closedate'], _MD_TIME_FMT);
+	$data['dispclose'] = eventdate($data['closedate'], _MD_TIME_FMT);
     }
     $data['date'] = eventdate($data['ldate']);
     $pat[] = '{X_TIME}';
-    $str[] = $data['time'] = formatTimestamp($data['ldate'], _MD_STIME_FMT);
+    $str[] = $data['time'] = eventdate($data['ldate'], _MD_STIME_FMT);
     $post = isset($data['cdate'])?$data['cdate']:time();
     $data['postdate'] = formatTimestamp($post, _MD_POSTED_FMT);
     $data['uname'] = isset($data['uid'])?XoopsUser::getUnameFromId($data['uid']):$xoopsUser->getVar('uname');
@@ -118,6 +118,9 @@ function eventform($data) {
     $form['email'] = $myts->makeTboxData4Edit($email);
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $form['check'] = array();
+    $mo = $xoopsModuleConfig['member_only'];
+    $form['member_only'] = $mo;
+    if (!$mo) $form['check']['email'] = preg_replace('/\\*$/', '', _MD_EMAIL).": ".strip_tags(_MD_ORDER_NOTE1);
     $items = array();
     $field = 0;
     $note1 = $note2 = "";
@@ -264,8 +267,6 @@ function eventform($data) {
 	$items[] = array('attr'=>$attr, 'label'=>$name,
 			 'value'=>$opts, 'comment'=>$comment);
     }
-    $mo = $xoopsModuleConfig['member_only'];
-    $form['member_only'] = $mo;
     $form['op'] = ($xoopsModuleConfig['has_confirm']&&
 		   (count($items)||!$mo))?'confirm':'order';
     $form['items'] = $items;
@@ -329,9 +330,40 @@ function get_extents($eid, $all=false) {
     return $extents;
 }
 
-function eventdate($time) {
+function eventdate($time, $format="") {
     global $ev_week, $xoopsModuleConfig;
-    $str = formatTimestamp($time, $xoopsModuleConfig['date_format']);
+    if (empty($format)) $format = $xoopsModuleConfig['date_format'];
+    $bound = eguide_form_options('bound_time', 0);
+    if ($bound) {
+	$etime = formatTimestamp($time, "H:i");
+	if ($etime < $bound) {
+	    $ehour = intval(preg_replace('/:\d+$/', '', $etime));
+	    $pat = array("g", "G", "h", "H");
+	    $h12 = $ehour+12;
+	    $h24 = $ehour+24;
+	    $rep = array($h12, $h24, $h12, $h24);
+	    switch (strtolower($format)) {
+	    case 's':
+		$format = _SHORTDATESTRING;
+		break;
+	    case 'm':
+		$format = _MEDIUMDATESTRING;
+		break;
+	    case 'mysql':
+		$format = "Y-m-d H:i:s";
+		break;
+	    case 'rss':
+		$format = "r";
+		break;
+	    case 'l':
+		$format = _DATESTRING;
+		break;
+	    }
+	    $format = str_replace($pat, $rep, $format);
+	    $time = $time - 86400; // sec of a day
+	}
+    }
+    $str = formatTimestamp($time, $format);
     if (isset($ev_week)) {
 	$str = str_replace(array_keys($ev_week), $ev_week, $str);
     }
@@ -415,6 +447,10 @@ if (!function_exists("template_dir")) {
     }
 }
 
+function eguide_from_name() {
+    return eguide_form_options("from_name", defined('_MD_FROM_NAME')?_MD_FROM_NAME:$GLOBALS['xoopsModule']->getVar('name'));
+}
+
 function order_notify($data, $email, $value) {
     global $xoopsModuleConfig, $xoopsUser, $xoopsModule;
 
@@ -451,17 +487,17 @@ function order_notify($data, $email, $value) {
     if ($email) $uinfo .= sprintf("%s: %s\n", _MD_EMAIL, $email);
     $rvid = $data['rvid'];
     $conf = $data['confirm'];
-    $title = eventdate($data['edate'])." ".$data['title'];
+    $edate = eventdate($data['edate']);
     $tags = array("EVENT_URL"=>$url, "RVID"=>$rvid, "CANCEL_KEY"=>$conf,
 		  "CANCEL_URL"=>EGUIDE_URL."/reserv.php?op=cancel&rvid=$rvid&key=$conf",
-		  "INFO"=>$uinfo.$value, "TITLE"=>$title,
+		  "INFO"=>$uinfo.$value, "TITLE"=>$edate." ".$data['title'],
+		  "EVENT_DATE"=>$edate, "EVENT_TITLE"=>$date['title'],
 		  "SUMMARY"=>strip_tags($data['summary']));
-    $subj = _MD_SUBJECT.' - '.$title;
-		  
+    $subj = eguide_form_options('reply_subject', _MD_SUBJECT);
     $xoopsMailer->assign($tags);
     $xoopsMailer->setSubject($subj);
     $xoopsMailer->setFromEmail($poster->getVar('email'));
-    $xoopsMailer->setFromName(_MD_FROM_NAME);
+    $xoopsMailer->setFromName(eguide_from_name());
     $ret = $xoopsMailer->send(); // send to order person
     if (!$ret) return $ret;
 
@@ -472,7 +508,7 @@ function order_notify($data, $email, $value) {
     $xoopsMailer->assign($tags);
     $xoopsMailer->setSubject($subj);
     $xoopsMailer->setFromEmail($poster->getVar('email'));
-    $xoopsMailer->setFromName(_MD_FROM_NAME);
+    $xoopsMailer->setFromName(eguide_from_name());
     if ($data['notify']) {
 	if (!in_array($xoopsModuleConfig['notify_group'], $poster->groups())) {
 	    $xoopsMailer->setToUsers($poster);

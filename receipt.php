@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.32 2009/03/09 05:19:11 nobu Exp $
+// $Id: receipt.php,v 1.33 2009/12/13 05:12:08 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -198,7 +198,7 @@ case 'active':
 	    }
 	    $xoopsMailer->assign('REQ_UNAME', $xoopsUser->getVar('uname'));
 	    $xoopsMailer->assign('REQ_NAME', $xoopsUser->getVar('name'));
-	    $xoopsMailer->setFromName(_MD_FROM_NAME);
+	    $xoopsMailer->setFromName(eguide_from_name());
 	    $xoopsMailer->assign("INFO", $uinfo.$data['info']);
 	    $curl = EGUIDE_URL."/reserv.php?op=cancel&rvid=$rvid&key=".$data['confirm'];
 	    $xoopsMailer->assign('RVID', $rvid);
