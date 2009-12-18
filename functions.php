@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.30 2009/12/13 13:09:10 nobu Exp $
+// $Id: functions.php,v 1.31 2009/12/18 13:39:05 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -360,7 +360,7 @@ function eventdate($time, $format="") {
 		break;
 	    }
 	    $format = str_replace($pat, $rep, $format);
-	    $time = $time - 86400; // sec of a day
+	    $time = $time - 43200; // sec of a 12hours
 	}
     }
     $str = formatTimestamp($time, $format);
