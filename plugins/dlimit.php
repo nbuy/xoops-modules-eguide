@@ -1,6 +1,6 @@
 <?php
 // event guide daily limitation plugins
-// $Id: dlimit.php,v 1.1 2009/10/08 10:28:51 nobu Exp $
+// $Id: dlimit.php,v 1.2 2009/12/24 13:39:49 nobu Exp $
 
 /* PLUGIN SPECS
      filename ::= basename + '.php'
@@ -31,8 +31,10 @@ function eguide_dlimit_condition($eid, $exid) {
     $res = $xoopsDB->query("SELECT IF(exdate, exdate, edate) edate FROM ".EGTBL." LEFT JOIN ".EXTBL." ON eid=eidref AND exid=$exid WHERE eid=$eid");
     list($edate) = $xoopsDB->fetchRow($res);
     // start of day calc in default time zone
-    list($y, $m, $d) = explode('-', formatTimestamp($edate, 'Y-m-d', $xoopsConfig['default_TZ']));
-    $start = userTimeToServerTime(mktime(0,0,0, $m, $d, $y), $xoopsConfig['default_TZ']);
+    list($y, $m, $d) = explode('-', eventdate($edate, 'Y-m-d', $xoopsConfig['default_TZ']));
+    $bound = eguide_form_options('bound_time', '00:00');
+    list($hour, $min) = explode(':', $bound);
+    $start = userTimeToServerTime(mktime($hour,$min,0, $m, $d, $y), $xoopsConfig['default_TZ']);
     $last = $start + 24*3600-1;	/* +1day */
     $res = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." r LEFT JOIN ".EGTBL." e ON r.eid=e.eid LEFT JOIN ".EXTBL." x ON r.eid=x.eidref AND x.exid=r.exid WHERE r.uid=$uid AND IF(exdate, exdate, edate) BETWEEN $start AND $last");
     list($count) = $xoopsDB->fetchRow($res);

@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.31 2009/12/18 13:39:05 nobu Exp $
+// $Id: functions.php,v 1.32 2009/12/24 13:39:48 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -330,12 +330,12 @@ function get_extents($eid, $all=false) {
     return $extents;
 }
 
-function eventdate($time, $format="") {
+function eventdate($time, $format="", $offset="") {
     global $ev_week, $xoopsModuleConfig;
     if (empty($format)) $format = $xoopsModuleConfig['date_format'];
     $bound = eguide_form_options('bound_time', 0);
     if ($bound) {
-	$etime = formatTimestamp($time, "H:i");
+	$etime = formatTimestamp($time, "H:i", $offset);
 	if ($etime <= $bound) {
 	    $ehour = intval(preg_replace('/:\d+$/', '', $etime));
 	    $pat = array("g", "G", "h", "H");
@@ -363,7 +363,7 @@ function eventdate($time, $format="") {
 	    $time = $time - 43200; // sec of a 12hours
 	}
     }
-    $str = formatTimestamp($time, $format);
+    $str = formatTimestamp($time, $format, $offset);
     if (isset($ev_week)) {
 	$str = str_replace(array_keys($ev_week), $ev_week, $str);
     }

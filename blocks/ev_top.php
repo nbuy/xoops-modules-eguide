@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.27 2009/06/01 05:58:06 nobu Exp $
+// $Id: ev_top.php,v 1.28 2009/12/24 13:39:49 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -102,8 +102,8 @@ WHERE ((expire>=edate AND expire>$now)
 	$event['title'] = $title;
 	$event['eid'] = $myrow['eid'];
 	if (isset($myrow['exid'])) $event['exid'] = $myrow['exid'];
-	$event['date'] = formatTimestamp($edate, _BLOCK_DATE_FMT);
-	$event['_date'] = formatTimestamp($edate, 's');
+	$event['date'] = eventdate($edate, _BLOCK_DATE_FMT);
+	$event['_date'] = eventdate($edate, 's');
 	$event['uname'] = XoopsUser::getUnameFromId($myrow['uid']);
 	$event['post'] = formatTimestamp($myrow['cdate'], _BLOCK_DATE_FMT);
 	$event['_post'] = formatTimestamp($myrow['cdate'], 'm');
