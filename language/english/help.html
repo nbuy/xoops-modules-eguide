@@ -288,10 +288,16 @@ td,th { padding: 4px; background: #e8e8e8;}
       <p>For example, setting "<tt>bound_time=03:00</tt>", a event start "2009-12-15 01:00" to be display "2009-12-14 25:00". The bound time work correct from <tt>00:01</tt> to <tt>11:59</tt>.</p>
     </dd>
     <dt>reply_subject (Reply mail subject)</dt>
-    <dt>form_name (Replay mail from name)</li>
+    <dt>from_name (Replay mail from name)</dt>
     <dd>
       For reply mail by this module, override setting value.
       Default using define in language resource.
+    </dd>
+    <dt>enable_copy (Enable copy funciton event article)</dt>
+    <dd>
+      <tt>enable_copy=yes</tt>
+      Add "New Event" checkbox when edit event article.
+      When checked the checkbox to store that new event.
     </dd>
   </dl>
 
@@ -410,6 +416,14 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h5>Changes</h5>
 
 <dl>
+  <dt>2009/12/24 eguide 2.56 released</dt>
+  <dd>
+    <ul>
+      <li>dlimit plugins support bound_time options</li>
+      <li>blocks support bound_time</li>
+      <li>add enable_copy options</li>
+    </ul>
+  </dd>
   <dt>2009/12/20 eguide 2.55 released</dt>
   <dd>
     <ul>
@@ -417,7 +431,7 @@ td,th { padding: 4px; background: #e8e8e8;}
         <ul>
 	  <li>bound_time=01:00 -- Bound time as last day</li>
 	  <li>reply_subject=Subject -- Replay email subject</li>
-	  <li>form_name=Sender -- Reply from name</li>
+	  <li>from_name=Sender -- Reply from name</li>
 	</ul>
       </li>
       <li>Email subject redefine with email vars.</li>
@@ -589,6 +603,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.56 2009/12/22 13:15:08 nobu Exp $
+$Id: help.html,v 1.57 2009/12/24 14:21:37 nobu Exp $
 </body>
 </html>

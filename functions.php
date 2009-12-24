@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.32 2009/12/24 13:39:48 nobu Exp $
+// $Id: functions.php,v 1.33 2009/12/24 14:21:37 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -491,7 +491,7 @@ function order_notify($data, $email, $value) {
     $tags = array("EVENT_URL"=>$url, "RVID"=>$rvid, "CANCEL_KEY"=>$conf,
 		  "CANCEL_URL"=>EGUIDE_URL."/reserv.php?op=cancel&rvid=$rvid&key=$conf",
 		  "INFO"=>$uinfo.$value, "TITLE"=>$edate." ".$data['title'],
-		  "EVENT_DATE"=>$edate, "EVENT_TITLE"=>$date['title'],
+		  "EVENT_DATE"=>$edate, "EVENT_TITLE"=>$data['title'],
 		  "SUMMARY"=>strip_tags($data['summary']));
     $subj = eguide_form_options('reply_subject', _MD_SUBJECT);
     $xoopsMailer->assign($tags);
