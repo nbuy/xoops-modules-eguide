@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.34 2009/12/13 05:12:08 nobu Exp $
+// $Id: admin.php,v 1.35 2009/12/24 13:53:34 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -280,6 +280,7 @@ foreach ($check as $k=>$v) {
 }
 $xoopsTpl->assign('check', $check);
 $xoopsTpl->assign('use_fckeditor', eguide_form_options('use_fckeditor', 0));
+$xoopsTpl->assign('enable_copy', eguide_form_options('enable_copy', 0));
 $timetable = array();
 $tstr = $xoopsModuleConfig['time_defs'];
 if ($tstr) {

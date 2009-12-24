@@ -200,6 +200,9 @@ fckeditor_exec("body", "100%", "350");
 <p><{$input_status}></p>
 <{/if}>
 <p>
+<{if $eid && $enable_copy}>
+<div><input type="checkbox" name="eid" value="0"><{$smarty.const._MD_NEWTITLE}></div>
+<{/if}>
 <input type="submit" name="preview" value="<{$smarty.const._MD_PREVIEW}>" />
 <input type="submit" name="save" value="<{$smarty.const._MD_SAVE}>" />
 </p>
