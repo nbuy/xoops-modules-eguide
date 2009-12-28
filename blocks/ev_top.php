@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.28 2009/12/24 13:39:49 nobu Exp $
+// $Id: ev_top.php,v 1.29 2009/12/28 10:29:17 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -32,6 +32,8 @@ if (!function_exists("eguide_marker")) {
 }
 
 if (!function_exists("b_event_top_show_base")) {
+
+include_once dirname(dirname(__FILE__))."/functions.php";
 
 function b_event_top_show_base($dirname, $prefix, $options) {
     global $xoopsDB, $xoopsUser;
