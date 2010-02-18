@@ -1,8 +1,16 @@
 <?php
 // event guide daily limitation plugins
-// $Id: dlimit.php,v 1.2 2009/12/24 13:39:49 nobu Exp $
+// $Id: dlimit.php,v 1.3 2010/02/18 15:06:12 nobu Exp $
 
-/* PLUGIN SPECS
+/*
+ * dlimit plugins feature
+ *   - Limitation reservation per 1day.
+ *     (default max_register_in_day=1)
+ *   - Limitation reservation in future.
+ *     (default max_register_in_future=0 as unlimit)
+ */
+
+/* PLUGIN GENERAL SPECS
      filename ::= basename + '.php'
 
    hooked funcitons (
@@ -41,6 +49,15 @@ function eguide_dlimit_condition($eid, $exid) {
     return $count;
 }
 
+function eguide_dlimit_rsvcount($eid, $exid) {
+    global $xoopsDB, $xoopsUser;
+    $now = time();
+    $uid = $xoopsUser->getVar('uid');
+    $res = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." r LEFT JOIN ".EGTBL." e ON r.eid=e.eid LEFT JOIN ".EXTBL." x ON r.eid=x.eidref AND x.exid=r.exid WHERE r.uid=$uid AND IF(exdate, exdate, edate) > $now");
+    list($count) = $xoopsDB->fetchRow($res);
+    return $count;
+}
+
 // pre check amount enough
 function eguide_dlimit_check($eid, $exid, $poster) {
     global $xoopsUser, $xoopsModule, $xoopsTpl;
@@ -53,8 +70,15 @@ function eguide_dlimit_check($eid, $exid, $poster) {
     // need points for order
     $limit = eguide_form_options('max_register_in_day', 1);
     $nrec = eguide_dlimit_condition($eid, $exid);
-    if ($nrec < $limit) return true;
-    if ($tpl) $xoopsTpl->assign('message', sprintf(_PI_EGUIDE_DLIMIT_FULL_OF_DAY, $limit));
+    if ($nrec < $limit) {
+	// check more condition
+	$rmax = eguide_form_options('max_register_in_future', 0);
+	if ($rmax==0) return true;
+	if (eguide_dlimit_rsvcount($eid, $exid) < $rmax) return true;
+	if ($tpl) $xoopsTpl->assign('message', sprintf(_PI_EGUIDE_DLIMIT_FULL_OF_FUTURE, $rmax));
+    } else {
+	if ($tpl) $xoopsTpl->assign('message', sprintf(_PI_EGUIDE_DLIMIT_FULL_OF_DAY, $limit));
+    }
     return false;
 }
 
