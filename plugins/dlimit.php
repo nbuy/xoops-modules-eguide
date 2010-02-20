@@ -1,6 +1,6 @@
 <?php
 // event guide daily limitation plugins
-// $Id: dlimit.php,v 1.3 2010/02/18 15:06:12 nobu Exp $
+// $Id: dlimit.php,v 1.4 2010/02/20 03:02:15 nobu Exp $
 
 /*
  * dlimit plugins feature
@@ -70,7 +70,7 @@ function eguide_dlimit_check($eid, $exid, $poster) {
     // need points for order
     $limit = eguide_form_options('max_register_in_day', 1);
     $nrec = eguide_dlimit_condition($eid, $exid);
-    if ($nrec < $limit) {
+    if ($limit==0 || $nrec < $limit) {
 	// check more condition
 	$rmax = eguide_form_options('max_register_in_future', 0);
 	if ($rmax==0) return true;
