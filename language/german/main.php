@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.12 2009/12/13 15:47:24 nobu Exp $
+// $Id: main.php,v 1.13 2010/02/21 11:07:50 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -63,7 +63,9 @@ define("_MD_RESERV_CANCEL","Wollen Sie die Reservierung wirklich stornieren?");
 define("_MD_RESERV_CANCELED","Reservierung wurde erfolgreich storniert");
 define("_MD_RESERV_NOTIFY","%s\n\nBestell Email: %s\nReservierte Veranstaltung: %s\n  %s\n");
 define("_MD_RESERV_FULL","Onlinereservierungen nicht mehr möglich, da keine freien Plätze mehr verfügbar sind. Bitte Fragen Sie telefonisch nach Restkarten oder besuchen Sie die Abendkasse.");
+define('_MD_RESERV_PLUGIN_FAIL','Für Ihren Reservierungswunsch sind nicht genügend freie Plätze vorhanden!');
 define("_MD_CANCEL_FAIL","Stornieren fehlgeschlagen");
+define('_MD_CANCEL_SUBJ','Stornieren - {EVENT_DATE} {EVENT_TITLE}');
 define("_MD_NODATA","Noch nix reserviert? Da dann nix wie ran... Event raussuchen und gleich noch einen Platz sichern!");
 define("_MD_NOEVENT","Neue Veranstaltung auf der Liste");
 define("_MD_SHOW_PREV","letzte Veranstaltungen");
@@ -72,7 +74,6 @@ define("_MD_RESERV_NOCANCEL","Resvervierung konnte nicht storniert werden");
 define('_MD_RESERV_TOMATCH',' %d sind zu viele (%d noch verfügbar)');
 define('_MD_RESERV_CLOSE','Reservierungen leider nicht mehr möglich');
 define('_MD_RESERV_NEEDLOGIN','Sie müssen sich <a href="'.XOOPS_URL.'/user.php">erst einloggen</a>!');
-define('_MD_RESERV_PLUGIN_FAIL','Für Ihren Reservierungswunsch sind nicht genügend freie Plätze vorhanden!');
 
 define("_MD_POSTERC","Eingetragen von");
 define('_MD_POSTDATE','am');
@@ -213,5 +214,5 @@ define("_MD_THISCOMESFROM","Weitere Informationen %s");
 
 //%%%%%%	File Name mylist.php 	%%%%%
 define('_MD_MYLIST','Meine Reservierungen');
-define('_MD_CANCEL','Stornieren - {EVENT_DATE} {EVENT_TITLE}');
+define('_MD_CANCEL','Stornieren');
 ?>

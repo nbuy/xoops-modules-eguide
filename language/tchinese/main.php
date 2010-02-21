@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.13 2009/12/13 15:47:24 nobu Exp $
+// $Id: main.php,v 1.14 2010/02/21 11:07:50 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -24,7 +24,7 @@ define('_MD_LISTITEM_FMT', '[%s]');
 define('_MD_ORDER_NOTE1', '\''._MD_REQUIRE_MARK.'\'* 為必填項目');
 define('_MD_ORDER_NOTE2', '\'[ ]\' 會顯示在參加者一覽表。');
 define('_MD_ORDER_SEND', '確認資料無誤後按此報名');
-define('_MD_ORDER_CONF', '請再次確認');
+define('_MD_ORDER_CONF', '你去確認');
 
 define('_MD_EVENT_NONE', '並無公佈的活動訊息');
 define('_MD_BACK', '返回');
@@ -66,6 +66,7 @@ define('_MD_RESERV_CLOSE', '報名活動已截止');
 define('_MD_RESERV_NEEDLOGIN', '您需要<a href="'.XOOPS_URL.'/user.php">登入</a>,才可以報名');
 define('_MD_RESERV_PLUGIN_FAIL', '缺少預約時需要的條件');
 define('_MD_CANCEL_FAIL', '取消處裡失敗');
+define('_MD_CANCEL_SUBJ', '取消 - {EVENT_DATE} {EVENT_TITLE}');
 define('_MD_NODATA', '無資料');
 define('_MD_NOEVENT', '無法找到該活動的內容紀錄');
 define('_MD_SHOW_PREV', '上個活動');
@@ -184,5 +185,5 @@ define('_MD_THISCOMESFROM', '%s 可以取得更多活動訊息');
 
 //%%%%%%	File Name mylist.php 	%%%%%
 define('_MD_MYLIST', '我的活動清單');
-define('_MD_CANCEL', '取消 - {EVENT_DATE} {EVENT_TITLE}');
+define('_MD_CANCEL', '取消');
 ?>

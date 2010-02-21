@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.23 2009/12/13 15:47:24 nobu Exp $
+// $Id: main.php,v 1.24 2010/02/21 11:07:50 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -24,7 +24,7 @@ define('_MD_LISTITEM_FMT', '[%s]');
 define("_MD_ORDER_NOTE1","'"._MD_REQUIRE_MARK."'required items. ");
 define("_MD_ORDER_NOTE2","'[ ]' item to be displayed on list of participants.");
 define('_MD_ORDER_SEND','Reservation');
-define('_MD_ORDER_CONF','Confirm');
+define('_MD_ORDER_CONF','Go to Confirm');
 
 define("_MD_EVENT_NONE","There is no event guide");
 define("_MD_BACK","Back");
@@ -184,5 +184,6 @@ define("_MD_THISCOMESFROM","More event information at %s");
 
 //%%%%%%	File Name mylist.php 	%%%%%
 define('_MD_MYLIST','Reservation Events');
-define('_MD_CANCEL','Cancel - {EVENT_DATE} {EVENT_TITLE}');
+define('_MD_CANCEL','Cancel');
+define('_MD_CANCEL_SUBJ','Cancel - {EVENT_DATE} {EVENT_TITLE}');
 ?>

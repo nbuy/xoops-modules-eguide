@@ -1,6 +1,6 @@
 <?php
 # eguide module onUpdate proceeding.
-# $Id: onupdate.php,v 1.4 2008/07/20 12:45:31 nobu Exp $
+# $Id: onupdate.php,v 1.5 2010/02/21 11:07:50 nobu Exp $
 
 global $xoopsDB;
 include_once dirname(__FILE__)."/const.php";
@@ -66,10 +66,18 @@ if ($xoopsDB->errno()) { // check exists
 }
 
 // add field in 2.1
-add_field(OPTBL, 'redirect', "varchar(128) NOT NULL default ''", 'optfield');
+$res = $xoopsDB->query("SELECT optvars FROM ".OPTBL, 1);
+if (empty($res) && $xoopsDB->errno()) {
+    add_field(OPTBL, 'redirect', "varchar(128) NOT NULL default ''", 'optfield');
+    // change field name and type
+    $xoopsDB->query("ALTER TABLE ".OPTBL." CHANGE `redirect` `optvars` TEXT");
+    // convert internal format
+    $xoopsDB->query("UPDATE ".OPTBL." SET optvars=concat('redirect=', optvars) WHERE optvars<>''");
+}
 // add field in 2.4
 add_field(CATBL, 'catpri', "INT DEFAULT 0 NOT NULL", 'catdesc');
 add_field(CATBL, 'weight', "INT DEFAULT 0 NOT NULL", 'catpri');
+
 
 function report_message($msg) {
     global $msgs;		// module manager's variable

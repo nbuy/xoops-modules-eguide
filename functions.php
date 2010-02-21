@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.33 2009/12/24 14:21:37 nobu Exp $
+// $Id: functions.php,v 1.34 2010/02/21 11:07:50 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -15,6 +15,33 @@ function explodeopts($opts) {
     return $myitem;
 }
 
+if (!function_exists("unserialize_vars")) {
+    // expand: label=value[,\n](label=value...) 
+    function unserialize_vars($text,$rev=false) {
+	if (preg_match("/^\w+: /", $text)) return unserialize_text($text);
+	$array = array();
+	$text = ltrim($text);
+	$pat = array('/""/', '/^"(.*)"$/');
+	$rep = array('"', '$1');
+	$delm = preg_match('/[\n\r]/', $text)?'\n\r':',\n\r'; // allow comma format
+	while ($text && preg_match("/^(\"[^\"]*\"|[^\"$delm]*)*[$delm]?/", $text, $d)) {
+	    $ln = preg_replace("/[\\s$delm]\$/", '', $d[0]);
+	    $text = ltrim(substr($text, strlen($d[0])));
+	    if (preg_match('/^\s*([^=]+)\s*=\s*(.+)$/', $ln, $d)) {
+		if (preg_match('/^#/', $d[1])) continue;
+		if ($rev) {
+		    $k = $d[2];
+		    $v = $d[1];
+		} else {
+		    $k = $d[1];
+		    $v = $d[2];
+		}
+		$array[$k] = preg_replace($pat, $rep, $v);
+	    }
+	}
+	return $array;
+    }
+}
 if (!function_exists("serialize_text")) {
     function serialize_text($array) {
 	$text = '';
@@ -101,6 +128,18 @@ function edit_eventdata(&$data) {
 	}
     }
     return $data;
+}
+
+function apply_user_vars($text) {
+    global $xoopsUser;
+    if (preg_match_all("/{X_([A-Z_]+)}/", $text, $d)) {
+	$u = is_object($xoopsUser);
+	foreach ($d[1] as $vname) {
+	    $rep = $u?$xoopsUser->getVar(strtolower($vname)):'';
+	    $text = str_replace("{X_$vname}", $rep, $text);
+	}
+    }
+    return $text;
 }
 
 function eventform($data) {
@@ -244,9 +283,11 @@ function eventform($data) {
 		    }
 		}
 	    }
-	    if (empty($v) && !isset($_POST[$fname]) &&
-		$xoopsUser && preg_match(_MD_NAME, $name)) {
-		$v = htmlspecialchars($xoopsUser->getVar('name'));
+	    if (!isset($_POST[$fname])) {
+		if (empty($v) && $xoopsUser && preg_match(_MD_NAME, $name)) { // compat old version
+		    $v = $xoopsUser->getVar('name');
+		} else $v = apply_user_vars($v);
+		$v = htmlspecialchars($v);
 	    }
 	    if ($type == "text") {
 		$opts .= "<input size='$size' name='$fname' value=\"$v\" $prop/>";
@@ -277,7 +318,7 @@ function eventform($data) {
 
 // remove slashes
 if (XOOPS_USE_MULTIBYTES && function_exists("mb_convert_encoding") &&
-    $xoopsConfig['language'] == 'japanese') {
+    $GLOBALS['xoopsConfig']['language'] == 'japanese') {
     if (get_magic_quotes_gpc()) {
 	function post_filter($s) {
 	    return mb_convert_encoding(stripslashes($s), _CHARSET, "EUC-JP,UTF-8,Shift_JIS,JIS");
@@ -425,11 +466,15 @@ function fetch_event($eid, $exid, $admin=false) {
 IF(expersons IS NULL, persons, expersons) persons, edate opendate,
 IF(exdate,exdate,edate) edate, IF(x.reserved,x.reserved,o.reserved) reserved, 
 closetime, reservation, uid, status, style, counter, topicid, 
-exid, exdate, strict, autoaccept, notify, redirect";
+exid, exdate, strict, autoaccept, notify, optvars";
     $result = $xoopsDB->query("SELECT $fields FROM ".EGTBL.' e LEFT JOIN '.OPTBL.
 ' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref AND exid=$exid
   WHERE e.eid=$eid $stc");
-    return $xoopsDB->fetchArray($result);
+    $data = $xoopsDB->fetchArray($result);
+    if (!empty($data['optvars'])) {
+	eguide_form_options(unserialize_vars($data['optvars']));
+    }
+    return $data;
 }
 
 if (!function_exists("template_dir")) {
@@ -470,6 +515,12 @@ function order_notify($data, $email, $value) {
 	$vals=unserialize_text($value);
 	if (isset($vals[$extra])) {
 	    $extpl = sprintf($tplname, $vals[$extra]);
+	    if (file_exists("$tmpdir$extpl")) $tplfile = $extpl;
+	}
+    } else {
+	$extra = eguide_form_options('reply_tpl_suffix');
+	if ($extra) {
+	    $extpl = sprintf($tplname, $extra);
 	    if (file_exists("$tmpdir$extpl")) $tplfile = $extpl;
 	}
     }
@@ -541,9 +592,19 @@ if(!function_exists("file_get_contents")) {
 function eguide_form_options($name='', $def=false) {
     static $options;
     if (!isset($options)) {
-	$options = array();
+	$options = is_array($def)?$def:array();
 	$re = '/^\s*([a-z\d_]+)\s*=(.+)$/';
-	$opts = $GLOBALS['xoopsModuleConfig']['label_persons'];
+	$mydir = basename(dirname(__FILE__));
+	global $xoopsModule;
+	if ($xoopsModule && $xoopsModule->getVar("dirname") == $mydir) {
+	    $opts = $GLOBALS['xoopsModuleConfig']['label_persons'];
+	} else {
+	    $module_handler =& xoops_gethandler('module');
+	    $module =& $module_handler->getByDirname($mydir);
+	    $config_handler =& xoops_gethandler('config');
+	    $configs =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+	    $opts = $configs['label_persons'];
+	}
 	if (preg_match('/^[^\n]*$/', $opts) && !preg_match($re, $opts)) {
 	    $options['label_persons']=trim($opts);
 	} else {
@@ -555,6 +616,23 @@ function eguide_form_options($name='', $def=false) {
 	    }
 	}
     }
-    return $name?(empty($options[$name])?$def:$options[$name]):$options;
+    if (is_array($name)) {	// works set options
+	foreach ($name as $k => $v) {
+	    $options[$k] = $v;
+	}
+	return;
+    }
+    return $name?(isset($options[$name])?$options[$name]:$def):$options;
+}
+
+function assign_module_css() {
+    global $xoopsTpl;
+
+    $css = htmlspecialchars(eguide_form_options('module_css', HEADER_CSS));
+    $header = $xoopsTpl->get_template_vars('xoops_module_header');
+    if ($css && !preg_match('/'.preg_quote($css,'/').'/', $header)) {
+	$header .= '<link rel="stylesheet" type="text/css" media="all" href="'.$css.'" />';
+	$xoopsTpl->assign('xoops_module_header', $header);
+    }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.59 2009/12/24 14:25:54 nobu Exp $
+// $Id: xoops_version.php,v 1.60 2010/02/21 11:07:50 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
@@ -10,7 +10,7 @@ $myicon = "images/{$myprefix}_slogo2.png";
 if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
 
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = 2.56;
+$modversion['version'] = 2.60;
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -74,7 +74,7 @@ $modversion['blocks'][1]=array('file' => "ev_top.php",
 			       'description' => _MI_EGUIDE_HEADLINE_DESC,
 			       'show_func' => "b_${myprefix}_top_show",
 			       'edit_func' => 'b_event_top_edit',
-			       'options' => '0|10|19|0|',
+			       'options' => '0|10|40|0|',
 			       'can_clone' => true,
 			       'template' => $myprefix.'_block_top.html');
 
@@ -83,7 +83,15 @@ $modversion['blocks'][] =array('file' => "ev_top.php",
 			       'description' => _MI_EGUIDE_HEADLINE2_DESC,
 			       'show_func' => "b_${myprefix}_top_show",
 			       'edit_func' => 'b_event_top_edit',
-			       'options' => '0|10|19|1|',
+			       'options' => '0|10|40|1|',
+			       'can_clone' => true,
+			       'template' => $myprefix.'_block_post.html');
+$modversion['blocks'][] =array('file' => "ev_top.php",
+			       'name' => _MI_EGUIDE_HEADLINE3.$exname,
+			       'description' => _MI_EGUIDE_HEADLINE3_DESC,
+			       'show_func' => "b_${myprefix}_top_show",
+			       'edit_func' => 'b_event_top_edit',
+			       'options' => '0|10|40|2|',
 			       'can_clone' => true,
 			       'template' => $myprefix.'_block_post.html');
 $modversion['blocks'][] =array('file' => "ev_cat.php",

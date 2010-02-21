@@ -1,6 +1,6 @@
 <?php
 // Send Event Information
-// $Id: sendinfo.php,v 1.12 2009/12/13 05:12:08 nobu Exp $
+// $Id: sendinfo.php,v 1.13 2010/02/21 11:07:50 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -10,7 +10,7 @@ $eid = param('eid');
 $exid = param('sub');
 
 include(XOOPS_ROOT_PATH."/header.php");
-$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+assign_module_css();
 
 $result = $xoopsDB->query("SELECT IF(exdate,exdate,edate) edate, title, uid FROM ".EGTBL." LEFT JOIN ".EXTBL." ON eid=eidref AND exid=$exid WHERE eid=$eid");
 $data = $xoopsDB->fetchArray($result);

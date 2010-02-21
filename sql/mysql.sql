@@ -1,5 +1,5 @@
 # Event Guide Module for XOOPS
-# $Id: mysql.sql,v 1.7 2008/02/04 12:59:16 nobu Exp $
+# $Id: mysql.sql,v 1.8 2010/02/21 11:07:50 nobu Exp $
 
 #
 # Table structure for table `eguide`
@@ -69,7 +69,7 @@ CREATE TABLE eguide_opt (
   reserved int(8) unsigned NOT NULL default '0',
   closetime  integer NOT NULL default '0',
   optfield text,
-  redirect varchar(128) NOT NULL default '',
+  optvars text,
   PRIMARY KEY  (eid)
 ) TYPE=MyISAM;
 

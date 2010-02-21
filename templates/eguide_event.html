@@ -52,7 +52,11 @@
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
 <{/if}>
-<p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" <{$form.submit_opts}>/></p>
+<p style="text-align: center;">
+  
+    <input type="submit" value="<{if $form.op=="confirm"}><{$smarty.const._MD_ORDER_CONF}><{else}><{$smarty.const._MD_ORDER_SEND}><{/if}>" <{$form.submit_opts}>/>
+  
+</p>
 </form>
 <script type="text/javascript">
 <!--//

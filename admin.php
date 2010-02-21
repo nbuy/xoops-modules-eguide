@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.35 2009/12/24 13:53:34 nobu Exp $
+// $Id: admin.php,v 1.36 2010/02/21 11:07:49 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -23,7 +23,8 @@ $uid = $xoopsUser->getVar('uid');
 // set form data
 $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
 	       'persons', 'style'); // integer value default '0'
-$targs = array('title', 'summary', 'body', 'optfield', 'before', 'redirect');
+$targs = array('title', 'summary', 'body', 'optfield', 'before');
+define("_EG_OPTDEFS", "redirect="._MD_RESERV_REDIRECT.",text");
 
 $myts =& MyTextSanitizer::getInstance();
 $xoopsOption['template_main'] = EGPREFIX.'_admin.html';
@@ -79,6 +80,7 @@ if ($op=='new') {
 	$data['ldate'] = 0;
 	$data['closetime'] = time_to_sec($data['before']);
 	if ($adm) $data['status'] = param('status');
+	$data['optvars'] = post_optvars(_EG_OPTDEFS);
     }
 }
 if (!isset($data['status'])) {
@@ -201,7 +203,7 @@ if ($op=='save' || $op=='date') {
 		     'persons'=>_MD_RESERV_PERSONS,
 		     'optfield'=>_MD_RESERV_ITEM,
 		     'closetime'=>_MD_CLOSEDATE,
-		     'redirect'=>_MD_RESERV_REDIRECT);
+		     'optvars'=>_MD_OPTION_VARS);
     if ($xoopsDB->getRowsNum($result)) {
 	$pdata = $xoopsDB->fetchArray($result);
 	$buf = "";
@@ -265,7 +267,7 @@ if ($op=='save' || $op=='date') {
 
 include(XOOPS_ROOT_PATH."/header.php");
 
-$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+assign_module_css();
 
 // DHTML calendar
 include_once XOOPS_ROOT_PATH.'/language/'.$xoopsConfig['language'].'/calendar.php';
@@ -374,6 +376,19 @@ if ($eid && $op=='delete') {
 			    'summary_textarea'=>$textarea->render(),
 			    'input_style'=>select_list('style', $edit_style, $data['style']),
 			    ));
+    if ($data['optvars']) $xoopsTpl->assign(unserialize_vars($data['optvars']));
+    $xoopsTpl->assign(array('input_edate'=>datefield('edate',$edate),
+			    'input_edatetime'=>timefield('edate',$edate),
+			    'edatetime'=>formatTimestamp($edate, 'H:i'),
+			    'input_expire'=>$input_expire,
+			    'input_category'=>$input_category,
+			    'input_extent'=>$input_extent,
+			    'input_status'=>$input_status,
+			    'extent_sets'=>$extent_sets,
+			    'label_desc'=>$nlab,
+			    'summary_textarea'=>$textarea->render(),
+			    'input_style'=>select_list('style', $edit_style, $data['style']),
+			    ));
 }
 
 $paths = array();
@@ -464,4 +479,18 @@ function time_to_sec($str) {
     }
     return $v * 60;
 }
+
+function post_optvars($defs) {
+    $vars = array();
+    foreach (explode("\n", $defs) as $item) {
+	list($fname) = explode("=", $item);
+	$v = param($fname, '');
+	if (!empty($v)) $vars[$fname] = "$fname=$v";
+    }
+    $fname = 'optvars';
+    $v = param($fname, '');
+    if (!empty($v)) $vars[$fname] = $v;
+    return join("\n", $vars);
+}
+
 ?>

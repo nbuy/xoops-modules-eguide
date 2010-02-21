@@ -1,6 +1,6 @@
 <?php
 // Event collection setting by Poster
-// $Id: collect.php,v 1.8 2009/10/04 10:26:22 nobu Exp $
+// $Id: collect.php,v 1.9 2010/02/21 11:07:50 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -90,7 +90,7 @@ OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref
 
 include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = EGPREFIX.'_collect.html';
-$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+assign_module_css();
 
 $num = $xoopsDB->getRowsNum($result);
 

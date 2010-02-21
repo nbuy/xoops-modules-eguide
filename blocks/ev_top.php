@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.29 2009/12/28 10:29:17 nobu Exp $
+// $Id: ev_top.php,v 1.30 2010/02/21 11:07:50 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -40,7 +40,7 @@ function b_event_top_show_base($dirname, $prefix, $options) {
     $myts =& MyTextSanitizer::getInstance();
 	
     $now = time();
-    list($detail, $nitem, $nlen, $only, $cat) = $options;
+    list($detail, $nitem, $nlen, $list_type, $cat) = $options;
     $cond = "";
     $ids = array();
     if ($cat) {
@@ -69,9 +69,14 @@ function b_event_top_show_base($dirname, $prefix, $options) {
 	    $cond = $ids?" AND topicid IN (".join(',',array_keys($ids)).")":"";
 	}
     }
-    if ($only) {
+    switch ($list_type) {
+    case 1:			// list of one entry for same event
 	$sql = "SELECT eid, title, summary, style, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix($prefix)." LEFT JOIN ".$xoopsDB->prefix($prefix."_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
-    } else {
+	break;
+    case 2:			// list of one entry for expired event
+	$sql = "SELECT eid, title, summary, style, MAX(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix($prefix)." LEFT JOIN ".$xoopsDB->prefix($prefix."_extent")." ON eid=eidref AND exdate<$now WHERE (edate<$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
+	break;
+    case 0: 			// list of all entry event
 	$sql = "SELECT e.eid, title, summary, style, IF(exdate,exdate,edate) edate, cdate, uid,
 exid, IF(x.reserved,x.reserved,o.reserved)/persons*100 as full, closetime
 FROM ".$xoopsDB->prefix($prefix).' e
@@ -80,6 +85,7 @@ FROM ".$xoopsDB->prefix($prefix).' e
 WHERE ((expire>=edate AND expire>$now)
        OR (expire<edate AND IF(exdate,exdate,edate)+expire>$now)) $cond
   AND status=0 ORDER BY edate";
+	break;
     }
     $result = $xoopsDB->query($sql, $nitem, 0);
 
@@ -134,7 +140,8 @@ WHERE ((expire>=edate AND expire>$now)
 }
 
 function b_event_top_edit($options) {
-    if ($options[0]) {
+    list($detail, $nitem, $nlen, $list_type, $cat) = $options;
+    if ($detail) {
 	$sel0=" checked";
 	$sel1="";
     } else {
@@ -144,12 +151,11 @@ function b_event_top_edit($options) {
     return _BLOCK_EV_STYLE."&nbsp;".
 	"<input type='radio' name='options[]' value='1'$sel0 />"._YES." &nbsp; \n".
 	"<input type='radio' name='options[]' value='0'$sel1 />"._NO."<br/>\n".
-	_BLOCK_EV_ITEMS."&nbsp;<input name='options[]' value='".$options[1].
-	"' /><br/>\n".
-	_BLOCK_EV_TRIM."&nbsp;<input name='options[]' value='".$options[2]."' />\n".
-	"<input type='hidden' name='options[]' value='".$options[3]."' /><br/>\n".
-	_BLOCK_EV_CATEGORY."&nbsp;<input name='options[]' value='".$options[4]."' />\n".
-	"<input type='hidden' name='options[]' value='".$options[4]."' />\n";
+	_BLOCK_EV_ITEMS."&nbsp;<input name='options[]' value='$nitem' /><br/>\n".
+	_BLOCK_EV_TRIM."&nbsp;<input name='options[]' value='$nlen' />\n".
+	"<input type='hidden' name='options[]' value='$list_type' /><br/>\n".
+	_BLOCK_EV_CATEGORY."&nbsp;<input name='options[]' value='$cat' />\n".
+	"<input type='hidden' name='options[]' value='$cat' />\n";
     
 }
 

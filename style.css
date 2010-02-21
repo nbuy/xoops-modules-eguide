@@ -21,6 +21,7 @@
 .catbox { float: right; }
 .evform th em, .evform em,.entform th em, .entform em
   { color: #cc0000; font-weight: bold; }
+.evform td.head { width: 10em; }
 .entform { background-color: #eeeeff; }
 h2 { color: #800000; }
 h3 { color: #002040; margin-bottom: 0px;}

@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.41 2009/12/13 05:12:08 nobu Exp $
+// $Id: reserv.php,v 1.42 2010/02/21 11:07:50 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -123,7 +123,7 @@ case 'delete':
 			      "INFO"=>$uinfo.$data['info'],
 			      );
 		$xoopsMailer->assign($tags);
-		$xoopsMailer->setSubject(_MD_CANCEL);
+		$xoopsMailer->setSubject(_MD_CANCEL_SUBJ);
 		$tpl = 'cancel.tpl';
 		$xoopsMailer->setTemplateDir(template_dir($tpl));
 		$xoopsMailer->setTemplate($tpl);
@@ -182,7 +182,7 @@ case 'register':
 include 'reserv_func.php';
 include(XOOPS_ROOT_PATH."/header.php");
 
-$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+assign_module_css();
 $eid = param('eid');
 $exid = param('sub');
 $errs = array();
@@ -246,21 +246,17 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	$data['rvid'] = $rvid = $xoopsDB->getInsertId();
 	$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
 	if (order_notify($data, $email, $value)) {
-	    $url = '';
-	    if (!empty($data['redirect'])) {
-		$url = $data['redirect'];
+	    $url = eguide_form_options('redirect', '');
+	    if (!empty($url)) {
 		$sec = 3;
 		if (preg_match('/^(\d+);/', $url, $d)) {
 		    $sec = $d[1];
 		    $url = preg_replace('/^(\d+);\s*/', '', $url);
 		}
-		if ($sec==0 && preg_match('/^[\w\d_-]+$/', $url)) {
-		    $url = EGUIDE_URL."/postproc.php?rvid=$rvid";
-		}
 		$url = str_replace(array('{X_EID}', '{X_SUB}', '{X_RVID}'),
 				   array($eid, $exid, $rvid), $url);
-		$xoopsTpl->assign('xoops_module_header', HEADER_CSS.sprintf('
-<meta http-equiv="Refresh" content="%u; url=%s" />', $sec, htmlspecialchars($url)));
+		$xoopsTpl->assign('xoops_module_header', sprintf('<meta http-equiv="Refresh" content="%u; url=%s" />', $sec, htmlspecialchars($url)));
+		assign_module_css();
 	    }
 	    echo "<div class='evform'>\n";
 	    echo "<p><a href='$evurl' class='evhead'>".eventdate($data['edate'])." &nbsp; ".htmlspecialchars($data['title'])."</a></p>";
@@ -329,7 +325,7 @@ case 'confirm':
 	     "<form action='reserv.php?op=order' method='post'>".
 	     "<input type='hidden' name='eid' value='$eid'/>\n".
 	     $emhide.join("\n", get_opt_values($opts, $errs, true)).
-	     "\n<input type='submit' value='"._MD_ORDER_CONF."'/>\n".
+	     "\n<input type='submit' value='"._MD_ORDER_SEND."'/>\n".
 	     ($exid?"<input type='hidden' name='sub' value='$exid'/>\n":"").
 	     "</form>");
     }

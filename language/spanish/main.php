@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.7 2009/12/13 15:47:24 nobu Exp $
+// $Id: main.php,v 1.8 2010/02/21 11:07:50 nobu Exp $
 // Spanish language files by Gerardo
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -67,6 +67,7 @@ define('_MD_RESERV_CLOSE','Proceso de Reservación concluido');
 define('_MD_RESERV_NEEDLOGIN','Necesitas <a href="'.XOOPS_URL.'/user.php">Ingresar</a>, para reservar');
 define('_MD_RESERV_PLUGIN_FAIL','Not enough condition for reservation');
 define("_MD_CANCEL_FAIL","Imposible cancelar");
+define('_MD_CANCEL_SUBJ','Cancelar - {EVENT_DATE} {EVENT_TITLE}');
 define("_MD_NODATA","No hay participantes");
 define("_MD_NOEVENT","No hay Eventos publicados");
 define("_MD_SHOW_PREV","Eventos Anteriores");
@@ -185,5 +186,5 @@ define("_MD_THISCOMESFROM","Más información sobre próximos Eventos aquí en %s");
 
 //%%%%%%	File Name mylist.php 	%%%%%
 define('_MD_MYLIST','Reservaciones');
-define('_MD_CANCEL','Cancelar - {EVENT_DATE} {EVENT_TITLE}');
+define('_MD_CANCEL','Cancelar');
 ?>

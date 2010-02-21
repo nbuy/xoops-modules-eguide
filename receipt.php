@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.33 2009/12/13 05:12:08 nobu Exp $
+// $Id: receipt.php,v 1.34 2010/02/21 11:07:50 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -153,7 +153,7 @@ if ($nrec && $op=='csv') {
 }
 
 include(XOOPS_ROOT_PATH."/header.php");
-$xoopsTpl->assign('xoops_module_header', HEADER_CSS);
+assign_module_css();
 
 if (count($extents)>1) {
     $xoopsTpl->assign('extents', $extents);

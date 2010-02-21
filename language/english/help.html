@@ -20,6 +20,7 @@ td,th { padding: 4px; background: #e8e8e8;}
   <li><a href="#functions">Functions</a></li>
   <li><a href="#config">Event Configuration</a></li>
   <li><a href="#form">Additional fileld Formats</a></li>
+  <li><a name="#plugins">Reservation limit plugins</a></li>
   <li><a href="#changes">Changes</a></li>
   </ul>
 
@@ -362,6 +363,32 @@ td,th { padding: 4px; background: #e8e8e8;}
     </dd>
   </dl>
 
+  <a name="plugins"></a><h5>Reservation limit plugins</h5>
+
+  <p>Event Guide module can use plugins for control reservations.
+  It provide more complex contition for reservations.
+  There is sample "dlimit" plugin that control same user can limited number of reservation in a day.
+  Using this plugin reservation to need login.
+  </p>
+
+  <p>This plugin activate set module preferences "Additional item options"
+  add like following.</p>
+  <pre>eguide_plugins=dlimit
+max_register_in_day=1
+max_register_in_future=2
+</pre>
+  <dl>
+    <dt>eguide_plugins</dt>
+    <dd>Activate plugins.
+      Comma seperated if multiple.</dd>
+    <dt>max_register_in_day</dt>
+    <dd>Number of reservation in a day. Default value is 1. No limitation as 0.</dd>
+    <dt>max_register_in_future</dt>
+    <dd>Number of total reservation in active event.
+      A event to starting time has come when next reservation to be accept.
+      Default value is 0 that is no limitation.</dd>
+  </ul>
+
   <a name="multidate"></a><h5>Handling for multiple open event</h5>
 
   <p>Event Guide handle the content of same event, open two or more times.
@@ -416,6 +443,19 @@ td,th { padding: 4px; background: #e8e8e8;}
   <a name="changes"></a><h5>Changes</h5>
 
 <dl>
+  <dt>2010/02/21 eguide 2.6 released</dt>
+  <dd>
+    <ul>
+      <li>option variables "reply_tpl_suffix" added</li>
+      <li>redirect make to handle option variables</li>
+      <li>add description for "Reservation limit plugins" in help.html</li>
+      <li>add blocks for expired event</li>
+      <li>add for "dlimit" plugins to limit total reservations (max_register_in_future)</li>
+      <li>Reservation button label to change by action</li>
+      <li>Allow {X_NAME} replace by user varibale</li>
+      <li>add option variable "module_css" for assign module local stylesheet</li>
+    </ul>
+  </dd>
   <dt>2009/12/24 eguide 2.56 released</dt>
   <dd>
     <ul>
@@ -604,6 +644,6 @@ td,th { padding: 4px; background: #e8e8e8;}
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.58 2009/12/24 14:25:54 nobu Exp $
+$Id: help.html,v 1.59 2010/02/21 11:07:50 nobu Exp $
 </body>
 </html>
