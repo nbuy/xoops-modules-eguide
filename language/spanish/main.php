@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.8 2010/02/21 11:07:50 nobu Exp $
+// $Id: main.php,v 1.9 2010/02/27 05:46:27 nobu Exp $
 // Spanish language files by Gerardo
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -141,6 +141,8 @@ define('_MD_RESERV_ADD','Add');
 define('_MD_RESERV_OPTREQ','Need option argument');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">About Additional Items format</a>');
 define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
+define('_MD_OPTION_VARS','Variables Opción');
+define('_MD_OPTION_OTHERS','Otros');
 define('_MD_RESERV_REDIRECT','Redirect After Reservation URL');
 define('_MD_RESERV_REDIRECT_DESC','Set a number waiting seconds. e.g.: "4;http://..."');
 define('_MD_APPROVE','Approve Display');

@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.7 2009/12/13 13:28:26 nobu Exp $
+// $Id: modinfo.php,v 1.8 2010/02/27 05:46:27 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -19,6 +19,8 @@ define("_MI_EGUIDE_HEADLINE","Encuentro de la Lenin");
 define("_MI_EGUIDE_HEADLINE_DESC","Upcomming Recent Event List");
 define("_MI_EGUIDE_HEADLINE2","Nuevos Eventos");
 define("_MI_EGUIDE_HEADLINE2_DESC","Eventos recientes");
+define("_MI_EGUIDE_HEADLINE3","Finished Events");
+define("_MI_EGUIDE_HEADLINE3_DESC","Event List of Already finished");
 define("_MI_EGUIDE_CATBLOCK","Evento Categoría");
 define("_MI_EGUIDE_CATBLOCK_DESC","Elija caso de la categoría");
 

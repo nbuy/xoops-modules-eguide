@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.36 2010/02/21 11:07:49 nobu Exp $
+// $Id: admin.php,v 1.37 2010/02/27 05:46:27 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -24,7 +24,7 @@ $uid = $xoopsUser->getVar('uid');
 $iargs = array('reservation', 'strict', 'autoaccept', 'notify',
 	       'persons', 'style'); // integer value default '0'
 $targs = array('title', 'summary', 'body', 'optfield', 'before');
-define("_EG_OPTDEFS", "redirect="._MD_RESERV_REDIRECT.",text");
+define("_EG_OPTDEFS", "redirect="._MD_RESERV_REDIRECT.",text\n");
 
 $myts =& MyTextSanitizer::getInstance();
 $xoopsOption['template_main'] = EGPREFIX.'_admin.html';
@@ -51,6 +51,7 @@ if ($op=='new') {
 		  'event'	=> '',
 		  'expire'	=> $xoopsModuleConfig['expire_after']*60,
 		  'closetime'      => $xoopsModuleConfig['close_before']*60,
+		  'optvars'	=> '',
 		  'topicid'	=> 1);
 } else {
     if ($eid) {
@@ -375,8 +376,21 @@ if ($eid && $op=='delete') {
 			    'label_desc'=>$nlab,
 			    'summary_textarea'=>$textarea->render(),
 			    'input_style'=>select_list('style', $edit_style, $data['style']),
+			    'edata' =>$data,
 			    ));
-    if ($data['optvars']) $xoopsTpl->assign(unserialize_vars($data['optvars']));
+    if ($data['optvars']) {
+	$optvars = unserialize_vars($data['optvars']);
+	$xoopsTpl->assign('optvars', $optvars);
+	foreach (explode("\n", _EG_OPTDEFS) as $item) {
+	    list($fname) = explode("=", $item);
+	    unset($optvars[$fname]);
+	}
+	$others = "";
+	foreach ($optvars as $k=>$v) {
+	    $others .= "$k=$v\n";
+	}
+	$xoopsTpl->assign('opt_others', $others);
+    }
     $xoopsTpl->assign(array('input_edate'=>datefield('edate',$edate),
 			    'input_edatetime'=>timefield('edate',$edate),
 			    'edatetime'=>formatTimestamp($edate, 'H:i'),
@@ -487,7 +501,7 @@ function post_optvars($defs) {
 	$v = param($fname, '');
 	if (!empty($v)) $vars[$fname] = "$fname=$v";
     }
-    $fname = 'optvars';
+    $fname = 'opt_others';
     $v = param($fname, '');
     if (!empty($v)) $vars[$fname] = $v;
     return join("\n", $vars);

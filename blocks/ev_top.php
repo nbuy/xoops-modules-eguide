@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.30 2010/02/21 11:07:50 nobu Exp $
+// $Id: ev_top.php,v 1.31 2010/02/27 05:46:27 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -69,12 +69,15 @@ function b_event_top_show_base($dirname, $prefix, $options) {
 	    $cond = $ids?" AND topicid IN (".join(',',array_keys($ids)).")":"";
 	}
     }
+    $module_url = XOOPS_URL."/modules/$dirname";
+    $more_url = $module_url."/index.php";
     switch ($list_type) {
     case 1:			// list of one entry for same event
 	$sql = "SELECT eid, title, summary, style, MIN(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix($prefix)." LEFT JOIN ".$xoopsDB->prefix($prefix."_extent")." ON eid=eidref AND exdate>$now WHERE (edate>$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
 	break;
     case 2:			// list of one entry for expired event
 	$sql = "SELECT eid, title, summary, style, MAX(IF(exdate,exdate,edate)) edate, cdate, uid FROM ".$xoopsDB->prefix($prefix)." LEFT JOIN ".$xoopsDB->prefix($prefix."_extent")." ON eid=eidref AND exdate<$now WHERE (edate<$now OR exdate) $cond AND status=0 GROUP BY eid ORDER BY cdate DESC";
+	$more_url .= "?prev=1";
 	break;
     case 0: 			// list of all entry event
 	$sql = "SELECT e.eid, title, summary, style, IF(exdate,exdate,edate) edate, cdate, uid,
@@ -91,7 +94,8 @@ WHERE ((expire>=edate AND expire>$now)
 
     $block = array('detail'=>$detail,
 		   'dirname'=>$dirname,
-		   'module_url'=>XOOPS_URL."/modules/$dirname",
+		   'module_url'=>$module_url,
+		   'more_url'=>$more_url,
 		   'categories'=>$ids,
 		   'events'=>array());
     while ( $myrow = $xoopsDB->fetchArray($result) ) {

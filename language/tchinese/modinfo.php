@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.8 2009/12/13 05:12:09 nobu Exp $
+// $Id: modinfo.php,v 1.9 2010/02/27 05:46:27 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -19,6 +19,8 @@ define('_MI_EGUIDE_HEADLINE', '活動快訊');
 define('_MI_EGUIDE_HEADLINE_DESC', '未來活動');
 define('_MI_EGUIDE_HEADLINE2', '新活動');
 define('_MI_EGUIDE_HEADLINE2_DESC', '最新活動訊息');
+define("_MI_EGUIDE_HEADLINE3","成品活動");
+define("_MI_EGUIDE_HEADLINE3_DESC","事件已經結束名單");
 define("_MI_EGUIDE_CATBLOCK","活動分類");
 define("_MI_EGUIDE_CATBLOCK_DESC","選擇活動分類");
 

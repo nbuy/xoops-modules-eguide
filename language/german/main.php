@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.13 2010/02/21 11:07:50 nobu Exp $
+// $Id: main.php,v 1.14 2010/02/27 05:46:27 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -153,6 +153,8 @@ define('_MD_RESERV_ADD','Hinzufügen');
 define('_MD_RESERV_OPTREQ','Need Option Argument');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">Zur Hilfe (englisch)</a>');
 define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
+define('_MD_OPTION_VARS','Option Variablen');
+define('_MD_OPTION_OTHERS','Andere');
 define('_MD_RESERV_REDIRECT','Redirect After Reservation URL');
 define('_MD_RESERV_REDIRECT_DESC','Set a number waiting seconds (e.g.: "4;http://..."). variables: {X_EID}, {X_SUB}, {X_RVID}');
 define('_MD_APPROVE','Anerkannte anzeigen');

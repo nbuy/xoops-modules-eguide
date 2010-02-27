@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.9 2009/12/13 13:28:26 nobu Exp $
+// $Id: modinfo.php,v 1.10 2010/02/27 05:46:27 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -20,6 +20,8 @@ define("_MI_EGUIDE_HEADLINE","Veranstaltungskalender");
 define("_MI_EGUIDE_HEADLINE_DESC","Nächste Veranstaltungen");
 define("_MI_EGUIDE_HEADLINE2","Neue Veranstaltungen");
 define("_MI_EGUIDE_HEADLINE2_DESC","neu eingetragene Veranstaltungen");
+define("_MI_EGUIDE_HEADLINE3","Abgeschlossene Veranstaltungen");
+define("_MI_EGUIDE_HEADLINE3_DESC","Event Liste der bereits fertig");
 define("_MI_EGUIDE_CATBLOCK","Event Kategorie");
 define("_MI_EGUIDE_CATBLOCK_DESC","CWählen Sie Event-Kategorie");
 

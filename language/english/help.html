@@ -179,6 +179,7 @@ td,th { padding: 4px; background: #e8e8e8;}
 	<td>Additional item optional settings.
 	  <ul>
 	    <li>label_persons=label (label for multiple person reservation)</li>
+	    <li>reply_tpl_suffix=suffix (suffix of reply mail template filename)</li>
 	    <li>reply_extension=label (label for reply mail template extension)</li>
 	    <li>export_charset=UTF-8 (using CSV output coding system)</li>
 	    <li>size=60 (text input default size)</li>
@@ -249,6 +250,14 @@ td,th { padding: 4px; background: #e8e8e8;}
       </p>
       Only value setting in this config, Assume set for this "label_persons=" option.
       This is compatible before eguide 2.5.
+    </dd>
+    <dt>reply_tpl_suffix (suffix of reply mail template filename)</dt>
+    <dd>
+      Use for alternative reply mail template. Using filename added setting value for auto reply email. For example:
+      <pre>reply_tpl_suffix=A</pre>
+      mean using replay template
+      <tt>language/&lt;lang&gt;/mail_template/{accept|order}<b>A</b>.tpl</tt>
+      file. "reply_extension" for indirect by addition items value. In this variable set suffix to direct.
     </dd>
     <dt>reply_extension (label for reply mail template extension)</dt>
     <dd>
@@ -443,9 +452,11 @@ max_register_in_future=2
   <a name="changes"></a><h5>Changes</h5>
 
 <dl>
-  <dt>2010/02/21 eguide 2.6 released</dt>
+  <dt>2010/02/27 eguide 2.6 released</dt>
   <dd>
     <ul>
+      <li>change admin.php form to hide some fields</li>
+      <li>fix new event notification email tags not set</li>
       <li>option variables "reply_tpl_suffix" added</li>
       <li>redirect make to handle option variables</li>
       <li>add description for "Reservation limit plugins" in help.html</li>
@@ -644,6 +655,6 @@ max_register_in_future=2
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.59 2010/02/21 11:07:50 nobu Exp $
+$Id: help.html,v 1.60 2010/02/27 05:46:27 nobu Exp $
 </body>
 </html>

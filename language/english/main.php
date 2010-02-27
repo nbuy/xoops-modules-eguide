@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.24 2010/02/21 11:07:50 nobu Exp $
+// $Id: main.php,v 1.25 2010/02/27 05:46:27 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -139,6 +139,8 @@ define('_MD_RESERV_ADD','Add');
 define('_MD_RESERV_OPTREQ','Need option argument');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">About Additional Items format</a>');
 define('_MD_RESERV_LABEL_DESC','Use item name "%s" if multiple persons reservation.');
+define('_MD_OPTION_VARS','Option Variables');
+define('_MD_OPTION_OTHERS','Others');
 define('_MD_RESERV_REDIRECT','Redirect After Reservation URL');
 define('_MD_RESERV_REDIRECT_DESC','Set a number waiting seconds (e.g.: "4;http://..."). variables: {X_EID}, {X_SUB}, {X_RVID}');
 define('_MD_APPROVE','Approve Display');

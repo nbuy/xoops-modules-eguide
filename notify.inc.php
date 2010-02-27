@@ -1,5 +1,5 @@
 <?php
-// $Id: notify.inc.php,v 1.18 2009/12/13 15:53:38 nobu Exp $
+// $Id: notify.inc.php,v 1.19 2010/02/27 05:46:27 nobu Exp $
 function event_notify($op, $data) {
     global $xoopsModuleConfig;
     $notify = $xoopsModuleConfig['notify'];
@@ -70,7 +70,7 @@ function user_notify($eid) {
 	$data['status']!=STAT_NORMAL) return (false);
 
     $tags = array('EVENT_TITLE'=> $title,
-		  'EVENT_DATE' => formatTimestamp($edate, _MD_TIME_FMT),
+		  'EVENT_DATE' => eventdate($edate, _MD_TIME_FMT),
 		  'EVENT_NOTE' => '',
 		  'EVENT_URL'  => EGUIDE_URL."/event.php?eid=$eid");
     $notification_handler =& xoops_gethandler('notification');
@@ -87,9 +87,7 @@ function user_notify($eid) {
 	$xoopsMailer->setTemplate($tpl);
 	$xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
 	$xoopsMailer->setFromName(eguide_from_name());
-	$xoopsMailer->assign("SITENAME", $xoopsConfig['sitename']);
-	$xoopsMailer->assign("TITLE", $title);
-	$xoopsMailer->assign("EVENT_URL", EGUIDE_URL."/event.php?eid=$eid");
+	$xoopsMailer->assign($tags);
 	$xoopsMailer->assign("CANCEL_URL", EGUIDE_URL."/reserv.php?op=cancel&rvid=".$data['rvid']."&key=".$data['confirm']);
 	$xoopsMailer->setToEmails($data['email']);
 	if (!$xoopsMailer->send()) {

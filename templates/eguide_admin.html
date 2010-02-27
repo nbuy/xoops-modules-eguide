@@ -124,20 +124,32 @@ Calendar._TT["WK"] = "";
 <{/if}>
 </p>
 <fieldset>
-<p><b><{$smarty.const._MD_EVENT_EXPIRE}></b> <{$input_expire}></p>
-<p><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>"/> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></p>
-<{if $input_extent}>
-<p>
-  <b><{$smarty.const._MD_EVENT_EXTENT}></b> <{$input_extent}>
-<{if $extent_sets}>
-<div class="extents">
-<{foreach from=$extent_sets item=ext}>
-  <nobr><{if $ext.disable}>&middot; <{else}><input type="checkbox" value="<{$ext.exdate}>" name="extent_sets[<{$ext.no}>]"<{if $ext.checked}> checked<{/if}>/><{/if}><{$ext.date}></nobr>
-<{/foreach}>
-</div>
+  <legend>
+<script type="text/javascript">
+<{if $extent_sets || $edata.closetime!=3600 }>
+document.write('<input type="checkbox" onChange="toggle(\'exdate\',this);" checked="checked" id="dateck"/>');
+<{else}>
+document.write('<input type="checkbox" onChange="toggle(\'exdate\',this);" id="dateck"/>');
 <{/if}>
-</p>
-<{/if}>
+</script>
+  <{$smarty.const._MD_EDIT_EXTENT}>
+  </legend>
+  <div id="exdate">
+    <p><b><{$smarty.const._MD_EVENT_EXPIRE}></b> <{$input_expire}></p>
+    <p><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>"/> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></p>
+    <{if $input_extent}>
+    <p>
+      <b><{$smarty.const._MD_EVENT_EXTENT}></b> <{$input_extent}>
+    <{if $extent_sets}>
+    <div class="extents">
+    <{foreach from=$extent_sets item=ext}>
+      <nobr><{if $ext.disable}>&middot; <{else}><input type="checkbox" value="<{$ext.exdate}>" name="extent_sets[<{$ext.no}>]"<{if $ext.checked}> checked<{/if}>/><{/if}><{$ext.date}></nobr>
+    <{/foreach}>
+    </div>
+    <{/if}>
+    </p>
+    <{/if}>
+  </div>
 </fieldset>
 <h3><{$smarty.const._MD_INTROTEXT}></h3>
 <{if $use_fckeditor}>
@@ -192,10 +204,26 @@ fckeditor_exec("body", "100%", "350");
 </div>
 <div class="evinfo">
   <{$smarty.const._MD_RESERV_ITEM_DESC}> <{$label_desc}></div>
-<h3><{$smarty.const._MD_RESERV_REDIRECT}></h3>
-<input type="text" name="redirect" value="<{$redirect}>" size="60" />
-<div class="evinfo"><{$smarty.const._MD_RESERV_REDIRECT_DESC}></div>
-
+<fieldset>
+  <legend>
+<script type="text/javascript">
+<{if $edata.optvars}>
+document.write('<input type="checkbox" onChange="toggle(\'optvars\',this);" checked="checked" id="optck"/>');
+<{else}>
+document.write('<input type="checkbox" onChange="toggle(\'optvars\',this);" id="optck"/>');
+<{/if}>
+</script>
+  <{$smarty.const._MD_OPTION_VARS}>
+  </legend>
+  <div id="optvars">
+    <h3><{$smarty.const._MD_RESERV_REDIRECT}></h3>
+    <input type="text" name="redirect" value="<{$optvars.redirect|escape}>" size="60" />
+    <div class="evinfo"><{$smarty.const._MD_RESERV_REDIRECT_DESC}></div>
+    
+    <h3><{$smarty.const._MD_OPTION_OTHERS}></h3>
+    <textarea name="opt_others" cols="60" rows="4"><{$opt_others|escape}></textarea>
+  </div>
+</fieldset>
 <{if $input_status}>
 <p><{$input_status}></p>
 <{/if}>
@@ -207,12 +235,11 @@ fckeditor_exec("body", "100%", "350");
 <input type="submit" name="save" value="<{$smarty.const._MD_SAVE}>" />
 </p>
 </form>
-<script type='text/javascript'>
+<script type="text/javascript">
 <!--//
 
 // display only JavaScript enable
-xoopsGetElementById('itemhelper').style.display = "block";
-
+xoopsGetElementById("itemhelper").style.display = "block";
 function addFieldItem() {
     var myform = window.document.evform;
     var item=myform.xelab.value;
@@ -244,6 +271,13 @@ function xoopsFormValidate_evform() {
 if ( myform.<{$name}>.value == "" ) { window.alert("<{$msg}>"); myform.<{$name}>.focus(); return false; }
 <{/foreach}>
 return true;
+
 }
+
+function toggle(id,a) {
+    xoopsGetElementById(id).style.display = a.checked?"block":"none";
+}
+toggle("exdate", xoopsGetElementById("dateck"));
+toggle("optvars", xoopsGetElementById("optck"));
 //--></script>
 </div>
