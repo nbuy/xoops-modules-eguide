@@ -1,5 +1,5 @@
 <?php
-// $Id: ev_top.php,v 1.31 2010/02/27 05:46:27 nobu Exp $
+// $Id: ev_top.php,v 1.32 2010/02/27 07:07:34 nobu Exp $
 
 include dirname(dirname(__FILE__))."/mydirname.php";
 
@@ -152,12 +152,17 @@ function b_event_top_edit($options) {
 	$sel0="";
 	$sel1=" checked";
     }
+    $typesel = "<select name='options[]'>\n";
+    foreach (explode('|', _BLOCK_EV_TYPES) as $k=>$v) {
+	$typesel .= "<option value='$k'".($k==$list_type?" selected='selected'":"").">$v</option>\n";
+    }
+    $typesel .= "</select>";
     return _BLOCK_EV_STYLE."&nbsp;".
 	"<input type='radio' name='options[]' value='1'$sel0 />"._YES." &nbsp; \n".
 	"<input type='radio' name='options[]' value='0'$sel1 />"._NO."<br/>\n".
 	_BLOCK_EV_ITEMS."&nbsp;<input name='options[]' value='$nitem' /><br/>\n".
-	_BLOCK_EV_TRIM."&nbsp;<input name='options[]' value='$nlen' />\n".
-	"<input type='hidden' name='options[]' value='$list_type' /><br/>\n".
+	_BLOCK_EV_TRIM."&nbsp;<input name='options[]' value='$nlen' /><br/>\n".
+	_BLOCK_EV_LISTTYPE."&nbsp;$typesel<br/>\n".
 	_BLOCK_EV_CATEGORY."&nbsp;<input name='options[]' value='$cat' />\n".
 	"<input type='hidden' name='options[]' value='$cat' />\n";
     
