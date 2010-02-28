@@ -127,9 +127,9 @@ Calendar._TT["WK"] = "";
   <legend>
 <script type="text/javascript">
 <{if $extent_sets || $edata.closetime!=3600 }>
-document.write('<input type="checkbox" onChange="toggle(\'exdate\',this);" checked="checked" id="dateck"/>');
+document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" checked="checked" id="dateck"/>');
 <{else}>
-document.write('<input type="checkbox" onChange="toggle(\'exdate\',this);" id="dateck"/>');
+document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" id="dateck"/>');
 <{/if}>
 </script>
   <{$smarty.const._MD_EDIT_EXTENT}>
@@ -208,9 +208,9 @@ fckeditor_exec("body", "100%", "350");
   <legend>
 <script type="text/javascript">
 <{if $edata.optvars}>
-document.write('<input type="checkbox" onChange="toggle(\'optvars\',this);" checked="checked" id="optck"/>');
+document.write('<input type="checkbox" onClick="toggle(\'optvars\',this);" checked="checked" id="optck"/>');
 <{else}>
-document.write('<input type="checkbox" onChange="toggle(\'optvars\',this);" id="optck"/>');
+document.write('<input type="checkbox" onClick="toggle(\'optvars\',this);" id="optck"/>');
 <{/if}>
 </script>
   <{$smarty.const._MD_OPTION_VARS}>
