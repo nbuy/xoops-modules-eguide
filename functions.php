@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.34 2010/02/21 11:07:50 nobu Exp $
+// $Id: functions.php,v 1.35 2010/03/14 01:49:38 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -593,7 +593,7 @@ function eguide_form_options($name='', $def=false) {
     static $options;
     if (!isset($options)) {
 	$options = is_array($def)?$def:array();
-	$re = '/^\s*([a-z\d_]+)\s*=(.+)$/';
+	$re = '/^\s*([a-z\d_]+)\s*=(.*)$/';
 	$mydir = basename(dirname(__FILE__));
 	global $xoopsModule;
 	if ($xoopsModule && $xoopsModule->getVar("dirname") == $mydir) {
