@@ -1,6 +1,6 @@
 <?php
 // Export event reservations in Excel/XML format
-// $Id: export.php,v 1.5 2007/07/18 04:53:43 nobu Exp $
+// $Id: export.php,v 1.6 2010/03/19 03:50:16 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/template.php';
@@ -33,10 +33,10 @@ if (isset($_GET['line'])) {
     $max_sect=max(1,intval(40/$max_rows));
 } elseif ($xoopsDB->getRowsNum($result)==1) { // only one page
     $max_sect=1;
-    $max_rows=40;
-} else {
-    $max_sect=5;
-    $max_rows=8;
+    $max_rows=eguide_form_options('excel_max_rows', 0); // max line output
+} else {				      // multiple sections
+    $max_sect=eguide_form_options('excel_multi_sections', 5);
+    $max_rows=eguide_form_options('excel_multi_rows', 8);
 }
 
 $sheets = array();
@@ -62,7 +62,7 @@ if ($xoopsModuleConfig['export_field']) {
 	}
     }
 }
-$nfield = 9;
+$nfield = eguide_form_options('excel_max_cols', count($outs)+1);
 $outs = array_keys($outs);
 $blank = array();
 $nbsp = array("value"=>"", "type"=>"String");
@@ -95,7 +95,7 @@ while ($data = $xoopsDB->fetchArray($result)) {
 	$row[_MD_RVID] = $rvdata['rvid'];
 	$vals = array();
 	foreach ($outs as $k) {
-	    $v = empty($k)?"":$row[$k];
+	    $v = empty($k)||empty($row[$k])?"":$row[$k];
 	    $type = preg_match('/^-?\\d+$/', $v)?"Number":"String";
 	    $vals[] = array('value'=>$v, 'type'=>$type);
 	}
@@ -107,6 +107,7 @@ while ($data = $xoopsDB->fetchArray($result)) {
     while (count($rows)<$max_rows) {	// minimum line padding
 	$rows[] = $blank;
     }
+    if ($max_rows==0) $max_rows = count($rows);
     $time = formatTimestamp($edate, 'H:i');
     $sheets[$tab]['rows'][$time]=$rows;
 }
@@ -125,7 +126,6 @@ $fileTpl->assign(array('sheets'=>$sheets,
 $fileTpl->template_dir = EGUIDE_PATH.'/templates';
 $contents = $fileTpl->fetch('db:eguide_excel.xml');
 
-//header('Content-type: text/xml; charset=UTF-8'); // for debug
 $tm=formatTimestamp($now, 'Ymd');
 header("Content-type: application/vnd.ms-excel");
 header("Content-Disposition: inline; filename=eguide-$tm.xml");
