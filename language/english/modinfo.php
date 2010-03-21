@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.24 2010/02/27 05:46:27 nobu Exp $
+// $Id: modinfo.php,v 1.25 2010/03/21 13:24:33 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -19,8 +19,8 @@ define("_MI_EGUIDE_HEADLINE","Event Guide");
 define("_MI_EGUIDE_HEADLINE_DESC","Upcomming Recent Event List");
 define("_MI_EGUIDE_HEADLINE2","New Events");
 define("_MI_EGUIDE_HEADLINE2_DESC","Newer Posted Event List");
-define("_MI_EGUIDE_HEADLINE3","Terminado Eventos");
-define("_MI_EGUIDE_HEADLINE3_DESC","Evento Lista de los ya terminados");
+define("_MI_EGUIDE_HEADLINE3","Finished Events");
+define("_MI_EGUIDE_HEADLINE3_DESC","Event List of Already finished");
 define("_MI_EGUIDE_CATBLOCK","Event Category");
 define("_MI_EGUIDE_CATBLOCK_DESC","Choose event category");
 
