@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.1 2010/04/04 04:13:25 nobu Exp $
+// $Id: modinfo.php,v 1.2 2010/04/04 07:39:55 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -53,6 +53,7 @@ define("_MI_EGUIDE_USER_NOTIFY","ユーザに新規イベントの通知");
 define("_MI_EGUIDE_USER_NOTIFY_DESC","新規イベントが登録された場合に希望者へ通知を行う");
 define("_MI_EGUIDE_MEMBER","ログインによる認証に限定");
 define("_MI_EGUIDE_MEMBER_DESC","申し込みをログインユーザに限定する。(申し込みにメールアドレスを使わない)");
+define("_MI_EGUIDE_MEMBER_RELAX","両方利用する");
 define("_MI_EGUIDE_ORDERCONF","予約時の確認画面を表示");
 define("_MI_EGUIDE_ORDERCONF_DESC","予約処理時に確認用の画面を表示する");
 define("_MI_EGUIDE_CLOSEBEFORE","受付〆切時間");

@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.42 2010/02/21 11:07:50 nobu Exp $
+// $Id: reserv.php,v 1.43 2010/04/04 07:39:55 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -10,7 +10,7 @@ $now=time();
 $nlab = eguide_form_options('label_persons');
 $myts =& MyTextSanitizer::getInstance();
 
-if ($xoopsModuleConfig['member_only'] && !is_object($xoopsUser)) {
+if ($xoopsModuleConfig['member_only']==ACCEPT_MEMBER && !is_object($xoopsUser)) {
     redirect_header(XOOPS_URL."/user.php",2,_NOPERM);
     exit;
 }
@@ -20,8 +20,9 @@ $isadmin = is_object($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->getVar('mi
 function reserv_permit($ruid, $euid, $confirm) {
     global $xoopsUser, $xoopsModule, $isadmin, $xoopsModuleConfig;
     if (!is_object($xoopsUser)) {
-	if ($xoopsModuleConfig['member_only']) return false;
-	return $confirm==param('key');
+	if ($confirm==param('key')) return true;
+	if ($xoopsModuleConfig['member_only']==ACCEPT_MEMBER) return false;
+	return true;
     }
     // administrator has permit
     if ($isadmin) return true;
@@ -98,7 +99,7 @@ case 'delete':
 		$xoopsMailer =& getMailer();
 		$xoopsMailer->useMail();
 
-		if ($xoopsModuleConfig['member_only']) {
+		if ($xoopsModuleConfig['member_only'] && $data['ruid']) {
 		    $user = new XoopsUser($data['ruid']);
 		    $uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
 				     $user->getVar('uname'),
@@ -193,7 +194,7 @@ case 'order':
     $vals = get_opt_values($data['optfield'], $errs, false, false);
     check_prev_order($data, $vals, $errs);
     $value = serialize_text($vals);
-    if (!$xoopsModuleConfig['member_only']) {
+    if ($xoopsModuleConfig['member_only']!=ACCEPT_MEMBER) {
 	$email = param('email', '');
     } else {
 	$email = '';

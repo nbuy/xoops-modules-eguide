@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.10 2010/02/27 05:46:27 nobu Exp $
+// $Id: modinfo.php,v 1.11 2010/04/04 07:39:55 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -54,6 +54,7 @@ define("_MI_EGUIDE_USER_NOTIFY","Ja - Benachrichtigung aktivieren, Nein - deakti
 define("_MI_EGUIDE_USER_NOTIFY_DESC","Usern erlauben Benachrichtgungen über neue Veranstaltungen zu ehalten");
 define("_MI_EGUIDE_MEMBER","Nur registrierte User können reservieren");
 define("_MI_EGUIDE_MEMBER_DESC","Nur eingeloggte und registrierte User können reservieren");
+define("_MI_EGUIDE_MEMBER_RELAX","Beide");
 define("_MI_EGUIDE_ORDERCONF","Bestätigungsseite");
 define("_MI_EGUIDE_ORDERCONF_DESC","Bestätigungsseite nach Reservierung anzeigen");
 define("_MI_EGUIDE_CLOSEBEFORE","Schlusszeit (min)");

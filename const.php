@@ -1,5 +1,5 @@
 <?php
-# $Id: const.php,v 1.12 2010/02/21 11:07:50 nobu Exp $
+# $Id: const.php,v 1.13 2010/04/04 07:39:55 nobu Exp $
 
 define("_RVSTAT_ORDER",0);
 define("_RVSTAT_RESERVED",1);
@@ -8,6 +8,10 @@ define("_RVSTAT_REFUSED",2);
 define("STAT_NORMAL",0);
 define("STAT_POST",1);
 define("STAT_DELETED",4);
+
+define("ACCEPT_EMAIL",0);
+define("ACCEPT_MEMBER",1);
+define("ACCEPT_BOTH",2);
 
 include_once(dirname(__FILE__).'/mydirname.php');
 

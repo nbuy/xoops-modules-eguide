@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.9 2010/03/21 13:24:33 nobu Exp $
+// $Id: modinfo.php,v 1.10 2010/04/04 07:39:55 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -53,6 +53,7 @@ define("_MI_EGUIDE_USER_NOTIFY","User requested notification of new event");
 define("_MI_EGUIDE_USER_NOTIFY_DESC","YES - Enable notification mail, NO - disable.");
 define("_MI_EGUIDE_MEMBER","Event entry need to LOGIN");
 define("_MI_EGUIDE_MEMBER_DESC","Only login user can be reservation event. (Not use email address)");
+define("_MI_EGUIDE_MEMBER_RELAX","Ambos");
 define("_MI_EGUIDE_ORDERCONF","Has confirm page");
 define("_MI_EGUIDE_ORDERCONF_DESC","Display confirm page when reservation submit");
 define("_MI_EGUIDE_CLOSEBEFORE","Close Time Before (min)");

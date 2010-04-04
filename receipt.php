@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.34 2010/02/21 11:07:50 nobu Exp $
+// $Id: receipt.php,v 1.35 2010/04/04 07:39:55 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -94,7 +94,6 @@ $result = $xoopsDB->query("SELECT * FROM ".RVTBL." WHERE eid=$eid AND exid=$exid
 $nrec = $xoopsDB->getRowsNum($result);
 
 // output records in CSV format
-$mo = $xoopsModuleConfig['member_only'];
 if ($nrec && $op=='csv') {
     $outs = array();
     if ($xoopsModuleConfig['export_field']) {
@@ -273,7 +272,9 @@ case 'one':
     
     $items = array();
     $items[] = array('label'=>_MD_RVID, 'value'=>"$rvid &nbsp; [$edit] &nbsp; [$del]");
-    if (!$mo) $items[] = array('label'=>_MD_EMAIL, 'value'=>$myts->displayTarea($data['email']));
+    if ($data['email']) $items[] = array('label'=>_MD_EMAIL, 'value'=>$myts->displayTarea($data['email']));
+    
+    if ($data['uid']) $items[] = array('label'=>_MD_UNAME, 'value'=>xoops_getLinkedUnameFromId($data['uid']));
     $items[] = array('label'=>_MD_STATUS, 'value'=>$rv_stats[$data['status']]);
     $items[] = array('label'=>_MD_ORDER_DATE, 'value'=>formatTimestamp($data['rdate'], _MD_TIME_FMT));
     foreach (unserialize_text($rvdata['info']) as $lab => $v) {
@@ -304,7 +305,7 @@ default:
     $xoopsTpl->assign(array('order_count'=>$nrec,
 			    'reserv_num'=>sprintf(_MD_RESERV_REG,$nrsv),
 			    'print_date'=>formatTimestamp(time(), _MD_POSTED_FMT),
-			    'labels'=>array_merge(array($mo?_MD_UNAME:_MD_EMAIL),
+			    'labels'=>array_merge(array($xoopsModuleConfig['member_only']?_MD_UNAME:_MD_EMAIL),
 						  array_slice($item, 0, $max)),
 			    'reserv_msg'=>$mailmsg,
 			    'operations'=>

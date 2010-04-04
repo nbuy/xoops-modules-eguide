@@ -1,6 +1,6 @@
 <?php
 // reservation functions
-// $Id: reserv_func.php,v 1.7 2010/02/21 11:07:50 nobu Exp $
+// $Id: reserv_func.php,v 1.8 2010/04/04 07:39:55 nobu Exp $
 
 function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
     $myts =& MyTextSanitizer::getInstance();
@@ -72,7 +72,7 @@ function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
 // check condition before entry event
 // return errors (go on if empty)
 function check_prev_order($data, $vals, &$errs, $force=false) {
-    global $xoopsModuleConfig, $xoopsDB;
+    global $xoopsModuleConfig, $xoopsDB, $xoopsUser;
     $eid = $data['eid'];
     $exid = intval($data['exid']);
     // stopping if multiple event but no have exid (missing?)
@@ -87,7 +87,8 @@ function check_prev_order($data, $vals, &$errs, $force=false) {
     }
 
     // order duplicate check
-    if ($force || !$xoopsModuleConfig['member_only']) {
+    $mo = $xoopsModuleConfig['member_only'];
+    if ($force || $mo==ACCEPT_EMAIL || ($mo==ACCEPT_BOTH && !is_object($xoopsUser))) {
 	$email = param('email', '');
 	if (!($force && empty($email))) {
 	    if (!preg_match('/^[\w\-_\.]+@[\w\-_\.]+$/', $email)) {
@@ -99,7 +100,6 @@ function check_prev_order($data, $vals, &$errs, $force=false) {
 	    $result = false;
 	}
     } else {
-	global $xoopsUser;
 	if (!is_object($xoopsUser)) redirect_header($_SERVER['HTTP_REFERER'],2);
 	$result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND uid=".$xoopsUser->getVar('uid'));
 	$email = $xoopsUser->getVar('uname');

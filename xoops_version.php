@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.60 2010/02/21 11:07:50 nobu Exp $
+// $Id: xoops_version.php,v 1.61 2010/04/04 07:39:55 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
@@ -212,8 +212,9 @@ $modversion['config'][]=array('name' => 'user_notify',
 $modversion['config'][]=array('name' => 'member_only',
 			      'title' => '_MI_EGUIDE_MEMBER',
 			      'description' => '_MI_EGUIDE_MEMBER_DESC',
-			      'formtype' => 'yesno',
+			      'formtype' => 'select',
 			      'valuetype' => 'int',
+			      'options' => array(_NO=>0, _YES=>1, _MI_EGUIDE_MEMBER_RELAX=>2),
 			      'default' => 0);
 $modversion['config'][]=array('name' => 'has_confirm',
 			      'title' => '_MI_EGUIDE_ORDERCONF',

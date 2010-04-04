@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.9 2010/02/27 05:46:27 nobu Exp $
+// $Id: modinfo.php,v 1.10 2010/04/04 07:39:55 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -53,6 +53,7 @@ define('_MI_EGUIDE_USER_NOTIFY', '使用者是否能夠訂閱新活動的通知'
 define('_MI_EGUIDE_USER_NOTIFY_DESC', '是 - 啟用郵件通知，否 - 停用');
 define('_MI_EGUIDE_MEMBER', '要檢視這個頁面的資料請先登入');
 define('_MI_EGUIDE_MEMBER_DESC', '只有註冊/登入的使用者可以進行活動預約（或是在不使用郵件的前提下）');
+define("_MI_EGUIDE_MEMBER_RELAX","兩者都使用");
 define('_MI_EGUIDE_ORDERCONF', '是否要確認頁面？');
 define('_MI_EGUIDE_ORDERCONF_DESC', '當報名時，顯示報名確認頁');
 define('_MI_EGUIDE_CLOSEBEFORE', '預設報名活動在幾分鐘前關閉');

@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.35 2010/03/14 01:49:38 nobu Exp $
+// $Id: functions.php,v 1.36 2010/04/04 07:39:55 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -158,6 +158,7 @@ function eventform($data) {
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $form['check'] = array();
     $mo = $xoopsModuleConfig['member_only'];
+    $mo = ($mo && is_object($xoopsUser)?$mo!=ACCEPT_MEMBER:0);
     $form['member_only'] = $mo;
     if (!$mo) $form['check']['email'] = preg_replace('/\\*$/', '', _MD_EMAIL).": ".strip_tags(_MD_ORDER_NOTE1);
     $items = array();
@@ -526,7 +527,7 @@ function order_notify($data, $email, $value) {
     }
     $xoopsMailer->setTemplateDir($tmpdir);
     $xoopsMailer->setTemplate($tplfile);
-    if ($xoopsModuleConfig['member_only']) {
+    if ($xoopsModuleConfig['member_only'] && is_object($xoopsUser)) {
 	$uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
 			 $xoopsUser->getVar('uname'),
 			 $xoopsUser->getVar('name'));

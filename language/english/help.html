@@ -165,8 +165,10 @@ td,th { padding: 4px; background: #e8e8e8;}
       </tr>
       <tr class="odd">
 	<th align="left">Event entry need to LOGIN</th>
-	<td>Yes/<u>No</u></td>
-	<td>Only login user can be reservation event. (Not use email address)</td>
+	<td><u>No</u>/Yes/Both</td>
+	<td>Only login user can be reservation event (Not use email address).
+	  When select "Both", email address input field exist only guest user.
+	</td>
       </tr>
       <tr class="even">
 	<th align="left">Has confirm page</th>
@@ -452,6 +454,14 @@ max_register_in_future=2
   <a name="changes"></a><h5>Changes</h5>
 
 <dl>
+  <dt>2010/04/04 eguide 2.61 released</dt>
+  <dd>
+    <ul>
+      <li>Add language/portuguese resouces (thx leco1)</li>
+      <li>Add select option "Both" for "Event entry need to LOGIN" in preferences</li>
+      <li>Remove limitation for excel(XML) format download.</li>
+    </ul>
+  </dd>
   <dt>2010/02/27 eguide 2.6 released</dt>
   <dd>
     <ul>
@@ -656,6 +666,6 @@ max_register_in_future=2
 <hr>
 <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.61 2010/02/27 07:11:09 nobu Exp $
+$Id: help.html,v 1.62 2010/04/04 07:39:55 nobu Exp $
 </body>
 </html>

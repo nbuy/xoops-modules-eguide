@@ -182,8 +182,10 @@ td,th { padding: 4px; background: #e8e8e8;}
       </tr>
       <tr class="even">
         <th align="left">ログインによる認証に限定</th>
-	<td>はい/<u>いいえ</u></td>
-	<td>申し込みをログインユーザに限定する。(申し込みにメールアドレスを使わない)</td>
+	<td><u>いいえ</u>/はい/両方利用する</td>
+	<td>申し込みをログインユーザに限定する(申し込みにメールアドレスを使わない)。
+	  「両方利用する」を選択した場合、ログインしていればメールアドレスの入力を省略する。
+	</td>
       </tr>
       <tr class="odd">
         <th align="left">予約時の確認画面を表示</th>
@@ -496,9 +498,11 @@ max_register_in_future=2
   <a name="changes"></a><h5>変更履歴</h5>
 
 <dl>
-  <dt>2010/03/xx イベント案内モジュール 2.61 リリース</dt>
+  <dt>2010/04/04 イベント案内モジュール 2.61 リリース</dt>
   <dd>
     <ul>
+      <li>ポルトガル語の言語リソースを追加 (thx leco1)</li>
+      <li>「ログインによる認証に限定」の選択肢として「両方」をサポート。</li>
       <li>excel(XML) の出力を可変長に変更。従来互換にする場合 "excel_max_rows=40" を指定する。</li>
     </ul>
   </dd>
@@ -702,6 +706,6 @@ max_register_in_future=2
 <hr>
 <address>安富 伸浩 &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 マイサイト ユーザーズ <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.1 2010/04/04 04:13:25 nobu Exp $
+$Id: help.html,v 1.2 2010/04/04 07:39:55 nobu Exp $
 </body>
 </html>

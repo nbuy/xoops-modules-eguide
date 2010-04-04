@@ -1,6 +1,6 @@
 <?php
 // display events
-// $Id: event.php,v 1.28 2010/02/21 11:07:50 nobu Exp $
+// $Id: event.php,v 1.29 2010/04/04 07:39:55 nobu Exp $
 
 include 'header.php';
 
@@ -85,7 +85,7 @@ $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".$title);
     }
     if ($data['strict'] && $data['persons']<=$data['reserved']) {
 	$xoopsTpl->assign('message', _MD_RESERV_FULL);
-    } elseif (!is_object($xoopsUser) && $xoopsModuleConfig['member_only']) {
+    } elseif (!is_object($xoopsUser) && $xoopsModuleConfig['member_only']==ACCEPT_MEMBER) {
 	$xoopsTpl->assign('message', _MD_RESERV_NEEDLOGIN);
     } else {
 	$ok = true;
