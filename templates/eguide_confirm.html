@@ -34,8 +34,19 @@
   </table>
 <{/if}>
   <div style="text-align: center;">
+    <{if $values}>
+    <table cellspacing="1" cellpadding="2" border="0" class="outer">
+      <{foreach key=lab item=val from=$values}>
+	<tr class="<{cycle values="even,odd"}>"><td class="head"><{$lab}></td><td><{$val|escape}></td></tr>
+      <{/foreach}>
+    </table>
+    <{/if}>
+    <{if $cancel}>
     <table align="center">
       <tr><td><{$submit}></td><td><{$cancel}></td></tr>
     </table>
+    <{else}>
+      <{$submit}>
+    <{/if}>
   </div>
 </div>

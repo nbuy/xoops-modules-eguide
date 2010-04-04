@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.43 2010/04/04 07:39:55 nobu Exp $
+// $Id: reserv.php,v 1.44 2010/04/04 08:42:59 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -338,10 +338,10 @@ case 'confirm':
     break;
 
 case 'cancel':
-    $result = $xoopsDB->query('SELECT eid,exid,uid,confirm,email FROM '.RVTBL.' WHERE rvid='.$rvid);
+    $result = $xoopsDB->query('SELECT eid,exid,uid,confirm,email,info FROM '.RVTBL.' WHERE rvid='.$rvid);
     if ($result) {
 	if ($xoopsDB->getRowsNum($result)) {
-	    list($eid, $exid, $ruid, $conf, $email) = $xoopsDB->fetchRow($result);
+	    list($eid, $exid, $ruid, $conf, $email, $info) = $xoopsDB->fetchRow($result);
 	} else $result = false;
     }
     if (!$result || $xoopsDB->getRowsNum($result)==0) {
@@ -382,6 +382,11 @@ case 'cancel':
 		"<input type='hidden' name='rvid' value='$rvid' />\n".
 		"<input type='submit' value='"._SUBMIT."' />\n</form>\n";
 	    $xoopsTpl->assign('submit', $form);
+	    $values = array();
+	    if ($email) $values[_MD_EMAIL]=$email;
+	    if ($ruid) $values[_MD_UNAME]=XoopsUser::getUnameFromId($ruid);
+	    $values = array_merge($values, unserialize_text($info));
+	    $xoopsTpl->assign('values', $values);
 	}
     } else {
 	echo "<div class='evform'>\n";

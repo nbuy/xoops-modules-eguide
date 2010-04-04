@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module
-// $Id: xoops_version.php,v 1.61 2010/04/04 07:39:55 nobu Exp $
+// $Id: xoops_version.php,v 1.62 2010/04/04 08:42:59 nobu Exp $
 
 # for duplicatable (not D3, old style)
 include (dirname(__FILE__)."/mydirname.php");
@@ -10,7 +10,7 @@ $myicon = "images/{$myprefix}_slogo2.png";
 if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
 
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = 2.60;
+$modversion['version'] = 2.61;
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
@@ -215,7 +215,7 @@ $modversion['config'][]=array('name' => 'member_only',
 			      'formtype' => 'select',
 			      'valuetype' => 'int',
 			      'options' => array(_NO=>0, _YES=>1, _MI_EGUIDE_MEMBER_RELAX=>2),
-			      'default' => 0);
+			      'default' => 2);
 $modversion['config'][]=array('name' => 'has_confirm',
 			      'title' => '_MI_EGUIDE_ORDERCONF',
 			      'description' => '_MI_EGUIDE_ORDERCONF_DESC',
