@@ -293,7 +293,7 @@
  </Styles>
 <{foreach from=$sheets key=sname item=sheet}>
  <Worksheet ss:Name="<{$sname}>">
-  <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="45" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="<{$max_rows+5}>" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
    <Column ss:StyleID="s21" ss:AutoFitWidth="0" ss:Width="64.5"/>
    <Column ss:AutoFitWidth="0" ss:Width="120.75"/>
