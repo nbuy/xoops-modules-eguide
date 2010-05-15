@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.1 2010/04/04 04:13:25 nobu Exp $
+// $Id: main.php,v 1.2 2010/05/15 09:17:59 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -157,9 +157,9 @@ define('_MD_EVENT_DEL_ADMIN','申込情報を含めすべてのデータを削�
 define('_MD_TIMEC','時間');
 // Localization Transrate Month name
 global $ev_month;
-$ev_month = array(1=>"1月", 2=>"2月", 3=>"3月", 4=>"4月",
-		  5=>"5月", 6=>"6月", 7=>"7月", 8=>"8月",
-		  9=>"9月", 10=>"10月", 11=>"11月", 12=>"12月");
+$ev_month = array("Jan"=>"1月", "Feb"=>"2月", "Mar"=>"3月", "Apr"=>"4月",
+		  "May"=>"5月", "Jun"=>"6月", "Jul"=>"7月", "Aug"=>"8月",
+		  "Sep"=>"9月", "Oct"=>"10月", "Nov"=>"11月", "Dec"=>"12月");
 
 define('_MD_RESERV_DEFAULT_ITEM',"名前*,size=40\n住所\n");
 define('_MD_RESERV_DEFAULT_MEMBER',"");

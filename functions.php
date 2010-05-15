@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.36 2010/04/04 07:39:55 nobu Exp $
+// $Id: functions.php,v 1.37 2010/05/15 09:17:59 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -373,7 +373,7 @@ function get_extents($eid, $all=false) {
 }
 
 function eventdate($time, $format="", $offset="") {
-    global $ev_week, $xoopsModuleConfig;
+    global $ev_week, $ev_month, $xoopsModuleConfig;
     if (empty($format)) $format = $xoopsModuleConfig['date_format'];
     $bound = eguide_form_options('bound_time', 0);
     if ($bound) {
@@ -408,6 +408,9 @@ function eventdate($time, $format="", $offset="") {
     $str = formatTimestamp($time, $format, $offset);
     if (isset($ev_week)) {
 	$str = str_replace(array_keys($ev_week), $ev_week, $str);
+    }
+    if (isset($ev_month)) {
+	$str = str_replace(array_keys($ev_month), $ev_month, $str);
     }
     return $str;
 }

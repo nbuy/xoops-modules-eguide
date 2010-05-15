@@ -4,7 +4,7 @@
   <td><a href="event.php?eid=<{$eid}><{if $exid}>&amp;sub=<{$exid}><{/if}>" class="evhead"><{$title}></a></td>
   <td>
     [ <a href="admin.php?eid=<{$eid}>"><{$smarty.const._EDIT}></a>
-    | <a href="editdate.php?eid=<{$eid}>"><{$smarty.const._MD_EDIT_EXTENT}></a>
+    <{if $exid}>| <a href="editdate.php?eid=<{$eid}>"><{$smarty.const._MD_EDIT_EXTENT}></a><{/if}>
     ]
   </td>
 </tr>

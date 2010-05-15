@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.14 2010/02/27 05:46:27 nobu Exp $
+// $Id: main.php,v 1.15 2010/05/15 09:17:59 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -170,9 +170,9 @@ define('_MD_EVENT_DEL_ADMIN','Alle Daten löschen (auch bereits getätigte Reservi
 define('_MD_TIMEC','Zeit');
 // Localization Transrate Month name
 global $ev_month;
-$ev_month = array(1=>"Jan", 2=>"Feb", 3=>"Mär", 4=>"Apr",
-		  5=>"Mai", 6=>"Jun", 7=>"Jul", 8=>"Aug",
-		  9=>"Sep", 10=>"Okt", 11=>"Nov", 12=>"Dez");
+$ev_month = array("Jan"=>"Jan", "Feb"=>"Feb", "Mar"=>"Mär", "Apr"=>"Apr",
+		  "May"=>"Mai", "Jun"=>"Jun", "Jul"=>"Jul", "Aug"=>"Aug",
+		  "Sep"=>"Sep", "Oct"=>"Okt", "Nov"=>"Nov", "Dec"=>"Dez");
 
 define('_MD_RESERV_DEFAULT_ITEM',"Name*\nAdresse\nTelefonnummer\nAnzahl Tickets*,select,1,2,3,4,5,6");
 define('_MD_RESERV_DEFAULT_MEMBER',"");

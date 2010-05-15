@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.25 2010/02/27 05:46:27 nobu Exp $
+// $Id: main.php,v 1.26 2010/05/15 09:17:59 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -156,9 +156,9 @@ define('_MD_EVENT_DEL_ADMIN','Delete all data including reservations.');
 define('_MD_TIMEC','Time');
 // Localization Transrate Month name
 //global $ev_month;
-//$ev_month = array(1=>"Jan", 2=>"Feb", 3=>"Mar", 4=>"Apr",
-//                  5=>"May", 6=>"Jun", 6=>"Jul", 8=>"Aug",
-//                  9=>"Sep", 10=>"Oct", 11=>"Nov", 12=>"Dec");
+//$ev_month = array("Jan"=>"Jan", "Feb"=>"Feb", "Mar"=>"Mar", "Apr"=>"Apr",
+//                  "May"=>"May", "Jun"=>"Jun", "Jul"=>"Jul", "Aug"=>"Aug",
+//                  "Sep"=>"Sep", "Oct"=>"Oct", "Nov"=>"Nov", "Dec"=>"Dec");
 
 define('_MD_RESERV_DEFAULT_ITEM',"Name*,size=40\nAddress\n");
 define('_MD_RESERV_DEFAULT_MEMBER',"");

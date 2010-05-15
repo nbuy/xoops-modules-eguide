@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.15 2010/02/27 05:46:27 nobu Exp $
+// $Id: main.php,v 1.16 2010/05/15 09:17:59 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -157,9 +157,9 @@ define('_MD_EVENT_DEL_ADMIN', '將刪除所有資料與報名者資料');
 define('_MD_TIMEC', '幾時開始');
 // Localization Transrate Month name
 global $ev_month;
-$ev_month = array(1=>"一月", 2=>"二月", 3=>"三月", 4=>"四月",
-		  5=>"五月", 6=>"六月", 7=>"七月", 8=>"八月",
-		  9=>"九月", 10=>"十月", 11=>"十一月", 12=>"十二月");
+$ev_month = array("Jan"=>"一月", "Feb"=>"二月", "Mar"=>"三月", "Apr"=>"四月",
+		  "May"=>"五月", "Jun"=>"六月", "Jul"=>"七月", "Aug"=>"八月",
+		  "Sep"=>"九月", "Oct"=>"十月", "Nov"=>"十一月", "Dec"=>"十二月");
 
 define('_MD_RESERV_DEFAULT_ITEM', '姓名*,size=40\n連絡地址\n');
 define('_MD_RESERV_DEFAULT_MEMBER', '');
