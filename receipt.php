@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.35 2010/04/04 07:39:55 nobu Exp $
+// $Id: receipt.php,v 1.36 2010/06/27 04:12:30 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -22,7 +22,7 @@ if ($rvid) {
     $data = $xoopsDB->fetchArray($result);
     $eid = $data['eid'];
     $exid = $data['exid'];
-    $back = 'receipt.php?eid='.$eid.($exid?'&sub='.$exid:'');
+    $back = EGUIDE_URL.'/receipt.php?eid='.$eid.($exid?'&sub='.$exid:'');
     $backanc = "<a href='$back'>"._MD_RESERV_RETURN."</a>";
     if ($op=='save') {
 	$status = intval($_POST['status']);

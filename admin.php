@@ -1,6 +1,6 @@
 <?php
 // Event Administration by Poster
-// $Id: admin.php,v 1.37 2010/02/27 05:46:27 nobu Exp $
+// $Id: admin.php,v 1.38 2010/06/27 04:12:30 nobu Exp $
 
 include 'header.php';
 include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
@@ -249,7 +249,7 @@ if ($op=='save' || $op=='date') {
     if ($op == 'date') {
 	header('Location: '.EGUIDE_URL.'/editdate.php?eid='.$eid);
     } else {
-	redirect_header("event.php?eid=$eid",2,_MD_DBUPDATED);
+	redirect_header(EGUIDE_URL."/event.php?eid=$eid",2,_MD_DBUPDATED);
     }
     exit;
 } elseif ($op=='confirm') {
@@ -261,7 +261,7 @@ if ($op=='save' || $op=='date') {
     } else {			// delete by poster
 	$result = $xoopsDB->query('UPDATE '.EGTBL.' SET status='.STAT_DELETED." WHERE eid=$eid AND uid=$uid");
     }
-    redirect_header("index.php",2,_MD_DBDELETED);
+    redirect_header(EGUIDE_URL."/index.php",2,_MD_DBDELETED);
     exit();
 }
 

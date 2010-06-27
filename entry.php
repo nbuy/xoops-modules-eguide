@@ -1,6 +1,6 @@
 <?php
 // Reservation Entry by Poster
-// $Id: entry.php,v 1.9 2010/02/21 11:07:50 nobu Exp $
+// $Id: entry.php,v 1.10 2010/06/27 04:12:30 nobu Exp $
 
 include 'header.php';
 $_GET['op'] = '';	// only for poster
@@ -26,7 +26,7 @@ if (isset($_POST['eid'])) {
 	    $value .= "$name: $val\n";
 	}
     }
-    $url = XOOPS_URL.'/modules/'.basename(dirname(__FILE__)).'/receipt.php?eid='.$eid;
+    $url = EGUIDE_URL.'/receipt.php?eid='.$eid;
     if ($exid) $url .= '&sub='.$exid;
     if (!$errs) {
 	$data['closetime'] = 0;	// override close order time
@@ -58,7 +58,7 @@ if (isset($_POST['eid'])) {
 }
 
 if (empty($data)) {
-	redirect_header("index.php",2,_MD_NOEVENT);
+	redirect_header(EGUIDE_URL."/index.php",2,_MD_NOEVENT);
 	exit();
 }
 

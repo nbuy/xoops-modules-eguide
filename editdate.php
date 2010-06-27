@@ -1,6 +1,6 @@
 <?php
 // Administration Date by Poster
-// $Id: editdate.php,v 1.15 2010/02/21 11:07:50 nobu Exp $
+// $Id: editdate.php,v 1.16 2010/06/27 04:12:30 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -9,12 +9,12 @@ $eid = param('eid');
 
 $result=$xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=0", 1);
 if ($xoopsDB->getRowsNum($result)>0) {
-    redirect_header(empty($_SERVER['HTTP_REFERER'])?'admin.php':$_SERVER['HTTP_REFERER'], 1, _NOPERM);
+    redirect_header(empty($_SERVER['HTTP_REFERER'])?EGUIDE_URL.'/admin.php':$_SERVER['HTTP_REFERER'], 1, _NOPERM);
 }
 
 $event = fetch_event($eid, 0);
 if (!$event) {
-    redirect_header('index.php', 2, _MD_NOEVENT);
+    redirect_header(EGUIDE_URL.'/index.php', 2, _MD_NOEVENT);
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
@@ -144,7 +144,7 @@ if (isset($_POST['adds'])) {
 	    include "notify.inc.php";
 	    event_notify('update', $tags);
 	}
-	redirect_header('editdate.php?eid='.$eid, 1, _MD_DBUPDATED);
+	redirect_header(EGUIDE_URL.'/editdate.php?eid='.$eid, 1, _MD_DBUPDATED);
 	exit;
     }
     $_POST['adds'] = '';

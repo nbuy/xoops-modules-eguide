@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.37 2010/05/15 09:17:59 nobu Exp $
+// $Id: functions.php,v 1.38 2010/06/27 04:12:30 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -407,14 +407,25 @@ function eventdate($time, $format="", $offset="") {
     }
     $str = formatTimestamp($time, $format, $offset);
     if (isset($ev_week)) {
-	$str = str_replace(array_keys($ev_week), $ev_week, $str);
+	static $week;
+	if (!isset($week)) $week = preg_word_quote($ev_week);
+	$str = preg_replace($week, $ev_week, $str);
     }
     if (isset($ev_month)) {
-	$str = str_replace(array_keys($ev_month), $ev_month, $str);
+	static $month;
+	if (!isset($month)) $month = preg_word_quote($ev_month);
+	$str = preg_replace($month, $ev_month, $str);
     }
     return $str;
 }
 
+function preg_word_quote($a) {
+    $ret = array();
+    foreach ($a as $v) {
+	$ret[] = '/\b'.preg_quote($v).'\b/';
+    }
+    return $ret;
+}
 function get_eguide_category($all=true, $indent='') {
     global $xoopsDB;
     static $catall, $cattop;

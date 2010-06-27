@@ -1,6 +1,6 @@
 <?php
 // checking permittion for event adiminstration.
-// $Id: perm.php,v 1.7 2008/02/02 11:57:12 nobu Exp $
+// $Id: perm.php,v 1.8 2010/06/27 04:12:30 nobu Exp $
 function eguide_perm($eid) {
     global $xoopsDB, $xoopsUser, $xoopsModule, $xoopsModuleConfig, $_POST;
     if (!$xoopsUser) return false;		   	// need login
@@ -17,7 +17,7 @@ function eguide_perm($eid) {
 }
 
 if (!eguide_perm(param('eid'))) {
-    redirect_header("index.php",2,_NOPERM);
+    redirect_header(EGUIDE_URL."/index.php",2,_NOPERM);
     exit();
 }
 ?>

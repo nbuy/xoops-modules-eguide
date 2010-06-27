@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.44 2010/04/04 08:42:59 nobu Exp $
+// $Id: reserv.php,v 1.45 2010/06/27 04:12:30 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -70,7 +70,7 @@ case 'delete':
 	    $result = false;
 	}
     } else {
-	redirect_header('index.php', 3, _MD_RESERV_NOTFOUND);
+	redirect_header(EGUIDE_URL.'/index.php', 3, _MD_RESERV_NOTFOUND);
 	exit;
     }
     if ($result) {
@@ -170,7 +170,7 @@ case 'notify':
     } else {
 	$msg = _MD_MAIL_ERR;
     }
-    redirect_header("index.php",5,$msg);
+    redirect_header(EGUIDE_URL."/index.php",5,$msg);
     exit;
 
 case 'register':
