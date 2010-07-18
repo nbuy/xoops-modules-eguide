@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.16 2010/05/15 09:17:59 nobu Exp $
+// $Id: main.php,v 1.17 2010/07/18 06:51:54 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -176,8 +176,6 @@ define('_MD_INFO_MAILOK', '已成功寄出');
 define('_MD_INFO_MAILNG', '傳送失敗');
 define("_MD_UPDATE_SUBJECT","事件更新");
 define("_MD_UPDATE_DEFAULT","預設");
-
-include_once dirname(__FILE__)."/common.php";
 
 //%%%%%%	File Name print.php 	%%%%%
 

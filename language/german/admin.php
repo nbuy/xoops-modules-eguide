@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.6 2008/07/05 06:14:06 nobu Exp $
+// $Id: admin.php,v 1.7 2010/07/18 06:51:54 nobu Exp $
 // German language files by El Cario www.el-cario.de
 define("_AM_DBUPDATED","Datenbank aktualisiert");
 define("_AM_TITLE","Titel");
@@ -39,5 +39,4 @@ define("_AM_NODATA","Keine Einträge");
 
 define("_AM_INFO_SEARCH","Suchen");
 
-include_once dirname(__FILE__)."/common.php";
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.15 2010/05/15 09:17:59 nobu Exp $
+// $Id: main.php,v 1.16 2010/07/18 06:51:54 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -205,8 +205,6 @@ define("_MD_INFO_MAILOK","Email gesendet");
 define("_MD_INFO_MAILNG","Email konnte nicht gesendet werden");
 define("_MD_UPDATE_SUBJECT","Event Aktualisiert");
 define("_MD_UPDATE_DEFAULT","Default");
-
-include_once dirname(__FILE__)."/common.php";
 
 //%%%%%%	File Name print.php 	%%%%%
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.1 2010/04/04 06:27:21 nobu Exp $
+// $Id: main.php,v 1.2 2010/07/18 06:51:54 nobu Exp $
 // Módulo traduzido para o Português do Brasil (portuguese) por
 // Leco (m_ohse@hotmail.com) URL: http://xoopersBR.com
 
@@ -177,8 +177,6 @@ define("_MD_INFO_MAILOK","Email enviado");
 define("_MD_INFO_MAILNG","Falha no envio do email");
 define("_MD_UPDATE_SUBJECT","Evento atualizado");
 define("_MD_UPDATE_DEFAULT","Padrão");
-
-include_once dirname(__FILE__)."/common.php";
 
 //%%%%%%	File Name print.php 	%%%%%
 

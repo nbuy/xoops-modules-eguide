@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.9 2010/02/27 05:46:27 nobu Exp $
+// $Id: main.php,v 1.10 2010/07/18 06:51:54 nobu Exp $
 // Spanish language files by Gerardo
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -177,8 +177,6 @@ define("_MD_INFO_MAILOK","Mail sent");
 define("_MD_INFO_MAILNG","Imposible enviar el EMail");
 define("_MD_UPDATE_SUBJECT","Evento actualizado");
 define("_MD_UPDATE_DEFAULT","Default");
-
-include_once dirname(__FILE__)."/common.php";
 
 //%%%%%%	File Name print.php 	%%%%%
 

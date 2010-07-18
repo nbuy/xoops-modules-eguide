@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.7 2008/07/05 06:14:06 nobu Exp $
+// $Id: admin.php,v 1.8 2010/07/18 06:51:54 nobu Exp $
 define('_AM_DBUPDATED', '資料已經更新！');
 define('_AM_TITLE', '活動項目');
 define('_AM_POSTER', '發表者');
@@ -38,5 +38,4 @@ define('_AM_NODATA', '無資料');
 
 define('_AM_INFO_SEARCH', '搜尋');
 
-include_once dirname(__FILE__)."/common.php";
 ?>

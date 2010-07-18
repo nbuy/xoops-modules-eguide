@@ -1,6 +1,6 @@
 <?php
 // Event Guide Module Administration message catalogue
-// $Id: admin.php,v 1.1 2010/04/04 06:27:21 nobu Exp $
+// $Id: admin.php,v 1.2 2010/07/18 06:51:54 nobu Exp $
 // Módulo traduzido para o Português do Brasil (portuguese) por
 // Leco (m_ohse@hotmail.com) URL: http://xoopersBR.com
 
@@ -42,5 +42,4 @@ define("_AM_NODATA","Não existem dados");
 
 define("_AM_INFO_SEARCH","Busca");
 
-include_once dirname(__FILE__)."/common.php";
 ?>
