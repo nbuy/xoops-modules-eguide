@@ -1,6 +1,6 @@
 <?php
 // Event Receiption for Poster
-// $Id: receipt.php,v 1.36 2010/06/27 04:12:30 nobu Exp $
+// $Id: receipt.php,v 1.37 2010/08/18 13:44:34 nobu Exp $
 
 include 'header.php';
 require 'perm.php';
@@ -326,7 +326,7 @@ default:
 	foreach (unserialize_text($order['info']) as $lab => $v) {
 	    if ($ok) {
 		if (isset($nitem[$lab])) {
-		    if ($nitem[$lab]!="") {
+		    if ($nitem[$lab]!=="") {
 			if (preg_match('/^-?\d+$/', $v)) {
 			    $nitem[$lab] += $v;
 			} else {
@@ -360,7 +360,7 @@ default:
 			   array_keys($citem)) as $ki) {
 	    unset($citem[$ki]);
 	}
-	if ($v!="") $citem[$k.$sl] = $v;
+	if ($v!=="") $citem[$k.$sl] = $v;
     }
     $xoopsTpl->assign('list', $list);
     $xoopsTpl->assign('confirm', $confirm);
