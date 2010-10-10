@@ -1,5 +1,5 @@
 <?php
-// $Id: menu.php,v 1.8 2008/10/19 14:25:11 nobu Exp $
+// $Id: menu.php,v 1.9 2010/10/10 06:30:12 nobu Exp $
 
 $adminmenu[]=array('title' => _MI_EGUIDE_ABOUT,
 		   'link'  => "admin/help.php");
@@ -23,6 +23,9 @@ $adminmenu4altsys[]=
 $adminmenu4altsys[]=
     array('title' => _MD_A_MYMENU_MYBLOCKSADMIN,
 	  'link' => 'admin/index.php?mode=admin&lib=altsys&page=myblocksadmin');
+$adminmenu4altsys[]=
+    array('title' => _MD_A_MYMENU_MYLANGADMIN,
+	  'link' => 'admin/index.php?mode=admin&lib=altsys&page=mylangadmin');
 $adminmenu4altsys[]=
     array('title' => _MD_A_MYMENU_MYPREFERENCES,
 	  'link' => 'admin/index.php?mode=admin&lib=altsys&page=mypreferences');

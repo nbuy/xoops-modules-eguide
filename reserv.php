@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.45 2010/06/27 04:12:30 nobu Exp $
+// $Id: reserv.php,v 1.46 2010/10/10 06:30:12 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -296,8 +296,10 @@ case 'confirm':
 
     $data = fetch_event($eid, $exid);
     $opts = $data['optfield'];
-    $vals = get_opt_values($opts, $errs);
-    check_prev_order($data, $vals, $errs);
+    if ($op != 'order') {
+	$vals = get_opt_values($opts, $errs);
+	check_prev_order($data, $vals, $errs);
+    }
 
     $emhide = "";
     $num = 1;
@@ -305,6 +307,9 @@ case 'confirm':
 	$email = $myts->makeTboxData4Edit($_POST['email']);
 	$vals=array_merge(array(_MD_EMAIL=>$email), $vals);
 	$emhide = "<input type='hidden' name='email' value='$email'/>\n";
+	if (isset($_POST['email_conf'])) {
+	    $emhide .= "<input type='hidden' name='email_conf' value='".$myts->makeTboxData4Edit($_POST['email_conf'])."'/>\n";
+	}
 	if (!empty($_POST['notify'])) {
 	    $emhide .= "<input type='hidden' name='notify' value='".
 		$myts->makeTboxData4Edit($_POST['notify'])."'/>\n";

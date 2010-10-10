@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.16 2010/07/18 06:51:54 nobu Exp $
+// $Id: main.php,v 1.17 2010/10/10 06:30:12 nobu Exp $
 // German language files by El Cario www.el-cario.de
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -17,6 +17,8 @@ define("_MD_POSTED_FMT", "d.m.Y H:i");
 define("_MD_TIME_FMT", "d.m.Y H:i");
 define("_MD_READMORE","Lesen Sie Mehr...");
 define("_MD_EMAIL","Email Addresse");
+define("_MD_EMAIL_CONF","E-Mail abrufen");
+define('_MD_EMAIL_CONF_DESC','Bitte geben Sie Ihre E-Mail Adresse zur Bestätigung erneut');
 define("_MD_SUBJECT","Bestätigung - {EVENT_DATE} {EVENT_TITLE}");
 define("_MD_NOTIFY_EVENT",  "Benachrichtigung über neue Veranstaltungen erhalten");
 define("_MD_NOTIFY_REQUEST", "Benachrichtigen Sie mich, wenn weitere Veranstaltungen stattfinden");
@@ -37,6 +39,7 @@ define("_PRINT", "Drucken");
 define("_MD_NOITEM_ERR","Bitte geben sie einen Wert ein.");
 define("_MD_NUMITEM_ERR","muss eine Zahl sein");
 define("_MD_MAIL_ERR","E-Mail Adresse ist falsch");
+define('_MD_MAIL_CONF_ERR','Bestätigen Sie E-Mail Adresse nicht überein');
 define("_MD_SEND_ERR","Fehler beim Senden der E-Mail");
 define("_MD_DUP_ERR","Wir haben auf diese E-Mail Adresse bereits reservierte Plätze");
 define("_MD_DUP_REGISTER","Sie werden bereits über kommende Veranstaltungen informiert");

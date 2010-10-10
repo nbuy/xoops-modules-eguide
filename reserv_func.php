@@ -1,6 +1,6 @@
 <?php
 // reservation functions
-// $Id: reserv_func.php,v 1.8 2010/04/04 07:39:55 nobu Exp $
+// $Id: reserv_func.php,v 1.9 2010/10/10 06:30:12 nobu Exp $
 
 function get_opt_values($optfield, &$errs, $hidden=false, $view=true) {
     $myts =& MyTextSanitizer::getInstance();
@@ -93,6 +93,10 @@ function check_prev_order($data, $vals, &$errs, $force=false) {
 	if (!($force && empty($email))) {
 	    if (!preg_match('/^[\w\-_\.]+@[\w\-_\.]+$/', $email)) {
 		$errs[] =  _MD_EMAIL.": ".htmlspecialchars($email)." - "._MD_MAIL_ERR;
+	    }
+	    if (eguide_form_options('email_repeat_check')) {
+		$conf = param('email_conf', '');
+		if ($email !== $conf) $errs[] =  _MD_MAIL_CONF_ERR;
 	    }
 	    $ml = strtolower($email);
 	    $result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=$exid AND email=".$xoopsDB->quoteString($ml));

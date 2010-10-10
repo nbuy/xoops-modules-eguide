@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.38 2010/06/27 04:12:30 nobu Exp $
+// $Id: functions.php,v 1.39 2010/10/10 06:30:12 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -154,7 +154,9 @@ function eventform($data) {
     if (isset($_POST['email'])) {
 	$email = $myts->stripSlashesGPC($_POST['email']);
     } else $email = is_object($xoopsUser)?$xoopsUser->email():"";
+    $conf = isset($_POST['email_conf'])?$myts->stripSlashesGPC($_POST['email_conf']):$email;
     $form['email'] = $myts->makeTboxData4Edit($email);
+    $form['email_conf'] = $myts->makeTboxData4Edit($conf);
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $form['check'] = array();
     $mo = $xoopsModuleConfig['member_only'];
@@ -314,6 +316,7 @@ function eventform($data) {
     $form['items'] = $items;
     $form['note'] = $note1.(!empty($note1)&&!empty($note2)?" ":"").$note2;
     $form['eid'] = empty($data['eid'])?0:$data['eid'];
+    $form['options'] = eguide_form_options();
     return $form;
 }
 

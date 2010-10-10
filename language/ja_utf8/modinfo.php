@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.2 2010/04/04 07:39:55 nobu Exp $
+// $Id: modinfo.php,v 1.3 2010/10/10 06:30:12 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -112,6 +112,7 @@ define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', 'このカテゴリに新しいイベ�
 if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
     define('_MD_A_MYMENU_MYTPLSADMIN','テンプレート管理');
     define('_MD_A_MYMENU_MYBLOCKSADMIN','ブロック/アクセス管理');
+    define('_MD_A_MYMENU_MYLANGADMIN','言語定数管理');
     define('_MD_A_MYMENU_MYPREFERENCES','一般設定');
 }
 ?>

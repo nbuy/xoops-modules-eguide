@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.11 2010/04/04 07:39:55 nobu Exp $
+// $Id: modinfo.php,v 1.12 2010/10/10 06:30:12 nobu Exp $
 // Module Info
 // German language files by El Cario www.el-cario.de
 
@@ -112,7 +112,8 @@ define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', 'Benachrichtigen, wenn neue Veranstaltu
 // for altsys
 if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
     define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
-    define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
+    define('_MD_A_MYMENU_MYBLOCKSADMIN','Modul-Blöcke');
+    define('_MD_A_MYMENU_MYLANGADMIN','Sprachen');
     define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
 }
 ?>

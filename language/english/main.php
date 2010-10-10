@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.27 2010/07/18 06:51:54 nobu Exp $
+// $Id: main.php,v 1.28 2010/10/10 06:30:12 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -15,6 +15,8 @@ define("_MD_POSTED_FMT", "j M Y H:i");
 define("_MD_TIME_FMT", "j M Y H:i");
 define("_MD_READMORE","More...");
 define("_MD_EMAIL","EMail Address");
+define("_MD_EMAIL_CONF","Confirm EMail Address");
+define('_MD_EMAIL_CONF_DESC','Please enter your email address again for confirmation');
 define('_MD_UNAME','Username');
 define("_MD_SUBJECT","Confirm - {EVENT_DATE} {EVENT_TITLE}");
 define("_MD_NOTIFY_EVENT",  "Notification of new events");
@@ -36,6 +38,7 @@ define("_PRINT", "Print");
 define("_MD_NOITEM_ERR","No input, please enter a value.");
 define("_MD_NUMITEM_ERR","Needs to be numeric");
 define("_MD_MAIL_ERR","Mail address format error");
+define('_MD_MAIL_CONF_ERR','Confirm email address do not match');
 define("_MD_SEND_ERR","failed to send mail");
 define("_MD_DUP_ERR","We have already reserved a place with your mail address");
 define('_MD_DATE_ERR','The Date is out of range');

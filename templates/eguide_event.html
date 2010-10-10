@@ -29,6 +29,11 @@
 <br/><input type="checkbox" name="notify" /><{$smarty.const._MD_NOTIFY_REQUEST}>
 <{/if}>
 </td></tr>
+<{if $form.options.email_repeat_check}>
+<tr class="evms <{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL_CONF}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input size="40" name="email_conf" id="email_conf" value="<{$form.email_conf}>"/>
+  <div class="note"><{$smarty.const._MD_EMAIL_CONF_DESC}></div>
+</td></tr>
+<{/if}>
 <{/if}>
 <{foreach from=$form.items item=fm name=item}>
   <{if preg_match("/^-/", $form.items[$smarty.foreach.item.iteration].label)}>
@@ -76,8 +81,13 @@ function xoopsFormValidate_order() {
     obj = null;
     var msg = "";
 <{foreach from=$form.check key=name item=msg}>
-if ( checkItem(myform["<{$name}>"]) ) { msg = msg+"<{$msg}>\n"; if(obj==null)obj=myform["<{$name}>"]; }
+myobj = myform["<{$name}>"];
+if ( checkItem(myobj) ) { msg = msg+"<{$msg}>\n"; if(obj==null)obj=myobj; }
 <{/foreach}>
+<{if $form.options.email_repeat_check}>
+myobj = myform["email_conf"];
+if (myform["email"].value != myobj.value) { msg = msg+"<{$smarty.const._MD_MAIL_CONF_ERR}>\n"; if(obj==null)obj=myobj; }
+<{/if}>
 if (msg != "") { 
   window.alert(msg); 
   if (typeof(obj.length)!="number") obj.focus();

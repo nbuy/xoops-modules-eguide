@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.1 2010/04/04 06:27:21 nobu Exp $
+// $Id: modinfo.php,v 1.2 2010/10/10 06:30:12 nobu Exp $
 // Módulo traduzido para o Português do Brasil (portuguese) por
 // Leco (m_ohse@hotmail.com) URL: http://xoopersBR.com
 
@@ -113,6 +113,7 @@ define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', 'Notifique-me quando um novo evento for
 if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
     define('_MD_A_MYMENU_MYTPLSADMIN','Modelos');
     define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocos e Permissões');
+    define('_MD_A_MYMENU_MYLANGADMIN','Linguagens');
     define('_MD_A_MYMENU_MYPREFERENCES','Preferências');
 }
 ?>

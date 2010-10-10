@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.3 2010/07/18 06:51:54 nobu Exp $
+// $Id: main.php,v 1.4 2010/10/10 06:30:12 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -15,6 +15,8 @@ define('_MD_POSTED_FMT', 'm');
 define('_MD_TIME_FMT', 'm');
 define('_MD_READMORE','詳細...');
 define('_MD_EMAIL','メール');
+define('_MD_EMAIL_CONF','メール確認');
+define('_MD_EMAIL_CONF_DESC','確認のためもう一度メールアドレスを入力してください');
 define('_MD_UNAME','ユーザ名');
 define('_MD_SUBJECT','予約確認 - {EVENT_DATE} {EVENT_TITLE}');
 define('_MD_NOTIFY_EVENT',  '新規のイベント掲載をメールで通知する');
@@ -36,6 +38,7 @@ define('_PRINT', '印刷');
 define('_MD_NOITEM_ERR','必須項目の入力がありません');
 define('_MD_NUMITEM_ERR','数値を入力してください');
 define('_MD_MAIL_ERR','メールアドレスの書式を確認してください');
+define('_MD_MAIL_CONF_ERR','確認入力のメールアドレスが一致しません');
 define('_MD_SEND_ERR','メール送信に失敗しました');
 define('_MD_DUP_ERR','お申し込みメールアドレスで既に予約があります');
 define('_MD_DATE_ERR','指定日時が範囲外です');

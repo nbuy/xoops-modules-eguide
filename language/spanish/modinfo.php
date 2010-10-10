@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.10 2010/04/04 07:39:55 nobu Exp $
+// $Id: modinfo.php,v 1.11 2010/10/10 06:30:12 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -109,8 +109,9 @@ define('_MI_EGUIDE_CNEWPOST_NOTIFY', 'New event post in category');
 define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', 'Notify when new event posted in current category');
 // for altsys
 if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
-    define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
-    define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
+    define('_MD_A_MYMENU_MYTPLSADMIN','Plantillas');
+    define('_MD_A_MYMENU_MYBLOCKSADMIN','Bloques de los módulos');
+    define('_MD_A_MYMENU_MYLANGADMIN','Administración de textos');
     define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
 }
 ?>

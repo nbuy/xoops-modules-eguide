@@ -1,5 +1,5 @@
 <?php
-// $Id: modinfo.php,v 1.26 2010/04/04 07:39:55 nobu Exp $
+// $Id: modinfo.php,v 1.27 2010/10/10 06:30:12 nobu Exp $
 // Module Info
 
 if (defined('_MI_EGUIDE_NAME')) return;
@@ -112,6 +112,7 @@ define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', 'Notify when new event posted in curren
 if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
     define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
     define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
+    define('_MD_A_MYMENU_MYLANGADMIN','Languages');
     define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
 }
 ?>

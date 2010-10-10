@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.17 2010/07/18 06:51:54 nobu Exp $
+// $Id: main.php,v 1.18 2010/10/10 06:30:12 nobu Exp $
 
 if (defined('_MD_RESERV_FORM')) return;
 
@@ -15,6 +15,8 @@ define('_MD_POSTED_FMT', 'Y-m-d H:i');//j M Y H:i >Y-m-d H:i
 define('_MD_TIME_FMT', 'Y-m-d H:i');//j M Y H:i >Y-m-d H:i
 define('_MD_READMORE', '詳細...');
 define('_MD_EMAIL', '電子郵件');
+define("_MD_EMAIL_CONF","檢查電子郵件");
+define('_MD_EMAIL_CONF_DESC','請輸入您的電子郵件地址再次確認');
 define('_MD_UNAME', '使用者名稱');
 define('_MD_SUBJECT', '確認報名 - {EVENT_DATE} {EVENT_TITLE}');
 define('_MD_NOTIFY_EVENT', '登錄電子郵件通知');
@@ -36,6 +38,7 @@ define('_PRINT', '列印');
 define('_MD_NOITEM_ERR', '必填項目沒有輸入內容');
 define('_MD_NUMITEM_ERR', '請輸入內容');
 define('_MD_MAIL_ERR', '請確認電子郵件格式');
+define('_MD_MAIL_CONF_ERR','確認電子郵件地址不匹配');
 define('_MD_SEND_ERR', '電子郵件寄送失敗');
 define('_MD_DUP_ERR', '這個電子郵件已經註冊了');
 define('_MD_DATE_ERR', '報名時間已截止');

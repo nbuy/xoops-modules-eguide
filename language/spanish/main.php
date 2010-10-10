@@ -1,5 +1,5 @@
 <?php
-// $Id: main.php,v 1.10 2010/07/18 06:51:54 nobu Exp $
+// $Id: main.php,v 1.11 2010/10/10 06:30:12 nobu Exp $
 // Spanish language files by Gerardo
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -16,6 +16,8 @@ define("_MD_POSTED_FMT", "j M Y H:i");
 define("_MD_TIME_FMT", "j M Y H:i");
 define("_MD_READMORE","Más...");
 define("_MD_EMAIL","EMail");
+define("_MD_EMAIL_CONF","Consultar el EMail");
+define('_MD_EMAIL_CONF_DESC','Por favor, introduzca su dirección de EMail de nuevo para su confirmación');
 define('_MD_UNAME','Usuario');
 define("_MD_SUBJECT","Confirmar - {EVENT_DATE} {EVENT_TITLE}");
 define("_MD_NOTIFY_EVENT",  "Notificación sobre nuevos Eventos");
@@ -37,6 +39,7 @@ define("_PRINT", "Imprimir");
 define("_MD_NOITEM_ERR","Ingresa un valor.");
 define("_MD_NUMITEM_ERR","Debe ser numérico");
 define("_MD_MAIL_ERR","Formato de eMail erróneo");
+define('_MD_MAIL_CONF_ERR','Confirmar dirección de EMail no coinciden');
 define("_MD_SEND_ERR","No se pudo enviar el eMail");
 define("_MD_DUP_ERR","Ya existe una plaza reservada con tu direción eMail");
 define('_MD_DATE_ERR','The Date is out of range');

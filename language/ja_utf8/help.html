@@ -359,6 +359,12 @@ td,th { padding: 4px; background: #e8e8e8;}
       イベント記事の編集画面に "新規登録イベント" のチェックボックスを追加する。
       チェックボックスを有効にしてすると新規のイベントとして保存する。
     </dd>
+    <dt>email_repeat_check (イベント申し込みのメールアドレスの確認を行う)</dt>
+    <dd>
+      <tt>email_repeat_check=yes</tt>
+      イベントの申し込みを行う際に、メールアドレスの確認フィールドを追加し、
+      メールアドレスが一致することを確認する。
+    </dd>
   </dl>
 
   <a name="form"></a><h5>フォームの追加項目</h5>
@@ -498,9 +504,12 @@ max_register_in_future=2
   <a name="changes"></a><h5>変更履歴</h5>
 
 <dl>
-  <dt>2010/06/xx イベント案内モジュール 2.63 リリース</dt>
+  <dt>2010/10/10 イベント案内モジュール 2.63 リリース</dt>
   <dd>
     <ul>
+      <li>メール確認 (email_repeat_check) オプションの追加</li>
+      <li>altsys の言語管理に対応</li>
+      <li>申し込み集計で計算を誤るケースがあったものを修正</li>
       <li>redirect_header を絶対パスで出力する (携帯対応の障害対策)</li>
     </ul>
   </dd>
@@ -722,6 +731,6 @@ max_register_in_future=2
 <hr>
 <address>安富 伸浩 &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;</address>
 マイサイト ユーザーズ <a href="http://myht.org/">http://myht.org/</a><br/>
-$Id: help.html,v 1.7 2010/06/27 04:12:30 nobu Exp $
+$Id: help.html,v 1.8 2010/10/10 06:30:12 nobu Exp $
 </body>
 </html>

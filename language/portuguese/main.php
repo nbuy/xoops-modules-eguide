@@ -1,6 +1,6 @@
 <?php
-// $Id: main.php,v 1.2 2010/07/18 06:51:54 nobu Exp $
-// MÛdulo traduzido para o PortuguÍs do Brasil (portuguese) por
+// $Id: main.php,v 1.3 2010/10/10 06:30:12 nobu Exp $
+// M√≥dulo traduzido para o Portugu√™s do Brasil (portuguese) por
 // Leco (m_ohse@hotmail.com) URL: http://xoopersBR.com
 
 if (defined('_MD_RESERV_FORM')) return;
@@ -16,38 +16,41 @@ define('_MD_STIME_FMT', 'H:i');
 define("_MD_POSTED_FMT", "j M Y H:i");
 define("_MD_TIME_FMT", "j M Y H:i");
 define("_MD_READMORE","Mais...");
-define("_MD_EMAIL","EndereÁo de email");
-define('_MD_UNAME','Nome de usu·rio');
+define("_MD_EMAIL","Endere√ßo de email");
+define('_MD_EMAIL_CONF','Verificar e-mail');
+define('_MD_EMAIL_CONF_DESC','Digite seu endere√ßo de e-mail novamente para confirma√ß√£o');
+define('_MD_UNAME','Nome de usu√°rio');
 define("_MD_SUBJECT","Confirmar - {EVENT_DATE} {EVENT_TITLE}");
-define("_MD_NOTIFY_EVENT",  "NotificaÁ„o de novos eventos");
+define("_MD_NOTIFY_EVENT",  "Notifica√ß√£o de novos eventos");
 define("_MD_NOTIFY_REQUEST","Notifique-me, via email, quando novos eventos forem postados");
 define('_MD_REQUIRE_MARK', '<em>*</em>');
 define('_MD_LISTITEM_FMT', '[%s]');
 define("_MD_ORDER_NOTE1","'"._MD_REQUIRE_MARK."'itens requeridos. ");
-define("_MD_ORDER_NOTE2","'[ ]' item que ser· mostrado na lista de participantes.");
+define("_MD_ORDER_NOTE2","'[ ]' item que ser√° mostrado na lista de participantes.");
 define('_MD_ORDER_SEND','Agendamento');
 define('_MD_ORDER_CONF','Confirmar');
 
-define("_MD_EVENT_NONE","N„o existe evento agendando");
+define("_MD_EVENT_NONE","N√£o existe evento agendando");
 define("_MD_BACK","Voltar");
 define("_MD_RESERVED","Existe apenas um agendamento");
-define("_MD_RESERV_NUM","N˙mero m·ximo de lugares %d");
+define("_MD_RESERV_NUM","N√∫mero m√°ximo de lugares %d");
 define("_MD_RESERV_REG","Atualmente foram reservados lugares %d");
 define("_PRINT", "Imprimir");
 
 define("_MD_NOITEM_ERR","Nada informado. Por favor, informe um valor.");
-define("_MD_NUMITEM_ERR","Precisa ser um valor numÈrico");
-define("_MD_MAIL_ERR","Erro no formato do endereÁo de email");
+define("_MD_NUMITEM_ERR","Precisa ser um valor num√©rico");
+define("_MD_MAIL_ERR","Erro no formato do endere√ßo de email");
+define('_MD_MAIL_CONF_ERR','Confirmar endere√ßo de email n√£o coincidem');
 define("_MD_SEND_ERR","Falha no envio de email");
-define("_MD_DUP_ERR","NÛs j· agendamos um lugar com seu endereÁo de email");
-define('_MD_DATE_ERR','A data est· fora do perÌodo de abrangÍncia');
+define("_MD_DUP_ERR","N√≥s j√° agendamos um lugar com seu endere√ßo de email");
+define('_MD_DATE_ERR','A data est√° fora do per√≠odo de abrang√™ncia');
 define('_MD_DATEDELETE_ERR','Pare e remova a data pois existe um agendamento');
-define("_MD_DUP_REGISTER","A notificaÁ„o via email j· foi registrada");
-define("_MD_REGISTERED","A notificaÁ„o via email foi registrada");
+define("_MD_DUP_REGISTER","A notifica√ß√£o via email j√° foi registrada");
+define("_MD_REGISTERED","A notifica√ß√£o via email foi registrada");
 
-define("_MD_RESERV_ACCEPT","Enviada confirmaÁ„o por email");
+define("_MD_RESERV_ACCEPT","Enviada confirma√ß√£o por email");
 define("_MD_RESERV_STOP","Os agendamentos foram cancelados.");
-define("_MD_RESERV_CONF","Ordenamento da informaÁ„o");
+define("_MD_RESERV_CONF","Ordenamento da informa√ß√£o");
 define("_MD_RESERV_ADMIN","Lista de agendamentos");
 define("_MD_RESERV_REGISTER","Agendamento registrado");
 
@@ -57,19 +60,19 @@ define("_MD_RESERV_REFUSE"," foi recusado.");
 define("_AM_MAILGOOD","Sucesso: %s");
 define("_AM_SENDMAILNG","Falha: %s");
 
-define("_MD_RESERV_NOTFOUND","N„o existem agendamentos ou todos j· foram cancelados.");
-define("_MD_RESERV_CANCEL","VocÍ tem certeza que deseja cancelar?");
+define("_MD_RESERV_NOTFOUND","N√£o existem agendamentos ou todos j√° foram cancelados.");
+define("_MD_RESERV_CANCEL","Voc√™ tem certeza que deseja cancelar?");
 define("_MD_RESERV_CANCELED","O agendamento do evento foi cancelado");
-define("_MD_RESERV_NOCANCEL","O agendamento n„o pode ser cancelado apÛs o finalizaÁ„o do tempo");
-define("_MD_RESERV_NOTIFY","%s\n\nOrdenaÁ„o do email: %s\nEvento agendando: %s\n  %s\n");
-define("_MD_RESERV_FULL","Os agendamentos foram cancelados porque o evento agora est· totalmente reservado.");
+define("_MD_RESERV_NOCANCEL","O agendamento n√£o pode ser cancelado ap√≥s o finaliza√ß√£o do tempo");
+define("_MD_RESERV_NOTIFY","%s\n\nOrdena√ß√£o do email: %s\nEvento agendando: %s\n  %s\n");
+define("_MD_RESERV_FULL","Os agendamentos foram cancelados porque o evento agora est√° totalmente reservado.");
 define('_MD_RESERV_TOMATCH',' %d is too match (%d esquerda)');
 define('_MD_RESERV_CLOSE','Agendamento finalizado');
-define('_MD_RESERV_NEEDLOGIN','VocÍ precisa estar <a href="'.XOOPS_URL.'/user.php">logado</a>, quando desejar efetuar algum agendamento');
-define('_MD_RESERV_PLUGIN_FAIL','N„o existem condiÁıes para registrar o agendamento');
+define('_MD_RESERV_NEEDLOGIN','Voc√™ precisa estar <a href="'.XOOPS_URL.'/user.php">logado</a>, quando desejar efetuar algum agendamento');
+define('_MD_RESERV_PLUGIN_FAIL','N√£o existem condi√ß√µes para registrar o agendamento');
 define("_MD_CANCEL_FAIL","Flaha no cancelamento");
-define("_MD_NODATA","N„o existem dados");
-define("_MD_NOEVENT","N„o existem eventos listados");
+define("_MD_NODATA","N√£o existem dados");
+define("_MD_NOEVENT","N√£o existem eventos listados");
 define("_MD_SHOW_PREV","Eventos anteriores");
 define("_MD_SHOW_NEXT","Eventos futuros");
 
@@ -78,27 +81,27 @@ define('_MD_POSTDATE','Registrado');
 define('_MD_STARTTIME','Evento iniciado');
 define('_MD_CLOSEDATE','Agendamento finalizado');
 define('_MD_CLOSEBEFORE','Finalizar antes do tempo');
-define('_MD_CLOSEBEFORE_DESC','Antes do inÌcio (Exemplo: 3 dias, 2 horas, 50 minutos)');
+define('_MD_CLOSEBEFORE_DESC','Antes do in√≠cio (Exemplo: 3 dias, 2 horas, 50 minutos)');
 define('_MD_TIME_UNIT','dias,horas,minutos');
 define('_MD_TIME_REG','d(ia)?s?,h(ora)?,minuto');
-define('_MD_CALENDAR','Ir ao calend·rio');
-define('_MD_CAL','Calend·rio');
+define('_MD_CALENDAR','Ir ao calend√°rio');
+define('_MD_CAL','Calend√°rio');
 define('_MD_CAL_MONDAY_FIRST', 'Verdadeiro');
 define("_MD_REFER","%d acessos");
 define("_MD_RESERV_LIST","Lista de participantes");
 
-define('_MD_NEED_UPGRADE','… necess·rio para proceder a atualizaÁ„o do mÛdulo');
+define('_MD_NEED_UPGRADE','√â necess√°rio para proceder a atualiza√ß√£o do m√≥dulo');
 
 //%%%%%%	File Name receiept.php 	%%%%%
 define("_MD_RESERV_EDIT","Editar agendamentos");
-define("_MD_OPERATION","OperaÁ„o");
-define("_MD_STATUS","SituaÁ„o");
-define("_MD_RESERV_RETURN","Retorna ‡ lista");
+define("_MD_OPERATION","Opera√ß√£o");
+define("_MD_STATUS","Situa√ß√£o");
+define("_MD_RESERV_RETURN","Retorna √† lista");
 define("_MD_RESERV_REC","Agendamentos gravados");
 define("_MD_RVID","ID do agendamento");
 define("_MD_ORDER_COUNT","Contagem");
-define("_MD_PRINT_DATE","Data da impress„o");
-define("_MD_SAVECHANGE","Salvar mudanÁas");
+define("_MD_PRINT_DATE","Data da impress√£o");
+define("_MD_SAVECHANGE","Salvar mudan√ßas");
 define("_MD_RESERV_DEL","Excluir agendamento");
 define("_MD_DETAIL","Detalhe");
 define("_MD_RESERV_MSG_H","Enviar mensagem para o agendamento");
@@ -107,7 +110,7 @@ define("_MD_REFUSE","Recusado");
 define("_MD_EXPORT_OUT","Formato excel");
 define('_MD_EXPORT_CHARSET', 'UTF-8');
 define("_MD_INFO_MAIL","Enviado email");
-define("_MD_SUMMARY","Sum·rio");
+define("_MD_SUMMARY","Sum√°rio");
 define("_MD_SUM_ITEM","Resumo do item");
 define("_MD_SUM","Soma");
 
@@ -115,22 +118,22 @@ define("_MD_SUM","Soma");
 define("_MD_EDITARTICLE","Editar o evento");
 define("_MD_NEWTITLE","Novo evento");
 define("_MD_NEWSUB","Novo evento - {EVENT_DATE} {EVENT_TITLE}");
-define("_MD_TITLE","TÌtulo");
+define("_MD_TITLE","T√≠tulo");
 define("_MD_EVENT_DATE","Data do evento");
-define("_MD_EVENT_EXPIRE","Mostrar finalizaÁ„o");
+define("_MD_EVENT_EXPIRE","Mostrar finaliza√ß√£o");
 define('_MD_EVENT_EXTENT','Repetir abertura');
 define('_MD_EVENT_CATEGORY','Categoria');
 define('_MD_EDIT_EXTENT','Editar data aberta');
-define('_MD_EXTENT_REPEAT','RepetiÁıes');
+define('_MD_EXTENT_REPEAT','Repeti√ß√µes');
 define('_MD_ADD_EXTENT','Adicionar data da abertura');
-define('_MD_ADD_EXTENT_DESC','Data de abertura adicional no "YYYY-MM-DD HH:MM" formato (Registros m˙ltiplos separados em nova linha)');
-define("_MD_INTROTEXT","Texto introdutÛrio");
-define("_MD_EXTEXT","DescriÁ„o");
-define("_MD_EVENT_STYLE","Estilo de saÌda");
+define('_MD_ADD_EXTENT_DESC','Data de abertura adicional no "YYYY-MM-DD HH:MM" formato (Registros m√∫ltiplos separados em nova linha)');
+define("_MD_INTROTEXT","Texto introdut√≥rio");
+define("_MD_EXTEXT","Descri√ß√£o");
+define("_MD_EVENT_STYLE","Estilo de sa√≠da");
 define('_MD_RESERV_SETTING','Agendamento');
-define("_MD_RESERV_DESC","Permitir continuaÁ„o dos agendamentos");
-define('_MD_RESERV_STOPFULL','Parar agendamentos quando o limite for alcanÁado');
-define("_MD_RESERV_AUTO","Aceitar automaticamente agendamentos (N„o È necess·ria a aprovaÁ„o)");
+define("_MD_RESERV_DESC","Permitir continua√ß√£o dos agendamentos");
+define('_MD_RESERV_STOPFULL','Parar agendamentos quando o limite for alcan√ßado');
+define("_MD_RESERV_AUTO","Aceitar automaticamente agendamentos (N√£o √© necess√°ria a aprova√ß√£o)");
 define('_MD_RESERV_NOTIFYPOSTER','Agendamento notificado por email');
 define('_MD_RESERV_UNIT','');
 define('_MD_RESERV_ITEM','Itens adicionais');
@@ -138,19 +141,19 @@ define('_MD_RESERV_LAB','Nome do item');
 define('_MD_RESERV_LABREQ','Por favor, informe o nome do item');
 define('_MD_RESERV_REQ','Requerido');
 define('_MD_RESERV_ADD','Adicionar');
-define('_MD_RESERV_OPTREQ','Necess·rio opÁ„o argumento');
+define('_MD_RESERV_OPTREQ','Necess√°rio op√ß√£o argumento');
 define('_MD_RESERV_ITEM_DESC','<a href="language/english/help.html#form" target="help">Sobre o formato dos itens adicionais</a>');
-define('_MD_RESERV_LABEL_DESC','Utilize o nome do item "%s" caso m˙ltiplos agendamnto pessoal.');
-define('_MD_OPTION_VARS','Vari·veis Opcionais');
+define('_MD_RESERV_LABEL_DESC','Utilize o nome do item "%s" caso m√∫ltiplos agendamnto pessoal.');
+define('_MD_OPTION_VARS','Vari√°veis Opcionais');
 define('_MD_OPTION_OTHERS','Outros');
-define('_MD_RESERV_REDIRECT','URL de redirecionamento apÛs o agendamento');
-define('_MD_RESERV_REDIRECT_DESC','Configurar o n˙mero de segundos para aguardar (Exemplo: "4;http://..."). vari·veis: {X_EID}, {X_SUB}, {X_RVID}');
-define('_MD_APPROVE','Mostrar aprovaÁ„o');
-define('_MD_PREVIEW','VizualizaÁ„o');
+define('_MD_RESERV_REDIRECT','URL de redirecionamento ap√≥s o agendamento');
+define('_MD_RESERV_REDIRECT_DESC','Configurar o n√∫mero de segundos para aguardar (Exemplo: "4;http://..."). vari√°veis: {X_EID}, {X_SUB}, {X_RVID}');
+define('_MD_APPROVE','Mostrar aprova√ß√£o');
+define('_MD_PREVIEW','Vizualiza√ß√£o');
 define('_MD_SAVE','Salvar');
 define('_MD_UPDATE','Atualizar');
 define('_MD_DBUPDATED','Banco de dados atualizado');
-define('_MD_DBDELETED','Evento excluÌdo');
+define('_MD_DBDELETED','Evento exclu√≠do');
 
 define('_MD_EVENT_DEL_DESC','Excluir este evento');
 define('_MD_EVENT_DEL_ADMIN','Excluir todos os dados, inlusive os agendamentos.');
@@ -162,27 +165,27 @@ define('_MD_TIMEC','Hora');
 //                  5=>"May", 6=>"Jun", 6=>"Jul", 8=>"Aug",
 //                  9=>"Sep", 10=>"Oct", 11=>"Nov", 12=>"Dec");
 
-define('_MD_RESERV_DEFAULT_ITEM',"Nome*,tamanho=40\nEndereÁo\n");
+define('_MD_RESERV_DEFAULT_ITEM',"Nome*,tamanho=40\nEndere√ßo\n");
 define('_MD_RESERV_DEFAULT_MEMBER',"");
 
 // notification message
 define('_MD_APPROVE_REQ','Por favor, confirme o evento aprove-o.');
 //%%%%%%	File Name sendinfo.php 	%%%%%
-define("_MD_INFO_TITLE","Enviar informaÁ„o por email");
+define("_MD_INFO_TITLE","Enviar informa√ß√£o por email");
 define("_MD_INFO_CONDITION","Enviar para");
-define("_MD_INFO_NODATA","N„o existem dados");
+define("_MD_INFO_NODATA","N√£o existem dados");
 define("_MD_INFO_SELF","Auto enviar (%s)");
 define("_MD_INFO_DEFAULT","-mensagens-\n\n\nEvento agendando\n    {EVENT_URL}\n");
 define("_MD_INFO_MAILOK","Email enviado");
 define("_MD_INFO_MAILNG","Falha no envio do email");
 define("_MD_UPDATE_SUBJECT","Evento atualizado");
-define("_MD_UPDATE_DEFAULT","Padr„o");
+define("_MD_UPDATE_DEFAULT","Padr√£o");
 
 //%%%%%%	File Name print.php 	%%%%%
 
 define("_MD_URLFOREVENT","URL deste evento:");
 // %s represents your site name
-define("_MD_THISCOMESFROM","Mais informaÁıes de eventos em %s");
+define("_MD_THISCOMESFROM","Mais informa√ß√µes de eventos em %s");
 
 //%%%%%%	File Name mylist.php 	%%%%%
 define('_MD_MYLIST','Agendamento de eventos');
