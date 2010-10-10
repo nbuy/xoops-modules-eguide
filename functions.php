@@ -1,6 +1,6 @@
 <?php
 // Event Guide common functions
-// $Id: functions.php,v 1.39 2010/10/10 06:30:12 nobu Exp $
+// $Id: functions.php,v 1.40 2010/10/10 10:11:55 nobu Exp $
 
 // exploding addional informations.
 function explodeopts($opts) {
@@ -424,7 +424,7 @@ function eventdate($time, $format="", $offset="") {
 
 function preg_word_quote($a) {
     $ret = array();
-    foreach ($a as $v) {
+    foreach (array_keys($a) as $v) {
 	$ret[] = '/\b'.preg_quote($v).'\b/';
     }
     return $ret;
