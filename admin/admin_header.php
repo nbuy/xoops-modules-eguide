@@ -2,12 +2,18 @@
 include '../../../include/cp_header.php';
 
 $modbase = dirname(dirname(__FILE__));
+if (!defined("_MD_ORDER_DATE")) {
+    if (class_exists("XCube_Root")) {
+	$root =& XCube_Root::getSingleton();
+	
+	$root->mLanguageManager->_loadLanguage($xoopsModule->getVar('dirname'), 'common');
+    } else {
+	$modres = $modbase."/language";
+	$lang = $xoopsConfig['language'];
+	if (file_exists("$modres/$lang/common.php")) include_once "$modres/$lang/common.php";
+	else include_once "$modres/english/common.php";
+    }
+}
 include "$modbase/const.php";
 include "$modbase/functions.php";
-
-$loc="$modbase/language/".$xoopsConfig['language'];
-foreach (array(/*"modinfo.php", "main.php", */"common.php") as $res) {
-    if ( file_exists("$loc/$res") ) include_once("$loc/$res");
-    else include_once("$modbase/language/english/$res");
-}
 ?>
