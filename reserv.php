@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.46 2010/10/10 06:30:12 nobu Exp $
+// $Id: reserv.php,v 1.47 2011/04/16 06:45:36 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -74,7 +74,7 @@ case 'delete':
 	exit;
     }
     if ($result) {
-	$evurl = EGUIDE_URL."/event.php?eid=$eid".($exid?"&sub=$exid":"");
+	$evurl = EGUIDE_URL.($eid?"/event.php?eid=$eid".($exid?"&sub=$exid":""):"/index.php");
 	if ($data['status']!=_RVSTAT_REFUSED) {
 	    if ($exid) {
 		$xoopsDB->query('UPDATE '.EXTBL." SET reserved=reserved-$num WHERE exid=$exid");
@@ -271,12 +271,12 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
 	    //
 	    // register user notify request
 	    //
-	    if ($xoopsModuleConfig['user_notify'] && param('notify')) {
+	    if ($xoopsModuleConfig['user_notify'] && param('notify', '')) {
 		$reg = $xoopsDB->query('SELECT * FROM '.RVTBL." WHERE email=$ml AND eid=0");
 		if ($xoopsDB->getRowsNum($reg)==0) {
 		    $conf = rand(10000,99999);
 		    $xoopsDB->query('INSERT INTO '.RVTBL." 
-(eid,uid,rdate,email,status,confirm) VALUES (0,$uid,$now,$ml,1,'$conf')");
+(eid,exid,uid,rdate,email,status,confirm) VALUES (0,0,$uid,$now,$ml,1,'$conf')");
 		} else {
 		    echo "<div class='evnote'>"._MD_DUP_REGISTER."</div>\n";
 		}
