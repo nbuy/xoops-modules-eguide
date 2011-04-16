@@ -1,5 +1,5 @@
 # Event Guide Module for XOOPS
-# $Id: mysql.sql,v 1.8 2010/02/21 11:07:50 nobu Exp $
+# $Id: mysql.sql,v 1.9 2011/04/16 06:48:15 nobu Exp $
 
 #
 # Table structure for table `eguide`
@@ -21,7 +21,7 @@ CREATE TABLE eguide (
   counter int(8) unsigned NOT NULL default '0',
   topicid int(8) unsigned NOT NULL default '1',
   PRIMARY KEY  (eid)
-) TYPE=MyISAM;
+);
 
 #
 # Table structure for table `eguide_category`
@@ -35,7 +35,7 @@ CREATE TABLE eguide_category (
   catpri   integer NOT NULL default '0',
   weight   integer NOT NULL default '0',
   PRIMARY KEY  (catid)
-) TYPE=MyISAM;
+);
 
 # --------------------------------------------------------
 
@@ -53,7 +53,7 @@ CREATE TABLE eguide_extent (
   expersons  integer,
   reserved int(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (exid)
-) TYPE=MyISAM;
+);
 
 #
 # Table structure for table `eguide_opt`
@@ -71,7 +71,7 @@ CREATE TABLE eguide_opt (
   optfield text,
   optvars text,
   PRIMARY KEY  (eid)
-) TYPE=MyISAM;
+);
 
 #
 # Table structure for table `eguide_reserv`
@@ -88,4 +88,4 @@ CREATE TABLE eguide_reserv (
   status tinyint(1),
   confirm varchar(8),
   PRIMARY KEY  (rvid)
-) TYPE=MyISAM;
+);
