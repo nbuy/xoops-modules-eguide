@@ -1,6 +1,6 @@
 <?php
 // reservation proceedings.
-// $Id: reserv.php,v 1.47 2011/04/16 06:45:36 nobu Exp $
+// $Id: reserv.php,v 1.48 2011/08/03 14:41:22 nobu Exp $
 include 'header.php';
 
 $op = param('op', "x");
@@ -41,7 +41,7 @@ case 'delete':
 	$result = false;
     } else {		// there is reservation
 	$data = $xoopsDB->fetchArray($result);
-	$evurl = EGUIDE_URL.'/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:'');
+	$evurl = EGUIDE_URL.($data['eid']?'/event.php?eid='.$data['eid'].($data['exid']?'&sub='.$data['exid']:''):'/index.php');
 
 	if (!reserv_permit($data['ruid'], $data['uid'], $data['confirm'])) {
 	    redirect_header($evurl, 3, _MD_RESERV_NOTFOUND);
@@ -55,12 +55,12 @@ case 'delete':
 	    $num = intval($vals[$nlab]);
 	    if ($num<1) $num = 1;
 	}
-	if ($isadmin || $data['edate']-$data['closetime']>$now) {
-	    edit_eventdata($data);
+	if ($isadmin || empty($data['edate']) || $data['edate']-$data['closetime']>$now) {
 	    $eid = $data['eid'];
+	    if ($eid) edit_eventdata($data);
 	    $exid = $data['exid'];
 	    if ($isadmin || (is_object($xoopsUser) &&
-			     $data['uid']==$xoopsUser->getVar('uid'))) {
+			     $data['ruid']==$xoopsUser->getVar('uid'))) {
 		$conf = "";
 	    } else {
 		$conf = "AND confirm=".intval($_POST['key']);
@@ -363,14 +363,14 @@ case 'cancel':
 	$data['email'] = $email;
     }
     if ($result) {
-	if (!$isadmin && $data['edate']-$data['closetime']<$now) {
+	if (!$isadmin && isset($date['edate']) && $data['edate']-$data['closetime']<$now) {
 	    echo "<div class='evform'>\n";
 	    echo "<div class='error'>"._MD_RESERV_NOCANCEL."</div>\n";
 	    echo "</div>\n";
 	} else {
 	    $eid = $data['eid'];
 	    $key = isset($_GET['key'])?intval($_GET['key']):'';
-	    edit_eventdata($data);
+	    if ($eid) edit_eventdata($data);
 	    $xoopsOption['template_main'] = EGPREFIX.'_confirm.html';
 	    $xoopsTpl->assign('event', $data);
 	    if (isset($_GET['back'])) {
