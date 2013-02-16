@@ -82,6 +82,7 @@ CREATE TABLE eguide_reserv (
   eid  int(8) NOT NULL,
   exid int(8) NOT NULL,
   uid  int(8),
+  operator int(8),
   rdate integer,
   email varchar(60),
   info text,

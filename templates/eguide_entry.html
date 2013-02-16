@@ -15,12 +15,16 @@
 <form action="entry.php" method="post">
 <table class="outer" align="center" cellspacing="1" border="0">
 <tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
+<tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_UNAME}></td><td><{$form.uname}></td></tr>
+<{if !$form.member_only}>
 <tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}></td><td><input size="40" name="email" value="<{$form.email}>"/>
 </td></tr>
+<{/if}>
 <{foreach from=$form.items item=fm}>
 <tr class="<{$fm.attr}> <{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}><{$fm.comment}></td></tr>
 <{/foreach}>
 </table>
+<input type="hidden" name="uid" id="reserv_uid" value="<{$form.uid}>" />
 <input type="hidden" name="eid" value="<{$form.eid}>" />
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />

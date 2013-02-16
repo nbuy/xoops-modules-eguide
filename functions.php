@@ -142,25 +142,27 @@ function apply_user_vars($text) {
     return $text;
 }
 
-function eventform($data) {
+function eventform($data, $uid) {
     global $xoopsUser, $xoopsModuleConfig;
+    $poster = isset($uid)?new XoopsUser($uid):$xoopsUser;
     $myts =& MyTextSanitizer::getInstance();
 
     if (empty($data['reservation'])) return null;
 
-    $form = array();
+    $form = array('uid'=>$uid, 'poster'=>$poster,
+	'uname'=>$uid?$poster->getVar('uname'):$GLOBALS['xoopsConfig']['anonymous']);
     $optfield = $data['optfield'];
     // reservation form
     if (isset($_POST['email'])) {
 	$email = $myts->stripSlashesGPC($_POST['email']);
-    } else $email = is_object($xoopsUser)?$xoopsUser->email():"";
+    } else $email = is_object($poster)?$poster->email():"";
     $conf = isset($_POST['email_conf'])?$myts->stripSlashesGPC($_POST['email_conf']):$email;
     $form['email'] = $myts->makeTboxData4Edit($email);
     $form['email_conf'] = $myts->makeTboxData4Edit($conf);
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $form['check'] = array();
     $mo = $xoopsModuleConfig['member_only'];
-    $mo = ($mo && is_object($xoopsUser)?$mo!=ACCEPT_MEMBER:0);
+    $mo = ($mo && is_object($poster)?$mo!=ACCEPT_MEMBER:0);
     $form['member_only'] = $mo;
     if (!$mo) $form['check']['email'] = preg_replace('/\\*$/', '', _MD_EMAIL).": ".strip_tags(_MD_ORDER_NOTE1);
     $items = array();
@@ -287,8 +289,8 @@ function eventform($data) {
 		}
 	    }
 	    if (!isset($_POST[$fname])) {
-		if (empty($v) && $xoopsUser && preg_match(_MD_NAME, $name)) { // compat old version
-		    $v = $xoopsUser->getVar('name');
+		if (empty($v) && $poster && preg_match(_MD_NAME, $name)) { // compat old version
+		    $v = $poster->getVar('name');
 		} else $v = apply_user_vars($v);
 		$v = htmlspecialchars($v);
 	    }

@@ -44,10 +44,11 @@ if (isset($_POST['eid'])) {
 	    $data['confirm'] = $conf = rand(10000,99999);
 	    $email = param('email', '');
 	    $ml = $xoopsDB->quoteString($email);
-	    $uid = $xoopsUser->getVar('uid');
+	    $uid = (int)$_POST['uid'];
+	    $operator=$xoopsUser->getVar('uid');
 	    $xoopsDB->query('INSERT INTO '.RVTBL." 
-(eid,exid,uid,rdate,email,status,confirm,info) VALUES
-($eid,$exid,$uid,$now,$ml,"._RVSTAT_RESERVED.",$conf,".
+(eid,exid,uid,operator,rdate,email,status,confirm,info) VALUES
+($eid,$exid,$uid,$operator,$now,$ml,"._RVSTAT_RESERVED.",$conf,".
 			    $xoopsDB->quoteString($value).")");
 	    $data['rvid'] = $xoopsDB->getInsertId();
 	    order_notify($data, $email, $value); // error ignore
@@ -87,8 +88,9 @@ if ($data['closedate'] < $now) {
 	$xoopsTpl->assign('message', _MD_RESERV_FULL);
     } else {
 	if (empty($_POST['email'])) $_POST['email'] = '';
-	$form = eventform($data);
+	$form = eventform($data, (int)$_REQUEST['uid']);
 	$form['lang_email'] = preg_replace('/\\*$/', '', _MD_EMAIL);
+	$form['member_only'] = $xoopsModuleConfig['member_only']==1;
 	$xoopsTpl->assign('form', $form);
     }
 }

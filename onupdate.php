@@ -77,6 +77,8 @@ if (empty($res) && $xoopsDB->errno()) {
 // add field in 2.4
 add_field(CATBL, 'catpri', "INT DEFAULT 0 NOT NULL", 'catdesc');
 add_field(CATBL, 'weight', "INT DEFAULT 0 NOT NULL", 'catpri');
+// add field in 2.7
+add_field(RVTBL, 'operator', "INT", 'uid');
 
 
 function report_message($msg) {

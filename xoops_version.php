@@ -10,7 +10,7 @@ $myicon = "images/{$myprefix}_slogo2.png";
 if (!file_exists("$mydirpath/$myicon")) $myicon = "module_icon.php";
 
 $modversion['name'] = _MI_EGUIDE_NAME.$exname;
-$modversion['version'] = 2.64;
+$modversion['version'] = 2.7;
 $modversion['description'] = _MI_EGUIDE_DESC;
 $modversion['credits'] = "Nobuhiro Yasutomi";
 $modversion['author'] = "Nobuhiro Yasutomi";
