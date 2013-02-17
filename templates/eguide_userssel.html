@@ -8,31 +8,38 @@
 <div class="entform">
   <div class="evnote"><{$message}></div>
 </div>
-<{elseif $form}>
-<a name="form"></a>
-<div class="entform">
-<div class="evtitle"><{$smarty.const._MD_RESERV_REGISTER}></div>
-<form action="entry.php" method="post">
-<table class="outer" align="center" cellspacing="1" border="0">
-<tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
-<tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_UNAME}></td><td><{$form.uname}></td></tr>
-<{if !$form.member_only}>
-<tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}></td><td><input size="40" name="email" value="<{$form.email}>"/>
-</td></tr>
-<{/if}>
-<{foreach from=$form.items item=fm}>
-<tr class="<{$fm.attr}> <{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}><{$fm.comment}></td></tr>
-<{/foreach}>
-</table>
-<input type="hidden" name="uid" id="reserv_uid" value="<{$form.uid}>" />
+<{else}>
+<div class="entlist">
+<div id="users_search">
+<form action="entry.php">
 <input type="hidden" name="eid" value="<{$form.eid}>" />
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
 <{/if}>
-<{if $form.note}>
-  <div align='right'><{$form.note}></div>
-<{/if}>
-<p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" /></p>
+<input name="search" value="<{$smarty.get.search|escape}>"/> <input type="submit" value="<{$smarty.const._SEARCH}>"/>
 </form>
 </div>
+<table width="100%">
+  <tr>
+    <td width="20%"><{$smarty.const._SEARCH}> <{$users_total}></td>
+    <td align="center"><{$navigation}></td>
+    <td width="20%"></td>
+  </tr>
+</table>
+<table class="outer" align="center" cellspacing="1" border="0">
+  <tr class="head">
+    <th></th>
+    <{foreach item=col from=$columns}>
+    <th><{$lang_users[$col]|escape}></th>
+    <{/foreach}>
+  </tr>
+  <{foreach item=user from=$users}>
+  <tr class="<{cycle values="even,odd"}>">
+    <td><a href="entry.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_RESERV_REGISTER}></a></td>
+    <{foreach item=col from=$columns}>
+    <td><{$user[$col]|escape}></td>
+    <{/foreach}>
+  </tr>
+  <{/foreach}>
+</table>
 <{/if}>

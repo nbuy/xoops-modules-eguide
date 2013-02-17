@@ -547,10 +547,14 @@ function order_notify($data, $email, $value) {
     $xoopsMailer->setTemplateDir($tmpdir);
     $xoopsMailer->setTemplate($tplfile);
     if ($xoopsModuleConfig['member_only'] && is_object($xoopsUser)) {
-	$uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME,
-			 $xoopsUser->getVar('uname'),
-			 $xoopsUser->getVar('name'));
-	$xoopsMailer->setToUsers($xoopsUser);
+	$user = $xoopsUser;
+	if (isset($data['reserv_uid'])) {
+	    $ruid = $data['reserv_uid'];
+	    $user = new XoopsUser($ruid);
+	} else {
+	    $xoopsMailer->setToUsers($user);
+	}
+	$uinfo = sprintf("%s: %s (%s)\n", _MD_UNAME, $user->getVar('uname'), $user->getVar('name'));
     } else {
 	if (!empty($email)) $xoopsMailer->setToEmails($email);
 	$uinfo = "";

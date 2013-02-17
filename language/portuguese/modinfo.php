@@ -83,6 +83,7 @@ define("_MI_EGUIDE_EXPORT_LIST_DESC","Item `name' ou `number' separados por virg
 define("_MI_EGUIDE_INDEX_TPL", "Lista da Guia de eventos na página inicial");
 define("_MI_EGUIDE_EVENT_TPL", "Detalhe do evento");
 define("_MI_EGUIDE_ENTRY_TPL", "Registro do agendamento");
+define("_MI_EGUIDE_USERSSEL_TPL", "User select for operators entry");
 define("_MI_EGUIDE_EVENT_PRINT_TPL", "Imprimir detalhe do evento");
 define("_MI_EGUIDE_RECEIPT_TPL", "Lista dos agendamentos");
 define("_MI_EGUIDE_ADMIN_TPL", "Formulário de registro do evento");

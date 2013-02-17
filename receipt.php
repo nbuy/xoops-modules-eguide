@@ -275,6 +275,7 @@ case 'one':
     if ($data['email']) $items[] = array('label'=>_MD_EMAIL, 'value'=>$myts->displayTarea($data['email']));
     
     if ($data['uid']) $items[] = array('label'=>_MD_UNAME, 'value'=>xoops_getLinkedUnameFromId($data['uid']));
+    if ($rvdata['operator']) $items[] = array('label'=>_MD_RESERV_REGISTER, 'value'=>xoops_getLinkedUnameFromId($rvdata['operator']));
     $items[] = array('label'=>_MD_STATUS, 'value'=>$rv_stats[$data['status']]);
     $items[] = array('label'=>_MD_ORDER_DATE, 'value'=>formatTimestamp($data['rdate'], _MD_TIME_FMT));
     foreach (unserialize_text($rvdata['info']) as $lab => $v) {

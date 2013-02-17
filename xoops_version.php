@@ -48,6 +48,8 @@ $modversion['templates'][]=array('file' => $myprefix.'_event.html',
 				 'description' => _MI_EGUIDE_EVENT_TPL);
 $modversion['templates'][]=array('file' => $myprefix.'_entry.html',
 				 'description' => _MI_EGUIDE_ENTRY_TPL);
+$modversion['templates'][]=array('file' => $myprefix.'_userssel.html',
+				 'description' => _MI_EGUIDE_USERSSEL_TPL);
 $modversion['templates'][]=array('file' => $myprefix.'_receipt.html',
 				 'description' => _MI_EGUIDE_RECEIPT_TPL);
 $modversion['templates'][]=array('file' => $myprefix.'_admin.html',

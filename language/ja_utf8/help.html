@@ -365,6 +365,22 @@ td,th { padding: 4px; background: #e8e8e8;}
       イベントの申し込みを行う際に、メールアドレスの確認フィールドを追加し、
       メールアドレスが一致することを確認する。
     </dd>
+    <dt>need_bind_uid (予約登録に登録ユーザ設定を行う)</dt>
+    <dd>
+      <tt>need_bind_uid=1</tt>
+      ログインによる認証に限定の指定によらず、
+      担当者/管理者による予約登録では登録ユーザを指定する。
+    </dd>
+    <dt>users_search_columns (予約登録でユーザの検索/表示を行うカラムリスト)</dt>
+    <dd>
+      <tt>users_search_columns=uname,email</tt>
+      担当者/管理者による予約登録を登録ユーザとして行う場合のユーザ検索で
+      表示検索を行うカラムをカンマ区切りで指定する (users テーブルのカラム名)。
+    </dd>
+    <dt>users_search_labels (検索/表示を行うカラムの表示名のリスト)</dt>
+    <dd>
+      <tt>users_search_columns=ユーザ名,EMAIL</tt>
+    </dd>
   </dl>
 
   <a name="form"></a><h5>フォームの追加項目</h5>
@@ -504,6 +520,12 @@ max_register_in_future=2
   <a name="changes"></a><h5>変更履歴</h5>
 
 <dl>
+  <dt>2013/02/17 イベント案内モジュール 2.70 リリース</dt>
+  <dd>
+    <ul>
+      <li>予約登録において登録ユーザとの紐付けを行う</li>
+    </ul>
+  </dd>
   <dt>2011/09/10 イベント案内モジュール 2.64 リリース</dt>
   <dd>
     <ul>

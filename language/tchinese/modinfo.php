@@ -82,6 +82,7 @@ define('_MI_EGUIDE_EXPORT_LIST_DESC', '以項目名稱或數字組合的逗點�
 define('_MI_EGUIDE_INDEX_TPL', '活動清單');
 define('_MI_EGUIDE_EVENT_TPL', '活動詳細內容');
 define('_MI_EGUIDE_ENTRY_TPL', '預約資料');
+define("_MI_EGUIDE_USERSSEL_TPL", "User select for operators entry");
 define('_MI_EGUIDE_EVENT_PRINT_TPL', '列印活動細節');
 define('_MI_EGUIDE_RECEIPT_TPL', '報名名單');
 define('_MI_EGUIDE_ADMIN_TPL', '活動表格');

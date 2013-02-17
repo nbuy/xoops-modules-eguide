@@ -83,6 +83,7 @@ define("_MI_EGUIDE_EXPORT_LIST_DESC","Item `name' or `number' seperated comma(,)
 define("_MI_EGUIDE_INDEX_TPL", "Event Guide Top page list");
 define("_MI_EGUIDE_EVENT_TPL", "Details des Events");
 define("_MI_EGUIDE_ENTRY_TPL", "Reservierungseintrag");
+define("_MI_EGUIDE_USERSSEL_TPL", "User select for operators entry");
 define("_MI_EGUIDE_EVENT_PRINT_TPL", "Detail of Event for Print");
 define("_MI_EGUIDE_RECEIPT_TPL", "Reservierungsliste");
 define("_MI_EGUIDE_ADMIN_TPL", "Event Entry Form");

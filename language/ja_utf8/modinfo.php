@@ -82,6 +82,7 @@ define("_MI_EGUIDE_EXPORT_LIST_DESC","フィールド名または、フィール
 define("_MI_EGUIDE_INDEX_TPL", "イベント案内トップの一覧");
 define("_MI_EGUIDE_EVENT_TPL", "個別イベントの詳細表示");
 define("_MI_EGUIDE_ENTRY_TPL", "担当者による予約登録画面");
+define("_MI_EGUIDE_USERSSEL_TPL", "予約登録ユーザの選択");
 define("_MI_EGUIDE_EVENT_PRINT_TPL", "個別イベントの詳細印刷");
 define("_MI_EGUIDE_RECEIPT_TPL", "予約受付の一覧表示");
 define("_MI_EGUIDE_ADMIN_TPL", "イベント投稿フォーム");
