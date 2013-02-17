@@ -317,6 +317,21 @@ td,th { padding: 4px; background: #e8e8e8;}
       When an application for the event,
       confirm email address to add a field to verify that it matches the address.
      </dd>
+    <dt>need_bind_uid (Force user setting when register reservation)</dt>
+    <dd>
+      <tt>need_bind_uid=1</tt>
+      Need setup user when resister reservation by moderator/admin.
+    </dd>
+    <dt>users_search_columns (Search columns when user selecting)</dt>
+    <dd>
+      <tt>users_search_columns=uname,email</tt>
+      Setup user for register reservation by moderator/admin.
+      Searching/Display columns name list for <tt>users</tt> table joined by comma(,).
+    </dd>
+    <dt>users_search_labels (Searching/Display column display labels)</dt>
+    <dd>
+      <tt>users_search_columns=Username,EMAIL</tt>
+    </dd>
   </dl>
 
   <a name="form"></a><h5>Additional fields Format</h5>
@@ -460,6 +475,12 @@ max_register_in_future=2
   <a name="changes"></a><h5>Changes</h5>
 
 <dl>
+  <dt>2013/02/17 eguide 2.70 released</dt>
+  <dd>
+    <ul>
+      <li>Register reservation bind for user account</li>
+    </ul>
+  </dd>
   <dt>2011/09/10 eguide 2.64 released</dt>
   <dd>
     <ul>
