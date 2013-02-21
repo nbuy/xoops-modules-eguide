@@ -150,7 +150,7 @@ function eventform($data, $uid) {
     if (empty($data['reservation'])) return null;
 
     $form = array('uid'=>$uid, 'poster'=>$poster,
-	'uname'=>$uid?$poster->getVar('uname'):$GLOBALS['xoopsConfig']['anonymous']);
+	'uname'=>$uid>0?$poster->getVar('uname'):$GLOBALS['xoopsConfig']['anonymous']);
     $optfield = $data['optfield'];
     // reservation form
     if (isset($_POST['email'])) {

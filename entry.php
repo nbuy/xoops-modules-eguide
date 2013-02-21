@@ -117,6 +117,9 @@ if (param('op', '')=='users' || ($member_only && !$uid)) {
     
     $res = $xoopsDB->query("SELECT uid,$cols $cond", $max_list, $start);
     $users = array();
+    if (empty($s)) {
+	$users[] = array('uid'=>-1, 'uname'=>$GLOBALS['xoopsConfig']['anonymous']);
+    }
     while ($user = $xoopsDB->fetchArray($res)) {
 	$users[] = $user;
     }
