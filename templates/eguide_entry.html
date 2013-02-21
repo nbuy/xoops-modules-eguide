@@ -24,7 +24,9 @@
 <tr class="<{$fm.attr}> <{cycle values="even,odd"}>"><td class="head"><{$fm.label}></td><td><{$fm.value}><{$fm.comment}></td></tr>
 <{/foreach}>
 </table>
+<{if $form.uid>0}>
 <input type="hidden" name="uid" id="reserv_uid" value="<{$form.uid}>" />
+<{/if}>
 <input type="hidden" name="eid" value="<{$form.eid}>" />
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
