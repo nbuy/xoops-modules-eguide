@@ -36,7 +36,7 @@ function reserv_permit($ruid, $euid, $confirm) {
 
 switch ($op) {
 case 'delete':
-    $result = $xoopsDB->query('SELECT email,r.eid,r.exid,r.status,e.uid,r.uid ruid, info, confirm, optfield, cdate, counter, style, persons, IF(exdate,exdate,edate) edate, notify, title, closetime,IF(x.reserved IS NULL,o.reserved,x.reserved) reserved FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.OPTBL.' o ON r.eid=o.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid");
+    $result = $xoopsDB->query('SELECT email,r.eid,r.exid,r.status,e.uid,r.uid ruid, operator, info, confirm, optfield, cdate, counter, style, persons, IF(exdate,exdate,edate) edate, notify, title, closetime,IF(x.reserved IS NULL,o.reserved,x.reserved) reserved FROM '.RVTBL.' r LEFT JOIN '.EGTBL.' e ON r.eid=e.eid LEFT JOIN '.OPTBL.' o ON r.eid=o.eid LEFT JOIN '.EXTBL." x ON r.exid=x.exid WHERE rvid=$rvid");
     if (!$result || $xoopsDB->getRowsNum($result)==0) {
 	$result = false;
     } else {		// there is reservation
@@ -91,7 +91,7 @@ case 'delete':
 		    }
 		}
 	    }
-	    if ($data['notify']) {
+	    if ($data['notify'] && empty($data['operator'])) {
 		$poster = new XoopsUser($data['uid']);
 		$title = eventdate($data['edate'])." ".$data['title'];
 		$email = $data['email'];
