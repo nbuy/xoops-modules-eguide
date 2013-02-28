@@ -13,6 +13,13 @@ $uid = $xoopsUser->getVar('uid');
 include XOOPS_ROOT_PATH.'/header.php';
 $xoopsOption['template_main'] = EGPREFIX.'_mylist.html';
 
+if (isset($_GET['uid']) && $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
+   $uid = (int)$_GET['uid'];
+   $user = new XoopsUser($uid);
+   $xoopsTpl->assign('show_user',$user);
+}
+assign_module_css();
+
 $res = $xoopsDB->query('SELECT count(rvid) FROM '.RVTBL.' WHERE uid='.$uid);
 list($rvcount) = $xoopsDB->fetchRow($res);
 $rvmax = $xoopsModuleConfig['max_list'];

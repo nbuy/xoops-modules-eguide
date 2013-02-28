@@ -35,7 +35,10 @@
   </tr>
   <{foreach item=user from=$users}>
   <tr class="<{cycle values="even,odd"}>">
-    <td><a href="entry.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_RESERV_REGISTER}></a></td>
+    <td>
+      <a href="entry.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_RESERV_REGISTER}></a>
+      <{if $xoops_isadmin && $user.uid>0}>| <a href="mylist.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_DETAIL}></a> <{/if}>
+    </td>
     <{foreach item=col from=$columns}>
     <td><{$user[$col]|escape}></td>
     <{/foreach}>
