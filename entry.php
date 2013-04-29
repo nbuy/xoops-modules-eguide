@@ -9,6 +9,7 @@ $eid = param('eid');
 $exid = param('sub');
 $uid = param('uid');
 $data = fetch_event($eid, $exid, true);
+$data['past_register'] = eguide_form_options('enable_past_register', 0);
 $errs = array();
 $now=time();
 $member_only = $xoopsModuleConfig['member_only']==1;
@@ -18,6 +19,7 @@ if (isset($_POST['eid'])) {
     $myts =& MyTextSanitizer::getInstance();
 
     $vals = get_opt_values($data['optfield'], $errs, false, false);
+
     check_prev_order($data, $vals, $errs, true);
     $value = serialize_text($vals);
     $url = EGUIDE_URL.'/receipt.php?eid='.$eid;
@@ -74,7 +76,7 @@ if (is_object($module) && $module->getVar('isactive')==1) {
 }
 // page title
 $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | "._MD_RESERVATION);
-if ($data['closedate'] < $now  && !eguide_form_options('enable_past_register', 0)) {
+if ($data['closedate'] < $now  && !$data['past_register']) {
     if ($data['reservation']) $xoopsTpl->assign('message', _MD_RESERV_CLOSE);
 } elseif ($data['reservation']) {
     $reserved = false;

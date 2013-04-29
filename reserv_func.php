@@ -82,7 +82,7 @@ function check_prev_order($data, $vals, &$errs, $force=false) {
     }
     // stop reservation or limit over
     if (empty($data['reservation']) ||
-	($data['edate']-$data['closetime'])<time()) {
+	($data['past_register'] && $data['edate']-$data['closetime'])<time()) {
 	if (empty($errs)) $errs[] = _MD_RESERV_STOP;
     }
 
