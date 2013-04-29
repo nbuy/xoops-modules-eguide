@@ -381,6 +381,11 @@ td,th { padding: 4px; background: #e8e8e8;}
     <dd>
       <tt>users_search_columns=ユーザ名,EMAIL</tt>
     </dd>
+    <dt>enable_past_register=yes</dt>
+    <dd>
+       イベントの締め切り後も管理者による予約登録を許可する。
+       指定しない場合、締め切り後の登録は「受付を終了しました」となり行えない。
+    </dd>
   </dl>
 
   <a name="form"></a><h5>フォームの追加項目</h5>
@@ -520,9 +525,10 @@ max_register_in_future=2
   <a name="changes"></a><h5>変更履歴</h5>
 
 <dl>
-  <dt>2013/02/17 イベント案内モジュール 2.70 リリース</dt>
+  <dt>2013/04/29 イベント案内モジュール 2.70 リリース</dt>
   <dd>
     <ul>
+      <li>締め切り後に管理者の予約登録を可能にするオプション変数 (enable_past_register) を追加</li>
       <li>予約登録において登録ユーザとの紐付けを行う</li>
     </ul>
   </dd>

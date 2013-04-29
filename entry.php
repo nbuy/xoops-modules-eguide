@@ -74,7 +74,7 @@ if (is_object($module) && $module->getVar('isactive')==1) {
 }
 // page title
 $xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | "._MD_RESERVATION);
-if ($data['closedate'] < $now) {
+if ($data['closedate'] < $now  && !eguide_form_options('enable_past_register', 0)) {
     if ($data['reservation']) $xoopsTpl->assign('message', _MD_RESERV_CLOSE);
 } elseif ($data['reservation']) {
     $reserved = false;

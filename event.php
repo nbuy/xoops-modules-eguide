@@ -75,7 +75,8 @@ set_eguide_breadcrumbs($data['topicid'], array($title=>''));
 $xoopsTpl->assign('event', $data);
 if (isset($pidate)) $xoopsTpl->assign('caldate', $pidate);
 // page title
-$xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".$title);if ($data['closedate'] < $now) {
+$xoopsTpl->assign('xoops_pagetitle', $xoopsModule->getVar('name')." | ".$title);
+if ($data['closedate'] < $now) {
     if ($data['reservation']) $xoopsTpl->assign('message', _MD_RESERV_CLOSE);
 } elseif ($data['reservation']) {
     $reserved = false;
