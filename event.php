@@ -99,7 +99,7 @@ if ($data['closedate'] < $now) {
 	}
 	if ($reserved) {
 	    $xoopsTpl->assign('message', _MD_RESERVED);
-	} elseif ($ok) $xoopsTpl->assign('form', eventform($data));
+	} elseif ($ok) $xoopsTpl->assign('form', eventform($data, 0));
     }
 }
 

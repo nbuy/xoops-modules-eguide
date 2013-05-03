@@ -145,6 +145,7 @@ function apply_user_vars($text) {
 function eventform($data, $uid) {
     global $xoopsUser, $xoopsModuleConfig;
     $poster = isset($uid)?new XoopsUser($uid):$xoopsUser;
+    $uid = is_object($poster)?$poster->getVar('uid'):0;
     $myts =& MyTextSanitizer::getInstance();
 
     if (empty($data['reservation'])) return null;
