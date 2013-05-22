@@ -163,7 +163,7 @@ function eventform($data, $uid) {
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $form['check'] = array();
     $mo = $xoopsModuleConfig['member_only'];
-    $mo = ($mo && is_object($poster)?$mo!=ACCEPT_MEMBER:0);
+    $mo = ($mo && is_object($xoopsUser)?$mo!=ACCEPT_MEMBER:0);
     $form['member_only'] = $mo;
     if (!$mo) $form['check']['email'] = preg_replace('/\\*$/', '', _MD_EMAIL).": ".strip_tags(_MD_ORDER_NOTE1);
     $items = array();
@@ -268,9 +268,9 @@ function eventform($data, $uid) {
 		    if ($type=='radio') {
 			$sub++;
 			if (isset($args[1])) {
-			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>".$args[1]." ";
+			    $opts .= "<label><input type='$type' name='$fname' value='$an'$ck $prop/>".$args[1]."</label> ";
 			} else {
-			    $opts .= "<input type='$type' name='$fname' value='$an'$ck $prop/>$an &nbsp; ";
+			    $opts .= "<label><input type='$type' name='$fname' value='$an'$ck $prop/>$an</label> &nbsp; ";
 			}
 		    } elseif (in_array($type, array('text','textarea','const'))) {
 			if (!isset($_POST[$fname])) {
@@ -281,7 +281,7 @@ function eventform($data, $uid) {
 			    $ck = in_array($an, $_POST[$fname])?' checked':'';
 			}
 			$lab = empty($args[1])?"$an &nbsp; ":$args[1]." ";
-			$opts .= "<input type='$type' name='${fname}[]' id='${fname}[]' value='$an'$ck $prop/>".$lab;
+			$opts .= "<label><input type='$type' name='${fname}[]' id='${fname}[]' value='$an'$ck $prop/>".$lab."</label>";
 		    } elseif ($type=='select') {
 			if ($ck != "") $ck = " selected";
 			$lab = empty($args[1])?$an:$args[1];
