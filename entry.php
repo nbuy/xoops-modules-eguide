@@ -12,7 +12,7 @@ $data = fetch_event($eid, $exid, true);
 $data['past_register'] = eguide_form_options('enable_past_register', 0);
 $errs = array();
 $now=time();
-$member_only = $xoopsModuleConfig['member_only']==1;
+$member_only = ($xoopsModuleConfig['member_only']!=ACCEPT_EMAIL && $uid>0);
 
 if (isset($_POST['eid'])) {
     include 'reserv_func.php';

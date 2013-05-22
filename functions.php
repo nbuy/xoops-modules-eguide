@@ -144,7 +144,7 @@ function apply_user_vars($text) {
 
 function eventform($data, $uid) {
     global $xoopsUser, $xoopsModuleConfig;
-    $poster = isset($uid)?new XoopsUser($uid):$xoopsUser;
+    $poster = $uid?new XoopsUser($uid):$xoopsUser;
     $uid = is_object($poster)?$poster->getVar('uid'):0;
     $myts =& MyTextSanitizer::getInstance();
 
@@ -162,8 +162,7 @@ function eventform($data, $uid) {
     $form['email_conf'] = $myts->makeTboxData4Edit($conf);
     $form['user_notify'] = $xoopsModuleConfig['user_notify'];
     $form['check'] = array();
-    $mo = $xoopsModuleConfig['member_only'];
-    $mo = ($mo && is_object($xoopsUser)?$mo!=ACCEPT_MEMBER:0);
+    $mo = ($xoopsModuleConfig['member_only']!=ACCEPT_EMAIL && is_object($poster));
     $form['member_only'] = $mo;
     if (!$mo) $form['check']['email'] = preg_replace('/\\*$/', '', _MD_EMAIL).": ".strip_tags(_MD_ORDER_NOTE1);
     $items = array();
