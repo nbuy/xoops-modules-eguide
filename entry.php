@@ -47,7 +47,9 @@ if (isset($_POST['eid'])) {
 			    $xoopsDB->quoteString($value).")");
 	    $data['rvid'] = $xoopsDB->getInsertId();
 	    $data['reserv_uid'] = $uid;
-	    order_notify($data, $email, $value); // error ignore
+	    if ($data['edate']-$data['closetime']>$now) {
+		order_notify($data, $email, $value); // error ignore
+	    }
 	    redirect_header($url, 1, _MD_DBUPDATED);
 	    exit;
 	} else $errs[] = _MD_RESERV_FULL;
