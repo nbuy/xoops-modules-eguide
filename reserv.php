@@ -91,7 +91,7 @@ case 'delete':
 		    }
 		}
 	    }
-	    if ($data['notify'] && empty($data['operator'])) {
+	    if ($data['notify'] && empty($data['operator']) && ($data['edate']-$data['closetime']>$now)) {
 		$poster = new XoopsUser($data['uid']);
 		$title = eventdate($data['edate'])." ".$data['title'];
 		$email = $data['email'];
@@ -363,7 +363,7 @@ case 'cancel':
 	$data['email'] = $email;
     }
     if ($result) {
-	if (!$isadmin && isset($date['edate']) && $data['edate']-$data['closetime']<$now) {
+	if (!$isadmin && isset($data['edate']) && $data['edate']-$data['closetime']<$now) {
 	    echo "<div class='evform'>\n";
 	    echo "<div class='error'>"._MD_RESERV_NOCANCEL."</div>\n";
 	    echo "</div>\n";
