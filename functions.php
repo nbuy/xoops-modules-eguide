@@ -151,7 +151,7 @@ function eventform($data, $uid) {
     if (empty($data['reservation'])) return null;
 
     $form = array('uid'=>$uid, 'poster'=>$poster,
-	'uname'=>$uid>0?$poster->getVar('uname'):$GLOBALS['xoopsConfig']['anonymous']);
+		  'uname'=>display_username($uid));
     $optfield = $data['optfield'];
     // reservation form
     if (isset($_POST['email'])) {
@@ -495,6 +495,16 @@ exid, exdate, strict, autoaccept, notify, optvars";
 	eguide_form_options(unserialize_vars($data['optvars']));
     }
     return $data;
+}
+
+function display_username($uid, $ancher=false) {
+    $user = new XoopsUser((int)$uid);
+    $str = eguide_form_options('display_username', '{X_UNAME}');
+    if (!is_object($user)) return $GLOBALS['xoopsConfig']['anonymous'];
+    while (preg_match('/{X_(\w+)}/', $str, $d)) {
+	$str = str_replace($d[0], $user->getVar(strtolower($d[1])), $str);
+    }
+    return ($ancher?'<a href="'.XOOPS_URL.'/userinfo.php?uid='.$uid.'">'.$str.'</a>':$str);
 }
 
 if (!function_exists("template_dir")) {

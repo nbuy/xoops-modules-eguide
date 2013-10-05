@@ -386,14 +386,20 @@ td,th { padding: 4px; background: #e8e8e8;}
        イベントの締め切り後も管理者による予約登録を許可する。
        指定しない場合、締め切り後の登録は「受付を終了しました」となり行えない。
     </dd>
+    <dt>display_username={X_UNAME}</dt>
+    <dd>
+       予約ユーザの表示形式を指定する。規定値はユーザ名 "<tt>{X_UNAME}</tt>"。
+       "名前 (ユーザ)" の形式で表示する場合、以下のように指定する。
+       <pre>display_username={X_NAME} ({X_UNAME})</pre>
+    </dd>
   </dl>
 
   <a name="form"></a><h5>フォームの追加項目</h5>
   <strong>予約処理</strong> における追加項目は、申込時のフォームで入力する
   項目を指定できる。指定の書式は次通り。
   <blockquote class="bnf">
-      行 ::= ["!"]項目名["*"][,タイプ[,引数...]]<p />
-      タイプ ::= {text|checkbox|radio|textarea|select|hidden|const}<br />
+      行 ::= ["!"]項目名["*"][,タイプ[,引数...]]<br/>
+      タイプ ::= {text|checkbox|radio|textarea|select|hidden|const}<br/>
       引数 ::= [値 ["+"] "="] ラベル
   </blockquote>
   <ul>
@@ -525,6 +531,12 @@ max_register_in_future=2
   <a name="changes"></a><h5>変更履歴</h5>
 
 <dl>
+  <dt>2013/10/05 イベント案内モジュール 2.71 リリース</dt>
+  <dd>
+    <ul>
+      <li>予約ユーザの表示形式のカスタマイズ (display_username) を追加</li>
+    </ul>
+  </dd>
   <dt>2013/05/30 イベント案内モジュール 2.70 リリース</dt>
   <dd>
     <ul>

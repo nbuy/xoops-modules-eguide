@@ -9,8 +9,9 @@ include 'perm.php';
 
 $eid = intval($_GET['eid']);
 
-$result = $xoopsDB->query("SELECT optfield FROM ".OPTBL." WHERE eid=$eid");
-list($optfield) = $xoopsDB->fetchRow($result);
+$result = $xoopsDB->query("SELECT optfield,optvars FROM ".OPTBL." WHERE eid=$eid");
+list($optfield,$optvars) = $xoopsDB->fetchRow($result);
+eguide_form_options(unserialize_vars($optvars));
 
 $fields = "e.eid, cdate, title, closetime,
 IF(expersons IS NULL,persons, expersons) persons, expersons,
@@ -87,11 +88,9 @@ while ($data = $xoopsDB->fetchArray($result)) {
     $member_handler =& xoops_gethandler('member');
     while ($rvdata = $xoopsDB->fetchArray($res)) {
 	$row = unserialize_text($rvdata['info']);
-	$user = $member_handler->getUser($rvdata['uid']);
-	$name = is_object($user)?$user->getVar('name'):'';
 	$row[_MD_ORDER_DATE] = formatTimestamp($rvdata['rdate'], 'Y-m-d H:i:s');
 	$row[_MD_EMAIL] = $rvdata['email'];
-	$row[_MD_UNAME] = is_object($user)?$user->getVar('uname').($name?" ($name)":""):$xoopsConfig['anonymous'];
+	$row[_MD_UNAME] = display_username($rvdata['uid']);
 	$row[_MD_RVID] = $rvdata['rvid'];
 	$vals = array();
 	foreach ($outs as $k) {

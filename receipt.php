@@ -70,8 +70,9 @@ $print = $op=='print';
 
 // make optional field and countable list.
 if ($eid) {
-    $result = $xoopsDB->query("SELECT optfield FROM ".OPTBL." WHERE eid=$eid");
+    $result = $xoopsDB->query("SELECT optfield,optvars FROM ".OPTBL." WHERE eid=$eid");
     $opts = $xoopsDB->fetchArray($result);
+    eguide_form_options(unserialize_vars($opts['optvars']));
     $item = array();
     foreach (explode("\n",preg_replace('/\r/','',$opts['optfield'])) as $ln) {
 	// comment line
@@ -126,7 +127,7 @@ if ($nrec && $op=='csv') {
 	$row = unserialize_text($a['info']);
 	$row[_MD_EMAIL] = $a['email'];
 	$row[_MD_ORDER_DATE] = formatTimestamp($a['rdate']);
-	$row[_MD_UNAME] = XoopsUser::getUnameFromId($a['uid']);
+	$row[_MD_UNAME] = display_username($a['uid']);
 	$row[_MD_RVID] = $a['rvid'];
 	$temp = array();
 	foreach ($outs as $k) {
@@ -274,7 +275,7 @@ case 'one':
     $items[] = array('label'=>_MD_RVID, 'value'=>"$rvid &nbsp; [$edit] &nbsp; [$del]");
     if ($data['email']) $items[] = array('label'=>_MD_EMAIL, 'value'=>$myts->displayTarea($data['email']));
     
-    if ($data['uid']) $items[] = array('label'=>_MD_UNAME, 'value'=>xoops_getLinkedUnameFromId($data['uid']));
+    if ($data['uid']) $items[] = array('label'=>_MD_UNAME, 'value'=>display_username($data['uid'], true));
     if ($rvdata['operator']) $items[] = array('label'=>_MD_RESERV_REGISTER, 'value'=>xoops_getLinkedUnameFromId($rvdata['operator']));
     $items[] = array('label'=>_MD_STATUS, 'value'=>$rv_stats[$data['status']]);
     $items[] = array('label'=>_MD_ORDER_DATE, 'value'=>formatTimestamp($data['rdate'], _MD_TIME_FMT));
@@ -351,7 +352,7 @@ default:
 	}
 	$order['add'] = $add;
 	if ($order['uid']) {
-	    $order['uname'] = XoopsUser::getUnameFromId($order['uid']);
+	    $order['uname'] = display_username($order['uid']);
 	}
 	$list[] = $order;
     }
