@@ -267,9 +267,9 @@ function eventform($data, $uid) {
 		    if ($type=='radio') {
 			$sub++;
 			if (isset($args[1])) {
-			    $opts .= "<label><input type='$type' name='$fname' value='$an'$ck $prop/>".$args[1]."</label> ";
+			    $opts .= "<label class='radio-inline'><input type='$type' name='$fname' value='$an'$ck $prop/>".$args[1]."</label> ";
 			} else {
-			    $opts .= "<label><input type='$type' name='$fname' value='$an'$ck $prop/>$an</label> &nbsp; ";
+			    $opts .= "<label class='radio-inline'><input type='$type' name='$fname' value='$an'$ck $prop/>$an</label> &nbsp; ";
 			}
 		    } elseif (in_array($type, array('text','textarea','const'))) {
 			if (!isset($_POST[$fname])) {
@@ -280,7 +280,7 @@ function eventform($data, $uid) {
 			    $ck = in_array($an, $_POST[$fname])?' checked':'';
 			}
 			$lab = empty($args[1])?"$an &nbsp; ":$args[1]." ";
-			$opts .= "<label><input type='$type' name='${fname}[]' id='${fname}[]' value='$an'$ck $prop/>".$lab."</label>";
+			$opts .= "<label class='checkbox-inline'><input type='$type' name='${fname}[]' id='${fname}[]' value='$an'$ck $prop/>".$lab."</label>";
 		    } elseif ($type=='select') {
 			if ($ck != "") $ck = " selected";
 			$lab = empty($args[1])?$an:$args[1];
@@ -295,11 +295,11 @@ function eventform($data, $uid) {
 		$v = htmlspecialchars($v);
 	    }
 	    if ($type == "text") {
-		$opts .= "<input size='$size' name='$fname' value=\"$v\" $prop/>";
+		$opts .= "<input type='text' size='$size' name='$fname' value=\"$v\" $prop class='form-control' />";
 	    } elseif ($type == "textarea") {
-		$opts .= "<textarea name='$fname' rows='$rows' cols='$cols' wrap='virtual' $prop>$v</textarea>";
+		$opts .= "<textarea name='$fname' rows='$rows' cols='$cols' wrap='virtual' $prop class='form-control' >$v</textarea>";
 	    } elseif ($type == "select") {
-		$opts = "<select name='$fname' $prop>\n$opts</select>";
+		$opts = "<select name='$fname' $prop class='form-control' >\n$opts</select>";
 	    } elseif ($type == "const") {
 		$opts = $v;
 	    }

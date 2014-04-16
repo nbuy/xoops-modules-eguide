@@ -2,109 +2,26 @@
 <{include file="db:eguide_event.html"}>
 <{/if}>
 <div class="event">
-<h2><{$lang_event_edit}></h2>
+<h2 class="page-header"><{$lang_event_edit}></h2>
 <!-- for DHTML calendar -->
-<link rel="stylesheet" type="text/css" media="all" href="<{$xoops_url}>/include/calendar-blue.css" />
-<script type="text/javascript" src="<{$xoops_url}>/include/calendar.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="<{$xoops_url}>/modules/eguide/class/bootstrap-datepicker/datepicker3.css" />
+<script type="text/javascript" src="<{$xoops_url}>/modules/eguide/class/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<{$xoops_url}>/modules/eguide/class/bootstrap-datepicker/locales/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
 <script type="text/javascript">
-<!--
-var calendar = null;
-
-function selected(cal, date) {
-  cal.sel.value = date;
-}
-
-function closeHandler(cal) {
-  cal.hide();
-  Calendar.removeEvent(document, "mousedown", checkCalendar);
-}
-
-function checkCalendar(ev) {
-  var el = Calendar.is_ie ? Calendar.getElement(ev) : Calendar.getTargetElement(ev);
-  for (; el != null; el = el.parentNode)
-    if (el == calendar.element || el.tagName == "A") break;
-  if (el == null) {
-    calendar.callCloseHandler(); Calendar.stopEvent(ev);
-  }
-}
-function showCalendar(id) {
-  var el = xoopsGetElementById(id);
-  if (calendar != null) {
-    calendar.hide();
-  } else {
-    var cal = new Calendar(<{if $smarty.const._MD_CAL_MONDAY_FIRST}>true<{else}>false<{/if}>, <{if $jstime}><{$jstime}><{else}>'null'<{/if}>, selected, closeHandler);
-    calendar = cal;
-    cal.setRange(<{$calrange[0]}>, <{$calrange[1]}>);
-    calendar.create();
-  }
-  calendar.sel = el;
-  calendar.parseDate(el.value);
-  calendar.showAtElement(el);
-  Calendar.addEvent(document, "mousedown", checkCalendar);
-  return false;
-}
-
-Calendar._DN = new Array
-<{if $weekname}>
-("<{$weekname.Sun}>", "<{$weekname.Mon}>", "<{$weekname.Tue}>",
- "<{$weekname.Wed}>", "<{$weekname.Thu}>", "<{$weekname.Fri}>",
- "<{$weekname.Sat}>", "<{$weekname.Sun}>");
-<{else}>
-("Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat", "Sun");
-<{/if}>
-
-Calendar._MN = new Array
-<{if $monthname}>
-(<{foreach from=$monthname item=month}>"<{$month}>",<{/foreach}>"");
-<{else}>
-("Jan", "Feb", "Mar", "Apr", "May", "Jun",
- "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
-<{/if}>
-
-Calendar._TT = {};
-<{if $calsetting}>
-Calendar._TT["TOGGLE"] = "<{$calsetting._CAL_TGL1STD}>";
-Calendar._TT["PREV_YEAR"] = "<{$calsetting._CAL_PREVYR}>";
-Calendar._TT["PREV_MONTH"] = "<{$calsetting._CAL_PREVMNTH}>";
-Calendar._TT["GO_TODAY"] = "<{$calsetting._CAL_GOTODAY}>";
-Calendar._TT["NEXT_MONTH"] = "<{$calsetting._CAL_NXTMNTH}>";
-Calendar._TT["NEXT_YEAR"] = "<{$calsetting._CAL_NEXTYR}>";
-Calendar._TT["SEL_DATE"] = "<{$calsetting._CAL_SELDATE}>";
-Calendar._TT["DRAG_TO_MOVE"] = "<{$calsetting._CAL_DRAGMOVE}>";
-Calendar._TT["PART_TODAY"] = "(<{$calsetting._CAL_TODAY}>)";
-Calendar._TT["MON_FIRST"] = "<{$calsetting._CAL_DISPM1ST}>";
-Calendar._TT["SUN_FIRST"] = "<{$calsetting._CAL_DISPS1ST}>";
-Calendar._TT["CLOSE"] = "<{$calsetting._CLOSE}>";
-Calendar._TT["TODAY"] = "<{$calsetting._CAL_TODAY}>";
-<{else}>
-Calendar._TT["TOGGLE"] = "<{$smarty.const._CAL_TGL1STD}>";
-Calendar._TT["PREV_YEAR"] = "<{$smarty.const._CAL_PREVYR}>";
-Calendar._TT["PREV_MONTH"] = "<{$smarty.const._CAL_PREVMNTH}>";
-Calendar._TT["GO_TODAY"] = "<{$smarty.const._CAL_GOTODAY}>";
-Calendar._TT["NEXT_MONTH"] = "<{$smarty.const._CAL_NXTMNTH}>";
-Calendar._TT["NEXT_YEAR"] = "<{$smarty.const._CAL_NEXTYR}>";
-Calendar._TT["SEL_DATE"] = "<{$smarty.const._CAL_SELDATE}>";
-Calendar._TT["DRAG_TO_MOVE"] = "<{$smarty.const._CAL_DRAGMOVE}>";
-Calendar._TT["PART_TODAY"] = "(<{$smarty.const._CAL_TODAY}>)";
-Calendar._TT["MON_FIRST"] = "<{$smarty.const._CAL_DISPM1ST}>";
-Calendar._TT["SUN_FIRST"] = "<{$smarty.const._CAL_DISPS1ST}>";
-Calendar._TT["CLOSE"] = "<{$smarty.const._CLOSE}>";
-Calendar._TT["TODAY"] = "<{$smarty.const._CAL_TODAY}>";
-<{/if}>
-
-// date formats
-Calendar._TT["DEF_DATE_FORMAT"] = "y-mm-dd";
-Calendar._TT["TT_DATE_FORMAT"] = "y-mm-dd";
-
-Calendar._TT["WK"] = "";
-//-->
+  $(document).ready(function() {
+    $('.jdate').datepicker({
+      format: "yyyy-mm-dd",
+      language: "zh-TW",
+      todayHighlight: true
+    });
+  });
 </script>
 
-<form action="admin.php<{if $eid}>?eid=<{$eid}><{/if}>" method="post" class="evbody" name="evform" id="evform" onsubmit="return xoopsFormValidate_evform();">
+<form action="admin.php<{if $eid}>?eid=<{$eid}><{/if}>" method="post" class="evbody form-inline" name="evform" id="evform" onsubmit="return xoopsFormValidate_evform();">
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td>
 <h3><{$smarty.const._MD_TITLE}></h3>
-<input type="text" name="title" id="title" value="<{$title}>" size="60" maxlength="80" />
+<input type="text" name="title" id="title" value="<{$title}>" size="60" maxlength="80" class="form-control" />
 </td><{if $input_category}><td>
 <h3><{$smarty.const._MD_EVENT_CATEGORY}></h3>
 <{$input_category}></td><{/if}></tr>
@@ -114,7 +31,7 @@ Calendar._TT["WK"] = "";
 <{$input_edate}> &nbsp;
 <{$smarty.const._MD_TIMEC}> 
 <{if $timetable}>
-  <select name="edatetime">
+  <select name="edatetime" class="form-control">
     <{foreach item=timeopt from=$timetable}>
       <option value="<{$timeopt.value}>"<{if $timeopt.value==$edatetime}> selected="selected"<{/if}>><{$timeopt.label}></option>
     <{/foreach}>
@@ -136,7 +53,7 @@ document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" id="da
   </legend>
   <div id="exdate">
     <p><b><{$smarty.const._MD_EVENT_EXPIRE}></b> <{$input_expire}></p>
-    <p><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>"/> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></p>
+    <p><b><{$smarty.const._MD_CLOSEBEFORE}></b> <input type="text" name="before" id="before" size="7" value="<{$before}>" class="form-control" /> <span class="evinfo"><{$smarty.const._MD_CLOSEBEFORE_DESC}></span></p>
     <{if $input_extent}>
     <p>
       <b><{$smarty.const._MD_EVENT_EXTENT}></b> <{$input_extent}>
@@ -153,23 +70,26 @@ document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" id="da
 </fieldset>
 <h3><{$smarty.const._MD_INTROTEXT}></h3>
 <{if $use_fckeditor}>
-<textarea id="summary" name="summary" wrap="virtual" cols="60" rows="10"><{$summary|escape}></textarea>
+<textarea id="summary" name="summary" wrap="virtual" cols="60" rows="10" class="form-control mce"><{$summary|escape}></textarea>
 <{else}>
 <{$summary_textarea}>
 <{/if}>
 <h3><{$smarty.const._MD_EXTEXT}></h3>
-<textarea name="body" wrap="virtual" cols="60" rows="10"><{$body}></textarea>
+<textarea name="body" wrap="virtual" cols="60" rows="10" class="form-control mce"><{$body}></textarea>
 
 <{if $use_fckeditor}>
-<script type="text/javascript" src="<{$xoops_url}>/common/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="<{$xoops_url}>/modules/eguide/class/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="<{$xoops_url}>/modules/eguide/class/tinymce/jquery.tinymce.min.js"></script>
 <script type="text/javascript">
-function fckeditor_exec(target, width, height, url) {
-	var oFCKeditor = new FCKeditor(target, width, height, "<{$use_fckeditor}>");
-	oFCKeditor.BasePath = "<{$xoops_url}>/common/fckeditor/";
-	oFCKeditor.ReplaceTextarea();
-}
-fckeditor_exec("summary", "100%", "350");
-fckeditor_exec("body", "100%", "350");
+tinymce.init({
+    selector: "textarea.mce",
+    theme: "modern",
+    language : "zh_TW",
+    plugins: ["advlist autolink lists link image charmap print preview anchor",
+        "searchreplace visualblocks code fullscreen",
+        "insertdatetime media table contextmenu paste"],
+    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+});
 </script>
 <input type="hidden" name="style" value="0" />
 <{else}>
@@ -178,19 +98,23 @@ fckeditor_exec("body", "100%", "350");
 <{/if}>
 
 <h3><{$smarty.const._MD_RESERV_SETTING}></h3>
-<div><input type="checkbox" name="reservation" value="1"<{if $reservation}> checked<{/if}>/> <{$smarty.const._MD_RESERV_DESC}></div>
+<div><label class="checkbox-inline"><input type="checkbox" name="reservation" value="1"<{if $reservation}> checked<{/if}>/> <{$smarty.const._MD_RESERV_DESC}><label></div>
 <div>
+  <label class="checkbox-inline">
   <input type="checkbox" name="strict" value="1"<{if $strict}> checked<{/if}>/> <{$smarty.const._MD_RESERV_STOPFULL}>
+  </label>
+  <label class="checkbox-inline">
   <input type="checkbox" name="autoaccept" value="1"<{if $autoaccept}> checked<{/if}>/> <{$smarty.const._MD_RESERV_AUTO}>
+  </label>
 </div>
-<div><input type="checkbox" name="notify" value="1"<{if $notify}> checked<{/if}>/> <{$smarty.const._MD_RESERV_NOTIFYPOSTER}></div>
-<div><b><{$smarty.const._MD_RESERV_PERSONS}></b> <input type="text" name="persons" value="<{$persons}>" size="3" /> <{$smarty.const._MD_RESERV_UNIT}></div>
+<div><label class="checkbox-inline"><input type="checkbox" name="notify" value="1"<{if $notify}> checked<{/if}>/> <{$smarty.const._MD_RESERV_NOTIFYPOSTER}></label></div>
+<div><b><{$smarty.const._MD_RESERV_PERSONS}></b> <input type="text" name="persons" value="<{$persons}>" size="3" class="form-control" /> <{$smarty.const._MD_RESERV_UNIT}></div>
 <h3><{$smarty.const._MD_RESERV_ITEM}></h3>
-<textarea name="optfield" wrap="virtual" cols="60" rows="5"><{$optfield}></textarea>
-<div id="itemhelper" style="display:none;">
-  <{$smarty.const._MD_RESERV_LAB}> <input name="xelab" size="10">
+<textarea name="optfield" wrap="virtual" cols="100" rows="10" class="form-control"><{$optfield}></textarea>
+<div id="itemhelper" style="display:none;margin-top:5px;">
+  <{$smarty.const._MD_RESERV_LAB}> <input type="text" name="xelab" size="10" class="form-control">
   <input type="checkbox" name="xereq" title="<{$smarty.const._MD_RESERV_REQ}>">
-  <select name="xetype">
+  <select name="xetype" class="form-control">
     <option value="text">text</option>
     <option value="checkbox">checkbox</option>
     <option value="radio">radio</option>
@@ -199,8 +123,8 @@ fckeditor_exec("body", "100%", "350");
     <option value="hidden">hidden</option>
     <option value="const">const</option>
   </select>
-  <input name="xeopt" size="30" />
-  <button onClick="return addFieldItem();"><{$smarty.const._MD_RESERV_ADD}></button>
+  <input type="text" name="xeopt" size="30" class="form-control" />
+  <button onClick="return addFieldItem();" class="btn btn-default"><{$smarty.const._MD_RESERV_ADD}></button>
 </div>
 <div class="evinfo">
   <{$smarty.const._MD_RESERV_ITEM_DESC}> <{$label_desc}></div>
@@ -217,23 +141,24 @@ document.write('<input type="checkbox" onClick="toggle(\'optvars\',this);" id="o
   </legend>
   <div id="optvars">
     <h3><{$smarty.const._MD_RESERV_REDIRECT}></h3>
-    <input type="text" name="redirect" value="<{$optvars.redirect|escape}>" size="60" />
+    <input type="text" name="redirect" value="<{$optvars.redirect|escape}>" size="60" class="form-control" />
     <div class="evinfo"><{$smarty.const._MD_RESERV_REDIRECT_DESC}></div>
     
     <h3><{$smarty.const._MD_OPTION_OTHERS}></h3>
-    <textarea name="opt_others" cols="60" rows="4"><{$opt_others|escape}></textarea>
+    <textarea name="opt_others" cols="60" rows="4" class="form-control"><{$opt_others|escape}></textarea>
   </div>
 </fieldset>
 <{if $input_status}>
 <p><{$input_status}></p>
 <{/if}>
-<p>
+
 <{if $eid && $enable_copy}>
-<div><input type="checkbox" name="eid" value="0"><{$smarty.const._MD_NEWTITLE}></div>
+<div class="checkbox"><label><input type="checkbox" name="eid" value="0"> <{$smarty.const._MD_NEWTITLE}></label></div>
 <{/if}>
-<input type="submit" name="preview" value="<{$smarty.const._MD_PREVIEW}>" />
-<input type="submit" name="save" value="<{$smarty.const._MD_SAVE}>" />
-</p>
+<div style="margin-top:10px">
+<input type="submit" name="preview" value="<{$smarty.const._MD_PREVIEW}>" class="btn btn-default" />
+<input type="submit" name="save" value="<{$smarty.const._MD_SAVE}>" class="btn btn-primary" />
+</div>
 </form>
 <script type="text/javascript">
 <!--//

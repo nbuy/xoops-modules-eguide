@@ -238,28 +238,28 @@ case 'active':
     break;
 
 case 'edit':
-    echo "<h4>"._MD_RESERV_EDIT."</h4>";
-    echo "<form action='receipt.php' method='post'>\n";
+    echo "<h3 class='page-header'>"._MD_RESERV_EDIT."</h3>";
+    echo "<form action='receipt.php' method='post' class='form-inline'>\n";
     echo "<input type='hidden' name='op' value='save' />\n";
     echo "<input type='hidden' name='rvid' value='$rvid' />\n";
     echo "<input type='hidden' name='eid' value='$eid' />\n";
-    echo "<table class='outer'>\n";
+    echo "<table class='outer table table-bordered table-striped'>\n";
     echo "<tr><th align='left'>"._MD_RVID."</th><td class='even'>$rvid</td></tr>\n";
     echo "<tr><th align='left'>"._MD_ORDER_DATE."</th><td class='odd'>".formatTimestamp($data['rdate'], _MD_TIME_FMT)."</td></tr>\n";
-    echo "<tr><th align='left'>"._MD_EMAIL."</th><td class='even'><input size='40' name='email' value='".$data['email']."' /></td></tr>\n";
+    echo "<tr><th align='left'>"._MD_EMAIL."</th><td class='even'><input type='text' size='40' name='email' value='".$data['email']."' class='form-control' /></td></tr>\n";
     echo "<tr><th align='left'>"._MD_STATUS."</th><td class='odd'>\n";
     $s = $data['status'];
-    echo "<select name='status'>\n";
+    echo "<select name='status' class='form-control'>\n";
     foreach ($rv_stats as $i => $v) {
 	$ck = ($i==$s)?" selected":"";
 	echo "<option value='$i'$ck>$v</option>\n";
     }
     echo "</select></td></tr>\n";
     echo "<tr><th align='left'>"._MD_RESERV_ITEM."</th><td class='even'>\n";
-    echo "<textarea name='info' cols='40' rows='5'>".
+    echo "<textarea name='info' cols='40' rows='5' class='form-control'>".
 	htmlspecialchars($data['info'])."</textarea>\n";
     echo "</td></tr>\n";
-    echo "<tr><th></th><td class='odd'><input type='submit' value='"._MD_SAVECHANGE."' /></td></tr>\n";
+    echo "<tr><th></th><td class='odd'><input type='submit' value='"._MD_SAVECHANGE."' class='btn btn-primary' /></td></tr>\n";
     echo "</table>\n</form>\n";
     echo "<p align='center'>$backanc</p>\n";
     break;
@@ -268,11 +268,11 @@ case 'one':
     
     $xoopsOption['template_main'] = EGPREFIX.'_confirm.html';
     $xoopsTpl->assign('lang_title', _MD_RESERV_REC);
-    $edit = "<a href='receipt.php?op=edit&rvid=$rvid'>"._EDIT."</a>";
-    $del ="<a href='reserv.php?op=cancel&rvid=$rvid&back='>"._MD_RESERV_DEL."</a>";
+    $edit = "<a href='receipt.php?op=edit&rvid=$rvid' class='btn btn-primary btn-xs' role='button'>"._EDIT."</a>";
+    $del ="<a href='reserv.php?op=cancel&rvid=$rvid&back=' class='btn btn-danger btn-xs' role='button'>"._MD_RESERV_DEL."</a>";
     
     $items = array();
-    $items[] = array('label'=>_MD_RVID, 'value'=>"$rvid &nbsp; [$edit] &nbsp; [$del]");
+    $items[] = array('label'=>_MD_RVID, 'value'=>"$rvid &nbsp; $edit &nbsp; $del");
     if ($data['email']) $items[] = array('label'=>_MD_EMAIL, 'value'=>$myts->displayTarea($data['email']));
     
     if ($data['uid']) $items[] = array('label'=>_MD_UNAME, 'value'=>display_username($data['uid'], true));

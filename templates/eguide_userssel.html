@@ -11,12 +11,12 @@
 <{else}>
 <div class="entlist">
 <div id="users_search">
-<form action="entry.php">
+<form action="entry.php" class="form-inline">
 <input type="hidden" name="eid" value="<{$form.eid}>" />
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
 <{/if}>
-<input name="search" value="<{$smarty.get.search|escape}>"/> <input type="submit" value="<{$smarty.const._SEARCH}>"/>
+<input type="text" name="search" value="<{$smarty.get.search|escape}>" class="form-control" /> <input type="submit" value="<{$smarty.const._SEARCH}>" class="btn btn-default" />
 </form>
 </div>
 <table width="100%">
@@ -26,7 +26,7 @@
     <td width="20%"></td>
   </tr>
 </table>
-<table class="outer" align="center" cellspacing="1" border="0">
+<table class="outer table table-bordered table-striped" align="center" cellspacing="1" border="0">
   <tr class="head">
     <th></th>
     <{foreach item=col from=$columns}>

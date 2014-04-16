@@ -1,7 +1,7 @@
 <{if $event.eid}>
 <{include file="db:eguide_item.html"}>
 <{else}>
-  <h2><{$smarty.const._MD_NOTIFY_EVENT}></h2>
+  <h3 class="page-header"><{$smarty.const._MD_DETAIL}></h3>
 <{/if}>
 <{if $errors}>
 <div class="error">
@@ -13,7 +13,7 @@
 
 <div class="evform">
 <{if $items}>
-  <table cellspacing="1" cellpadding="2" border="0" class="outer">
+  <table cellspacing="1" cellpadding="2" border="0" class="outer table table-bordered table-striped">
   <{foreach key=lab item=fm from=$items name=item}>
     <{if preg_match("/^-/", $items[$smarty.foreach.item.iteration].label)}>
       <{if empty($form_continue)}>
@@ -34,7 +34,7 @@
 <{/if}>
   <div class="evtbl">
     <{if $values}>
-    <table cellspacing="1" cellpadding="2" border="0" class="outer">
+    <table cellspacing="1" cellpadding="2" border="0" class="outer table table-bordered table-striped">
       <{foreach key=lab item=val from=$values}>
 	<tr class="<{cycle values="even,odd"}>"><td class="head"><{$lab}></td><td><{$val|escape}></td></tr>
       <{/foreach}>

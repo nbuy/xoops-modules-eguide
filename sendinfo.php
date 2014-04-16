@@ -57,11 +57,11 @@ if ($op=="doit") {
 } else {
     $result = $xoopsDB->query("SELECT status, count(rvid) FROM ".RVTBL." WHERE eid=$eid AND exid=$exid GROUP BY status");
     
-    echo "<h3>"._MD_INFO_TITLE."</h3>\n";
+    echo "<h3 class='page-header'>"._MD_INFO_TITLE."</h3>\n";
     echo "<form action='sendinfo.php' method='post'>\n";
-    echo "<b>"._MD_INFO_CONDITION."</b> ";
+    echo "<div class='form-group'><label>"._MD_INFO_CONDITION."</label> ";
     if ($xoopsDB->getRowsNum($result)) {
-	echo "<select name='status'>\n";
+	echo "<select name='status' class='form-control'>\n";
 	while ($data = $xoopsDB->fetchArray($result)) {
 	    $s = $data['status'];
 	    $n = $data['count(rvid)'];
@@ -69,20 +69,20 @@ if ($op=="doit") {
 	    echo "<option value='$s'$ck>".$rv_stats[$s]." - ".
 		sprintf(_MD_INFO_COUNT, $n)."</option>\n";
 	}
-	echo "</select>";
+	echo "</select></div>";
     }
     $result = $xoopsDB->query("SELECT count(rvid) FROM ".RVTBL." WHERE eid=0");
     list($ord)=$xoopsDB->fetchRow($result);
-    $notify = ($ord)?("&nbsp;&nbsp; <input type='checkbox' name='request' /> "._MD_INFO_REQUEST." (".sprintf(_MD_INFO_COUNT, $ord).")"):"";
-    echo "$notify<br />\n";
+    $notify = ($ord)?("<div class='checkbox'><label><input type='checkbox' name='request' /> "._MD_INFO_REQUEST." (".sprintf(_MD_INFO_COUNT, $ord).")</label></div>"):"";
+    echo "$notify\n";
     echo "<input type='hidden' name='op' value='doit' />\n".
 	"<input type='hidden' name='eid' value='$eid' />\n".
 	"<input type='hidden' name='sub' value='$exid' />\n".
-	"<p><b>"._MD_TITLE."</b> ".
-	"<input name='title' size='60' value='Re: $title' /></p>\n".
-	"<p><textarea name='body' cols='60' rows='10'>"._MD_INFO_DEFAULT."</textarea></p>\n".
-	"<p><input type='checkbox' name='self' value='1' checked /> ".sprintf(_MD_INFO_SELF, $xoopsUser->email())."</p>\n".
-	"<input type='submit' value='"._SUBMIT."' />\n".
+	"<div class='form-group'><label>"._MD_TITLE."</label> ".
+	"<input type='text' name='title' size='60' value='Re: $title' class='form-control' /></div>\n".
+	"<textarea name='body' cols='60' rows='10' class='form-control'>"._MD_INFO_DEFAULT."</textarea>\n".
+	"<div class='checkbox'><label><input type='checkbox' name='self' value='1' checked /> ".sprintf(_MD_INFO_SELF, $xoopsUser->email())."</label></div>\n".
+	"<input type='submit' value='"._SUBMIT."' class='btn btn-primary' />\n".
 	"</form>";
 }
 

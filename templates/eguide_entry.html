@@ -10,14 +10,15 @@
 </div>
 <{elseif $form}>
 <a name="form"></a>
+<div class="well">
 <div class="entform">
 <div class="evtitle"><{$smarty.const._MD_RESERV_REGISTER}></div>
-<form action="entry.php" method="post">
-<table class="outer" align="center" cellspacing="1" border="0">
+<form action="entry.php" method="post" class="form-inline">
+<table class="outer table table-bordered table-striped" align="center" cellspacing="1" border="0">
 <tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
 <tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_UNAME}></td><td><{$form.uname}></td></tr>
 <{if !$form.member_only}>
-<tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}></td><td><input size="40" name="email" value="<{$form.email}>"/>
+<tr class="<{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}></td><td><input type="text" size="40" name="email" value="<{$form.email}>" class="form-control" />
 </td></tr>
 <{/if}>
 <{foreach from=$form.items item=fm}>
@@ -31,10 +32,11 @@
 <{if $event.exid}>
 <input type="hidden" name="sub" value="<{$event.exid}>" />
 <{/if}>
-<{if $form.note}>
-  <div align='right'><{$form.note}></div>
-<{/if}>
-<p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" /></p>
+<p style="text-align: center;"><input type="submit" value="<{$smarty.const._MD_ORDER_SEND}>" class="btn btn-primary" /></p>
 </form>
+</div>
+<{if $form.note}>
+  <div align='right'><span class="label label-danger"><{$form.note}></span></div>
+<{/if}>
 </div>
 <{/if}>

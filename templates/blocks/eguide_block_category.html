@@ -1,6 +1,7 @@
 <{if $block.options}>
-<form action="<{$block.action}>" id="<{$block.dirname}>_catsel" style="text-align: center;">
-<select name="cat" onChange="submit();">
+<form action="<{$block.action}>" id="<{$block.dirname}>_catsel" style="text-align: center;" class="form-inline">
+<label><{$smarty.const._BLOCK_EV_CATEGORY}></label>
+<select name="cat" onChange="submit();" class="form-control">
   <option value="">-----</option>
 <{foreach from=$block.options item=option}>
   <option value="<{$option.catid}>"<{if $option.catid==$smarty.get.cat}> selected="selected"<{/if}>><{$option.name}></option>

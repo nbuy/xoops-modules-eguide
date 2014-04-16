@@ -1,36 +1,36 @@
 <{include file="db:eguide_item.html"}>
 <{if $event.extents}>
-<div class="evform">
+<div class="evform form-inline">
 <form action="event.php">
 <b><{$smarty.const._MD_EXTENT_DATE}></b>
 <input type="hidden" name="eid" value="<{$event.eid}>"/>
-<select name="sub">
+<select name="sub" class="form-control">
 <{foreach from=$event.extents item=ext}>
 <option value="<{$ext.exid}>"><{$ext.date}></option>
 <{/foreach}>
 </select>
-<input type="submit" value="<{$smarty.const._SUBMIT}>"/>
+<input type="submit" value="<{$smarty.const._SUBMIT}>" class="btn btn-default" />
 </form>
 </div>
 <{elseif $message}>
 <div class="evform">
-  <div class="evnote"><{$message}></div>
+  <div class="evnote alert alert-danger text-center"><{$message}></div>
 </div>
 <{elseif $form}>
 <a name="form"></a>
 <div class="evform">
-<div class="evtitle"><{$smarty.const._MD_RESERVATION}></div>
-<form action="reserv.php?op=<{$form.op}>#form" name="order" method="post" onsubmit="return xoopsFormValidate_order();">
-<table class="outer" align="center" cellspacing="1" border="0">
+<div class="evtitle"><h4><{$smarty.const._MD_RESERVATION}></h4></div>
+<form action="reserv.php?op=<{$form.op}>#form" name="order" method="post" onsubmit="return xoopsFormValidate_order();" class="form-inline">
+<table class="outer table table-bordered table-striped" align="center" cellspacing="1" border="0">
 <tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
 <{if !$form.member_only}>
-<tr class="evms <{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input size="40" name="email" id="email" value="<{$form.email}>"/>
+<tr class="evms <{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input type='text' size="40" name="email" id="email" value="<{$form.email}>" class="form-control" />
 <{if $form.user_notify}>
-<br/><input type="checkbox" <{if $smarty.post.notify}>checked="checked" <{/if}>name="notify" /><{$smarty.const._MD_NOTIFY_REQUEST}>
+<br/><label class="checkbox-inline"><input type="checkbox" <{if $smarty.post.notify}>checked="checked" <{/if}>name="notify" /><{$smarty.const._MD_NOTIFY_REQUEST}></label>
 <{/if}>
 </td></tr>
 <{if $form.options.email_repeat_check}>
-<tr class="evms <{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL_CONF}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input size="40" name="email_conf" id="email_conf" value="<{$form.email_conf}>"/>
+<tr class="evms <{cycle values="even,odd"}>"><td class="head"><{$smarty.const._MD_EMAIL_CONF}><{$smarty.const._MD_REQUIRE_MARK}></td><td><input type="text" size="40" name="email_conf" id="email_conf" value="<{$form.email_conf}>" class="form-control" />
   <div class="note"><{$smarty.const._MD_EMAIL_CONF_DESC}></div>
 </td></tr>
 <{/if}>
@@ -59,7 +59,7 @@
 <{/if}>
 <p style="text-align: center;">
   
-    <input type="submit" value="<{if $form.op=="confirm"}><{$smarty.const._MD_ORDER_CONF}><{else}><{$smarty.const._MD_ORDER_SEND}><{/if}>" <{$form.submit_opts}>/>
+    <input type="submit" value="<{if $form.op=="confirm"}><{$smarty.const._MD_ORDER_CONF}><{else}><{$smarty.const._MD_ORDER_SEND}><{/if}>" <{$form.submit_opts}> class="btn btn-primary" />
   
 </p>
 </form>
@@ -97,15 +97,16 @@ return true;
 }
 //--></script>
 <{if $form.lang_note || $form.note}>
-  <p align="right"><{$form.lang_note}> <{$form.note}></p>
+  <p align="right"><span class="label label-danger"><{$form.lang_note}> <{$form.note}></span></p>
 <{/if}>
 </div>
 <{/if}>
 
 <{if $list}>
+<hr>
 <div class="evlist">
-<div class="evtitle"><{$smarty.const._MD_RESERV_LIST}></div>
-<table width="100%" cellspacing="1" cellpadding="4" class="outer">
+<div class="evtitle"><h4><{$smarty.const._MD_RESERV_LIST}></h4></div>
+<table width="100%" cellspacing="1" cellpadding="4" class="outer table table-bordered table-striped">
 <tr class="head"><th></th><{foreach from=$labels item=lab}><th><{$lab}></th><{/foreach}></tr>
 <{foreach from=$list item=order key=nc}>
 <tr class="<{cycle values="even,odd"}>">

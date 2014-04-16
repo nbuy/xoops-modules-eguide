@@ -331,14 +331,14 @@ case 'confirm':
 	     "<form action='reserv.php?op=order' method='post'>".
 	     "<input type='hidden' name='eid' value='$eid'/>\n".
 	     $emhide.join("\n", get_opt_values($opts, $errs, true)).
-	     "\n<input type='submit' value='"._MD_ORDER_SEND."'/>\n".
+	     "\n<input type='submit' value='"._MD_ORDER_SEND."' class='btn btn-primary' />\n".
 	     ($exid?"<input type='hidden' name='sub' value='$exid'/>\n":"").
 	     "</form>");
     }
     $xoopsTpl->assign('cancel', "<form action='event.php?eid=$eid".
 		      ($exid?'&sub='.$exid:''). "#form' method='post'>".$emhide.
 		      join("\n", get_opt_values($opts, $errs, true)).
-		      "\n<input type='submit' value='"._MD_BACK."'/>\n".
+		      "\n<input type='submit' value='"._MD_BACK."' class='btn btn-default' style='margin-left:5px' />\n".
 		      "</form>\n");
     break;
 
@@ -385,7 +385,7 @@ case 'cancel':
 		"' />\n<input type='hidden' name='key' value='$key' />\n".
 		"<input type='hidden' name='back' value='$back' />\n".
 		"<input type='hidden' name='rvid' value='$rvid' />\n".
-		"<input type='submit' value='"._SUBMIT."' />\n</form>\n";
+		"<input type='submit' value='"._SUBMIT."' class='btn btn-danger' />\n</form>\n";
 	    $xoopsTpl->assign('submit', $form);
 	    $values = array();
 	    if ($email) $values[_MD_EMAIL]=$email;
@@ -403,11 +403,9 @@ case 'cancel':
 case 'register':
     $email = ($xoopsUser)?$xoopsUser->getVar('email'):"";
     echo "<h2>"._MD_NOTIFY_EVENT."</h2>\n";
-    echo "<form action='reserv.php' method='post'>
-<table class='evtbl' align='center'>\n";
-    echo "<tr><th>"._MD_EMAIL."*</th><td><input size='40' name='email' value='$email'/> <input type='submit' value='"._REGISTER."'></td></tr>\n";
-    echo "</table>\n";
-    echo "<p align='center'>"._MD_NOTIFY_REQUEST."</p>";
+    echo "<form action='reserv.php' method='post' class='form-inline'>";
+    echo ""._MD_EMAIL."* <input type='text' size='40' name='email' value='$email' class='form-control' /> <input type='submit' value='"._REGISTER."' class='btn btn-primary'>\n";
+    echo "<p>"._MD_NOTIFY_REQUEST."</p>";
     echo "<input type='hidden' name='op' value='notify' />\n</form>\n";
     break;
 }

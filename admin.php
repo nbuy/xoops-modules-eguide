@@ -100,7 +100,7 @@ if ($eid) {			// already exists extents
     $result = $xoopsDB->query('SELECT rvid FROM '.RVTBL." WHERE eid=$eid AND exid=0", 1);
     if ($xoopsDB->getRowsNum($result)==0) {
 	$save = _MD_EDIT_EXTENT."("._MD_SAVE.")";
-	$input_extent = "<input type='submit' name='editdate' value='$save'/> 
+	$input_extent = "<input type='submit' name='editdate' value='$save' class='btn btn-default' /> 
 &nbsp; <a href='editdate.php?eid=$eid'>"._MD_EDIT_EXTENT."</a>";
     }
     $result = $xoopsDB->query('SELECT * FROM '.EXTBL.' WHERE eidref='.$eid.' ORDER BY exdate');
@@ -115,7 +115,7 @@ if ($eid) {			// already exists extents
     $extents = param('extents',"none");
     $repeat = param('repeat',1);
     $input_extent = select_list('extents', $ev_extents, $extents);
-    $input_extent .= ' &nbsp; '._MD_EXTENT_REPEAT." <input size='2' value='$repeat' name='repeat'/>";
+    $input_extent .= ' &nbsp; '._MD_EXTENT_REPEAT." <input type='text' size='2' value='$repeat' name='repeat' class='form-control' />";
     $step = 86400;		// sec/day
     switch ($extents) {
     case 'weekly':
@@ -306,13 +306,13 @@ if ($eid && $op=='delete') {
     $xoopsTpl->assign('message', "<div><form action='admin.php' method='post'>
 <input type='hidden' name='op' value='confirm' />
 <input type='hidden' name='eid' value='$eid' />
-<input type='submit' value='"._DELETE."' />
-</form><b>"._MD_EVENT_DEL_DESC."</b></div>\n".
-(($adm)?"<div class='evnote'>"._MD_EVENT_DEL_ADMIN."</div>\n":''));
+<input type='submit' value='"._DELETE."' class='btn btn-danger' />
+</form></div>\n".
+(($adm)?"<div class='evnote alert alert-danger'><b>"._MD_EVENT_DEL_DESC._MD_EVENT_DEL_ADMIN."</b></div>\n":''));
 } else {
     $expire = $data['expire']>$data['edate']?$data['expire']-$data['edate']:$data['expire'];
     $str = isset($expire_set["+$expire"])?"":htmlspecialchars(time_to_str($expire));
-    $input_expire = "<input name='expire_text' size='8' value='$str' onchange='document.evform.expire.selectedIndex=0' /> ".
+    $input_expire = "<input type='text' name='expire_text' size='8' value='$str' onchange='document.evform.expire.selectedIndex=0' class='form-control' /> ".
 	select_list('expire', $expire_set, $expire);
 
     $cats = get_eguide_category();
@@ -437,10 +437,10 @@ function getDateField($p) {
 }
 
 function datefield($prefix, $time, $hastime=true) {
-    $buf = "<input id='${prefix}ymd' name='${prefix}ymd' size='12' value='".formatTimestamp($time, "Y-m-d")."'/> ";
-    $buf .= "<script language='javascript'><!-- 
-document.write('<input type=\"button\" value=\""._MD_CAL."\" onClick=\"showCalendar(\\'${prefix}ymd\\')\">');
---></script>\n";
+    $buf = "<input type='text' id='${prefix}ymd' name='${prefix}ymd' size='12' value='".formatTimestamp($time, "Y-m-d")."' class='jdate form-control' /> ";
+    /*$buf .= "<script language='javascript'><!-- 
+document.write('<input type=\"button\" value=\""._MD_CAL."\" onClick=\"showCalendar(\\'${prefix}ymd\\')\" class=\"btn btn-default\">');
+--></script>\n";*/
     return $buf;
 }
 
@@ -455,7 +455,7 @@ function timefield($prefix, $time) {
 }
 
 function select_value($fmt, $name, $from, $to, $def=0, $step=1) {
-    $buf = "<select name='$name' id='$name'>\n";
+    $buf = "<select name='$name' id='$name' class='form-control'>\n";
     for ($i = $from; $i<=$to; $i+=$step) {
 	$buf .= "<option value='$i'".($i==$def?" selected='selected'":"").">".sprintf($fmt, $i)."</option>\n";
     }
@@ -464,7 +464,7 @@ function select_value($fmt, $name, $from, $to, $def=0, $step=1) {
 }
 
 function select_list($name, $options, $def=1) {
-    $buf = "<select name='$name'>\n";
+    $buf = "<select name='$name' class='form-control'>\n";
     foreach ($options as $i => $v) {
 	if (is_array($v)) $v = $v['name'];
 	$buf .= "<option value='$i'".($i==$def?" selected='selected'":"").">$v</option>\n";
