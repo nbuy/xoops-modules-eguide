@@ -1,18 +1,18 @@
 <{include file="db:eguide_item.html"}>
 <{if $errors}>
 <{foreach from=$errors item=msg}>
-<div class="error"><{$msg}></div>
+<div class="error alert alert-danger text-center"><{$msg}></div>
 <{/foreach}>
 <{/if}>
 <{if $message}>
 <div class="entform">
-  <div class="evnote"><{$message}></div>
+  <div class="evnote alert alert-danger text-center"><{$message}></div>
 </div>
 <{elseif $form}>
 <a name="form"></a>
 <div class="well">
 <div class="entform">
-<div class="evtitle"><{$smarty.const._MD_RESERV_REGISTER}></div>
+<div class="evtitle"><h4><{$smarty.const._MD_RESERV_REGISTER}></h4></div>
 <form action="entry.php" method="post" class="form-inline">
 <table class="outer table table-bordered table-striped" align="center" cellspacing="1" border="0">
 <tr><th colspan="2"><{$event.date}> &nbsp; <{$event.title}></th></tr>
