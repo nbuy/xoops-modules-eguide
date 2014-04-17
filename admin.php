@@ -308,7 +308,7 @@ if ($eid && $op=='delete') {
 <input type='hidden' name='eid' value='$eid' />
 <input type='submit' value='"._DELETE."' class='btn btn-danger' />
 </form></div>\n".
-(($adm)?"<div class='evnote alert alert-danger'><b>"._MD_EVENT_DEL_DESC._MD_EVENT_DEL_ADMIN."</b></div>\n":''));
+(($adm)?"<div class='evnote'><b>"._MD_EVENT_DEL_DESC._MD_EVENT_DEL_ADMIN."</b></div>\n":''));
 } else {
     $expire = $data['expire']>$data['edate']?$data['expire']-$data['edate']:$data['expire'];
     $str = isset($expire_set["+$expire"])?"":htmlspecialchars(time_to_str($expire));
