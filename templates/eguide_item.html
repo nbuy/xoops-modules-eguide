@@ -16,7 +16,7 @@
 </div>
 <{/if}>
   <div class="evinfo"><{$smarty.const._MD_POSTERC}> <a href="<{$xoops_url}>/userinfo.php?uid=<{$event.uid}>"><{$event.uname}></a>&nbsp;&nbsp;<{$smarty.const._MD_POSTDATE}> <{$event.postdate}> (<{$event.hits}>)</div>
-  <p class="evbody"><{$event.disp_summary}></p>
+  <div class="evbody"><{$event.disp_summary}></div>
 <div class="evprop">
   <ul>
     <li><{$smarty.const._MD_STARTTIME}> <{$event.time}></li>
@@ -33,7 +33,7 @@
   </ul>
 </div>
 <{if $event.disp_body}>
-  <p class="evbody"><{$event.disp_body}></p>
+  <div class="evbody"><{$event.disp_body}></div>
 <{elseif $event.expire && $event.reservation}>
   <p><a href="event.php?eid=<{$event.eid}><{if $event.exid}>&amp;sub=<{$event.exid}><{/if}>#form" class="btn btn-primary" role="button"><{$smarty.const._MD_RESERV_FORM}></a></p>
 <{/if}>
