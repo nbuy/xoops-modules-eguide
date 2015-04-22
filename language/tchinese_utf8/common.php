@@ -8,6 +8,7 @@ define('_MD_EXTENT_DATE', '報名開始受理日期');
 define('_MD_RESERV_PERSONS', '活動名額');
 define('_MD_INFO_REQUEST', '提醒活動通知註冊會員');
 define('_MD_INFO_COUNT', '報名人員，共%d人');
+define('_MD_EXPORT_CHARSET', 'UTF-8');
 
 global $expire_set,$edit_style,$ev_stats,$ev_extents,$rv_stats;
 
