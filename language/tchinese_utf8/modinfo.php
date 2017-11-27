@@ -1,8 +1,10 @@
 <?php
-// $Id: modinfo.php,v 1.11 2010/10/10 06:30:12 nobu Exp $
+//
 // Module Info
 
-if (defined('_MI_EGUIDE_NAME')) return;
+if (defined('_MI_EGUIDE_NAME')) {
+    return;
+}
 
 // The name of this module
 define('_MI_EGUIDE_NAME', '活動快訊');
@@ -19,10 +21,10 @@ define('_MI_EGUIDE_HEADLINE', '活動快訊');
 define('_MI_EGUIDE_HEADLINE_DESC', '未來活動');
 define('_MI_EGUIDE_HEADLINE2', '新活動');
 define('_MI_EGUIDE_HEADLINE2_DESC', '最新活動訊息');
-define("_MI_EGUIDE_HEADLINE3","成品活動");
-define("_MI_EGUIDE_HEADLINE3_DESC","事件已經結束名單");
-define("_MI_EGUIDE_CATBLOCK","活動分類");
-define("_MI_EGUIDE_CATBLOCK_DESC","選擇活動分類");
+define('_MI_EGUIDE_HEADLINE3', '成品活動');
+define('_MI_EGUIDE_HEADLINE3_DESC', '事件已經結束名單');
+define('_MI_EGUIDE_CATBLOCK', '活動分類');
+define('_MI_EGUIDE_CATBLOCK_DESC', '選擇活動分類');
 
 define('_MI_EGUIDE_EVENTS', '活動內容設定');
 define('_MI_EGUIDE_NOTIFIES', '提醒新註冊會員');
@@ -36,7 +38,7 @@ define('_MI_EGUIDE_POSTGROUP', '可以新增活動的群組');
 define('_MI_EGUIDE_POSTGROUP_DESC', '選擇一個群組，可以管理自己新增的活動');
 define('_MI_EGUIDE_NOTIFYADMIN', '提醒管理者');
 define('_MI_EGUIDE_NOTIFYADMIN_DESC', '有新的資訊時會以電子郵件通知活動管理者');
-define("_MI_EGUIDE_NOTIFY_ALWAYS","全件通知");
+define('_MI_EGUIDE_NOTIFY_ALWAYS', '全件通知');
 define('_MI_EGUIDE_NOTIFYGROUP', '提醒管理群');
 define('_MI_EGUIDE_NOTIFYGROUP_DESC', '這個群組將會收到管理者提醒電子郵件');
 define('_MI_EGUIDE_NEEDPOSTAUTH', '您需要審核新的活動嗎?');
@@ -53,7 +55,7 @@ define('_MI_EGUIDE_USER_NOTIFY', '使用者是否能夠訂閱新活動的通知'
 define('_MI_EGUIDE_USER_NOTIFY_DESC', '是 - 啟用郵件通知，否 - 停用');
 define('_MI_EGUIDE_MEMBER', '要檢視這個頁面的資料請先登入');
 define('_MI_EGUIDE_MEMBER_DESC', '只有註冊/登入的使用者可以進行活動預約（或是在不使用郵件的前提下）');
-define("_MI_EGUIDE_MEMBER_RELAX","兩者都使用");
+define('_MI_EGUIDE_MEMBER_RELAX', '兩者都使用');
 define('_MI_EGUIDE_ORDERCONF', '是否要確認頁面？');
 define('_MI_EGUIDE_ORDERCONF_DESC', '當報名時，顯示報名確認頁');
 define('_MI_EGUIDE_CLOSEBEFORE', '預設報名活動在幾分鐘前關閉');
@@ -82,7 +84,7 @@ define('_MI_EGUIDE_EXPORT_LIST_DESC', '以項目名稱或數字組合的逗點�
 define('_MI_EGUIDE_INDEX_TPL', '活動清單');
 define('_MI_EGUIDE_EVENT_TPL', '活動詳細內容');
 define('_MI_EGUIDE_ENTRY_TPL', '預約資料');
-define("_MI_EGUIDE_USERSSEL_TPL", "User select for operators entry");
+define('_MI_EGUIDE_USERSSEL_TPL', 'User select for operators entry');
 define('_MI_EGUIDE_EVENT_PRINT_TPL', '列印活動細節');
 define('_MI_EGUIDE_RECEIPT_TPL', '報名名單');
 define('_MI_EGUIDE_ADMIN_TPL', '活動表格');
@@ -111,9 +113,8 @@ define('_MI_EGUIDE_CNEWPOST_NOTIFY_CAP', '在分類裏新增一個活動時提�
 
 // for altsys
 if (!defined('_MD_A_MYMENU_MYTPLSADMIN')) {
-    define('_MD_A_MYMENU_MYTPLSADMIN','Templates');
-    define('_MD_A_MYMENU_MYBLOCKSADMIN','Blocks/Permissions');
-    define('_MD_A_MYMENU_MYLANGADMIN','Languages');
-    define('_MD_A_MYMENU_MYPREFERENCES','Preferences');
+    define('_MD_A_MYMENU_MYTPLSADMIN', 'Templates');
+    define('_MD_A_MYMENU_MYBLOCKSADMIN', 'Blocks/Permissions');
+    define('_MD_A_MYMENU_MYLANGADMIN', 'Languages');
+    define('_MD_A_MYMENU_MYPREFERENCES', 'Preferences');
 }
-?>

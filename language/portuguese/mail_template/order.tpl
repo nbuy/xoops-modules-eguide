@@ -1,9 +1,9 @@
-Confirmação do agendamento - {TITLE}
+ConfirmaÃ§Ã£o do agendamento - {TITLE}
 
 ID do agendamento: {RVID}
 
-Nós recebemos sua solicitação de reserva de agendamento deste evento.
-Por favor, aguarde até o mesmo ser confirmado.
+NÃ³s recebemos sua solicitaÃ§Ã£o de reserva de agendamento deste evento.
+Por favor, aguarde atÃ© o mesmo ser confirmado.
 
 Dados da reserva:
 ------------
@@ -12,5 +12,5 @@ Dados da reserva:
 URL do seu evento agendado:
 {EVENT_URL}
 
-Se você desejar cancelar esta reserva, por favor acessa a seguinte URL:
+Se vocÃª desejar cancelar esta reserva, por favor acessa a seguinte URL:
 {CANCEL_URL}

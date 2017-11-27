@@ -1,4 +1,16 @@
-eguide
+# XOOPS CMS Module   ![XOOPS CMS](https://avatars2.githubusercontent.com/u/12771439?v=3&s=200)
+
+**eGuide** is a module for Event management.  
+
+**XOOPS Module Archive:** Modules in this archive are older modules for XOOPS CMS, and therefore some of them might not work with the latest XOOPS and PHP versions. 
+
+However, please fork them and if you have any improvements and fixes, please share them back with us. 
+
+Visit us on https://xoops.org
+
+The upcoming "next generation" XOOPS CMS version is being crafted at: https://github.com/XOOPS
+
+
 ========
 
 Xoops Modules
@@ -6,7 +18,7 @@ Xoops Modules
 ## 說明
 * eguide是一個功能強大的Xoops報名模組，擁有彈性自訂各類表單輸入項、複數人數報名、報名審核機制、自動或手動發信機制、重複開放報名、必填欄位表單驗證、前台彈性顯示報名欄位資料、自動統計、匯出CSV或Excel格式報名資料...等功能
 * 此模組原作者為nbuy( https://github.com/nbuy )
-* 此修正版本樣板套用bootstrap3，您的佈景需支援bootstrap3，例如：xBootstrap( http://xoops.org/modules/news/article.php?storyid=6571 )
+* 此修正版本樣板套用bootstrap3，您的佈景需支援bootstrap3，例如：xBootstrap( https://xoops.org/modules/news/article.php?storyid=6571 )
 * 建立及修改報名，日期選擇器改採bootstrap-datepicker( https://github.com/eternicode/bootstrap-datepicker )，所見即所得編輯器改採TinyMCE4( http://www.tinymce.com/ )
 
 ## 使用

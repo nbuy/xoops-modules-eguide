@@ -1,7 +1,7 @@
-Confirmação de Agendamento
+ConfirmaÃ§Ã£o de Agendamento
 
-Título - {TITLE}
-Número da Confirmação. {RVID}
+TÃ­tulo - {TITLE}
+NÃºmero da ConfirmaÃ§Ã£o. {RVID}
 
 A reserva de seu agendamento foi finalizada.
 Obrigado.
@@ -13,5 +13,5 @@ Dados do Agendamento:
 URL do seu evento agendado:
 {EVENT_URL}
 
-Se você desejar cancelar esta reserva, por favor acessa a seguinte URL:
+Se vocÃª desejar cancelar esta reserva, por favor acessa a seguinte URL:
 {CANCEL_URL}

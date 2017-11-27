@@ -1,26 +1,26 @@
 # Event Guide Module for XOOPS
-# $Id: mysql.sql,v 1.9 2011/04/16 06:48:15 nobu Exp $
+# 
 
 #
 # Table structure for table `eguide`
 #
 
 CREATE TABLE eguide (
-  eid int(8) unsigned NOT NULL auto_increment,
-  uid int(5) NOT NULL default '0',
-  title varchar(255) default NULL,
-  cdate int(10) NOT NULL default '0',
-  edate int(10) NOT NULL default '0',
-  ldate int(10) NOT NULL default '0',
-  mdate int(10) NOT NULL default '0',
-  expire int(10) NOT NULL default '0',
-  style tinyint(1) NOT NULL default '0',
-  status tinyint(1) NOT NULL default '0',
-  summary text NOT NULL,
-  body    text NOT NULL,
-  counter int(8) unsigned NOT NULL default '0',
-  topicid int(8) unsigned NOT NULL default '1',
-  PRIMARY KEY  (eid)
+  eid     INT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  uid     INT(5)          NOT NULL DEFAULT '0',
+  title   VARCHAR(255)             DEFAULT NULL,
+  cdate   INT(10)         NOT NULL DEFAULT '0',
+  edate   INT(10)         NOT NULL DEFAULT '0',
+  ldate   INT(10)         NOT NULL DEFAULT '0',
+  mdate   INT(10)         NOT NULL DEFAULT '0',
+  expire  INT(10)         NOT NULL DEFAULT '0',
+  style   TINYINT(1)      NOT NULL DEFAULT '0',
+  status  TINYINT(1)      NOT NULL DEFAULT '0',
+  summary TEXT            NOT NULL,
+  body    TEXT            NOT NULL,
+  counter INT(8) UNSIGNED NOT NULL DEFAULT '0',
+  topicid INT(8) UNSIGNED NOT NULL DEFAULT '1',
+  PRIMARY KEY (eid)
 );
 
 #
@@ -28,18 +28,18 @@ CREATE TABLE eguide (
 #
 
 CREATE TABLE eguide_category (
-  catid    integer NOT NULL auto_increment,
-  catname  varchar(40) NOT NULL,
-  catimg   varchar(255) NOT NULL default '',
-  catdesc  text,
-  catpri   integer NOT NULL default '0',
-  weight   integer NOT NULL default '0',
-  PRIMARY KEY  (catid)
+  catid   INTEGER      NOT NULL AUTO_INCREMENT,
+  catname VARCHAR(40)  NOT NULL,
+  catimg  VARCHAR(255) NOT NULL DEFAULT '',
+  catdesc TEXT,
+  catpri  INTEGER      NOT NULL DEFAULT '0',
+  weight  INTEGER      NOT NULL DEFAULT '0',
+  PRIMARY KEY (catid)
 );
 
 # --------------------------------------------------------
 
-INSERT INTO eguide_category(catid,catname,catdesc) VALUES(1, '', 'Default category (you can edit this)'); 
+INSERT INTO eguide_category (catid, catname, catdesc) VALUES (1, '', 'Default category (you can edit this)');
 # -- Default Category (Noname)
 
 #
@@ -47,12 +47,12 @@ INSERT INTO eguide_category(catid,catname,catdesc) VALUES(1, '', 'Default catego
 #
 
 CREATE TABLE eguide_extent (
-  exid    integer NOT NULL auto_increment,
-  eidref  integer NOT NULL,
-  exdate  integer NOT NULL,
-  expersons  integer,
-  reserved int(8) unsigned NOT NULL default '0',
-  PRIMARY KEY  (exid)
+  exid      INTEGER         NOT NULL AUTO_INCREMENT,
+  eidref    INTEGER         NOT NULL,
+  exdate    INTEGER         NOT NULL,
+  expersons INTEGER,
+  reserved  INT(8) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY (exid)
 );
 
 #
@@ -60,17 +60,17 @@ CREATE TABLE eguide_extent (
 #
 
 CREATE TABLE eguide_opt (
-  eid int(8) NOT NULL,
-  reservation tinyint(1),
-  strict tinyint(1),
-  autoaccept tinyint(1),
-  notify  tinyint(1),
-  persons int(8) unsigned NOT NULL default '0',
-  reserved int(8) unsigned NOT NULL default '0',
-  closetime  integer NOT NULL default '0',
-  optfield text,
-  optvars text,
-  PRIMARY KEY  (eid)
+  eid         INT(8)          NOT NULL,
+  reservation TINYINT(1),
+  strict      TINYINT(1),
+  autoaccept  TINYINT(1),
+  notify      TINYINT(1),
+  persons     INT(8) UNSIGNED NOT NULL DEFAULT '0',
+  reserved    INT(8) UNSIGNED NOT NULL DEFAULT '0',
+  closetime   INTEGER         NOT NULL DEFAULT '0',
+  optfield    TEXT,
+  optvars     TEXT,
+  PRIMARY KEY (eid)
 );
 
 #
@@ -78,15 +78,15 @@ CREATE TABLE eguide_opt (
 #
 
 CREATE TABLE eguide_reserv (
-  rvid int(8) unsigned NOT NULL auto_increment,
-  eid  int(8) NOT NULL,
-  exid int(8) NOT NULL,
-  uid  int(8),
-  operator int(8),
-  rdate integer,
-  email varchar(60),
-  info text,
-  status tinyint(1),
-  confirm varchar(8),
-  PRIMARY KEY  (rvid)
+  rvid     INT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  eid      INT(8)          NOT NULL,
+  exid     INT(8)          NOT NULL,
+  uid      INT(8),
+  operator INT(8),
+  rdate    INTEGER,
+  email    VARCHAR(60),
+  info     TEXT,
+  status   TINYINT(1),
+  confirm  VARCHAR(8),
+  PRIMARY KEY (rvid)
 );

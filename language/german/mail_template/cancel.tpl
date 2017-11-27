@@ -1,6 +1,6 @@
 Ihr Reservierung wurde storniert (ID: {RVID})
 
-Sie hatten für diese Veranstaltung reserviert:
+Sie hatten fÃ¼r diese Veranstaltung reserviert:
 {TITLE}
 {EVENT_URL}
 
@@ -10,4 +10,4 @@ Reservierungsdaten:
 
 Stoniert von {REQ_UNAME}
 
-Wir bedauern ihre Stornierung und hoffen, Sie bald wieder begrüßen zu dürfen.
+Wir bedauern ihre Stornierung und hoffen, Sie bald wieder begrÃ¼ÃŸen zu dÃ¼rfen.

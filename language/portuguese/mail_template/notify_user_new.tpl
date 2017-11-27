@@ -5,6 +5,6 @@ Um novo evento foi registrado.
 {TITLE}
 {EVENT_URL}
 
-Este evento está sendo enviado aos nossos endereços registrados.
-Se você não deseja mais receber notificações de eventos, por favor remova seu registro acessando a seguinte URL:
+Este evento estÃ¡ sendo enviado aos nossos endereÃ§os registrados.
+Se vocÃª nÃ£o deseja mais receber notificaÃ§Ãµes de eventos, por favor remova seu registro acessando a seguinte URL:
 {CANCEL_URL}

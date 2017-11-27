@@ -1,7 +1,7 @@
 {TITLE}
 {EVENT_URL}
 
-ID do agendamento {RVID} O resultado é {RESULT}
+ID do agendamento {RVID} O resultado Ã© {RESULT}
 
 Dados da reserva:
 ------------
@@ -9,5 +9,5 @@ Dados da reserva:
 
 Aprovado por {REQ_UNAME}
 
-Se você desejar cancelar esta reserva, por favor acessa a seguinte URL:
+Se vocÃª desejar cancelar esta reserva, por favor acessa a seguinte URL:
 {CANCEL_URL}

@@ -10,7 +10,7 @@
 {INFO}------------
 
 活動網頁：
-  {EVENT_URL}
+{EVENT_URL}
 
 如您要取消報名，請至以下網址：
-  {CANCEL_URL}
+{CANCEL_URL}

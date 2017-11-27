@@ -1,17 +1,17 @@
-Reservierung bestätigt
-  Titel - {TITLE}
-  Bestätigungsnummer {RVID}
+Reservierung bestÃ¤tigt
+Titel - {TITLE}
+BestÃ¤tigungsnummer {RVID}
 
-Ihre Reservierung wurde von einem Mitarbeiter bestätigt.
+Ihre Reservierung wurde von einem Mitarbeiter bestÃ¤tigt.
 
 Reservierungsdaten:
 ------------
 {INFO}------------
 
-Sie haben für diese Veranstaltung reserviert:
-  {EVENT_URL}
+Sie haben fÃ¼r diese Veranstaltung reserviert:
+{EVENT_URL}
 
 Wenn Sie die Reservierung stornieren wollen, bitte hier entlang:
-  {CANCEL_URL}
-  
-  Wir wünschen Ihnen viel Spaß...
+{CANCEL_URL}
+
+Wir wÃ¼nschen Ihnen viel SpaÃŸ...
