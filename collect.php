@@ -89,7 +89,7 @@ OPTBL.' o ON e.eid=o.eid LEFT JOIN '.EXTBL." x ON e.eid=eidref
   WHERE $cond ORDER BY edate");
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = EGPREFIX.'_collect.html';
+$xoopsOption['template_main'] = EGPREFIX.'_collect.tpl';
 assign_module_css();
 
 $num = $xoopsDB->getRowsNum($result);

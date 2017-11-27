@@ -266,7 +266,7 @@ case 'edit':
 
 case 'one':
     
-    $xoopsOption['template_main'] = EGPREFIX.'_confirm.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_confirm.tpl';
     $xoopsTpl->assign('lang_title', _MD_RESERV_REC);
     $edit = "<a href='receipt.php?op=edit&rvid=$rvid' class='btn btn-primary btn-xs' role='button'>"._EDIT."</a>";
     $del ="<a href='reserv.php?op=cancel&rvid=$rvid&back=' class='btn btn-danger btn-xs' role='button'>"._MD_RESERV_DEL."</a>";
@@ -289,7 +289,7 @@ case 'one':
     break;
 
 default:
-    $xoopsOption['template_main'] = EGPREFIX.'_receipt.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_receipt.tpl';
 
     $xoopsTpl->assign('lang_title', _MD_RESERVATION);
 
@@ -371,7 +371,7 @@ default:
 }
 
 if ($print) {
-    $xoopsTpl->display('db:'.EGPREFIX.'_receipt_print.html');
+    $xoopsTpl->display('db:'.EGPREFIX.'_receipt_print.tpl');
 } else {
     include(XOOPS_ROOT_PATH."/footer.php");
 }

@@ -292,7 +292,7 @@ VALUES ($eid,$exid,$uid,$now,$ml, ".$xoopsDB->quoteString($value).",$accept,'$co
     if (empty($errs)) break;
 
 case 'confirm':
-    $xoopsOption['template_main'] = EGPREFIX.'_confirm.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_confirm.tpl';
 
     $data = fetch_event($eid, $exid);
     $opts = $data['optfield'];
@@ -371,7 +371,7 @@ case 'cancel':
 	    $eid = $data['eid'];
 	    $key = isset($_GET['key'])?intval($_GET['key']):'';
 	    if ($eid) edit_eventdata($data);
-	    $xoopsOption['template_main'] = EGPREFIX.'_confirm.html';
+	    $xoopsOption['template_main'] = EGPREFIX.'_confirm.tpl';
 	    $xoopsTpl->assign('event', $data);
 	    if (isset($_GET['back'])) {
 		$back =  $myts->stripSlashesGPC($_GET['back']);

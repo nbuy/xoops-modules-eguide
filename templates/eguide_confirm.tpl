@@ -1,5 +1,5 @@
 <{if $event.eid}>
-<{include file="db:eguide_item.html"}>
+<{include file="db:eguide_item.tpl"}>
 <{else}>
   <h3 class="page-header"><{$smarty.const._MD_DETAIL}></h3>
 <{/if}>

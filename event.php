@@ -67,7 +67,7 @@ if (is_object($module) && $module->getVar('isactive')==1) {
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = EGPREFIX.'_event.html';
+$xoopsOption['template_main'] = EGPREFIX.'_event.tpl';
 assign_module_css();
 edit_eventdata($data);
 $title = $data['date']." ".$data['title'];
@@ -106,9 +106,9 @@ if ($data['closedate'] < $now) {
 $xoopsTpl->assign(make_lists($data));
 
 if ($op == "print") {
-    $xoopsOption['template_main'] = EGPREFIX.'_event_print.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_event_print.tpl';
     $xoopsTpl->assign('lang_comefrom', sprintf(_MD_THISCOMESFROM, $xoopsConfig['sitename']));
-    $xoopsTpl->display('db:'.EGPREFIX.'_event_print.html');
+    $xoopsTpl->display('db:'.EGPREFIX.'_event_print.tpl');
     exit;
 }
 

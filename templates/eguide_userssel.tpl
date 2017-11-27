@@ -1,4 +1,4 @@
-<{include file="db:eguide_item.html"}>
+<{include file="db:eguide_item.tpl"}>
 <{if $errors}>
 <{foreach from=$errors item=msg}>
 <div class="error"><{$msg}></div>

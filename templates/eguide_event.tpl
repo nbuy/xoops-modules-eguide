@@ -1,4 +1,4 @@
-<{include file="db:eguide_item.html"}>
+<{include file="db:eguide_item.tpl"}>
 <{if $event.extents}>
 <div class="evform form-inline">
 <form action="event.php">
@@ -127,13 +127,13 @@ return true;
 <div class="evcomment">
 <!-- start comments loop -->
 <{if $comment_mode == "flat"}>
-<{include file="db:system_comments_flat.html"}>
+<{include file="db:system_comments_flat.tpl"}>
 <{elseif $comment_mode == "thread"}>
-<{include file="db:system_comments_thread.html"}>
+<{include file="db:system_comments_thread.tpl"}>
 <{elseif $comment_mode == "nest"}>
-<{include file="db:system_comments_nest.html"}>
+<{include file="db:system_comments_nest.tpl"}>
 <{/if}>
 <!-- end comments loop -->
 </div>
 <{/if}>
-<{include file="db:system_notification_select.html"}>
+<{include file="db:system_notification_select.tpl"}>

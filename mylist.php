@@ -11,7 +11,7 @@ if (!is_object($xoopsUser)) {
 $uid = $xoopsUser->getVar('uid');
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = EGPREFIX.'_mylist.html';
+$xoopsOption['template_main'] = EGPREFIX.'_mylist.tpl';
 
 if (isset($_GET['uid']) && $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
    $uid = (int)$_GET['uid'];

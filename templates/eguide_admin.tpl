@@ -1,5 +1,5 @@
 <{if $event}>
-<{include file="db:eguide_event.html"}>
+<{include file="db:eguide_event.tpl"}>
 <{/if}>
 <div class="event">
 <h2 class="page-header"><{$lang_event_edit}></h2>

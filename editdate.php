@@ -18,7 +18,7 @@ if (!$event) {
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = EGPREFIX.'_editdate.html';
+$xoopsOption['template_main'] = EGPREFIX.'_editdate.tpl';
 assign_module_css();
 $edate = $event['edate'];
 $xoopsTpl->assign('event', edit_eventdata($event));

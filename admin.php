@@ -27,7 +27,7 @@ $targs = array('title', 'summary', 'body', 'optfield', 'before');
 define("_EG_OPTDEFS", "redirect="._MD_RESERV_REDIRECT.",text\n");
 
 $myts =& MyTextSanitizer::getInstance();
-$xoopsOption['template_main'] = EGPREFIX.'_admin.html';
+$xoopsOption['template_main'] = EGPREFIX.'_admin.tpl';
 
 if ($op=='new') {
     // default value in post form
@@ -299,7 +299,7 @@ if ($tstr) {
 $xoopsTpl->assign('timetable', $timetable);
 
 if ($eid && $op=='delete') {
-    $xoopsOption['template_main'] = EGPREFIX.'_event.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_event.tpl';
     edit_eventdata($data);
     unset($data['eid']);	// disable control link
     $xoopsTpl->assign('event', $data);

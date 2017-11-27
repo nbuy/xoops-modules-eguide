@@ -80,7 +80,7 @@ case 'impsave':
 	exit;
     }
     $block = $xoopsDB->fetchArray($res);
-    $prefix = preg_replace('/_block_top\.html$/', '', $block['template']);
+    $prefix = preg_replace('/_block_top\.tpl$/', '', $block['template']);
     $xoopsDB->query('DELETE FROM '.CATBL);
     function dbquote($x) {
 	global $xoopsDB;
@@ -443,7 +443,7 @@ function import_category() {
     while (list($mid, $name, $temp)=$xoopsDB->fetchRow($res)) {
 	$mods[] = array('mid'=>$mid,
 			'name'=>htmlspecialchars($name),
-			'prefix'=>preg_replace('/_block_top\.html$/', '', $temp));
+			'prefix'=>preg_replace('/_block_top\.tpl$/', '', $temp));
     }
     $selmod = new XoopsFormSelect(_AM_CAT_IMPORTFROM, 'mid');
     $selmod->addOption(0, _NONE);

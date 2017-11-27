@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="header"><img src="<{$xoops_url}>/images/logo.gif" alt="<{$xoops_sitename}>"/></div>
-<{include file="db:eguide_item.html"}>
+<{include file="db:eguide_item.tpl"}>
 <{if $list}>
 <div class="evlist">
 <div class="evtitle"><{$smarty.const._MD_RESERV_LIST}></div>

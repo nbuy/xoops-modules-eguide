@@ -89,7 +89,7 @@ while ($event = $xoopsDB->fetchArray($result)) {
 }
 
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = EGPREFIX.'_index.html';
+$xoopsOption['template_main'] = EGPREFIX.'_index.tpl';
 
 $xoopsTpl->assign('events', $events);
 assign_module_css();

@@ -65,7 +65,7 @@ $data['exid']=$exid;
 $data['isadmin'] = true;
 $data['link'] = true;
 include XOOPS_ROOT_PATH.'/header.php';
-$xoopsOption['template_main'] = EGPREFIX.'_entry.html';
+$xoopsOption['template_main'] = EGPREFIX.'_entry.tpl';
 assign_module_css();
 edit_eventdata($data);
 $xoopsTpl->assign('event', $data);
@@ -102,7 +102,7 @@ if ($data['closedate'] < $now  && !$data['past_register']) {
 // select users.uid 
 if (!$member_only && eguide_form_options('need_bind_uid', 0)) $member_only = true;
 if (param('op', '')=='users' || ($member_only && !$uid)) {
-    $xoopsOption['template_main'] = EGPREFIX.'_userssel.html';
+    $xoopsOption['template_main'] = EGPREFIX.'_userssel.tpl';
     include_once XOOPS_ROOT_PATH.'/class/pagenav.php';
 
     // search string
