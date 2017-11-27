@@ -1,0 +1,377 @@
+<h5>2.72 Beta 4  [NOT RELEASED]</h5>
+<hr>
+- namespaces (mamba)
+- moved all images, CSS, and JS files to /assets (mamba)
+- renamed .html Smarty templates to .tpl (mamba)
+- added SCANDIR_SORT_NONE to scandir()
+- replaced each() with foreach() for PHP 7.2 (mamba)
+
+WORK IN PROGRESS, TODO:
+- add install checks for PHP 5.5 and XOOPS 2.5.8 (mamba)
+- add auto-creation of upload folders (mamba)
+
+
+<h5>2.72 Beta 3  [NOT RELEASED]</h5>
+<hr>
+- XOOPS 2.5.9, PHP 7 (mamba)
+- removed @version (mamba)
+- PSR-2 code cosmetics (mamba)
+- addNavigation(basename(__FILE__))  (mamba)
+- dirname(__FILE__) to __DIR__ (mamba)
+- replaced < br /> with < br > (mamba)
+- Unnecessary double quotes (mamba)
+- reference mismatch (mamba)
+- Hardening to type safe (mamba)
+- update Help, .html to .tpl (mamba)
+- changed _handler to Handler (mamba)
+- removed '/' from void HTML elements (&lt;br&gt;, &lt;img&gt;, etc) (mamba)
+- HTML 5: removed 'selected' and 'checked' (mamba)
+- updated file headers for consistency (mamba)
+- renamed several $indexAdmin with $adminObject for consistency (mamba)
+- Updates for PayPal changes (zyspec)
+- added Contributing.md (mamba)
+- moved functions to Utility class (mamba)
+- include_once to require_once (mamba)
+- php-cs-fixer updates (mamba)
+- short array syntax (mamba)
+- Yoda notation (mamba)
+- started conversion to XMF (mamba)
+    &nbsp;&nbsp;- updated addInfoBoxLine entries (mamba)
+    &nbsp;&nbsp;- displayNavigation(basename(__FILE__))  (mamba)
+    &nbsp;&nbsp;- changed to ->displayButton('left') (mamba)
+
+- replaced $xoopsGTicket with $XoopsSecurity (Mamba)
+- added tokens to forms in templates (mamba)
+- added 'true' for tokens in new forms (mamba)
+
+
+<h5>2.72 Beta 2  [NOT RELEASED]</h5>
+<hr>
+08-01-08 Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* BUGFIX: static typoscript directory missing from extension
+	* CHANGED: Moved static typoscript to ext_typoscript_setup.txt
+	* BUGFIX: Fixed debug library, tpl and function to avoid recursion
+	* BUGFIX: prefilter dots now recognizes literals
+	* BUGFIX: modifier format gets an instance of tslib_cobj
+	* NEW: Additional params forceType, collapse and description added to modifier debug
+	* NEW: plugins object, image, data, typoscript, typolink, LLL and format now use $smarty->trigger_error
+	* BUGFIX: Rewrite of function get_debug_info.
+	* BUGFIX: Modified output from dBug library to work within the context of TYPO3 and Smarty
+	* BUGFIX: block function typoscript now calls cObjGet instead of cObjGetSingle
+	* CHANGED: Moved default TypoScript settings to ext_typoscript files instead of using static templates
+	* CHANGED: Rewrite of TCA helper functions for plugins
+
+<h5>2.72 Beta 1  [NOT RELEASED]</h5>
+<hr>
+07-10-09  Simon Tuck <stu@rtpartner.ch>, Rueegg Tuck Partner
+
+	* Complete rewrite of the extension
+	* Added integration with the pi_base scenario as well as the lib/div scenario
+	* Cleaned up the custom plugins
+	* Added a debug console
+
+
+<h5>2013/10/05 eguide 2.71 released</h5>
+<hr>
+- Reservation username display format customizabled (display_username)
+
+<h5>2013/05/30 eguide 2.70 released</h5>
+<hr>
+Not display cancel reservation form when past event time.
+Use < label > tag in checkbox/radio type item.
+Fix to show email field when guest and both accept mode.
+Add option variable (enable_past_register), that allow register to event which past closed date
+Register reservation bind for user account
+
+
+<h5>2011/09/10 eguide 2.64 released </h5>
+                               <hr>
+Fix notification email register/cancel not work
+
+
+<h5>2010/10/10 eguide 2.63 released </h5>
+                                                              <hr>
+Fix replace for month/week name by local language string (2.63a)
+Add email confirm options (email_repeat_check)
+Support altsys language manager
+Fix miscalculate in reservation summary
+Fix redirect_header out absolute path (for mobile)
+
+
+<h5>2010/05/16 eguide 2.62 released </h5>
+<hr>
+Fix version string (2.62a)
+Enable localization for month name in event date
+Fix block function conflict when module duplicated
+Fix Excel(XML) format malfunction over 40 records
+
+
+<h5>2010/04/04 eguide 2.61 released </h5>
+                               <hr>
+Show reservation data when cancel confirm
+Add language/portuguese resouces (thx leco1)
+Add select option "Both" for "Event entry need to LOGIN" in preferences
+Remove limitation for excel(XML) format download.
+
+
+<h5>2010/02/27 eguide 2.6 released </h5>
+                              <hr>
+add list type select in block options
+change admin.php form to hide some fields
+fix new event notification email tags not set
+option variables "reply_tpl_suffix" added
+redirect make to handle option variables
+add description for "Reservation limit plugins" in help.html
+add blocks for expired event
+add for "dlimit" plugins to limit total reservations (max_register_in_future)
+Reservation button label to change by action
+Allow {X_NAME} replace by user varibale
+add option variable "module_css" for assign module local stylesheet
+
+
+<h5>2009/12/24 eguide 2.56 released </h5>
+                               <hr>
+fix EVENT_TITLE mail variable setting
+dlimit plugins support bound_time options
+blocks support bound_time
+add enable_copy options
+
+
+<h5>2009/12/20 eguide 2.55 released </h5>
+                               <hr>
+More "Additional item options"
+bound_time=01:00 -- Bound time as last day
+reply_subject=Subject -- Replay email subject
+from_name=Sender -- Reply from name
+Email subject redefine with email vars.
+Reply email variable EVENT_DATE defined
+
+
+<h5>2009/10/04 eguide 2.54 released </h5>
+                               <hr>
+Time Table Labels apply to event date time selection
+FCKeditor (use_fckeditor={Basic|Default}) option added
+fix cancel page for new event mail notification
+fix in additional item at printable comment with comma
+event editing start time accept "HH:MM" format
+reservation control plugins control by option variable
+fix my reservation page ancker mistake
+fix block descption edit style mistake
+fix mutiple date editing template
+
+
+<h5>2009/05/24 eguide 2.53 released </h5>
+                               <hr>
+Add context value for XOOPS Search module (thx tes)
+Add description to variable in block template
+
+
+<h5>2009/03/09 eguide 2.52 released </h5>
+                               <hr>
+Describe more "REFERER errors" in reservation failer.
+Add detail show reservation. (thx uhouho)
+Fix repeat opening event mistake datetime. (thx uhouho)
+
+
+<h5>2009/03/09 eguide 2.52 released </h5>
+                               <hr>
+Describe more "REFERER errors" in reservation failer.
+Add detail show reservation. (thx uhouho)
+Fix repeat opening event mistake datetime. (thx uhouho)
+
+
+<h5>2008/10/19 eguide 2.51 released </h5>
+                               <hr>
+Add {RVID} tags in reply mail template (accept.tpl)
+Add CSV output coding system options (export_charset)
+follow altsys 0.6 template/blocks admin
+Revised Admin Interface by Gigamaster
+Fix category image field not stored (thx Gigamaster)
+Fix event active editing not work in admin list (thx Gigamaster)
+Assign category discription in smarty variable
+
+
+<h5>2008/07/22 eguide 2.5 released </h5>
+                              <hr>
+Add item options "reply_extension" as switch reply mail template
+Apply "Additional item options" in defaults
+Change preferences "Label of persons" to "Additional item options"
+Not display category select button if there is no categires
+Add no data language resources for admin page
+Fix using template set mistake.
+
+
+<h5>2008/02/16 eguide 2.42 released </h5>
+                               <hr>
+fix checkbox failer
+Add addtional field input helper (JavaScript)
+Fix admin menu link
+
+
+<h5>2008/02/11 eguide 2.41 released </h5>
+                               <hr>
+Fix conflict with pico module
+
+
+<h5>2008/02/05 eguide 2.4 released </h5>
+                              <hr>
+Categories enhancement (two level, sort order, importer, block)
+Fix JavaScript check failer
+Enable confirm page in default
+Add duplicatable function
+Fix excel template (remove hard code kanji)
+Using newer altsys (0.5later) function
+Arrangement of language resource (Separation main/common)
+add resource language/spanish (thx Gerardo)
+
+
+<h5>2007/12/31 eguide 2.31 released </h5>
+                               <hr>
+text field quote(') handle bug fixed
+add const type
+variables handle in redirect URL
+multiple category selecting in index.php (e.g. cat=1,2,3)
+fix JavaScript mistake (thx souhalt)
+fix rendering mistake when occurrence errors (thx souhalt)
+Ignore mail sending status except reservation user
+Using altsys module when exists
+Internal Reservation data format changes (refactoring)
+Fix extra date editing failer when after start time (thx Jens)
+add breadcrumbs (xoops_breadcrumbs) smarty variable setting
+
+
+<h5>2007/03/03 eguide 2.3 released </h5>
+                              <hr>
+Add setting notifiy to operation user self.
+Add update notification to admin with poster
+fix stop admin mail when disable setting in preference
+fix notification mail for register users
+
+
+<h5>eguide 2.24 released </h5>
+                    <hr>
+fix compat in PHP5/MySQL5 (mylist.php failer, etc)
+fix complex value-label behavier item in checkbox/radio
+update tchinese resources (thanks jax)
+suppress space(nbsp) when setting value at additional items typed checkbox/radio
+
+
+<h5>2006/10/14 eguide 2.23 released </h5>
+                               <hr>
+fix month name index typo in japanese/german/tchinese
+
+
+<h5>2006/10/14 eguide 2.21 released </h5>
+                               <hr>
+fix some language resources
+add language/tchinese resources (by jimmy9522 at twpug.net)
+fix poster uname mistake when summary CSV output
+
+
+<h5>2006/08/29 eguide 2.2 released </h5>
+                              <hr>
+make display simple uname CSV format output
+add category filter in blocks
+add filling mark in block when show details
+new event block shows next event in multiple
+fix template: not display _MD_RESERV_FORM (as "Reservation Here") when reservation disable
+add language/german resources (from Jens Havelberg)
+
+
+<h5>2006/08/17 eguide 2.1 released </h5>
+                              <hr>
+add redirect url setting after reservation
+revised escape in additional items and extent "prop" attribute (from Craig Taylor)
+fix template: not display close time when reservation disable
+
+
+<h5>2006/08/13 eguide 2.01 released </h5>
+                               <hr>
+fix mistake resources
+fix cancel failer when login user do cancel
+
+
+<h5>2006/08/03 eguide 2.0 released </h5>
+<hr>
+
+
+<h5>Changes before 2.0 </h5>
+<hr>
+2006/08/03 remove too old language/tchinese
+2006/07/21 fix confirmation email send to order user
+2006/06/06 eguide 2.0 RC
+2006/06/06 editdate.php makes template
+2006/06/04 Notification Email template seperted to file
+2006/06/01 Excel/CSV output field setting in module preferences
+2006/05/31 add excel XML format output
+2006/05/28 module dirname `eguide' can be renamed
+2006/05/28 chacking input in entry event
+2006/05/28 setting each persons in multiple event
+2006/05/27 event date present format in module preferences
+2006/05/27 change expire date/time setting releative
+2006/05/23 using JavaScript calender setting date
+2006/05/21 add registerd by poster(manager)
+2006/05/01 add support 'hidden' field in form
+2006/04/10 Event Guide Module 2.0 Beta 2
+allow XOOPS notification
+add about eguide menu
+add multiple persons reservation support
+allow setting close time before by unit (day/hour/min)
+fix meny bugs
+2005/12/28 Event Guide Module 2.0 Beta
+remove XOOPS 1.3 compatiblity
+XOOPS common config support
+Support Templates
+Support Comments in Event
+Multiple Open Date Time in a Event
+Categories
+2005/10/30 1.6.8
+2005/10/22 fix event owner (when no admin permition) can't confirm request.
+2005/10/20 fix TimeZone handle mistake
+2005/09/28 1.6.7
+2005/09/28 Update language/english resources (from jyotirmaya, thanks)
+2005/09/19 1.6.6
+2005/09/19 No Reservations anchor display when reservation disabled
+2005/09/12 change to use $HTTP_{GET|POST|SERVER}_VARS to $_{GET|POST|SERVER}
+2005/06/15 1.6.5
+2005/06/15 fix typo bug in include/search.inc.php
+2005/06/13 1.6.4
+2005/06/13 Add description in search result (for RSS enhancement).
+2005/05/23 Fix force encode charset only in Japanese (problem in other multibyte language).
+2005/05/23 fix quote_gpc setting problem.
+2005/04/02 Fix cancel report mail send failer.
+2004/12/03 1.6.3
+2004/12/03 Fix page for next in event listed
+2004/07/17 1.6.2 Release.
+2004/07/17 Fix failer when URL base is not root.
+2004/07/15 1.6.1 Release.
+2004/07/15 Fix module setting failer.
+2004/07/07 1.6 Release.
+2004/07/07 Sort order change(recent first) in previus events.
+2004/07/06 Add link top of module in blocks
+2004/07/06 Check stop reservation. (When change state until write forms)
+2004/07/04 Add search function at notification list in admin.
+2004/07/04 Reservation enable/disable switch in admin list.
+2004/07/04 Encoding misstake in Japanese
+PHP 4.2.3 mbstring bug? (Not found error in patched version) Adhoc escape code added.
+2004/07/04 fix checkbox items extra count for empty
+2004/06/29 Display reservation list function added.
+2004/06/29 Over booking if last time multiple ordering.
+2004/06/06 Information Sending not work if there is no one reservation.
+2003/12/17 Input coding system auto convert (if mbstring enabled)
+2003/12/17 CSV output using mb_convert_string(if enabled) to SJIS convert.
+2003/12/17 fix XOOPS2 make error in block display
+2003/12/15 fix XOOPS2 approbe notifies date mailfunction.
+2003/12/03 fix XOOPS2 to be error set to top page.
+2003/12/01 fix XOOPS2 not work prev ancker - remove depend globals
+2003/10/21 1.5 Released.
+2003/10/17 remove register_globals depenency (support XOOPS 2.0.5)
+2003/08/04 fix menu orders and uncompatible messages between XOOPS1 and 2
+2003/07/21 1.4 Released.
+2003/07/21 fix reservation form not work.
+2003/07/19 1.3 Released.
+2003/07/19 add number of listed items in block, using block options.
+2003/06/10 1.2 - add compatiblity for XOOPS2
+2003/05/26 1.1 - remove depend local patch.
+2003/02/07 1.0 Released.
