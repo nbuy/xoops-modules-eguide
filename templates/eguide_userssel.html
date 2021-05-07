@@ -6,43 +6,48 @@
 <{/if}>
 <{if $message}>
 <div class="entform">
-  <div class="evnote"><{$message}></div>
+    <div class="evnote"><{$message}></div>
 </div>
 <{else}>
 <div class="entlist">
-<div id="users_search">
-<form action="entry.php">
-<input type="hidden" name="eid" value="<{$form.eid}>" />
-<{if $event.exid}>
-<input type="hidden" name="sub" value="<{$event.exid}>" />
-<{/if}>
-<input name="search" value="<{$smarty.get.search|escape}>"/> <input type="submit" value="<{$smarty.const._SEARCH}>"/>
-</form>
-</div>
-<table width="100%">
-  <tr>
-    <td width="20%"><{$smarty.const._SEARCH}> <{$users_total}></td>
-    <td align="center"><{$navigation}></td>
-    <td width="20%"></td>
-  </tr>
-</table>
-<table class="outer" align="center" cellspacing="1" border="0">
-  <tr class="head">
-    <th></th>
-    <{foreach item=col from=$columns}>
-    <th><{$lang_users[$col]|escape}></th>
-    <{/foreach}>
-  </tr>
-  <{foreach item=user from=$users}>
-  <tr class="<{cycle values="even,odd"}>">
-    <td>
-      <a href="entry.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_RESERV_REGISTER}></a>
-      <{if $xoops_isadmin && $user.uid>0}>| <a href="mylist.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_DETAIL}></a> <{/if}>
-    </td>
-    <{foreach item=col from=$columns}>
-    <td><{$user[$col]|escape}></td>
-    <{/foreach}>
-  </tr>
-  <{/foreach}>
-</table>
-<{/if}>
+    <div id="users_search">
+        <form action="entry.php">
+            <input type="hidden" name="eid" value="<{$form.eid}>"/>
+            <{if $event.exid}>
+            <input type="hidden" name="sub" value="<{$event.exid}>"/>
+            <{/if}>
+            <input name="search" value="<{$smarty.get.search|escape}>"/>
+            <input type="submit" value="<{$smarty.const._SEARCH}>"/>
+        </form>
+    </div>
+
+    <table width="100%">
+        <tr>
+            <td width="20%"><{$smarty.const._SEARCH}> <{$users_total}></td>
+            <td align="center"><{$navigation}></td>
+            <td width="20%"></td>
+        </tr>
+    </table>
+
+    <table class="outer" align="center">
+        <tr class="head">
+            <th></th>
+            <{foreach item=col from=$columns}>
+            <th><{$lang_users[$col]|escape}></th>
+            <{/foreach}>
+        </tr>
+        <{foreach item=user from=$users}>
+        <tr class="<{cycle values="even,odd"}>">
+        <td>
+            <a href="entry.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_RESERV_REGISTER}></a>
+            <{if $xoops_isadmin && $user.uid>0}>| <a
+                href="mylist.php?eid=<{$form.eid}><{if $event.exid}>&amp;exid=<{$event.exid}><{/if}>&amp;uid=<{$user.uid}>"><{$smarty.const._MD_DETAIL}></a>
+            <{/if}>
+        </td>
+        <{foreach item=col from=$columns}>
+        <td><{$user[$col]|escape}></td>
+        <{/foreach}>
+        </tr>
+        <{/foreach}>
+    </table>
+    <{/if}>

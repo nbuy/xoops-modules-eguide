@@ -25,35 +25,35 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
 
-include dirname(dirname(__FILE__))."/mydirname.php";
+include dirname( __FILE__, 2 ) . "/mydirname.php";
 
 eval( '
-function '.$myprefix.'_notify_iteminfo( $category, $item_id )
+function ' . $myprefix . '_notify_iteminfo( $category, $item_id )
 {
-	return eguide_notify_iteminfo_base( "'.$egdirname.'" , "'.$myprefix.'" , $category, $item_id ) ;
+	return eguide_notify_iteminfo_base( "' . $egdirname . '" , "' . $myprefix . '" , $category, $item_id ) ;
 }
-' ) ;
+' );
 
 
-if (!function_exists('eguide_notify_iteminfo_base')) {
+if ( ! function_exists( 'eguide_notify_iteminfo_base' ) ) {
 
-include_once dirname(dirname(__FILE__)).'/const.php';
+	include_once dirname( __FILE__, 2 ) . '/const.php';
 
-function eguide_notify_iteminfo_base($dirname, $prefix, $category, $item_id)
-{
-    global $xoopsDB;
+	function eguide_notify_iteminfo_base( $dirname, $prefix, $category, $item_id ) {
+		global $xoopsDB;
 
-    $item = array('name'=>'');
-    if ($category=='event' && $item_id!=0) {
-	// Assume we have a valid story id
-	$sql = 'SELECT title FROM '.EGTBL. ' WHERE status=0 AND eid='.$item_id;
-	$result = $xoopsDB->query($sql); // TODO: error check
-	
-	list($item['name']) = $xoopsDB->fetchRow($result);
-	$item['url'] = XOOPS_URL."/modules/$dirname/event.php?eid=".$item_id;
-    }
-    return $item;
+		$item = array( 'name' => '' );
+		if ( $category == 'event' && $item_id != 0 ) {
+			// Assume we have a valid story id
+			$sql    = 'SELECT title FROM ' . EGTBL . ' WHERE status=0 AND eid=' . $item_id;
+			$result = $xoopsDB->query( $sql ); // TODO: error check
+
+			list( $item['name'] ) = $xoopsDB->fetchRow( $result );
+			$item['url'] = XOOPS_URL . "/modules/$dirname/event.php?eid=" . $item_id;
+		}
+
+		return $item;
+	}
+
 }
 
-}
-?>

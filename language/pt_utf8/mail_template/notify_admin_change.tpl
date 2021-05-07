@@ -1,4 +1,4 @@
-Olá {X_UNAME}
+Ola {X_UNAME}
 
 Os dados do evento cadastrado foi atualizado.
 
@@ -8,7 +8,7 @@ O evento foi atualizado conforme abaixo:
 
 {UPDATED}
 
-Usuário que atualizou: {DO_UNAME}
+Usuario que atualizou: {DO_UNAME}
 
 -----------
 {X_SITENAME} ({X_SITEURL}) 
