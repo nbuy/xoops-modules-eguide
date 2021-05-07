@@ -3,9 +3,10 @@
 <{include file="db:eguide_item.html"}>
 <{/foreach}>
 <table width="100%">
-<tr>
-  <td><{if $page_prev}><a href="index.php<{$page_prev}>"><{$smarty.const._MD_SHOW_PREV}></a><{/if}></td>
-  <td align="right"><{if $page_next}><a href="index.php<{$page_next}>"><{$smarty.const._MD_SHOW_NEXT}></a><{/if}></td>
-</tr>
+    <tr>
+        <td><{if $page_prev}><a href="index.php<{$page_prev}>"><{$smarty.const._MD_SHOW_PREV}></a><{/if}></td>
+        <td align="right"><{if $page_next}><a href="index.php<{$page_next}>"><{$smarty.const._MD_SHOW_NEXT}></a><{/if}>
+        </td>
+    </tr>
 </table>
-<{include file='db:system_notification_select.html'}>
+<{include file='db:legacy_notification_select.html'}>
