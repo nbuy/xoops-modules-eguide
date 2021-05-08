@@ -4,7 +4,7 @@
 
 **Module Version**  : XCL 2.3.x  
 
-**Description** : Eguide is an event management module to create and manage guidance and booking/reservations for events.
+**Description** : Eguide is an event management app (XCL module) to create and manage guidance and booking/reservations for events.
 
 **Author** : Nobuhiro YASUTOMI (aka nbuy)
 
