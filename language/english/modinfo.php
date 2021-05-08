@@ -10,15 +10,18 @@ if ( defined( '_MI_EGUIDE_NAME' ) ) {
 define( "_MI_EGUIDE_NAME", "Event Guide" );
 
 // A brief description of this module
-define( "_MI_EGUIDE_DESC", "Event Detail display and Reservation system" );
+define( "_MI_EGUIDE_DESC", "Event Management, Guidance and Reservation system" );
+
+// WYSIWYG HTML Editor
+define( "_MI_BODY_EDITOR", "HTML Editor <br><em>What You See Is What You Get</em> - this feature requires the module CKEditor" );
 
 // Names of blocks for this module (Not all module has blocks)
 define( "_MI_EGUIDE_MYLIST", "Reserved Events" );
-define( "_MI_EGUIDE_SUBMIT", "Register New Event" );
+define( "_MI_EGUIDE_SUBMIT", "Create New Event" );
 define( "_MI_EGUIDE_COLLECT", "Settings collection" );
 define( "_MI_EGUIDE_REG", "Notify me of new events" );
 define( "_MI_EGUIDE_HEADLINE", "Event Guide" );
-define( "_MI_EGUIDE_HEADLINE_DESC", "Upcomming Recent Event List" );
+define( "_MI_EGUIDE_HEADLINE_DESC", "Upcomming Event List" );
 define( "_MI_EGUIDE_HEADLINE2", "New Events" );
 define( "_MI_EGUIDE_HEADLINE2_DESC", "Newer Posted Event List" );
 define( "_MI_EGUIDE_HEADLINE3", "Finished Events" );
@@ -27,22 +30,22 @@ define( "_MI_EGUIDE_CATBLOCK", "Event Category" );
 define( "_MI_EGUIDE_CATBLOCK_DESC", "Choose event category" );
 
 define( "_MI_EGUIDE_EVENTS", "Event article Operation" );
-define( "_MI_EGUIDE_NOTIFIES", "Notify to New registers" );
+define( "_MI_EGUIDE_NOTIFIES", "Notify New registers" );
 define( "_MI_EGUIDE_CATEGORY", "Event Categories" );
 define( "_MI_EGUIDE_SUMMARY", "Summary of Reservation" );
 define( "_MI_EGUIDE_CATEGORY_MARK", "Category - " );
 define( "_MI_EGUIDE_ABOUT", "about eguide" );
 
 // Configuration variable for this module
-define( "_MI_EGUIDE_POSTGROUP", "Group of Event Post" );
-define( "_MI_EGUIDE_POSTGROUP_DESC", "Set a group the owner permited to administration for own evnet." );
-define( "_MI_EGUIDE_NOTIFYADMIN", "Notify mail to Admin" );
-define( "_MI_EGUIDE_NOTIFYADMIN_DESC", "Notification mail to admin when New Event registerd" );
+define( "_MI_EGUIDE_POSTGROUP", "Group Permissions" );
+define( "_MI_EGUIDE_POSTGROUP_DESC", "Set a group with permissions to manage own events." );
+define( "_MI_EGUIDE_NOTIFYADMIN", "Notify Admin by email" );
+define( "_MI_EGUIDE_NOTIFYADMIN_DESC", "Notification sent to admin when a New Event is registered" );
 define( "_MI_EGUIDE_NOTIFY_ALWAYS", "Always" );
 define( "_MI_EGUIDE_NOTIFYGROUP", "Admin Group for Notification" );
-define( "_MI_EGUIDE_NOTIFYGROUP_DESC", "The group is received admin notification mail" );
-define( "_MI_EGUIDE_NEEDPOSTAUTH", "Do you need to approve New Event" );
-define( "_MI_EGUIDE_NEEDPOSTAUTH_DESC", "Need to approve New Event by site administrator" );
+define( "_MI_EGUIDE_NOTIFYGROUP_DESC", "The group to send an admin notification mail" );
+define( "_MI_EGUIDE_NEEDPOSTAUTH", "Approve a New Event" );
+define( "_MI_EGUIDE_NEEDPOSTAUTH_DESC", "A New Event needs the site administrator approval" );
 define( "_MI_EGUIDE_MAX_LISTITEM", "Display additional items in list" );
 define( "_MI_EGUIDE_MAX_LISTITEM_DESC", "Display items entry order additional form" );
 define( "_MI_EGUIDE_MAX_LISTLINES", "Display list items in a page" );

@@ -55,6 +55,7 @@ if ( $op == 'new' ) {
 		'title'           => '', // contents
 		'summary'         => '',
 		'body'            => '',
+		'body_editor'     => $xoopsModuleConfig['body_editor'],//ckeditor
 		'counter'         => 0,
 		'reserved'        => 0,
 		'edate'           => time() + 3600 * 24, // now + a day
@@ -128,7 +129,7 @@ if ( $eid ) {            // already exists extents
 	$extents      = param( 'extents', "none" );
 	$repeat       = param( 'repeat', 1 );
 	$input_extent = select_list( 'extents', $ev_extents, $extents );
-	$input_extent .= ' &nbsp; ' . _MD_EXTENT_REPEAT . " <input size='2' value='$repeat' name='repeat'/>";
+	$input_extent .= ' &nbsp; ' . _MD_EXTENT_REPEAT . " <input type='number' size='2' value='$repeat' name='repeat' style='width:5em'>";
 	$step         = 86400;        // sec/day
 	switch ( $extents ) {
 		case 'weekly':
@@ -306,6 +307,7 @@ assign_module_css();
 
 // DHTML calendar
 include_once XOOPS_ROOT_PATH . '/language/' . $xoopsConfig['language'] . '/calendar.php';
+
 if ( ! empty( $ev_week ) ) {
 	$xoopsTpl->assign( 'weekname', $ev_week );
 }
@@ -316,12 +318,16 @@ $y = formatTimestamp( time(), 'Y' );
 $xoopsTpl->assign( 'calrange', array( $y - 10, $y + 10 ) );
 
 $check = array( 'title' => _MD_TITLE, 'summary' => _MD_INTROTEXT );
+
 foreach ( $check as $k => $v ) {
 	$check[ $k ] = sprintf( _FORM_ENTER, $v );
 }
+
 $xoopsTpl->assign( 'check', $check );
-$xoopsTpl->assign( 'use_fckeditor', eguide_form_options( 'use_fckeditor', 0 ) );
+//$xoopsTpl->assign( 'use_fckeditor', eguide_form_options( 'use_fckeditor', 0 ) );
+$xoopsTpl->assign( 'body_editor', eguide_form_options( 'xoopsdhtml', 0 ) );
 $xoopsTpl->assign( 'enable_copy', eguide_form_options( 'enable_copy', 0 ) );
+
 $timetable = array();
 $tstr      = $xoopsModuleConfig['time_defs'];
 if ( $tstr ) {
@@ -335,6 +341,7 @@ if ( $tstr ) {
 	}
 }
 $xoopsTpl->assign( 'timetable', $timetable );
+
 
 if ( $eid && $op == 'delete' ) {
 	$xoopsOption['template_main'] = EGPREFIX . '_event.html';
@@ -413,12 +420,17 @@ if ( $eid && $op == 'delete' ) {
 	}
 
 	$summary  = isset( $data['summary'] ) ? $data['summary'] : '';
+
 	$textarea = new myFormDhtmlTextArea( '', 'summary', $summary, 10, 60 );
+
 	$nlab     = eguide_form_options( 'label_persons' );
+
 	if ( $nlab ) {
 		$nlab = sprintf( _MD_RESERV_LABEL_DESC, $nlab );
 	}
+
 	$edate = $data['edate'];
+
 	$xoopsTpl->assign( array(
 		'input_edate'      => datefield( 'edate', $edate ),
 		'input_edatetime'  => timefield( 'edate', $edate ),
@@ -433,6 +445,7 @@ if ( $eid && $op == 'delete' ) {
 		'input_style'      => select_list( 'style', $edit_style, $data['style'] ),
 		'edata'            => $data,
 	) );
+
 	if ( $data['optvars'] ) {
 		$optvars = unserialize_vars( $data['optvars'] );
 		$xoopsTpl->assign( 'optvars', $optvars );
@@ -496,10 +509,19 @@ function getDateField( $p ) {
 }
 
 function datefield( $prefix, $time, $hastime = true ) {
-	$buf = "<input id='${prefix}ymd' name='${prefix}ymd' size='12' value='" . formatTimestamp( $time, "Y-m-d" ) . "'/> ";
-	$buf .= "<script language='javascript'><!-- 
-document.write('<input type=\"button\" value=\"" . _MD_CAL . "\" onClick=\"showCalendar(\\'${prefix}ymd\\')\">');
---></script>\n";
+
+	$buf = "<script>
+	$( function() {
+		$( \"#${prefix}ymd\" ).datepicker({
+		dateFormat: \"yy-mm-dd\",
+		showAnim: \"slideDown\",
+		});
+	});
+	</script>";
+	$buf .= "<input type='text' id='${prefix}ymd' name='${prefix}ymd' size='12' value='" . formatTimestamp( $time, "Y-m-d" ) . "'> - " . _MD_CAL . " -";
+//	$buf .= "<script language='javascript'><!--
+//document.write('<input type=\"button\" value=\"" . _MD_CAL . "\" onClick=\"showCalendar(\\'${prefix}ymd\\')\">');
+//--></script>\n";
 
 	return $buf;
 }
@@ -576,5 +598,5 @@ function post_optvars( $defs ) {
 		$vars[ $fname ] = $v;
 	}
 
-	return join( "\n", $vars );
+	return implode( "\n", $vars );
 }

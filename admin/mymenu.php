@@ -14,6 +14,7 @@ if ( ! is_object( $xoopsModule ) ) {
 $language  = empty( $xoopsConfig['language'] ) ? 'english' : $xoopsConfig['language'];
 $mydirpath = dirname( __FILE__, 2 );
 $mydirname = basename( $mydirpath );
+
 if ( file_exists( "$mydirpath/language/$language/modinfo.php" ) ) {
 	// user customized language file
 	include_once "$mydirpath/language/$language/modinfo.php";
@@ -27,29 +28,29 @@ include __DIR__ . '/menu.php';
 $use_altsys = file_exists( XOOPS_TRUST_PATH . '/libs/altsys/mytplsadmin.php' );
 if ( $use_altsys ) {
 	// mytplsadmin (TODO check if this module has tplfile)
-	$title = defined( '_MD_A_MYMENU_MYTPLSADMIN' ) ? _MD_A_MYMENU_MYTPLSADMIN : 'tplsadmin';
-	array_push( $adminmenu, array(
+	$title       = defined( '_MD_A_MYMENU_MYTPLSADMIN' ) ? _MD_A_MYMENU_MYTPLSADMIN : 'tplsadmin';
+	$adminmenu[] = array(
 		'title' => $title,
 		'link'  => 'admin/index.php?mode=admin&lib=altsys&page=mytplsadmin'
-	) );
+	);
 }
 
 if ( file_exists( XOOPS_TRUST_PATH . '/libs/altsys/myblocksadmin.php' ) ) {
 	// myblocksadmin
-	$title = defined( '_MD_A_MYMENU_MYBLOCKSADMIN' ) ? _MD_A_MYMENU_MYBLOCKSADMIN : 'blocksadmin';
-	array_push( $adminmenu, array(
+	$title       = defined( '_MD_A_MYMENU_MYBLOCKSADMIN' ) ? _MD_A_MYMENU_MYBLOCKSADMIN : 'blocksadmin';
+	$adminmenu[] = array(
 		'title' => $title,
 		'link'  => 'admin/index.php?mode=admin&lib=altsys&page=myblocksadmin'
-	) );
+	);
 }
 
 if ( file_exists( XOOPS_TRUST_PATH . '/libs/altsys/mylangadmin.php' ) ) {
 	// myblocksadmin
-	$title = defined( '_MD_A_MYMENU_MYLANGADMIN' ) ? _MD_A_MYMENU_MYLANGADMIN : 'langadmin';
-	array_push( $adminmenu, array(
+	$title       = defined( '_MD_A_MYMENU_MYLANGADMIN' ) ? _MD_A_MYMENU_MYLANGADMIN : 'langadmin';
+	$adminmenu[] = array(
 		'title' => $title,
 		'link'  => 'admin/index.php?mode=admin&lib=altsys&page=mylangadmin'
-	) );
+	);
 }
 
 // preferences
@@ -57,22 +58,22 @@ $config_handler =& xoops_gethandler( 'config' );
 if ( count( $config_handler->getConfigs( new Criteria( 'conf_modid', $xoopsModule->mid() ) ) ) > 0 ) {
 	if ( file_exists( XOOPS_TRUST_PATH . '/libs/altsys/mypreferences.php' ) ) {
 		// mypreferences
-		$title = defined( '_MD_A_MYMENU_MYPREFERENCES' ) ? _MD_A_MYMENU_MYPREFERENCES : _PREFERENCES;
-		array_push( $adminmenu, array(
+		$title       = defined( '_MD_A_MYMENU_MYPREFERENCES' ) ? _MD_A_MYMENU_MYPREFERENCES : _PREFERENCES;
+		$adminmenu[] = array(
 			'title' => $title,
 			'link'  => 'admin/index.php?mode=admin&lib=altsys&page=mypreferences'
-		) );
+		);
 	} elseif ( defined( 'XOOPS_CUBE_LEGACY' ) ) {
 		// system->preferences
-		array_push( $adminmenu, array(
+		$adminmenu[] = array(
 			'title' => _PREFERENCES,
 			'link'  => XOOPS_URL . '/modules/legacy/admin/index.php?action=PreferenceEdit&confmod_id=' . $xoopsModule->mid()
-		) );
+		);
 	} else {
-		array_push( $adminmenu, array(
+		$adminmenu[] = array(
 			'title' => _PREFERENCES,
 			'link'  => XOOPS_URL . '/modules/system/admin.php?fct=preferences&op=showmod&mod=' . $xoopsModule->mid()
-		) );
+		);
 	}
 }
 
@@ -108,10 +109,14 @@ if ( empty( $adminmenu_hilighted ) ) {
 
 // link conversion from relative to absolute
 foreach ( array_keys( $adminmenu ) as $i ) {
-	if ( stristr( $adminmenu[ $i ]['link'], XOOPS_URL ) === false ) {
+	if ( false === stripos( $adminmenu[ $i ]['link'], XOOPS_URL ) ) {
 		$adminmenu[ $i ]['link'] = XOOPS_URL . "/modules/$mydirname/" . $adminmenu[ $i ]['link'];
 	}
 }
+
+// Returns module dir name with the first character capitalized
+// Assign to template for Admin Breadcrumbs
+$dirname = ucfirst( $mydirname );
 
 if ( $use_altsys ) {
 	// display
@@ -119,6 +124,7 @@ if ( $use_altsys ) {
 	$tpl = new XoopsTpl();
 	$tpl->assign( array(
 		'adminmenu' => $adminmenu,
+		'dirname'   => $dirname,
 	) );
 	$tpl->display( 'db:altsys_inc_mymenu.html' );
 } else {

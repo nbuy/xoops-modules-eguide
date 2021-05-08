@@ -79,7 +79,7 @@ function user_notify( $eid ) {
 		return ( false );
 	}
 
-	$tags                 = array(
+	$tags             = array(
 		'EVENT_TITLE' => $title,
 		'EVENT_DATE'  => eventdate( $edate, _MD_TIME_FMT ),
 		'EVENT_NOTE'  => '',

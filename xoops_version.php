@@ -19,7 +19,8 @@ $modversion['author']      = "Nobuhiro Yasutomi";
 $modversion['help']        = "help.html";
 $modversion['license']     = "GPL see LICENSE";
 $modversion['official']    = 0;
-$modversion['image']       = $myicon;
+//$modversion['image']       = $myicon;
+$modversion['image'] = 'images/module_eguide.svg';
 $modversion['dirname']     = $egdirname;
 
 // Sql file
@@ -370,6 +371,18 @@ $modversion['config'][] = array(
 	'valuetype'   => 'int',
 	'default'     => 1
 );
+
+$modversion['config'][] = array(
+	'name'        => 'body_editor',
+	'title'       => '',
+	'description' => '',
+	'formtype'    => 'select',
+	'valuetype'   => 'text',
+	'default'     => 'xoopsdhtml',
+	//	'options'		=> array('xoopsdhtml' => 'xoopsdhtml', 'common/fckeditor' => 'common_fckeditor')
+	'options'     => [ 'xoopsdhtml' => 'xoopsdhtml' ]
+);
+
 
 // Notification
 

@@ -12,6 +12,9 @@ define( "_MI_EGUIDE_NAME", "イベント案内" );
 // A brief description of this module
 define( "_MI_EGUIDE_DESC", "イベント案内の掲載と、受付処理を行う" );
 
+// WYSIWYG HTML Editor
+define( "_MI_BODY_EDITOR", "HTML Editor <br><em>What You See Is What You Get</em> - this feature requires the module CKEditor" );
+
 // Names of blocks for this module (Not all module has blocks)
 define( "_MI_EGUIDE_MYLIST", "予約済みイベント" );
 define( "_MI_EGUIDE_SUBMIT", "新規イベントの登録" );

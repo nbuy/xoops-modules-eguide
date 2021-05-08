@@ -2,6 +2,7 @@
 include '../../../include/cp_header.php';
 
 $modbase = dirname( __FILE__, 2 );
+
 if ( ! defined( "_MD_ORDER_DATE" ) ) {
 	if ( class_exists( "XCube_Root" ) ) {
 		$root =& XCube_Root::getSingleton();
@@ -17,5 +18,6 @@ if ( ! defined( "_MD_ORDER_DATE" ) ) {
 		}
 	}
 }
+
 include "$modbase/const.php";
 include "$modbase/functions.php";

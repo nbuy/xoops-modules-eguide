@@ -135,10 +135,11 @@ include 'mymenu.php';
 $myts =& MyTextSanitizer::getInstance();
 $tags = css_tags();
 
+/////////////////////////// ————— EVENTS
+
 switch ( $op ) {
 	case 'events':
 		echo "<h3>" . _MI_EGUIDE_EVENTS . "</h3>";
-		echo '<hr><br>';
 		echo "<p><a class='ui-btn' href=\"../admin.php\">" . _MI_EGUIDE_SUBMIT . "</a> </p>\n";
 		$result = $xoopsDB->query( 'SELECT count(eid) FROM ' . EGTBL );
 		list( $count ) = $xoopsDB->fetchRow( $result );
@@ -191,6 +192,7 @@ switch ( $op ) {
 		echo "<input type='hidden' name='op' value='resvCtrl'>\n";
 		echo "<input type='submit' value='" . _AM_UPDATE . "'>\n";
 		echo "</td></tr></table></form>\n";
+
 		$result = $xoopsDB->query( "SELECT count(rvid) FROM " . RVTBL . " WHERE eid=0" );
 		if ( $result ) {
 			list( $n ) = $xoopsDB->fetchRow( $result );
@@ -199,9 +201,10 @@ switch ( $op ) {
 		CloseTable();
 		break;
 
+	/////////////////////////// ————— NOTIFIES
+
 	case 'notifies':
 		echo "<h3>" . _MD_INFO_REQUEST . "</h3>";
-		echo '<hr><br>';
 		$cond = "eid=0";
 		if ( isset( $_GET['q'] ) ) {
 			$q    = $_GET['q'];
@@ -211,12 +214,12 @@ switch ( $op ) {
 		$n      = 0;
 		$nc     = $xoopsDB->getRowsNum( $result );
 		echo "<form method='get'>\n" .
-		     _AM_INFO_SEARCH . " <input name='q'>" .
+		     _AM_INFO_SEARCH . " <input type='search' name='q'>" .
 		     " <input type='hidden' name='op' value='notifies'>\n" .
 		     " <input type='submit' value='" . _SUBMIT . "'>\n" .
 		     "</form>\n";
-		echo "<p><a class='ui-btn' href=' ../reserv.php?op=register'>" . _MI_EGUIDE_REG . "</a></p>\n";
-    echo sprintf( _MD_INFO_COUNT, $nc );
+		echo "<p><a class='ui-btn' href=' ../reserv.php?op=register'>" . _MI_EGUIDE_REG . "</a> \n";
+        echo " <span class='badge'>" . sprintf( _MD_INFO_COUNT, $nc ) . "</span></p>";
     if ( $nc ) {
 	    echo "<form method='post'>\n" .
 	         "<input type='hidden' name='op' value='delnotify'>\n" .
@@ -245,6 +248,8 @@ switch ( $op ) {
     CloseTable();
     break;
 
+	/////////////////////////// ————— EDIT
+
 	case 'edit':
 		$result = $xoopsDB->query( "SELECT eid,edate,cdate,title,uid,status FROM " . EGTBL . " WHERE eid=$eid" );
 		$data   = $xoopsDB->fetchArray( $result );
@@ -255,7 +260,6 @@ switch ( $op ) {
 		$post   = formatTimestamp( $data['cdate'], _AM_POST_FMT );
 
 		echo "<h3>" . _MI_EGUIDE_EVENTS . " &gt;&gt; " . _AM_DISP_STATUS . "</h3>";
-		echo "<hr><br>";
 		echo "<form method='post'>\n";
 		echo "<table class='outer'>\n";
 		echo "<tr><th colspan=\"2\">" . _AM_TITLE . " : $title</th></tr>";
@@ -291,9 +295,10 @@ switch ( $op ) {
 		CloseTable();
 		break;
 
+	/////////////////////////// ————— CATEGORY
+
 	case 'category':
 		echo "<h3>" . _AM_CATEGORY . "</h3>\n";
-		echo "<hr><br>";
 
 		if ( isset( $_GET['catid'] ) ) {
 			edit_category( (int) $_GET['catid'] );
@@ -309,9 +314,10 @@ switch ( $op ) {
 		import_category();
 		break;
 
+	/////////////////////////// ————— SUMMARY
+
 	case 'summary':
 		echo "<h3>" . _AM_SUMMARY . "</h3>\n";
-		echo "<hr><br>";
 
 		$now    = time();
 		$result = $xoopsDB->query( 'SELECT count(eid) FROM ' . EGTBL . ' LEFT JOIN ' . EXTBL . " ON eid=eidref" );
@@ -326,9 +332,9 @@ switch ( $op ) {
 		if ( $count > $max ) {
 			echo $nav->renderNav();
 		}
-		echo "<ul class=\"toptab\"><li class=\"save\"><a href='index.php?op=summary_csv'>" . _MD_CSV_OUT . "</a></li></ul>\n";
+		echo "<p><a class='ui-btn' href='index.php?op=summary_csv'>" . _MD_CSV_OUT . "</a> \n";
 
-		echo "<p>" . sprintf( _MD_INFO_COUNT, $start + 1 ) . "/$count</p>";
+		echo "<span class='badge'>" . sprintf( _MD_INFO_COUNT, $start + 1 ) . "/$count</span></p>";
 
 		echo "<table class='outer'>";
 		$n = 0;
@@ -355,13 +361,15 @@ switch ( $op ) {
 			}
 			echo "<tr class='$bg'><td>$id<td>$date</td><td>$title</td>" .
 			     "<td>$uname</td><td align='right'>" . $data['persons'] .
-			     "</td><td align='right'>$reserved</td></tr>\n";
+			     "</td><td align='center'>$reserved</td></tr>\n";
 		}
 		echo "</table>";
 		break;
 }
 
 xoops_cp_footer();
+
+/////////////////////////// ————— FUNCTION SHOW CATEGORIES
 
 function show_categories() {
 	global $xoopsDB;
@@ -379,16 +387,11 @@ function show_categories() {
 	);
 
 	echo "
-	<ul class=\"toptab\">
-	<li class=\"addDir\">
-	<a href='index.php?op=category&catid=0'>" . _AM_CATEGORY_NEW . "</a>
-	</li>
-	<li class=\"import\">
-	<a href='index.php?op=catimp'>" . _AM_CATEGORY_IMPORT . "</a>
-	</li>
-	</ul>\n";
+	<p><a class='ui-btn' href='index.php?op=category&catid=0'>" . _AM_CATEGORY_NEW . "</a>	
+	<a class='ui-btn' href='index.php?op=catimp'>" . _AM_CATEGORY_IMPORT . "</a>
+	</p>\n";
 
-	echo "<p class='evnavi'>" . _AM_COUNT . ' ' . $xoopsDB->getRowsNum( $res ) . "</p>";
+	echo "<p><span class='badge'> " . _AM_COUNT . ' ' . $xoopsDB->getRowsNum( $res ) . "</span></p>";
 
 	echo "<form action='index.php?op=catdel' method='post'>\n";
 	echo "<table class=\"outer\">\n";

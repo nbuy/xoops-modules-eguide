@@ -13,6 +13,9 @@ define( "_MI_EGUIDE_NAME", "Guia de eventos" );
 // A brief description of this module
 define( "_MI_EGUIDE_DESC", "Sistema de agendamento e vizualização detalhada de eventos" );
 
+// WYSIWYG HTML Editor
+define( "_MI_BODY_EDITOR", "HTML Editor <br><em>What You See Is What You Get</em> - this feature requires the module CKEditor" );
+
 // Names of blocks for this module (Not all module has blocks)
 define( "_MI_EGUIDE_MYLIST", "Eventos agendados" );
 define( "_MI_EGUIDE_SUBMIT", "Registrar um novo evento" );

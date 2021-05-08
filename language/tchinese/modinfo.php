@@ -10,6 +10,9 @@ define('_MI_EGUIDE_NAME', '活動快訊');
 // A brief description of this module
 define('_MI_EGUIDE_DESC', '公佈活動快訊以及活動報名');
 
+// WYSIWYG HTML Editor
+define( "_MI_BODY_EDITOR", "HTML Editor <br><em>What You See Is What You Get</em> - this feature requires the module CKEditor" );
+
 // Names of blocks for this module (Not all module has blocks)
 define('_MI_EGUIDE_MYLIST', '．我已參加的活動清單');
 define('_MI_EGUIDE_SUBMIT', '．新增活動訊息');

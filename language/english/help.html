@@ -1,38 +1,20 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html language="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Event Guide module helps</title>
-    <style>
-        .outer {
-            background-color: #808080;
-        }
-
-        td, th {
-            padding: 4px;
-            background: #e8e8e8;
-        }
-
-        .head th {
-            padding: 4px;
-            background: #d0d0d0;
-        }
-
-        .bnf {
-            color: #008000;
-        }
-    </style>
 </head>
-<body>
 <style>
     .note {
         font-size: 90%;
-        color: #800000;
         padding: 0.5em;
     }
 </style>
+<body>
+
+
 <h4>Event Guide module</h4>
 <ul>
-    <li><a href="#summary">Summary</a></li>
+    <li><a href="#help-overview">Summary</a></li>
     <li><a href="#roleplay">Using Steps</a></li>
     <li><a href="#functions">Functions</a></li>
     <li><a href="#config">Event Configuration</a></li>
@@ -43,21 +25,26 @@
 
 <hr>
 
-<a name="summary"></a><h5>Summary</h5>
+<a id="help-overview"></a><h5>Summary</h5>
 
-Event guide module will display event guidance
-and reservations for the event.
-The modules has functions as follows:
+<p>Event management software is the generic term for a wide range of software products that are used in the management
+    of professional and academic conferences, trade exhibitions, conventions and smaller events such as
+    Continuing Professional Development meetings.</p>
+
+<p>The Event Guide module has the following features:</p>
 <ul>
-    <li>Event reservations</li>
-    <li>Configurable reservation forms - register id by email address</li>
-    <li>Display event automatically in time - change display and allow reservations</li>
-    <li>Adminster reservations and get data in CSV format</li>
-    <li>Mail to send to persons who have made reservations</li>
-    <li>New event notification to registered users</li>
+    <li>Event reservations.
+    <li>Configurable booking forms.
+    <li>Registration by e-mail address.
+    <li>Automatic display of the event over time.
+    <li>Customized display and permissions for reservations.
+    <li>Administration of reservations.
+    <li>Download data in CSV format.
+    <li>Sending confirmation and follow-up e-mails to people who have made reservations.
+    <li>Notify registered users of new events.
 </ul>
 
-<a name="roleplay"></a><h5>Using Steps</h5>
+<a id="roleplay"></a><h5>Using Steps</h5>
 
 <ol>
     <li>Install this module</li>
@@ -79,7 +66,7 @@ The modules has functions as follows:
 </ol>
 
 
-<a name="functions"></a><h5>Functions</h5>
+<a id="functions"></a><h5>Functions</h5>
 
 <h6>Event Registration and Display</h6>
 
@@ -124,155 +111,155 @@ The modules has functions as follows:
     <li>Notify new event registered users</li>
 </ol>
 
-<a name="config"></a><h5>Event Configuration</h5>
+<a id="config"></a><h5>Event Configuration</h5>
 
-Event Guide module setup items as follow:
+<p>Event Guide module setup items as follow:</p>
 
-<blockquote>
-    <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
-        <tr class="hd">
-            <th>Item</th>
-            <th>value</th>
-            <th>description</th>
-        </tr>
-        <tr class="even">
-            <th align="left">Group of Event Post</th>
-            <td>Group (<u>Regsiter Users</u>)</td>
-            <td>Set a group the owner permited to administration for own evnet.</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Notify mail to Admin</th>
-            <td>No/<u>Yes</u>/Always</td>
-            <td>Notification mail to admin when Event registerd or updated.
-                No = No notifcation.
-                Yes = Notify except operation user.
-                Always = Notify with operation user.
-            </td>
-        </tr>
-        <tr class="even">
-            <th align="left">Admin Group for Notification</th>
-            <td><u>Yes</u>/No</td>
-            <td>The group is received admin notification mail</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Do you need to approve New Event</th>
-            <td>Yes/<u>No</u></td>
-            <td>Need to approve New Event by site administrator</td>
-        </tr>
-        <tr class="even">
-            <th align="left">Display additional items in list</th>
-            <td>field counts (<u>3</u>)</td>
-            <td>Display items entry order additional form</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Display list items in a page</th>
-            <td>line counts (<u>50</u>)</td>
-            <td>How many item lines in a page</td>
-        </tr>
-        <tr class="even">
-            <th align="left">Display events in top page</th>
-            <td>Event counts (<u>10</u>)</td>
-            <td>Number of listed events in top page</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Show Multiple Entry</th>
-            <td><u>Yes</u>/No</td>
-            <td>When event has multiple entry, show each entris. YES - display each entries. NO - Only show recenet
-                entry.
-            </td>
-        </tr>
-        <tr class="even">
-            <th align="left">User requested notification of new event</th>
-            <td><u>Yes</u>/No</td>
-            <td>YES - Enable notification mail, NO - disable.</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Event entry need to LOGIN</th>
-            <td><u>No</u>/Yes/Both</td>
-            <td>Only login user can be reservation event (Not use email address).
-                When select "Both", email address input field exist only guest user.
-            </td>
-        </tr>
-        <tr class="even">
-            <th align="left">Has confirm page</th>
-            <td><u>Yes</u>/No</td>
-            <td>Display confirm page when reservation submit</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Additional item options</th>
-            <td>(none)</td>
-            <td>Additional item optional settings.
-                <ul>
-                    <li>label_persons=label (label for multiple person reservation)</li>
-                    <li>reply_tpl_suffix=suffix (suffix of reply mail template filename)</li>
-                    <li>reply_extension=label (label for reply mail template extension)</li>
-                    <li>export_charset=UTF-8 (using CSV output coding system)</li>
-                    <li>size=60 (text input default size)</li>
-                    <li>cols=40 (textarea default columns)</li>
-                    <li>rows=5 (textarea default rows)</li>
-                </ul>
-                See "<a href="#form_options">Additional item options</a>" more details.
+<table border="0">
+    <tr class="hd">
+        <th>Item</th>
+        <th>value</th>
+        <th>description</th>
+    </tr>
+    <tr class="even">
+        <th align="left">Group of Event Post</th>
+        <td>Group (<u>Regsiter Users</u>)</td>
+        <td>Set a group the owner permited to administration for own evnet.</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Notify mail to Admin</th>
+        <td>No/<u>Yes</u>/Always</td>
+        <td>Notification mail to admin when Event registerd or updated.
+            No = No notifcation.
+            Yes = Notify except operation user.
+            Always = Notify with operation user.
+        </td>
+    </tr>
+    <tr class="even">
+        <th align="left">Admin Group for Notification</th>
+        <td><u>Yes</u>/No</td>
+        <td>The group is received admin notification mail</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Do you need to approve New Event</th>
+        <td>Yes/<u>No</u></td>
+        <td>Need to approve New Event by site administrator</td>
+    </tr>
+    <tr class="even">
+        <th align="left">Display additional items in list</th>
+        <td>field counts (<u>3</u>)</td>
+        <td>Display items entry order additional form</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Display list items in a page</th>
+        <td>line counts (<u>50</u>)</td>
+        <td>How many item lines in a page</td>
+    </tr>
+    <tr class="even">
+        <th align="left">Display events in top page</th>
+        <td>Event counts (<u>10</u>)</td>
+        <td>Number of listed events in top page</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Show Multiple Entry</th>
+        <td><u>Yes</u>/No</td>
+        <td>When event has multiple entry, show each entris. YES - display each entries. NO - Only show recenet
+            entry.
+        </td>
+    </tr>
+    <tr class="even">
+        <th align="left">User requested notification of new event</th>
+        <td><u>Yes</u>/No</td>
+        <td>YES - Enable notification mail, NO - disable.</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Event entry need to LOGIN</th>
+        <td><u>No</u>/Yes/Both</td>
+        <td>Only login user can be reservation event (Not use email address).
+            When select "Both", email address input field exist only guest user.
+        </td>
+    </tr>
+    <tr class="even">
+        <th align="left">Has confirm page</th>
+        <td><u>Yes</u>/No</td>
+        <td>Display confirm page when reservation submit</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Additional item options</th>
+        <td>(none)</td>
+        <td>Additional item optional settings.
+            <ul>
+                <li>label_persons=label (label for multiple person reservation)</li>
+                <li>reply_tpl_suffix=suffix (suffix of reply mail template filename)</li>
+                <li>reply_extension=label (label for reply mail template extension)</li>
+                <li>export_charset=UTF-8 (using CSV output coding system)</li>
+                <li>size=60 (text input default size)</li>
+                <li>cols=40 (textarea default columns)</li>
+                <li>rows=5 (textarea default rows)</li>
+            </ul>
+            See "<a href="#form_options">Additional item options</a>" more details.
 
-            </td>
-        </tr>
-        <tr class="even">
-            <th align="left">Close Time Before (min)</th>
-            <td><u>60</u></td>
-            <td>Event entry close time before setting minits.</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Expire Time</th>
-            <td><u>1440</u> (was 1day, 24 hours)</td>
-            <td>Event expired on top page when after event start time in minites.</td>
-        </tr>
-        <tr class="even">
-            <th align="left">Persons default value</th>
-            <td><u>10</u></td>
-            <td>Reservation persons in event post form</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Date Foramt</th>
-            <td><u>D, d M Y</u></td>
-            <td>Open Event Date(Time) display format. Using PHP date function format.</td>
-        </tr>
-        <tr class="even">
-            <th align="left">Use Other moudle plugins</th>
-            <td>Yes/<u>No</u></td>
-            <td>Internal Control accept entry form other modules</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Current entry level mark</th>
-            <td>0,[Close]<br/>50,[Empty]<br/>100,[Many]<br/>101,[Full]<br/></td>
-            <td>The mark mean of how many entry in current. Show mark correspond parcentage. (xx,yy mean less than xx%
-                showup yy. And '0,yy' mean out of date mark)
-            </td>
-        </tr>
-        <tr class="even">
-            <th align="left">Time Table Labels</th>
-            <td>(none)</td>
-            <td>Set starting time in Settings collection page. e.g.: 08:00,14:00,16:00</td>
-        </tr>
-        <tr class="odd">
-            <th align="left">Item List in export reservations</th>
-            <td><u>*</u></td>
-            <td>Item `name' or `number' seperated comma(,). Astarisk(*) mean left items. e.g.: 3,4,0,2,*</td>
-        </tr>
-        <tr class="even">
-            <th align="left">Allow Comments</th>
-            <td><u>Yes</u>/No</td>
-            <td>Allow Comments for event<p>Following sets standard comment function in XOOPS</p></td>
-        </tr>
+        </td>
+    </tr>
+    <tr class="even">
+        <th align="left">Close Time Before (min)</th>
+        <td><u>60</u></td>
+        <td>Event entry close time before setting minits.</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Expire Time</th>
+        <td><u>1440</u> (was 1day, 24 hours)</td>
+        <td>Event expired on top page when after event start time in minites.</td>
+    </tr>
+    <tr class="even">
+        <th align="left">Persons default value</th>
+        <td><u>10</u></td>
+        <td>Reservation persons in event post form</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Date Foramt</th>
+        <td><u>D, d M Y</u></td>
+        <td>Open Event Date(Time) display format. Using PHP date function format.</td>
+    </tr>
+    <tr class="even">
+        <th align="left">Use Other moudle plugins</th>
+        <td>Yes/<u>No</u></td>
+        <td>Internal Control accept entry form other modules</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Current entry level mark</th>
+        <td>0,[Close]<br/>50,[Empty]<br/>100,[Many]<br/>101,[Full]<br/></td>
+        <td>The mark mean of how many entry in current. Show mark correspond parcentage. (xx,yy mean less than xx%
+            showup yy. And '0,yy' mean out of date mark)
+        </td>
+    </tr>
+    <tr class="even">
+        <th align="left">Time Table Labels</th>
+        <td>(none)</td>
+        <td>Set starting time in Settings collection page. e.g.: 08:00,14:00,16:00</td>
+    </tr>
+    <tr class="odd">
+        <th align="left">Item List in export reservations</th>
+        <td><u>*</u></td>
+        <td>Item `name' or `number' seperated comma(,). Astarisk(*) mean left items. e.g.: 3,4,0,2,*</td>
+    </tr>
+    <tr class="even">
+        <th align="left">Allow Comments</th>
+        <td><u>Yes</u>/No</td>
+        <td>Allow Comments for event<p>Following sets standard comment function in XOOPS</p></td>
+    </tr>
 
-    </table>
-</blockquote>
+</table>
 
-<a name="form_options"></a><h6>Additional item options</h6>
+
+<a id="form_options"></a><h6>Additional item options</h6>
+
 <dl>
     <dt>label_persons (label for multiple person reservation)</dt>
     <dd>This option setting for a reservation accept multiple persons.
         Set item name(label) to input how many.
         <p class="note">For example setting as
-            "<tt>label_persons=Persons</tt>". In additional item like as
+            "<code>label_persons=Persons</code>". In additional item like as
             "Persons,select,1,2,3,4" that make to recommand numeric choice field.
         </p>
         Only value setting in this config, Assume set for this "label_persons=" option.
@@ -283,7 +270,7 @@ Event Guide module setup items as follow:
         Use for alternative reply mail template. Using filename added setting value for auto reply email. For example:
         <pre>reply_tpl_suffix=A</pre>
         mean using replay template
-        <tt>language/&lt;lang&gt;/mail_template/{accept|order}<b>A</b>.tpl</tt>
+        <code>language/&lt;lang&gt;/mail_template/{accept|order}<b>A</b>.tpl</code>
         file. "reply_extension" for indirect by addition items value. In this variable set suffix to direct.
     </dd>
     <dt>reply_extension (label for reply mail template extension)</dt>
@@ -292,9 +279,9 @@ Event Guide module setup items as follow:
 
 
         <div class="note">This option setting item name(label) for template file name extension.
-            <p>For example, setting in preferences "<tt>reply_extension=OrderForm</tt>", In Additional Items include
+            <p>For example, setting in preferences "<code>reply_extension=OrderForm</code>", In Additional Items include
                 like "OrderForm,hidden,A" field. This event reservation switch reply mail template file.</p>
-            <p>In this case(the value as "A") using template file name assume <tt>language/&lt;lang&gt;/mail_template/{accept|order}<b>A</b>.tpl</tt>
+            <p>In this case(the value as "A") using template file name assume <code>language/&lt;lang&gt;/mail_template/{accept|order}<b>A</b>.tpl</code>
                 and using it.</p>
             <p>Additional value for file name, that is store value in reservation. In international using, recommand the
                 value make alpha-numeric only. Because sometime there is encoding problem.<br/>If there is no mail
@@ -325,9 +312,9 @@ Event Guide module setup items as follow:
     <dt>bound_time (Bundary time as the last day)</dt>
     <dd>
         The event start before stting this, display the day before date and more 24 hours (or 12 hours).
-        Setting time format as "<tt>HH:MM</tt>".
-        <p>For example, setting "<tt>bound_time=03:00</tt>", a event start "2009-12-15 01:00" to be display "2009-12-14
-            25:00". The bound time work correct from <tt>00:01</tt> to <tt>11:59</tt>.</p>
+        Setting time format as "<code>HH:MM</code>".
+        <p>For example, setting "<code>bound_time=03:00</code>", a event start "2009-12-15 01:00" to be display "2009-12-14
+            25:00". The bound time work correct from <code>00:01</code> to <code>11:59</code>.</p>
     </dd>
     <dt>reply_subject (Reply mail subject)</dt>
     <dt>from_name (Replay mail from name)</dt>
@@ -337,30 +324,30 @@ Event Guide module setup items as follow:
     </dd>
     <dt>enable_copy (Enable copy funciton event article)</dt>
     <dd>
-        <tt>enable_copy=yes</tt>
+        <code>enable_copy=yes</code>
         Add "New Event" checkbox when edit event article.
         When checked the checkbox to store that new event.
     </dd>
     <dt>email_repeat_check (Enable confirm input Email Address)</dt>
     <dd>
-        <tt>email_repeat_check=yes</tt>
+        <code>email_repeat_check=yes</code>
         When an application for the event,
         confirm email address to add a field to verify that it matches the address.
     </dd>
     <dt>need_bind_uid (Force user setting when register reservation)</dt>
     <dd>
-        <tt>need_bind_uid=1</tt>
+        <code>need_bind_uid=1</code>
         Need setup user when resister reservation by moderator/admin.
     </dd>
     <dt>users_search_columns (Search columns when user selecting)</dt>
     <dd>
-        <tt>users_search_columns=uname,email</tt>
+        <code>users_search_columns=uname,email</code>
         Setup user for register reservation by moderator/admin.
         Searching/Display columns name list for <tt>users</tt> table joined by comma(,).
     </dd>
     <dt>users_search_labels (Searching/Display column display labels)</dt>
     <dd>
-        <tt>users_search_columns=Username,EMAIL</tt>
+        <code>users_search_columns=Username,EMAIL</code>
     </dd>
     <dt>enable_past_register=yes</dt>
     <dd>
@@ -369,27 +356,28 @@ Event Guide module setup items as follow:
     </dd>
     <dt>display_username={X_UNAME}</dt>
     <dd>
-        Reservation user displayed format setting. Default as "<tt>{X_UNAME}</tt>".
+        Reservation user displayed format setting. Default as "<code>{X_UNAME}</code>".
         for example "real name (user name)" style display, set follow:
         <pre>display_username={X_NAME} ({X_UNAME})</pre>
     </dd>
 </dl>
 
-<a name="form"></a><h5>Additional fields Format</h5>
-<strong>In Reservation</strong>
+<a id="form"></a><h5>Additional fields Format</h5>
+
+<p><strong>In Reservation</strong><br>
 Additonal items set to FORM when used order to make reservation.
 These additional items are setup with the following formats:
 <blockquote>
-    line ::= ["!"]item-name["*"][,type[,argument...]]<p/>
-    type ::= {text|checkbox|radio|textarea|select|hidden|const}<br/>
+    line ::= ["!"]item-name["*"][,type[,argument...]]<br>
+    type ::= {text|checkbox|radio|textarea|select|hidden|const}<br>
     argument ::= [value ["+"] "="] label
 </blockquote>
 <ul>
-    <li>"!" means the item is displayed to the public.</li>
+    <li>"!" means the item is displayed to the public.<br>
     <div class="note">
         Additionally, form top of line marked "!" - reservation list is displayed.
         If there is no "!" marked items, the list is not displayed.
-    </div>
+    </div></li>
     <li>"*" means you need input something.</li>
     <li>"#" is a message in the FORM (displayed comments).</li>
     <li>"," is a delimiter. Include part of strings, using escape in "\".</li>
@@ -403,7 +391,7 @@ These additional items are setup with the following formats:
 <h6>examples:</h6>
 
 <form>
-    <table border="0" cellspacing="1" cellpadding="4" bgcolor="#808080">
+    <table>
         <tr bgcolor="#d0d0d0">
             <th>setup</th>
             <th>Displayed form</th>
@@ -422,17 +410,18 @@ These additional items are setup with the following formats:
         </tr>
         <tr class="odd">
             <td>Selection,radio,Item1+,Item2,Item3</td>
-            <td>Selection <input type='radio' name='samp4' value='1' checked/> Item1 &nbsp; <input type='radio'
-                                                                                                   name='samp4'
-                                                                                                   value='2'/> Item2
-                &nbsp; <input type='radio' name='samp4' value='3'/> Item3 &nbsp;
+            <td>Selection
+                <input type='radio' name='samp4' value='1' checked/> Item1
+                <input type='radio' name='samp4' value='2'/> Item2
+                <input type='radio' name='samp4' value='3'/> Item3
             </td>
         </tr>
         <tr class="even">
             <td>Selection,checkbox,Item1+,Item2,Item3</td>
-            <td>Selection <input type='checkbox' name='samp5_1' checked/> Item1 &nbsp; <input type='checkbox'
-                                                                                              name='samp5_2'/> Item2
-                &nbsp; <input type='checkbox' name='samp5_3'/> Item3 &nbsp;
+            <td>Selection
+                <input type='checkbox' name='samp5_1' checked/> Item1
+                <input type='checkbox' name='samp5_2'/> Item2
+                <input type='checkbox' name='samp5_3'/> Item3
             </td>
         </tr>
         <tr class="odd">
@@ -457,6 +446,8 @@ These additional items are setup with the following formats:
         </tr>
     </table>
 </form>
+
+
 <h6>Releated reservation forms</h6>
 <dl>
     <dt>Mulitiple persons reservation</dt>
@@ -464,14 +455,14 @@ These additional items are setup with the following formats:
         You want handle multiple persons reservation on a evnet,
         you need settings as following:
         <ul>
-            <li>Number of persons input field in "Additional items" (example: "<tt>Persons,select,1,2,3,4,5</tt>")</li>
-            <li>Module Preferences "Label of persons" setting the fields label. (set in exmaple "<tt>Persons</tt>")</li>
+            <li>Number of persons input field in "Additional items" (example: "<code>Persons,select,1,2,3,4,5</code>")</li>
+            <li>Module Preferences "Label of persons" setting the fields label. (set in exmaple "<code>Persons</code>")</li>
         </ul>
     </dd>
     <dt>Redirect After Reservation URL</dt>
     <dd>
         This is use when custom page display after reservation. That URL include following variables:
-        <tt>{X_EID}</tt> (event id), <tt>{X_SUB}</tt> (event extra id), <tt>{X_RVID}</tt> (reservation id).
+        <code>{X_EID}</code> (event id), <code>{X_SUB}</code> (event extra id), <code>{X_RVID}</code> (reservation id).
         This variables use handle to get event information.
         You can use for post processing reservations.
     </dd>
@@ -479,18 +470,20 @@ These additional items are setup with the following formats:
 
 <a name="plugins"></a><h5>Reservation limit plugins</h5>
 
-<p>Event Guide module can use plugins for control reservations.
-    It provide more complex contition for reservations.
+<p>Event Guide module can use plugins for control reservations.<br>
+    It provide more complex options for reservations.<br>
     There is sample "dlimit" plugin that control same user can limited number of reservation in a day.
     Using this plugin reservation to need login.
 </p>
 
 <p>This plugin activate set module preferences "Additional item options"
     add like following.</p>
+
 <pre>eguide_plugins=dlimit
 max_register_in_day=1
 max_register_in_future=2
 </pre>
+
 <dl>
     <dt>eguide_plugins</dt>
     <dd>Activate plugins.
@@ -503,9 +496,9 @@ max_register_in_future=2
         A event to starting time has come when next reservation to be accept.
         Default value is 0 that is no limitation.
     </dd>
-    </ul>
+</dl>
 
-    <a name="multidate"></a><h5>Handling for multiple open event</h5>
+<a id="multidate"></a><h5>Handling for multiple open event</h5>
 
     <p>Event Guide handle the content of same event, open two or more times.
         This settings to "Repeat Open" in event registration form.
@@ -530,7 +523,7 @@ max_register_in_future=2
         </li>
     </ul>
 
-    <a name="update"></a><h5>Module Update</h5>
+<a id="update"></a><h5>Module Update</h5>
 
     <ul>
         <li>When Event Guide module update, You need Module update in Module Manager in admin page.</li>
@@ -543,23 +536,24 @@ max_register_in_future=2
         </div>
     </ul>
 
-    <a name="duplication"></a><h5>Module duplicate</h5>
 
-    <p>eguide 2.4 later module is duplicatable (sorry not yet D3).
-        There is command line utility proguram for duplicate module.
-        "eguide/duplicate.php" is duplicate eguide module how many you want.
-        (This command support only Unix-like system)
-    </p>
-    <p>Example use this:</p>
+<a id="duplication"></a><h5>Module duplicate</h5>
+
+    <p>eguide 2.4 later module is Duplicable (sorry not yet D3).
+        There is command line utility program to duplicate the module.
+        "eguide/duplicate.php" allows you to duplicate eguide module has many times you need.</p>
+        <div class="tip">(This command support only Unix-like system)</div>
+
+    <p>Example how to use its:</p>
     <pre>
     $ <u>cd modules/eguide</u>
     $ <u>php duplicate.php event ticket class</u>
-    Duplicate: event
-    Duplicate: ticket
-    Duplicate: class
+    Duplicate: event<br>
+    Duplicate: ticket<br>
+    Duplicate: class<br>
   </pre>
 
-    <a name="changes"></a><h5>Changes</h5>
+    <a id="changes"></a><h5>Changes</h5>
 
     <dl>
         <dt>2013/10/05 eguide 2.71 released</dt>
@@ -818,6 +812,7 @@ max_register_in_future=2
     <address>Nobuhiro Yasutomi &lt;<a href="mailto:nobuhiro.yasutomi@nifty.ne.jp">nobuhiro.yasutomi@nifty.ne.jp</a>&gt;
     </address>
     MySite Users <a href="http://myht.org/">http://myht.org/</a><br/>
-    $Id: help.html,v 1.70 2011/09/10 02:45:21 nobu Exp $
+    $Id: help.html,v 1.70 2011/09/10 02:45:21 nobu Exp $<br>
+    $Id: help.html,v 1.74 2021/05/08 13:00:21 gigamaster Exp $
 </body>
 </html>

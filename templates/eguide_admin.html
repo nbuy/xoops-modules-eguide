@@ -2,12 +2,19 @@
 <{include file="db:eguide_event.html"}>
 <{/if}>
 <div class="event">
-    <h2><{$lang_event_edit}></h2>
+    <h2><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+<path d="M15 13h1.5v2.82l2.44 1.41l-.75 1.3L15 16.69V13m4-5H5v11h4.67c-.43-.91-.67-1.93-.67-3a7 7 0 0 1 7-7c1.07 0 2.09.24 3 .67V8M5 21a2 2 0 0 1-2-2V5c0-1.11.89-2 2-2h1V1h2v2h8V1h2v2h1a2 2 0 0 1 2 2v6.1c1.24 1.26 2 2.99 2 4.9a7 7 0 0 1-7 7c-1.91 0-3.64-.76-4.9-2H5m11-9.85A4.85 4.85 0 0 0 11.15 16c0 2.68 2.17 4.85 4.85 4.85A4.85 4.85 0 0 0 20.85 16c0-2.68-2.17-4.85-4.85-4.85z" fill="currentColor"/>
+</svg> <{$lang_event_edit}></h2>
+
+<{* /////////////////////////// TODO remove and/or replace with jquery UI
     <!-- for DHTML calendar -->
-    <link rel="stylesheet" type="text/css" media="all" href="<{$xoops_url}>/include/calendar-blue.css"/>
+
+<!--    <link rel="stylesheet" type="text/css" media="all" href="<{$xoops_url}>/include/calendar-blue.css"/>
+
     <script type="text/javascript" src="<{$xoops_url}>/include/calendar.js"></script>
+
     <script type="text/javascript">
-        <!--
+
         var calendar = null;
 
         function selected(cal, date) {
@@ -99,8 +106,11 @@
             Calendar._TT["TT_DATE_FORMAT"] = "y-mm-dd";
 
             Calendar._TT["WK"] = "";
-        //-->
-    </script>
+
+
+    </script>-->
+    /////////////////////////// *}>
+
 
     <form action="admin.php<{if $eid}>?eid=<{$eid}><{/if}>" method="post" class="evbody" name="evform" id="evform"
           onsubmit="return xoopsFormValidate_evform();">
@@ -118,11 +128,18 @@
                 <{/if}>
             </tr>
         </table>
+
+
         <h3><{$smarty.const._MD_EVENT_DATE}></h3>
-        <p>
-            <{$input_edate}>
+
+        <label for="datepicker">
             <{$smarty.const._MD_TIMEC}>
+            <{$input_edate}>
+        </label>
+
+
             <{if $timetable}>
+			<p>
             <select name="edatetime">
                 <{foreach item=timeopt from=$timetable}>
                 <option value="<{$timeopt.value}>" <{if $timeopt.value==$edatetime}> selected="selected"<{/if}>><{$timeopt.label}></option>
@@ -130,19 +147,21 @@
             </select>
             <{else}>
             <{$input_edatetime}>
-            <{/if}>
-        </p>
+    		</p> 
+			<{/if}>
+
         <fieldset>
             <legend>
                 <script type="text/javascript">
                     <{if $extent_sets || $edata.closetime!=3600}>
                     document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" checked="checked" id="dateck"/>');
-                    <{else} >
+                    <{else}>
                     document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" id="dateck"/>');
                     <{/if}>
                 </script>
                 <{$smarty.const._MD_EDIT_EXTENT}>
             </legend>
+
             <div id="exdate">
                 <p><b><{$smarty.const._MD_EVENT_EXPIRE}></b> <{$input_expire}></p>
                 <p><b><{$smarty.const._MD_CLOSEBEFORE}></b>
@@ -165,28 +184,36 @@
                 <{/if}>
             </div>
         </fieldset>
+
+
         <h3><{$smarty.const._MD_INTROTEXT}></h3>
-        <{if $use_fckeditor}>
-        <textarea id="summary" name="summary" wrap="virtual" cols="60" rows="10"><{$summary|escape}></textarea>
+
+        <{if $body_editor}>
+        <{xoops_dhtmltarea editor=html id="summary" name="summary"}>
+
+<!--    <textarea id="summary" name="summary" wrap="virtual" cols="60" rows="10"><{$summary|escape}></textarea>-->
         <{else}>
         <{$summary_textarea}>
         <{/if}>
+
         <h3><{$smarty.const._MD_EXTEXT}></h3>
+
         <textarea name="body" wrap="virtual" cols="60" rows="10"><{$body}></textarea>
 
-        <{if $use_fckeditor}>
-        <script type="text/javascript" src="<{$xoops_url}>/common/fckeditor/fckeditor.js"></script>
-        <script type="text/javascript">
-            function fckeditor_exec(target, width, height, url) {
-                var oFCKeditor = new FCKeditor(target, width, height, "<{$use_fckeditor}>");
-                oFCKeditor.BasePath = "<{$xoops_url}>/common/fckeditor/";
-                oFCKeditor.ReplaceTextarea();
-            }
+        <{if $body_editor}>
+<!--        <script type="text/javascript" src="<{$xoops_url}>/common/fckeditor/fckeditor.js"></script>-->
+<!--        <script type="text/javascript">-->
+<!--            function fckeditor_exec(target, width, height, url) {-->
+<!--                var oFCKeditor = new FCKeditor(target, width, height, "<{$use_fckeditor}>");-->
+<!--                oFCKeditor.BasePath = "<{$xoops_url}>/common/fckeditor/";-->
+<!--                oFCKeditor.ReplaceTextarea();-->
+<!--            }-->
 
-            fckeditor_exec("summary", "100%", "350");
-            fckeditor_exec("body", "100%", "350");
-        </script>
-        <input type="hidden" name="style" value="0"/>
+<!--            fckeditor_exec("summary", "100%", "350");-->
+<!--            fckeditor_exec("body", "100%", "350");-->
+<!--        </script>-->
+        <{xoops_dhtmltarea editor=html}>
+		<input type="hidden" name="style" value="0">
         <{else}>
         <h3><{$smarty.const._MD_EVENT_STYLE}></h3>
         <{$input_style}>
