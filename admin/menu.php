@@ -39,11 +39,13 @@ $adminmenu4altsys[] =
 		'title' => _MD_A_MYMENU_MYBLOCKSADMIN,
 		'link'  => 'admin/index.php?mode=admin&lib=altsys&page=myblocksadmin'
 	);
+if (defined('_MD_A_MYMENU_MYLANGADMIN')) {
 $adminmenu4altsys[] =
 	array(
 		'title' => _MD_A_MYMENU_MYLANGADMIN,
 		'link'  => 'admin/index.php?mode=admin&lib=altsys&page=mylangadmin'
 	);
+}
 $adminmenu4altsys[] =
 	array(
 		'title' => _MD_A_MYMENU_MYPREFERENCES,

@@ -316,7 +316,7 @@ function eventform( $data, $uid ) {
 								$ck = in_array( $an, $_POST[ $fname ] ) ? ' checked' : '';
 							}
 							$lab  = empty( $args[1] ) ? "$an &nbsp; " : $args[1] . " ";
-							$opts .= "<label><input type='$type' name='${fname}[]' id='${fname}[]' value='$an'$ck $prop/>" . $lab . "</label>";
+							$opts .= "<label><input type='$type' name='{$fname}[]' id='{$fname}[]' value='$an'$ck $prop/>" . $lab . "</label>";
 						} elseif ( $type == 'select' ) {
 							if ( $ck != "" ) {
 								$ck = " selected";
@@ -384,7 +384,7 @@ if ( XOOPS_USE_MULTIBYTES && function_exists( "mb_convert_encoding" ) &&
 		}
 	}
 } else {
-	if ( get_magic_quotes_gpc() ) {
+	if ( function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() ) {
 		function post_filter( $s ) {
 			return stripslashes( $s );
 		}
@@ -771,7 +771,7 @@ function assign_module_css() {
 
 	$css    = htmlspecialchars( eguide_form_options( 'module_css', HEADER_CSS ) );
 	$header = $xoopsTpl->get_template_vars( 'xoops_module_header' );
-	if ( $css && ! preg_match( '/' . preg_quote( $css, '/' ) . '/', $header ) ) {
+	if ( $css && (is_null($header) || ! preg_match( '/' . preg_quote( $css, '/' ) . '/', $header )) ) {
 		$header .= '<link rel="stylesheet" type="text/css" media="all" href="' . $css . '" />';
 		$xoopsTpl->assign( 'xoops_module_header', $header );
 	}
