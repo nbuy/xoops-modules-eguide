@@ -16,9 +16,9 @@ if ( ! function_exists( "eguide_marker" ) ) {
 	function eguide_marker( $full, $dirname ) {
 		global $marker;
 		if ( empty( $marker ) ) {
-			$module_handler =& xoops_gethandler( 'module' );
+			$module_handler = xoops_gethandler( 'module' );
 			$module         =& $module_handler->getByDirname( $dirname );
-			$config_handler =& xoops_gethandler( 'config' );
+			$config_handler = xoops_gethandler( 'config' );
 			$config         =& $config_handler->getConfigsByCat( 0, $module->getVar( 'mid' ) );
 			$marker         = preg_split( '/,|[\r\n]+/', $config['maker_set'] );
 		}
@@ -42,7 +42,7 @@ if ( ! function_exists( "b_event_top_show_base" ) ) {
 
 	function b_event_top_show_base( $dirname, $prefix, $options ) {
 		global $xoopsDB, $xoopsUser;
-		$myts =& MyTextSanitizer::getInstance();
+		$myts = MyTextSanitizer::getInstance();
 
 		$now = time();
 		list( $detail, $nitem, $nlen, $list_type, $cat ) = $options;
@@ -146,7 +146,7 @@ WHERE ((expire>=edate AND expire>$now)
 			$block['events'][] = $event;
 		}
 
-		$module_handler =& xoops_gethandler( 'module' );
+		$module_handler = xoops_gethandler( 'module' );
 		$module         =& $module_handler->getByDirname( $dirname );
 		if ( $xoopsUser && $xoopsUser->isAdmin( $module->getVar( 'mid' ) ) ) {
 			$result = $xoopsDB->query( "SELECT count(eid) FROM " . $xoopsDB->prefix( $prefix ) . " WHERE status=1" );

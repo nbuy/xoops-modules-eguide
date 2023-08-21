@@ -16,7 +16,7 @@ $member_only           = ( $xoopsModuleConfig['member_only'] != ACCEPT_EMAIL && 
 
 if ( isset( $_POST['eid'] ) ) {
 	include 'reserv_func.php';
-	$myts =& MyTextSanitizer::getInstance();
+	$myts = MyTextSanitizer::getInstance();
 
 	$vals = get_opt_values( $data['optfield'], $errs, false, false );
 
@@ -79,7 +79,7 @@ if ( $errs ) {
 	$xoopsTpl->assign( 'errors', $errs );
 }
 // check pical exists
-$module_handler =& xoops_gethandler( 'module' );
+$module_handler = xoops_gethandler( 'module' );
 $module         =& $module_handler->getByDirname( PICAL );
 if ( is_object( $module ) && $module->getVar( 'isactive' ) == 1 ) {
 	$xoopsTpl->assign( 'caldate', formatTimestamp( $data['edate'], 'Y-m-d' ) );

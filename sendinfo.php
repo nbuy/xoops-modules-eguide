@@ -21,7 +21,7 @@ $evurl = EGUIDE_URL . "/event.php?eid=$eid" . ( $exid ? "&sub=$exid" : "" );
 echo "<p><a href='$evurl' class='evhead'>$title</a></p>\n";
 if ( $op == "doit" ) {
 	$title       = param( 'title', '' );
-	$xoopsMailer =& getMailer();
+	$xoopsMailer = getMailer();
 	$xoopsMailer->useMail();
 	$xoopsMailer->setSubject( $title );
 	$xoopsMailer->setBody( param( 'body', '' ) );
@@ -50,7 +50,7 @@ if ( $op == "doit" ) {
 	if ( $emails ) {
 		$xoopsMailer->setToEmails( $emails );
 	}
-	$member_handler =& xoops_gethandler( 'member' );
+	$member_handler = xoops_gethandler( 'member' );
 	$users          = array();
 	foreach ( array_unique( $uids ) as $uid ) {
 		$users[] =& $member_handler->getUser( $uid );

@@ -4,7 +4,7 @@ include '../../../include/cp_header.php';
 $modbase = dirname( __FILE__, 2 );
 if ( ! defined( "_MD_ORDER_DATE" ) ) {
 	if ( class_exists( "XCube_Root" ) ) {
-		$root =& XCube_Root::getSingleton();
+		$root = XCube_Root::getSingleton();
 
 		$root->mLanguageManager->_loadLanguage( $xoopsModule->getVar( 'dirname' ), 'common' );
 	} else {

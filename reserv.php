@@ -8,7 +8,7 @@ $rvid = param( 'rvid' );
 $key  = param( 'key' );
 $now  = time();
 $nlab = eguide_form_options( 'label_persons' );
-$myts =& MyTextSanitizer::getInstance();
+$myts = MyTextSanitizer::getInstance();
 
 if ( $xoopsModuleConfig['member_only'] == ACCEPT_MEMBER && ! is_object( $xoopsUser ) ) {
 	redirect_header( XOOPS_URL . "/user.php", 2, _NOPERM );
@@ -112,7 +112,7 @@ switch ( $op ) {
 					$title  = eventdate( $data['edate'] ) . " " . $data['title'];
 					$email  = $data['email'];
 
-					$xoopsMailer =& getMailer();
+					$xoopsMailer = getMailer();
 					$xoopsMailer->useMail();
 
 					if ( $xoopsModuleConfig['member_only'] && $data['ruid'] ) {
@@ -155,7 +155,7 @@ switch ( $op ) {
 					if ( ! in_array( $xoopsModuleConfig['notify_group'], $poster->groups() ) ) {
 						$xoopsMailer->setToUsers( $poster );
 					}
-					$member_handler =& xoops_gethandler( 'member' );
+					$member_handler = xoops_gethandler( 'member' );
 					if ( $xoopsModuleConfig['notify'] ) {
 						$notify_group = $member_handler->getGroup( $xoopsModuleConfig['notify_group'] );
 						$xoopsMailer->setToGroups( $notify_group );

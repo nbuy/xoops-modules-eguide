@@ -29,7 +29,7 @@ if ( ! empty( $event['title'] ) ) {
 $paths[ _MD_EDIT_EXTENT ] = "editdate.php?eid=$eid";
 set_eguide_breadcrumbs( $event['catid'], $paths );
 
-$myts    =& MyTextSanitizer::getInstance();
+$myts    = MyTextSanitizer::getInstance();
 $now     = time();
 $extents = get_extents( $eid, true );
 $errors  = array();

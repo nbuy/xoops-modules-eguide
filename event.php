@@ -8,7 +8,7 @@ $eid  = param( 'eid' );
 $exid = param( 'sub' );
 $op   = param( 'op', 'view' );
 
-$myts =& MyTextSanitizer::getInstance();
+$myts = MyTextSanitizer::getInstance();
 
 $isadmin = false;
 $uid     = 0;
@@ -59,8 +59,8 @@ if ( $op != "print" ) {
 }
 
 // check pical exists
-$module_handler =& xoops_gethandler( 'module' );
-$module         =& $module_handler->getByDirname( PICAL );
+$module_handler = xoops_gethandler( 'module' );
+$module         = $module_handler->getByDirname( PICAL );
 
 if ( is_object( $module ) && $module->getVar( 'isactive' ) == 1 ) {
 	$pidate = formatTimestamp( $data['edate'], 'Y-m-d' );
@@ -134,7 +134,7 @@ function make_lists( $data ) {
 	global $xoopsDB;
 	$eid  = $data['eid'];
 	$exid = $data['exid'];
-	$myts =& MyTextSanitizer::getInstance();
+	$myts = MyTextSanitizer::getInstance();
 	if ( $data['reservation'] && ! empty( $data['reserved'] ) ) {
 		$show = array();
 		$item = array();

@@ -145,15 +145,15 @@ $modversion['blocks'][] = array(
 	'template'    => $myprefix . '_block_category.html'
 );
 // Menu
-$module_handler =& xoops_gethandler( 'module' );
-$module         =& $module_handler->getByDirname( $modversion['dirname'] );
+$module_handler = xoops_gethandler( 'module' );
+$module         = $module_handler->getByDirname( $modversion['dirname'] );
 
 global $xoopsUser, $xoopsDB;
 $modversion['hasMain'] = 1;
 $configs               = null;
 if ( is_object( $module ) && $module->getVar( 'isactive' ) ) {
-	$config_handler =& xoops_gethandler( 'config' );
-	$configs        =& $config_handler->getConfigsByCat( 0, $module->getVar( 'mid' ) );
+	$config_handler = xoops_gethandler( 'config' );
+	$configs        = $config_handler->getConfigsByCat( 0, $module->getVar( 'mid' ) );
 	// category submenu
 	$res = $xoopsDB->query( 'SELECT * FROM ' . $xoopsDB->prefix( $myprefix . '_category' ) . ' WHERE catpri=0 ORDER BY weight,catid' );
 	if ( $xoopsDB->getRowsNum( $res ) > 1 ) {

@@ -37,7 +37,7 @@ $iargs = array(
 $targs = array( 'title', 'summary', 'body', 'optfield', 'before' );
 define( "_EG_OPTDEFS", "redirect=" . _MD_RESERV_REDIRECT . ",text\n" );
 
-$myts                         =& MyTextSanitizer::getInstance();
+$myts                         = MyTextSanitizer::getInstance();
 $xoopsOption['template_main'] = EGPREFIX . '_admin.html';
 
 if ( $op == 'new' ) {
@@ -61,7 +61,7 @@ if ( $op == 'new' ) {
 		'event'           => '',
 		'expire'          => $xoopsModuleConfig['expire_after'] * 60,
 		'closetime'       => $xoopsModuleConfig['close_before'] * 60,
-		'optvars'         => '',
+		'optvars'         => array( 'redirect'=>'', 'text'=>'' ),
 		'topicid'         => 1
 	);
 } else {
