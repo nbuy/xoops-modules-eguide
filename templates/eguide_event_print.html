@@ -10,7 +10,7 @@
 <body>
 <div class="header"><img src="<{$xoops_url}>/images/logo.gif" alt="<{$xoops_sitename}>"/></div>
 <{include file="db:eguide_item.html"}>
-<{if $list}>
+<{if !empty($list)}>
 <div class="evlist">
     <div class="evtitle"><{$smarty.const._MD_RESERV_LIST}></div>
     <table class="outer" align="center" width="100%">
@@ -37,8 +37,8 @@
     <br/>
     <div><{$smarty.const._MD_URLFOREVENT}></div>
     <div>
-        <a href="<{$smarty.const.EGUIDE_URL}>/event.php?eid=<{$event.eid}><{if $event.exid}>&sub=<{$event.exid}><{/if}>"><{$smarty.const.EGUIDE_URL}>/event.php?eid=<{$event.eid}><{if
-            $event.exid}>&amp;sub=<{$event.exid}><{/if}></a></div>
+        <a href="<{$smarty.const.EGUIDE_URL}>/event.php?eid=<{$event.eid}><{if !empty($event.exid)}>&sub=<{$event.exid}><{/if}>"><{$smarty.const.EGUIDE_URL}>/event.php?eid=<{$event.eid}><{if
+            !empty($event.exid)}>&amp;sub=<{$event.exid}><{/if}></a></div>
 </div>
 </body>
 </html>
