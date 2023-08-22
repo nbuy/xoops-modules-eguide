@@ -61,7 +61,7 @@ if ( $op == 'new' ) {
 		'event'           => '',
 		'expire'          => $xoopsModuleConfig['expire_after'] * 60,
 		'closetime'       => $xoopsModuleConfig['close_before'] * 60,
-		'optvars'         => array( 'redirect'=>'', 'text'=>'' ),
+		'optvars'         => '',
 		'topicid'         => 1
 	);
 } else {
@@ -100,6 +100,9 @@ if ( $op == 'new' ) {
 if ( ! isset( $data['status'] ) ) {
 	$data['status'] = $xoopsModuleConfig['auth'] ? STAT_POST : STAT_NORMAL;
 }
+
+// redirect is part of optvars
+if ($data['optvars'] === '') $data['optvars'] = array( 'redirect'=>'', 'text'=>'' );
 
 $extent_sets = array();
 if ( isset( $_POST['extent_sets'] ) ) {
