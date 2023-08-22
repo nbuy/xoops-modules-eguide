@@ -484,24 +484,24 @@ include( XOOPS_ROOT_PATH . "/footer.php" );
 // make to unix time from separate fields.
 function getDateField( $p ) {
 	global $xoopsUser;
-	if ( empty( $_POST["${p}ymd"] ) ) {
+	if ( empty( $_POST["{$p}ymd"] ) ) {
 		return 0;
 	}
-	list( $y, $m, $d ) = explode( '-', $_POST["${p}ymd"] );
-	if ( isset( $_POST["${p}time"] ) ) { // accept 'HH:mm' format
-		list( $hour, $min ) = explode( ':', $_POST["${p}time"] );
+	list( $y, $m, $d ) = explode( '-', $_POST["{$p}ymd"] );
+	if ( isset( $_POST["{$p}time"] ) ) { // accept 'HH:mm' format
+		list( $hour, $min ) = explode( ':', $_POST["{$p}time"] );
 	} else {
-		$hour = $_POST["${p}hour"];
-		$min  = $_POST["${p}min"];
+		$hour = $_POST["{$p}hour"];
+		$min  = $_POST["{$p}min"];
 	}
 
 	return userTimeToServerTime( mktime( $hour, $min, 0, $m, $d, $y ), $xoopsUser->getVar( "timezone_offset" ) );
 }
 
 function datefield( $prefix, $time, $hastime = true ) {
-	$buf = "<input id='${prefix}ymd' name='${prefix}ymd' size='12' value='" . formatTimestamp( $time, "Y-m-d" ) . "'/> ";
+	$buf = "<input id='{$prefix}ymd' name='{$prefix}ymd' size='12' value='" . formatTimestamp( $time, "Y-m-d" ) . "'/> ";
 	$buf .= "<script language='javascript'><!-- 
-document.write('<input type=\"button\" value=\"" . _MD_CAL . "\" onClick=\"showCalendar(\\'${prefix}ymd\\')\">');
+document.write('<input type=\"button\" value=\"" . _MD_CAL . "\" onClick=\"showCalendar(\\'{$prefix}ymd\\')\">');
 --></script>\n";
 
 	return $buf;
@@ -509,10 +509,10 @@ document.write('<input type=\"button\" value=\"" . _MD_CAL . "\" onClick=\"showC
 
 function timefield( $prefix, $time ) {
 	list( $h, $i ) = explode( ' ', formatTimestamp( $time, "G i" ) );
-	$buf = select_value( "%02d", "${prefix}hour", 0, 23, $h );
+	$buf = select_value( "%02d", "{$prefix}hour", 0, 23, $h );
 	$buf .= " : ";
 
-	$buf .= select_value( "%02d", "${prefix}min", 0, 59, $i, 5 );
+	$buf .= select_value( "%02d", "{$prefix}min", 0, 59, $i, 5 );
 	$buf .= " : 00\n";
 
 	return $buf;
