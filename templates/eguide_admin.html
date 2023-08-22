@@ -95,8 +95,7 @@
             <{/if}>
 
 // date formats
-            Calendar._TT["DEF_DATE_FORMAT"] = "y-mm-dd";
-            Calendar._TT["TT_DATE_FORMAT"] = "y-mm-dd";
+            Calendar._TT["DEF_DATE_FORMAT"] = Calendar._TT["TT_DATE_FORMAT"] = <{if defined('XOOPS_CUBE_LEGACY')}>"Y-mm-dd"<{else}>"Y-m-d"<{/if}>;
 
             Calendar._TT["WK"] = "";
         //-->
