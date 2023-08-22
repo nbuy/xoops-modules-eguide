@@ -394,7 +394,7 @@ if ( $eid && $op == 'delete' ) {
 			$event[ $name ] = $data[ $name ];
 		}
 		edit_eventdata( $event );
-		$form                = eventform( $data );
+		$form                = eventform( $data, 0 );
 		$form['submit_opts'] = 'disabled';
 		$xoopsTpl->assign( 'form', $form );
 		$xoopsTpl->assign( 'event', $event );
