@@ -101,9 +101,6 @@ if ( ! isset( $data['status'] ) ) {
 	$data['status'] = $xoopsModuleConfig['auth'] ? STAT_POST : STAT_NORMAL;
 }
 
-// redirect is part of optvars
-if ($data['optvars'] === '') $data['optvars'] = array( 'redirect'=>'', 'text'=>'' );
-
 $extent_sets = array();
 if ( isset( $_POST['extent_sets'] ) ) {
 	$init = false;
@@ -436,8 +433,8 @@ if ( $eid && $op == 'delete' ) {
 		'input_style'      => select_list( 'style', $edit_style, $data['style'] ),
 		'edata'            => $data,
 	) );
-	if ( $data['optvars'] ) {
-		$optvars = unserialize_vars( $data['optvars'] );
+	if ( is_string($data['optvars']) ) {
+		$optvars = !empty($data['optvars'])?unserialize_vars( $data['optvars'] ) : array( 'redirect'=>'' );
 		$xoopsTpl->assign( 'optvars', $optvars );
 		foreach ( explode( "\n", _EG_OPTDEFS ) as $item ) {
 			list( $fname ) = explode( "=", $item );
