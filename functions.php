@@ -90,7 +90,7 @@ function xss_filter( $text ) {
 function edit_eventdata( &$data ) {
 	global $xoopsModuleConfig, $xoopsUser;
 
-	$myts  =& MyTextSanitizer::getInstance();
+	$myts  = MyTextSanitizer::getInstance();
 	$str   = $pat = array();
 	$pat[] = '{X_DATE}';
 	$str[] = $data['ldate'] =
@@ -771,7 +771,12 @@ function assign_module_css() {
 	global $xoopsTpl;
 
 	$css    = htmlspecialchars( eguide_form_options( 'module_css', HEADER_CSS ) );
-	$header = $xoopsTpl->get_template_vars( 'xoops_module_header' );
+	// XXX: Smarty3 (backword compatible)
+	if (method_exists($xoopsTpl, "getTemplateVars")) {
+		$header = $xoopsTpl->getTemplateVars( 'xoops_module_header' );
+	} else {
+		$header = $xoopsTpl->get_template_vars( 'xoops_module_header' );
+	}
 	if ( $css && (is_null($header) || ! preg_match( '/' . preg_quote( $css, '/' ) . '/', $header )) ) {
 		$header .= '<link rel="stylesheet" type="text/css" media="all" href="' . $css . '" />';
 		$xoopsTpl->assign( 'xoops_module_header', $header );
