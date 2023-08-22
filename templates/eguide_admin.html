@@ -231,7 +231,7 @@
         <fieldset>
             <legend>
                 <script type="text/javascript">
-                    <{if $edata.optvars}>
+                    <{if $edata.optvars.redirect || $edata.optvars.text}>
                     document.write('<input type="checkbox" onClick="toggle(\'optvars\',this);" checked="checked" id="optck"/>');
                     <{else}>
                     document.write('<input type="checkbox" onClick="toggle(\'optvars\',this);" id="optck"/>');
