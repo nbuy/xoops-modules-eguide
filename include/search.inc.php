@@ -39,7 +39,7 @@ if ( ! function_exists( 'eguide_search_base' ) ) {
 		$showcontext = function_exists( 'search_make_context' ) && ( empty( $_GET['showcontext'] ) ? 0 : 1 );
 		if ( $showcontext ) {
 			include_once XOOPS_ROOT_PATH . "/class/module.textsanitizer.php";
-			$myts =& MyTextSanitizer::getInstance();
+			$myts = MyTextSanitizer::getInstance();
 		}
 
 		$i = 0;

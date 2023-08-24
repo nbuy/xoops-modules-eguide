@@ -87,7 +87,7 @@ while ( $data = $xoopsDB->fetchArray( $result ) ) {
 	}
 	$res            = $xoopsDB->query( "SELECT * FROM " . RVTBL . " WHERE eid=$eid AND status=" . _RVSTAT_RESERVED . " AND exid=" . ( empty( $data['exid'] ) ? 0 : $data['exid'] ) );
 	$rows           = array();
-	$member_handler =& xoops_gethandler( 'member' );
+	$member_handler = xoops_gethandler( 'member' );
 	while ( $rvdata = $xoopsDB->fetchArray( $res ) ) {
 		$row                   = unserialize_text( $rvdata['info'] );
 		$row[ _MD_ORDER_DATE ] = formatTimestamp( $rvdata['rdate'], 'Y-m-d H:i:s' );

@@ -95,8 +95,7 @@
             <{/if}>
 
 // date formats
-            Calendar._TT["DEF_DATE_FORMAT"] = "y-mm-dd";
-            Calendar._TT["TT_DATE_FORMAT"] = "y-mm-dd";
+            Calendar._TT["DEF_DATE_FORMAT"] = Calendar._TT["TT_DATE_FORMAT"] = <{if defined('XOOPS_CUBE_LEGACY')}>"Y-mm-dd"<{else}>"Y-m-d"<{/if}>;
 
             Calendar._TT["WK"] = "";
         //-->
@@ -137,7 +136,7 @@
                 <script type="text/javascript">
                     <{if $extent_sets || $edata.closetime!=3600}>
                     document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" checked="checked" id="dateck"/>');
-                    <{else} >
+                    <{else}>
                     document.write('<input type="checkbox" onClick="toggle(\'exdate\',this);" id="dateck"/>');
                     <{/if}>
                 </script>
@@ -231,7 +230,7 @@
         <fieldset>
             <legend>
                 <script type="text/javascript">
-                    <{if $edata.optvars}>
+                    <{if $edata.optvars.redirect || $edata.optvars.text}>
                     document.write('<input type="checkbox" onClick="toggle(\'optvars\',this);" checked="checked" id="optck"/>');
                     <{else}>
                     document.write('<input type="checkbox" onClick="toggle(\'optvars\',this);" id="optck"/>');

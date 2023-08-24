@@ -21,6 +21,7 @@ function explodeopts( $opts ) {
 if ( ! function_exists( "unserialize_vars" ) ) {
 	// expand: label=value[,\n](label=value...)
 	function unserialize_vars( $text, $rev = false ) {
+		if ( !is_string($text) ) return array();
 		if ( preg_match( "/^\w+: /", $text ) ) {
 			return unserialize_text( $text );
 		}
@@ -164,7 +165,7 @@ function eventform( $data, $uid ) {
 	global $xoopsUser, $xoopsModuleConfig;
 	$poster = $uid ? new XoopsUser( $uid ) : $xoopsUser;
 	$uid    = is_object( $poster ) ? $poster->getVar( 'uid' ) : 0;
-	$myts   =& MyTextSanitizer::getInstance();
+	$myts   = MyTextSanitizer::getInstance();
 
 	if ( empty( $data['reservation'] ) ) {
 		return null;
@@ -617,7 +618,7 @@ function order_notify( $data, $email, $value ) {
 	$exid   = $data['exid'];
 	$url    = EGUIDE_URL . '/event.php?eid=' . $eid . ( $exid ? "&sub=$exid" : '' );
 
-	$xoopsMailer =& getMailer();
+	$xoopsMailer = getMailer();
 	$xoopsMailer->useMail();
 
 	$tplname = $data['autoaccept'] ? "accept%s.tpl" : "order%s.tpl";
@@ -697,7 +698,7 @@ function order_notify( $data, $email, $value ) {
 		if ( ! in_array( $xoopsModuleConfig['notify_group'], $poster->groups() ) ) {
 			$xoopsMailer->setToUsers( $poster );
 		}
-		$member_handler =& xoops_gethandler( 'member' );
+		$member_handler = xoops_gethandler( 'member' );
 		$notify_group   = $member_handler->getGroup( $xoopsModuleConfig['notify_group'] );
 		$xoopsMailer->setToGroups( $notify_group );
 		$xoopsMailer->send();
@@ -736,9 +737,9 @@ function eguide_form_options( $name = '', $def = false ) {
 		if ( $xoopsModule && $xoopsModule->getVar( "dirname" ) == $mydir ) {
 			$opts = $GLOBALS['xoopsModuleConfig']['label_persons'];
 		} else {
-			$module_handler =& xoops_gethandler( 'module' );
+			$module_handler = xoops_gethandler( 'module' );
 			$module         =& $module_handler->getByDirname( $mydir );
-			$config_handler =& xoops_gethandler( 'config' );
+			$config_handler = xoops_gethandler( 'config' );
 			$configs        =& $config_handler->getConfigsByCat( 0, $module->getVar( 'mid' ) );
 			$opts           = $configs['label_persons'];
 		}

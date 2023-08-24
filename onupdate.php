@@ -18,7 +18,7 @@ if ( file_exists( $config ) ) {
 	}
 	if ( count( $criteria->criteriaElements ) ) {
 		$cri_mods->add( $criteria );
-		$configs =& $config_handler->getConfigs( $criteria );
+		$configs = $config_handler->getConfigs( $criteria );
 		foreach ( $configs as $config ) {
 			$name = $config->getVar( 'conf_name' );
 			$config->setConfValueForInput( $eventConfig[ $name ] );

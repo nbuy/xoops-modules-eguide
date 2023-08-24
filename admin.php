@@ -37,7 +37,7 @@ $iargs = array(
 $targs = array( 'title', 'summary', 'body', 'optfield', 'before' );
 define( "_EG_OPTDEFS", "redirect=" . _MD_RESERV_REDIRECT . ",text\n" );
 
-$myts                         =& MyTextSanitizer::getInstance();
+$myts                         = MyTextSanitizer::getInstance();
 $xoopsOption['template_main'] = EGPREFIX . '_admin.html';
 
 if ( $op == 'new' ) {
@@ -100,6 +100,9 @@ if ( $op == 'new' ) {
 if ( ! isset( $data['status'] ) ) {
 	$data['status'] = $xoopsModuleConfig['auth'] ? STAT_POST : STAT_NORMAL;
 }
+
+// redirect is part of optvars
+if ($data['optvars'] === '') $data['optvars'] = array( 'redirect'=>'', 'text'=>'' );
 
 $extent_sets = array();
 if ( isset( $_POST['extent_sets'] ) ) {
@@ -391,7 +394,7 @@ if ( $eid && $op == 'delete' ) {
 			$event[ $name ] = $data[ $name ];
 		}
 		edit_eventdata( $event );
-		$form                = eventform( $data );
+		$form                = eventform( $data, 0 );
 		$form['submit_opts'] = 'disabled';
 		$xoopsTpl->assign( 'form', $form );
 		$xoopsTpl->assign( 'event', $event );

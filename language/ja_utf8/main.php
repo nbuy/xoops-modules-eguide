@@ -150,7 +150,7 @@ define( '_MD_RESERV_LABREQ', '項目名を入力してください' );
 define( '_MD_RESERV_REQ', '必須項目' );
 define( '_MD_RESERV_ADD', '追加' );
 define( '_MD_RESERV_OPTREQ', '引数が必要です' );
-define( '_MD_RESERV_ITEM_DESC', '<a href="language/japanese/help.html#form" target="help">追加項目の書式について</a>' );
+define( '_MD_RESERV_ITEM_DESC', '<a href="language/'.$GLOBALS['xoopsConfig']['language'].'/help.html#form" target="help">追加項目の書式について</a>' );
 define( '_MD_RESERV_LABEL_DESC', '予約人数の指定は項目名「%s」で行います' );
 define( '_MD_OPTION_VARS', 'オプション変数' );
 define( '_MD_OPTION_OTHERS', 'その他' );

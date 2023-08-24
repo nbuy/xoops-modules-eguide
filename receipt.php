@@ -9,7 +9,7 @@ $op   = param( 'op', 'view' );
 $rvid = param( 'rvid' );
 $eid  = param( 'eid' );
 $exid = param( 'sub' );
-$myts =& MyTextSanitizer::getInstance();
+$myts = MyTextSanitizer::getInstance();
 $nlab = eguide_form_options( 'label_persons' );
 
 if ( $rvid ) {
@@ -192,7 +192,7 @@ switch ( $op ) {
 			$data   = $xoopsDB->fetchArray( $result );
 			if ( $data ) {
 				$msg         = param( 'msg', '' );
-				$xoopsMailer =& getMailer();
+				$xoopsMailer = getMailer();
 				$xoopsMailer->useMail();
 				$xoopsMailer->setSubject( "Re: " . $title );
 				$xoopsMailer->setBody( $msg );

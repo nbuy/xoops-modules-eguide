@@ -7,7 +7,7 @@ function event_notify( $op, $data ) {
 		return;
 	}
 
-	$xoopsMailer =& getMailer();
+	$xoopsMailer = getMailer();
 	$xoopsMailer->useMail();
 
 	switch ( $op ) {
@@ -31,7 +31,7 @@ function event_notify( $op, $data ) {
 			$xoopsMailer->setSubject( _MD_UPDATE_SUBJECT );
 			break;
 	}
-	$member_handler =& xoops_gethandler( 'member' );
+	$member_handler = xoops_gethandler( 'member' );
 	$users          = $member_handler->getUsersByGroup( $xoopsModuleConfig['notify_group'], true );
 	$uids           = array();
 	if ( $notify == 1 ) {
@@ -85,13 +85,13 @@ function user_notify( $eid ) {
 		'EVENT_NOTE'  => '',
 		'EVENT_URL'   => EGUIDE_URL . "/event.php?eid=$eid"
 	);
-	$notification_handler =& xoops_gethandler( 'notification' );
+	$notification_handler = xoops_gethandler( 'notification' );
 	$notification_handler->triggerEvent( 'global', 0, 'new', $tags );
 	$notification_handler->triggerEvent( 'category', $data['topicid'], 'new', $tags );
 
 	$result = $xoopsDB->query( "SELECT rvid, email, confirm FROM " . RVTBL . " WHERE eid=0" );
 	while ( $data = $xoopsDB->fetchArray( $result ) ) {
-		$xoopsMailer =& getMailer();
+		$xoopsMailer = getMailer();
 		$xoopsMailer->useMail();
 		$xoopsMailer->setSubject( _MD_NEWSUB );
 		$tpl = 'notify_user_new.tpl';

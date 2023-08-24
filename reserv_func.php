@@ -3,7 +3,7 @@
 // $Id: reserv_func.php,v 1.9 2010/10/10 06:30:12 nobu Exp $
 
 function get_opt_values( $optfield, &$errs, $hidden = false, $view = true ) {
-	$myts   =& MyTextSanitizer::getInstance();
+	$myts   = MyTextSanitizer::getInstance();
 	$result = array();
 	$field  = 0;
 	foreach ( explode( "\n", $optfield ) as $n ) {
